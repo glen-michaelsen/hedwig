@@ -10,8 +10,12 @@ correct terminal state — never stranded in progress.
 
 ## Config
 
+Verified against the workspace on 2026-08-16 — these names exist, don't
+invent variants.
+
 | | |
 | --- | --- |
+| Linear team | `GM Consulting` (the only team) |
 | Pick from state | `Todo` |
 | Pick by label | `Claude` |
 | Claimed state | `In Progress` |
@@ -19,6 +23,9 @@ correct terminal state — never stranded in progress.
 | Blocked/failed state | `Todo` |
 | Blocking issue label | `Glen` |
 | Ship branch | `dev` (never `main`) |
+
+Other states on the board — `Backlog`, `Canceled`, `Duplicate` — are not
+part of this loop. Never move an issue into them.
 
 ## Precondition
 
