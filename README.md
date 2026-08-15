@@ -111,6 +111,28 @@ the signing secrets differ.
 
 Work on `dev` → it deploys to preview. Merge `dev` → `main` to release.
 
+### Workers Builds configuration
+
+Each Worker has its own build config in the dashboard. The commands are not
+interchangeable — getting them wrong fails in ways that look unrelated.
+
+| | `hedwig` (production) | `hedwig-preview` |
+| --- | --- | --- |
+| Production branch | `main` | `dev` |
+| Build command | `npm run cf:build` | `npm run cf:build` |
+| Deploy command | `npx wrangler deploy` | `npx wrangler deploy --env preview` |
+| Version command | `npx wrangler versions upload` | `npx wrangler versions upload --env preview` |
+| Non-production branch builds | off | off |
+
+- **`npm run build` is not enough.** It runs `next build`, which never produces
+  `.open-next/worker.js` — the file wrangler uploads. The deploy then fails
+  with "entry-point file not found", which reads like a wrangler problem and
+  isn't.
+- **`--env preview` is not optional on the preview Worker.** Without it,
+  wrangler reads the top-level config — production name, production D1,
+  production R2, trenodo.com — so a build from `dev` would deploy over
+  production.
+
 ## Deploying
 
 Pushing to `main` triggers a Cloudflare **Workers Build**, which runs
