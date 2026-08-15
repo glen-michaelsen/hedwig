@@ -11,10 +11,12 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 migrations apply hedwig --local",
     "db:migrate": "wrangler d1 migrations apply hedwig --remote",
+    "db:migrate:preview": "wrangler d1 migrations apply hedwig-preview --remote --env preview",
     "cf:types": "wrangler types",
     "cf:build": "opennextjs-cloudflare build",
     "cf:preview": "opennextjs-cloudflare build && wrangler dev",
-    "cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
+    "cf:deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "cf:deploy:preview": "opennextjs-cloudflare build && wrangler deploy --env preview"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

@@ -48,4 +48,54 @@
 	// Secrets (set with `npx wrangler secret put <NAME>`, and in .dev.vars locally):
 	//   BETTER_AUTH_SECRET     — signs tutor sessions
 	//   STUDENT_SESSION_SECRET — signs student portal cookies
+	,
+	/**
+	 * Preview — deployed from the `dev` branch as a separate Worker
+	 * (`hedwig-preview`) at preview.trenodo.com.
+	 *
+	 * It has its OWN D1 database and R2 bucket. That is the whole point: a
+	 * preview that shares production's data isn't a preview, it's production
+	 * with a different hostname. Its secrets are separate too, so a session
+	 * from one environment is not valid in the other.
+	 *
+	 * Wrangler environments do not inherit most top-level keys, so anything
+	 * that matters is repeated here on purpose.
+	 */
+	"env": {
+		"preview": {
+			"name": "hedwig-preview",
+			"compatibility_date": "2026-01-15",
+			"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+			"assets": {
+				"directory": ".open-next/assets",
+				"binding": "ASSETS"
+			},
+			"services": [
+				{
+					// Must match this environment's worker name, not production's.
+					"binding": "WORKER_SELF_REFERENCE",
+					"service": "hedwig-preview"
+				}
+			],
+			"d1_databases": [
+				{
+					"binding": "DB",
+					"database_name": "hedwig-preview",
+					"database_id": "a34f1d1d-608c-4b7d-8c08-ffff49b2d581",
+					"migrations_dir": "drizzle"
+				}
+			],
+			"r2_buckets": [
+				{
+					"binding": "MEDIA",
+					"bucket_name": "hedwig-media-preview"
+				}
+			],
+			"routes": [{ "pattern": "preview.trenodo.com", "custom_domain": true }],
+			"workers_dev": true,
+			"vars": {
+				"APP_URL": "https://preview.trenodo.com"
+			}
+		}
+	}
 }

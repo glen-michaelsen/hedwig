@@ -97,15 +97,31 @@ Visit `/account/signup` to create an account, add a student, and note the PIN it
 shows you — the PIN is hashed, so that screen is the only time it exists in
 plaintext.
 
+## Environments
+
+| | Branch | URL | Worker | Database | Bucket |
+| --- | --- | --- | --- | --- | --- |
+| Production | `main` | trenodo.com | `hedwig` | `hedwig` | `hedwig-media` |
+| Preview | `dev` | preview.trenodo.com | `hedwig-preview` | `hedwig-preview` | `hedwig-media-preview` |
+
+Preview is a **separate Worker with its own database, bucket and secrets**.
+A preview that shares production's data isn't a preview — it's production
+with a different hostname. Sessions don't transfer between the two, because
+the signing secrets differ.
+
+Work on `dev` → it deploys to preview. Merge `dev` → `main` to release.
+
 ## Deploying
 
 Pushing to `main` triggers a Cloudflare **Workers Build**, which runs
-`npm run cf:build` and deploys. Node is pinned to 22 by `.node-version`.
+`npm run cf:build` and deploys. Pushing to `dev` does the same for preview.
+Node is pinned to 22 by `.node-version`.
 
 > **Workers Builds does not run migrations.** If a change includes a new file
-> in `drizzle/`, run `npm run db:migrate` *before* merging to `main` —
-> otherwise the new code goes live against the old schema. Migrations here
-> are additive, so applying one early is safe; applying one late is not.
+> in `drizzle/`, apply it *before* the code lands — `npm run db:migrate:preview`
+> before pushing to `dev`, and `npm run db:migrate` before merging to `main`.
+> Otherwise the new code runs against the old schema. Migrations here are
+> additive, so applying one early is safe; applying one late is not.
 
 To deploy by hand (or to roll back):
 
