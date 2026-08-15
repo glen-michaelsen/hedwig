@@ -99,6 +99,16 @@ plaintext.
 
 ## Deploying
 
+Pushing to `main` triggers a Cloudflare **Workers Build**, which runs
+`npm run cf:build` and deploys. Node is pinned to 22 by `.node-version`.
+
+> **Workers Builds does not run migrations.** If a change includes a new file
+> in `drizzle/`, run `npm run db:migrate` *before* merging to `main` —
+> otherwise the new code goes live against the old schema. Migrations here
+> are additive, so applying one early is safe; applying one late is not.
+
+To deploy by hand (or to roll back):
+
 ```bash
 npx wrangler secret put BETTER_AUTH_SECRET
 npx wrangler secret put STUDENT_SESSION_SECRET
