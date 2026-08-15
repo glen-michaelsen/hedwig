@@ -62,16 +62,17 @@ run can't pick it up again.
 
 ### If the change adds a migration
 
-If the work created a new file in `drizzle/`, apply it to preview **before**
-pushing:
+Workers Builds does not run migrations, so schema-dependent code pushed
+without applying one puts new code in front of an old database on preview.
 
-```bash
-npm run db:migrate:preview
-```
-
-Workers Builds does not run migrations. Pushing schema-dependent code without
-this puts new code in front of an old database on preview. If the migration
-itself fails, that is the failure path.
+- **Running locally** (wrangler is logged in): apply it to preview *before*
+  pushing — `npm run db:migrate:preview`. If the migration itself fails,
+  that's the failure path.
+- **Running in the cloud** (no Cloudflare credentials — check with
+  `npx wrangler whoami`): you cannot apply it. Take the **blocked path**
+  instead: commit nothing, and file the `Glen` issue saying the change needs
+  a migration applied by hand. Pushing schema code you can't migrate is worse
+  than not shipping it.
 
 ## Step 4 — ship to dev
 
