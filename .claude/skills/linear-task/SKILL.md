@@ -8,6 +8,10 @@ description: Work exactly one Linear issue from Todo labelled "Claude", ship it 
 Work **exactly one** issue this run. Every run must end with the issue in a
 correct terminal state — never stranded in progress.
 
+> **This file must live on `main`.** The scheduled run clones the default
+> branch to read it, while the work it does ships to `dev`. If you ever edit
+> this skill, the change only takes effect once it reaches `main`.
+
 ## Config
 
 Verified against the workspace on 2026-08-16 — these names exist, don't
@@ -57,8 +61,18 @@ run can't pick it up again.
 
 1. Read `AGENTS.md` and `README.md` first. They are not optional context —
    they carry the tenancy rule, the light-theme rule, and the Next 16 caveats.
-2. Sync: `git fetch origin` and base the work on **current `origin/dev`**,
-   never a stale local snapshot.
+2. Sync. A cloud run starts from a **single-branch clone of `main`**, so
+   `dev` won't be there and a plain `git fetch origin` won't bring it. Make
+   it available explicitly:
+
+   ```bash
+   git remote set-branches origin '*'
+   git fetch origin
+   git checkout -B dev origin/dev
+   ```
+
+   Base the work on **current `origin/dev`** — never `main`, never a stale
+   local snapshot.
 3. Implement the issue fully. Ask for nothing mid-run — if you need an answer,
    that's the blocked path.
 4. Verify, all three:
