@@ -1,0 +1,4 @@
+# Copy to .dev.vars (gitignored) for local development.
+# In production set these with `npx wrangler secret put <NAME>`.
+BETTER_AUTH_SECRET="generate-with-openssl-rand-base64-32"
+STUDENT_SESSION_SECRET="generate-with-openssl-rand-base64-32"

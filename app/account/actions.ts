@@ -1,0 +1,81 @@
+"use server";
+
+import { APIError } from "better-auth/api";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { z } from "zod";
+import { getAuth } from "@/lib/auth";
+
+export type AuthFormState = { error?: string };
+
+const signUpSchema = z.object({
+  name: z.string().min(1, "Your name is required").trim(),
+  studioName: z.string().trim().optional(),
+  email: z.email("Enter a valid email address").trim(),
+  password: z.string().min(10, "Use at least 10 characters"),
+});
+
+export async function signUpAction(
+  _prev: AuthFormState,
+  formData: FormData,
+): Promise<AuthFormState> {
+  const parsed = signUpSchema.safeParse({
+    name: formData.get("name"),
+    studioName: formData.get("studioName"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Check the form" };
+  }
+
+  const auth = await getAuth();
+  try {
+    await auth.api.signUpEmail({
+      body: {
+        name: parsed.data.name,
+        email: parsed.data.email,
+        password: parsed.data.password,
+        studioName: parsed.data.studioName || parsed.data.name,
+      },
+      headers: await headers(),
+    });
+  } catch (error) {
+    if (error instanceof APIError) {
+      return { error: error.body?.message ?? "Could not create the account" };
+    }
+    throw error;
+  }
+
+  redirect("/tutor");
+}
+
+export async function signInAction(
+  _prev: AuthFormState,
+  formData: FormData,
+): Promise<AuthFormState> {
+  const email = String(formData.get("email") ?? "").trim();
+  const password = String(formData.get("password") ?? "");
+  if (!email || !password) return { error: "Enter your email and password" };
+
+  const auth = await getAuth();
+  try {
+    await auth.api.signInEmail({
+      body: { email, password },
+      headers: await headers(),
+    });
+  } catch (error) {
+    if (error instanceof APIError) {
+      return { error: "That email and password don't match" };
+    }
+    throw error;
+  }
+
+  redirect("/tutor");
+}
+
+export async function signOutAction() {
+  const auth = await getAuth();
+  await auth.api.signOut({ headers: await headers() });
+  redirect("/account/login");
+}

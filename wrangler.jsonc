@@ -1,0 +1,51 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"main": ".open-next/worker.js",
+	"name": "hedwig",
+	"compatibility_date": "2026-01-15",
+	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"services": [
+		{
+			// Self-reference, required by the OpenNext cache. Must match "name" above.
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "hedwig"
+		}
+	],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "hedwig",
+			"database_id": "ff093898-01af-439c-bd9f-7127b1d5ffa4",
+			"migrations_dir": "drizzle"
+		}
+	],
+	"r2_buckets": [
+		{
+			// Sheet music PDFs. Never publicly exposed — reads go through /s/m/[id].
+			"binding": "MEDIA",
+			"bucket_name": "hedwig-media"
+		}
+	],
+	// trenodo.com is the product. The Worker, D1 database and R2 bucket keep
+	// the "hedwig" codename — renaming the database would mean migrating the
+	// data, and renaming the Worker would break the self-reference binding.
+	"routes": [
+		{ "pattern": "trenodo.com", "custom_domain": true },
+		{ "pattern": "www.trenodo.com", "custom_domain": true }
+	],
+	// Adding "routes" turns the workers.dev URL off by default. Keep it on:
+	// it's a working fallback if anything goes wrong with the domain.
+	"workers_dev": true,
+	// Better Auth uses this as its base URL and CSRF origin. It must match the
+	// origin the app is actually served from.
+	"vars": {
+		"APP_URL": "https://trenodo.com"
+	}
+	// Secrets (set with `npx wrangler secret put <NAME>`, and in .dev.vars locally):
+	//   BETTER_AUTH_SECRET     — signs tutor sessions
+	//   STUDENT_SESSION_SECRET — signs student portal cookies
+}

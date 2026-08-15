@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# cloudflare
+/.open-next/
+/.wrangler/
+.dev.vars
+# worker-configuration.d.ts is committed so a fresh clone typechecks.
+# Regenerate with `npm run cf:types` after changing wrangler.jsonc.

@@ -1,26 +1,155 @@
 @import "tailwindcss";
 
+/*
+ * hedwig is a light-theme product on purpose. Parents, children and tutors
+ * should meet something warm and calm, not a developer tool.
+ *
+ * The `dark:` variant is rebound to a `.dark` class that nothing sets, so the
+ * dark utilities still scattered through the components are inert rather than
+ * firing off the visitor's OS setting and half-repainting the page. Adding a
+ * real dark mode later means putting `.dark` on <html> and filling in the
+ * token overrides again — nothing else has to change.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ------------------------------------------------------------------ *
+ * Brand
+ *
+ * A muted violet, nudged warm (hue 300 rather than 292) so it sits with
+ * the cream neutrals instead of cooling them down.
+ * ------------------------------------------------------------------ */
+
+@theme {
+  --color-brand-50: oklch(0.978 0.012 300);
+  --color-brand-100: oklch(0.953 0.026 300);
+  --color-brand-200: oklch(0.908 0.048 300);
+  --color-brand-300: oklch(0.836 0.082 300);
+  --color-brand-400: oklch(0.738 0.122 300);
+  --color-brand-500: oklch(0.638 0.148 300);
+  --color-brand-600: oklch(0.556 0.152 300);
+  --color-brand-700: oklch(0.478 0.138 300);
+  --color-brand-800: oklch(0.406 0.112 300);
+  --color-brand-900: oklch(0.346 0.09 300);
+
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.375rem;
+  --radius-4xl: 1.75rem;
+  --radius-5xl: 2.25rem;
+}
+
+/* ------------------------------------------------------------------ *
+ * Surfaces
+ *
+ * Warm ivory page, white cards. The neutrals carry a little yellow
+ * (hue ~75) rather than the usual blue-grey — that's most of what makes
+ * an interface feel welcoming rather than clinical.
+ * ------------------------------------------------------------------ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Keeps native controls — date pickers, selects, scrollbars — light
+     even for visitors whose OS is set to dark. */
+  color-scheme: light;
+
+  --app-background: oklch(0.987 0.006 78);
+  --app-surface: oklch(1 0 0);
+  --app-surface-muted: oklch(0.966 0.009 78);
+  --app-foreground: oklch(0.265 0.021 62);
+  /* Both secondary greys are kept dark enough to clear WCAG AA (4.5:1) on
+     the ivory background — they carry hints and metadata at 11-12px, and
+     parents reading this on a phone shouldn't have to squint. Hierarchy
+     comes from size and weight rather than from fading the text out. */
+  --app-muted: oklch(0.44 0.021 62);
+  --app-faint: oklch(0.5 0.019 62);
+  --app-border: oklch(0.912 0.01 78);
+  --app-border-strong: oklch(0.848 0.014 78);
+
+  /* Large, low-opacity and warm-tinted: a brown-grey shadow reads as
+     daylight, a black one reads as a screenshot of a code editor. */
+  --app-shadow-soft:
+    0 1px 2px oklch(0.35 0.03 62 / 0.05),
+    0 12px 28px -12px oklch(0.35 0.03 62 / 0.1);
+  --app-shadow-lift:
+    0 1px 2px oklch(0.35 0.03 62 / 0.05),
+    0 28px 60px -28px oklch(0.35 0.03 62 / 0.16);
+  --app-shadow-float:
+    0 2px 4px oklch(0.35 0.03 62 / 0.04),
+    0 44px 90px -40px oklch(0.35 0.03 62 / 0.2);
+  --app-shadow-brand: 0 18px 40px -20px oklch(0.556 0.152 300 / 0.45);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-background: var(--app-background);
+  --color-surface: var(--app-surface);
+  --color-surface-muted: var(--app-surface-muted);
+  --color-foreground: var(--app-foreground);
+  --color-muted: var(--app-muted);
+  --color-faint: var(--app-faint);
+  --color-line: var(--app-border);
+  --color-line-strong: var(--app-border-strong);
+
+  --shadow-soft: var(--app-shadow-soft);
+  --shadow-lift: var(--app-shadow-lift);
+  --shadow-float: var(--app-shadow-float);
+  --shadow-brand: var(--app-shadow-brand);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--app-background);
+  color: var(--app-foreground);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-brand-100);
+  color: var(--color-brand-900);
+}
+
+/* A soft wash of brand colour behind hero and auth panels. Sits at the
+   very back and never intercepts clicks. */
+.brand-wash {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.brand-wash::before,
+.brand-wash::after {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+}
+
+.brand-wash::before {
+  width: 40rem;
+  height: 40rem;
+  top: -18rem;
+  left: -10rem;
+  background: var(--color-brand-200);
+  opacity: 0.45;
+}
+
+/* Warm peach on the other side, so the wash reads as light through a
+   window rather than a purple gradient. */
+.brand-wash::after {
+  width: 34rem;
+  height: 34rem;
+  top: -8rem;
+  right: -12rem;
+  background: oklch(0.9 0.055 55);
+  opacity: 0.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
