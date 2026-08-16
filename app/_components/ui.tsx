@@ -217,7 +217,7 @@ export function NavLink({ href, children, ...rest }: ComponentProps<typeof Link>
  * resizing or optimising, and this way it can't be blocked on the image
  * pipeline in a header that renders on every page.
  */
-export function Wordmark({ className = "" }: { className?: string }) {
+export function Wordmark({ className = "h-7" }: { className?: string }) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
@@ -225,7 +225,10 @@ export function Wordmark({ className = "" }: { className?: string }) {
       alt="Trenodo"
       width={1980}
       height={500}
-      className={`h-7 w-auto ${className}`}
+      // Height comes from the caller, never both here and there — two
+      // competing height utilities resolve by stylesheet order, not by
+      // the order they're written in the attribute.
+      className={`w-auto ${className}`}
     />
   );
 }

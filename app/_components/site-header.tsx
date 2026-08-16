@@ -11,7 +11,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 border-b border-line/70 bg-background/80 backdrop-blur-xl">
       <div className={`${container} flex h-18 items-center justify-between`}>
         <Link href="/" className={`rounded-xl ${focusable}`}>
-          <Wordmark />
+          <Wordmark className="h-10" />
         </Link>
 
         <nav className="flex items-center gap-2.5">
@@ -34,7 +34,7 @@ export function SiteFooter() {
       <div
         className={`${container} flex flex-wrap items-center justify-between gap-6`}
       >
-        <Wordmark className="opacity-70" />
+        <Wordmark className="h-7 opacity-70" />
         <nav className="flex flex-wrap items-center gap-6 text-sm text-muted">
           <Link
             href="/tutoring"
