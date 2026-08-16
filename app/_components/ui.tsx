@@ -210,17 +210,36 @@ export function NavLink({ href, children, ...rest }: ComponentProps<typeof Link>
   );
 }
 
-/** The mark used in both headers and on the landing page. */
+/**
+ * The full logo — mark plus wordmark, from the brand SVG.
+ *
+ * Plain <img> rather than next/image: it's a vector that never needs
+ * resizing or optimising, and this way it can't be blocked on the image
+ * pipeline in a header that renders on every page.
+ */
 export function Wordmark({ className = "" }: { className?: string }) {
   return (
-    <span className={`inline-flex items-center gap-2.5 ${className}`}>
-      <span
-        aria-hidden
-        className="grid h-8 w-8 place-items-center rounded-xl bg-brand-600 text-sm font-semibold text-white shadow-brand"
-      >
-        T
-      </span>
-      <span className="text-[15px] font-semibold tracking-tight">Trenodo</span>
-    </span>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/logo.svg"
+      alt="Trenodo"
+      width={1980}
+      height={500}
+      className={`h-7 w-auto ${className}`}
+    />
+  );
+}
+
+/** Just the mark, for square spaces where the wordmark won't fit. */
+export function BrandMark({ className = "" }: { className?: string }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/app-icon.svg"
+      alt=""
+      width={500}
+      height={500}
+      className={`h-8 w-8 rounded-xl ${className}`}
+    />
   );
 }
