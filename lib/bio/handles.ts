@@ -17,6 +17,8 @@ export const RESERVED_HANDLES = new Set([
   "s",
   "studio",
   "tutor",
+  "tutoring",
+  "link-in-bio",
   "_next",
   // plausible tomorrow
   "about",

@@ -36,6 +36,18 @@ export function SiteFooter() {
       >
         <Wordmark className="opacity-70" />
         <nav className="flex flex-wrap items-center gap-6 text-sm text-muted">
+          <Link
+            href="/tutoring"
+            className="transition-colors hover:text-foreground"
+          >
+            Tutor
+          </Link>
+          <Link
+            href="/link-in-bio"
+            className="transition-colors hover:text-foreground"
+          >
+            Link in Bio
+          </Link>
           <Link href="/login" className="transition-colors hover:text-foreground">
             Student sign in
           </Link>
