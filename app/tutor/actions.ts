@@ -112,6 +112,22 @@ export async function deleteStudentAction(formData: FormData) {
 
 /* ------------------------------- library ------------------------------- */
 
+/**
+ * Reads a page's title so the form can fill an empty Title field as soon as
+ * a URL is pasted, rather than only at save time.
+ *
+ * Signed in only — this fetches a URL of the caller's choosing from our
+ * server, and shouldn't be an open proxy. The `global_fetch_strictly_public`
+ * compatibility flag keeps it off internal addresses.
+ */
+export async function lookupLinkTitleAction(
+  url: string,
+): Promise<string | null> {
+  await requireAccount();
+  if (!z.url().safeParse(url.trim()).success) return null;
+  return (await fetchLinkMeta(url.trim())).title;
+}
+
 export type NewMaterialState = { error?: string };
 
 export async function createMaterialAction(

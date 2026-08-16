@@ -1,7 +1,11 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { createMaterialAction, type NewMaterialState } from "../../../actions";
+import {
+  createMaterialAction,
+  lookupLinkTitleAction,
+  type NewMaterialState,
+} from "../../../actions";
 import { TagPicker } from "@/app/_components/tag-picker";
 import {
   Card,
@@ -21,10 +25,32 @@ const kinds: { value: Kind; title: string; hint: string }[] = [
 
 export function MaterialForm({ allTags }: { allTags: string[] }) {
   const [kind, setKind] = useState<Kind>("pdf");
+  const [title, setTitle] = useState("");
+  const [looking, setLooking] = useState(false);
   const [state, action, pending] = useActionState<NewMaterialState, FormData>(
     createMaterialAction,
     {},
   );
+
+  /**
+   * Fill the title from the page as soon as a URL is entered — but only
+   * when the field is empty, so it never overwrites something typed by
+   * hand. Checked again when the answer arrives, since a title can be
+   * typed while the lookup is in flight.
+   */
+  async function fillTitleFrom(url: string) {
+    if (!url.trim() || title.trim()) return;
+
+    setLooking(true);
+    try {
+      const found = await lookupLinkTitleAction(url);
+      setTitle((current) => (current.trim() ? current : (found ?? "")));
+    } catch {
+      // A title is a convenience — the server tries again on save.
+    } finally {
+      setLooking(false);
+    }
+  }
 
   return (
     <Card>
@@ -78,18 +104,36 @@ export function MaterialForm({ allTags }: { allTags: string[] }) {
               type="url"
               placeholder="https://…"
               required
+              // Covers pasting with the mouse as well as typing and tabbing.
+              onBlur={(event) => fillTitleFrom(event.target.value)}
+              onPaste={(event) => {
+                const pasted = event.clipboardData.getData("text");
+                if (pasted) setTimeout(() => fillTitleFrom(pasted), 0);
+              }}
             />
             <p className="mt-2 text-xs text-faint">
-              Leave the title blank and we&rsquo;ll try to read it from the page.
+              We&rsquo;ll read the title from the page and fill it in below.
             </p>
           </div>
         )}
 
         <div>
           <label className={label} htmlFor="title">
-            Title
+            Title{" "}
+            {looking && (
+              <span className="font-normal normal-case tracking-normal text-faint">
+                — reading the page…
+              </span>
+            )}
           </label>
-          <input className={input} id="title" name="title" />
+          <input
+            className={input}
+            id="title"
+            name="title"
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+            placeholder={kind === "pdf" ? "" : "Filled from the link"}
+          />
         </div>
 
         <div>
