@@ -14,6 +14,7 @@ import {
   buttonGhost,
   input,
 } from "@/app/_components/ui";
+import { DeleteMaterialButton } from "./_components/delete-material-button";
 
 export default async function LibraryPage({
   searchParams,
@@ -141,6 +142,13 @@ export default async function LibraryPage({
                   >
                     Edit
                   </Link>
+                  <DeleteMaterialButton
+                    materialId={m.id}
+                    title={m.title}
+                    lessonCount={m.lessonCount}
+                    shelfCount={m.shelfCount}
+                    className={`${actionPill} hover:border-rose-500/40 hover:bg-rose-500/10 hover:text-rose-700`}
+                  />
                 </div>
               </li>
             ))}

@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAccount } from "@/lib/auth";
-import { getMaterial, getMaterialTagNames, listTags } from "@/lib/dal/tutor";
+import {
+  getMaterial,
+  getMaterialTagNames,
+  getMaterialUsage,
+  listTags,
+} from "@/lib/dal/tutor";
 import { PageHeader, actionPill, focusable } from "@/app/_components/ui";
-import { deleteMaterialAction } from "../../actions";
+import { DeleteMaterialButton } from "../_components/delete-material-button";
 import { EditMaterialForm } from "./_components/edit-material-form";
 
 export default async function EditMaterialPage({
@@ -15,9 +20,10 @@ export default async function EditMaterialPage({
   const material = await getMaterial(tutor.id, id);
   if (!material) notFound();
 
-  const [tags, selectedTags] = await Promise.all([
+  const [tags, selectedTags, usage] = await Promise.all([
     listTags(tutor.id),
     getMaterialTagNames(id),
+    getMaterialUsage(id),
   ]);
 
   return (
@@ -64,18 +70,19 @@ export default async function EditMaterialPage({
         selectedTags={selectedTags}
       />
 
-      <form
-        action={deleteMaterialAction}
-        className="mt-12 border-t border-line pt-8"
-      >
-        <input type="hidden" name="materialId" value={id} />
-        <button className="text-sm text-rose-600 transition-opacity hover:opacity-70 dark:text-rose-400">
-          Delete this material
-        </button>
+      <div className="mt-12 border-t border-line pt-8">
+        <DeleteMaterialButton
+          materialId={id}
+          title={material.title}
+          lessonCount={usage.lessonCount}
+          shelfCount={usage.shelfCount}
+          label="Delete this material"
+          className="text-sm text-rose-600 transition-opacity hover:opacity-70"
+        />
         <p className="mt-2 text-xs text-faint">
           It disappears from every shelf and lesson note it was attached to.
         </p>
-      </form>
+      </div>
     </>
   );
 }

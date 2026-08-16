@@ -219,6 +219,13 @@ export async function listMaterials(
       url: material.url,
       linkOk: material.linkOk,
       createdAt: material.createdAt,
+      // So the delete confirmation can say what it's about to detach.
+      lessonCount: sql<number>`(
+        select count(*) from note_material where note_material.material_id = ${material.id}
+      )`,
+      shelfCount: sql<number>`(
+        select count(*) from shelf where shelf.material_id = ${material.id}
+      )`,
     })
     .from(material)
     .where(and(...conditions))
@@ -294,6 +301,25 @@ export async function updateMaterial(
 
   // Returned so the caller can bin the object the material no longer points at.
   return { replacedR2Key: data.r2Key ? owned.r2Key : null };
+}
+
+/** What a material is attached to, for the delete confirmation. */
+export async function getMaterialUsage(materialId: string) {
+  const db = await getDb();
+  const row = await db
+    .select({
+      lessonCount: sql<number>`(
+        select count(*) from note_material where note_material.material_id = ${materialId}
+      )`,
+      shelfCount: sql<number>`(
+        select count(*) from shelf where shelf.material_id = ${materialId}
+      )`,
+    })
+    .from(material)
+    .where(eq(material.id, materialId))
+    .get();
+
+  return { lessonCount: row?.lessonCount ?? 0, shelfCount: row?.shelfCount ?? 0 };
 }
 
 /** Tag names on one material, for prefilling the picker. */
