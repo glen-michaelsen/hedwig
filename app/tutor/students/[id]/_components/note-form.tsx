@@ -1,16 +1,9 @@
-import {
-  KindBadge,
-  button,
-  input,
-  label,
-} from "@/app/_components/ui";
+import { button, input, label } from "@/app/_components/ui";
 import { saveNoteAction } from "../../../actions";
-
-type MaterialOption = {
-  id: string;
-  title: string;
-  kind: "pdf" | "link" | "video";
-};
+import {
+  MaterialAttachField,
+  type MaterialOption,
+} from "./material-attach-field";
 
 export function NoteForm({
   studentId,
@@ -31,8 +24,6 @@ export function NoteForm({
     materialIds: string[];
   };
 }) {
-  const attached = new Set(note?.materialIds ?? []);
-
   return (
     <form action={saveNoteAction} className="space-y-7">
       <input type="hidden" name="studentId" value={studentId} />
@@ -85,26 +76,10 @@ export function NoteForm({
         </div>
 
         {materials.length > 0 && (
-          <div>
-            <p className={label}>Attach material</p>
-            <ul className="grid gap-2 sm:grid-cols-2">
-              {materials.map((m) => (
-                <li key={m.id}>
-                  <label className="flex cursor-pointer items-center gap-2.5 rounded-2xl bg-surface-muted px-4 py-3 text-sm transition-colors hover:bg-brand-500/8">
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 accent-brand-600"
-                      name="materialIds"
-                      value={m.id}
-                      defaultChecked={attached.has(m.id)}
-                    />
-                    <KindBadge kind={m.kind} />
-                    <span className="truncate">{m.title}</span>
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <MaterialAttachField
+            materials={materials}
+            initialAttachedIds={note?.materialIds ?? []}
+          />
         )}
       </div>
 
