@@ -121,29 +121,42 @@ export function PhoneInput({
 
   return (
     <div className="flex gap-2">
-      <select
-        className={`${inputBase} w-[8.5rem] shrink-0 truncate`}
-        value={country}
-        onChange={(event) =>
-          handleCountryChange(event.target.value as CountryCode)
-        }
-        aria-label="Country code"
-      >
-        <optgroup label="Common">
-          {options.priority.map((c) => (
-            <option key={c.code} value={c.code}>
-              {flagEmoji(c.code)} +{c.dial} {c.name}
-            </option>
-          ))}
-        </optgroup>
-        <optgroup label="All countries">
-          {options.rest.map((c) => (
-            <option key={c.code} value={c.code}>
-              {flagEmoji(c.code)} +{c.dial} {c.name}
-            </option>
-          ))}
-        </optgroup>
-      </select>
+      <div className="relative w-24 shrink-0">
+        {/* Closed state should read as just the flag and dial code, but a
+            native select always paints the selected option's full label
+            (flag + dial + country name) into its own closed box — there's
+            no way to give the two states different text on the same
+            element. So the select's own text is made transparent (options
+            keep an explicit color so the opened list still shows names)
+            and a pointer-events-none overlay renders the short label on
+            top of it. */}
+        <select
+          className={`${inputBase} w-full text-transparent`}
+          value={country}
+          onChange={(event) =>
+            handleCountryChange(event.target.value as CountryCode)
+          }
+          aria-label="Country code"
+        >
+          <optgroup label="Common">
+            {options.priority.map((c) => (
+              <option key={c.code} value={c.code} className="text-foreground">
+                {flagEmoji(c.code)} +{c.dial} {c.name}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label="All countries">
+            {options.rest.map((c) => (
+              <option key={c.code} value={c.code} className="text-foreground">
+                {flagEmoji(c.code)} +{c.dial} {c.name}
+              </option>
+            ))}
+          </optgroup>
+        </select>
+        <div className="pointer-events-none absolute inset-0 flex items-center px-4 text-sm text-foreground">
+          {flagEmoji(country)} +{getCountryCallingCode(country)}
+        </div>
+      </div>
 
       <input
         className={`${inputBase} flex-1 min-w-0`}
