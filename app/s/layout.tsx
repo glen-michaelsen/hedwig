@@ -2,8 +2,9 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getStudioForStudent } from "@/lib/dal/student";
 import { getStudentSession } from "@/lib/student-session";
-import { NavLink, focusable } from "@/app/_components/ui";
+import { focusable } from "@/app/_components/ui";
 import { studentLogoutAction } from "@/app/actions";
+import { StudentNav } from "@/app/s/_components/student-nav";
 
 const portalContainer = "mx-auto w-full max-w-2xl px-6 sm:px-8";
 
@@ -41,12 +42,7 @@ export default async function PortalLayout({ children }: LayoutProps<"/s">) {
           </form>
         </div>
 
-        <nav
-          className={`${portalContainer} flex items-center gap-0.5 border-t border-line/70 py-1.5`}
-        >
-          <NavLink href="/s">Lessons</NavLink>
-          <NavLink href="/s/shelf">Material</NavLink>
-        </nav>
+        <StudentNav />
       </header>
 
       <main className={`${portalContainer} flex-1 py-12 sm:py-16`}>
