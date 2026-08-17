@@ -43,7 +43,11 @@
 	// Better Auth uses this as its base URL and CSRF origin. It must match the
 	// origin the app is actually served from.
 	"vars": {
-		"APP_URL": "https://trenodo.com"
+		"APP_URL": "https://trenodo.com",
+		// The one account that sees the Admin group in the dashboard rail.
+		// A var rather than a column on `user`: a privilege that can only
+		// change by editing this file can't be granted by a signup form.
+		"ADMIN_EMAIL": "gm@gmco.dk"
 	}
 	// Secrets (set with `npx wrangler secret put <NAME>`, and in .dev.vars locally):
 	//   BETTER_AUTH_SECRET     — signs tutor sessions
@@ -94,7 +98,8 @@
 			"routes": [{ "pattern": "preview.trenodo.com", "custom_domain": true }],
 			"workers_dev": true,
 			"vars": {
-				"APP_URL": "https://preview.trenodo.com"
+				"APP_URL": "https://preview.trenodo.com",
+				"ADMIN_EMAIL": "gm@gmco.dk"
 			}
 		}
 	}

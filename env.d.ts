@@ -6,6 +6,8 @@ declare global {
     DB: D1Database;
     MEDIA: R2Bucket;
     APP_URL: string;
+    /** Email of the one platform admin. See isAdmin() in lib/auth.ts. */
+    ADMIN_EMAIL?: string;
     /** Secret. Signs tutor sessions. */
     BETTER_AUTH_SECRET: string;
     /** Secret. Signs the student portal cookie. */

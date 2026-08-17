@@ -3,7 +3,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import * as schema from "@/db/schema";
 import { getDb, getEnv } from "./db";
 
@@ -70,5 +70,29 @@ export async function getAccount(): Promise<Account | null> {
 export async function requireAccount(): Promise<Account> {
   const account = await getAccount();
   if (!account) redirect("/account/login");
+  return account;
+}
+
+/**
+ * The person who runs Trenodo, as opposed to a musician using it.
+ *
+ * Held in an env var rather than a column on `user`: there is exactly one,
+ * and a role column is a privilege that can be set by accident — through a
+ * signup form, a seed script, or a migration written in a hurry. An env var
+ * can only change by someone editing the Worker's configuration.
+ */
+export async function isAdmin(account: Account): Promise<boolean> {
+  const env = await getEnv();
+  const admin = env.ADMIN_EMAIL?.trim().toLowerCase();
+  return Boolean(admin) && account.email.trim().toLowerCase() === admin;
+}
+
+/**
+ * 404s rather than redirecting: a musician who guesses the URL shouldn't be
+ * told that an admin area exists, only that this page doesn't.
+ */
+export async function requireAdmin(): Promise<Account> {
+  const account = await requireAccount();
+  if (!(await isAdmin(account))) notFound();
   return account;
 }

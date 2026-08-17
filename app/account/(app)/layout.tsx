@@ -1,15 +1,8 @@
-import { requireAccount } from "@/lib/auth";
-import { AppShell } from "@/app/_components/app-shell";
+import { DashboardShell } from "@/app/_components/dashboard-shell";
 
-/** Wraps /account and /account/settings — the auth pages have their own shell. */
+/** Wraps /account and everything under it — the auth pages have their own shell. */
 export default async function AccountLayout({
   children,
 }: LayoutProps<"/account">) {
-  const account = await requireAccount();
-
-  return (
-    <AppShell email={account.email} nav={[{ href: "/account/settings", label: "Settings" }]}>
-      {children}
-    </AppShell>
-  );
+  return <DashboardShell>{children}</DashboardShell>;
 }

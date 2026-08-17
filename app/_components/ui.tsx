@@ -1,5 +1,4 @@
-import Link from "next/link";
-import type { ComponentProps, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 /* --------------------------------- layout -------------------------------- */
 
@@ -202,18 +201,6 @@ export function Pill({
 }
 
 /* ---------------------------------- nav ---------------------------------- */
-
-export function NavLink({ href, children, ...rest }: ComponentProps<typeof Link>) {
-  return (
-    <Link
-      href={href}
-      className={`rounded-full px-2.5 py-2 text-xs text-muted transition-colors hover:bg-surface-muted hover:text-foreground sm:px-4 sm:text-sm ${focusable}`}
-      {...rest}
-    >
-      {children}
-    </Link>
-  );
-}
 
 /**
  * The full logo — mark plus wordmark, from the brand SVG.

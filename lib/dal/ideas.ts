@@ -79,3 +79,50 @@ export async function listPublishedIdeas() {
 export type PublishedIdea = Awaited<
   ReturnType<typeof listPublishedIdeas>
 >[number];
+
+/* --------------------------------- admin -------------------------------- */
+/*
+ * Everything below is for the platform admin only — see requireAdmin() in
+ * lib/auth.ts. These functions have no tenant key by design: ideas belong to
+ * the platform, not to an account, so there is nothing to scope them by.
+ * That makes the auth check at the call site the only thing protecting them.
+ */
+
+export type IdeaStatus = "new" | "planned" | "shipped" | "declined";
+
+/** Includes the email, which the public list deliberately never returns. */
+export async function listAllIdeas() {
+  const db = await getDb();
+  return db
+    .select({
+      id: idea.id,
+      title: idea.title,
+      detail: idea.detail,
+      name: idea.name,
+      email: idea.email,
+      area: idea.area,
+      status: idea.status,
+      published: idea.published,
+      createdAt: idea.createdAt,
+    })
+    .from(idea)
+    .orderBy(desc(idea.createdAt))
+    .limit(500);
+}
+
+export async function setIdeaStatus(id: string, status: IdeaStatus) {
+  const db = await getDb();
+  await db.update(idea).set({ status }).where(eq(idea.id, id));
+}
+
+export async function setIdeaPublished(id: string, published: boolean) {
+  const db = await getDb();
+  await db.update(idea).set({ published }).where(eq(idea.id, id));
+}
+
+export async function deleteIdea(id: string) {
+  const db = await getDb();
+  await db.delete(idea).where(eq(idea.id, id));
+}
+
+export type AdminIdea = Awaited<ReturnType<typeof listAllIdeas>>[number];
