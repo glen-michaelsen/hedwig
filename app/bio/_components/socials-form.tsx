@@ -31,7 +31,7 @@ export function SocialsForm({
                 {platform.label}
               </label>
               <input
-                className={`${input} text-sm`}
+                className={input}
                 id={`social-${platform.id}`}
                 name="socialUrl"
                 type="url"

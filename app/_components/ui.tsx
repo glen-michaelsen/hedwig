@@ -19,8 +19,13 @@ export const focusable =
  * a normal full-width field — appending a width to `input` doesn't work,
  * since `w-full` is already in there and the winner is decided by CSS order,
  * not the order of the classes in the attribute.
+ *
+ * Font size is 16px below `sm` on purpose: iOS Safari zooms the page in on
+ * focus for any field under 16px, and every text field, select and textarea
+ * in the app shares this base. `sm:text-sm` brings back the tighter desktop
+ * size, where there's no touch keyboard to trigger it.
  */
-export const inputBase = `rounded-2xl border border-line bg-surface px-4 py-3 text-sm text-foreground placeholder:text-faint transition-colors hover:border-line-strong focus:border-brand-400 ${focusable}`;
+export const inputBase = `rounded-2xl border border-line bg-surface px-4 py-3 text-base sm:text-sm text-foreground placeholder:text-faint transition-colors hover:border-line-strong focus:border-brand-400 ${focusable}`;
 
 export const input = `${inputBase} w-full`;
 

@@ -96,6 +96,13 @@
   --shadow-brand: var(--app-shadow-brand);
 }
 
+html,
+body {
+  /* Guards against any element in a card, form or the bio editor pushing
+     wider than the viewport and opening up horizontal scroll. */
+  overflow-x: hidden;
+}
+
 body {
   background: var(--app-background);
   color: var(--app-foreground);
