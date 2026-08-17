@@ -72,6 +72,7 @@ export async function updatePage(
     backgroundKind: "preset" | "solid" | "gradient" | "image";
     backgroundValue: string | null;
     published: boolean;
+    showCredit: boolean;
   }>,
 ) {
   const db = await getDb();

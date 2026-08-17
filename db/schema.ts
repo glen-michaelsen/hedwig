@@ -292,6 +292,10 @@ export const bioPage = sqliteTable(
     published: integer("published", { mode: "boolean" })
       .notNull()
       .default(false),
+    /** The "Made with Trenodo" footer. On by default; theirs to turn off. */
+    showCredit: integer("show_credit", { mode: "boolean" })
+      .notNull()
+      .default(true),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
       .default(sql`(unixepoch())`),

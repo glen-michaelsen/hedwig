@@ -1,0 +1,1 @@
+ALTER TABLE `bio_page` ADD `show_credit` integer DEFAULT true NOT NULL;

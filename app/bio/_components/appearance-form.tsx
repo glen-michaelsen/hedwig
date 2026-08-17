@@ -28,6 +28,7 @@ export function AppearanceForm({
     accentColor: string | null;
     backgroundKind: BackgroundKind;
     backgroundValue: string | null;
+    showCredit: boolean;
   };
 }) {
   const { error, pending, saved, onSubmit } = useAction(updateAppearanceAction);
@@ -198,6 +199,29 @@ export function AppearanceForm({
             :1). Buttons will still be readable, but they won&rsquo;t stand out.
           </p>
         )}
+
+        {/* Asked for, not enforced: the credit is how most people find us,
+            but it's their page. Say so plainly and let them decide. */}
+        <div className="rounded-3xl bg-surface-muted p-5">
+          <label className="flex cursor-pointer items-start gap-3">
+            <input
+              type="checkbox"
+              className="mt-0.5 h-4 w-4 accent-brand-600"
+              name="showCredit"
+              defaultChecked={page.showCredit}
+            />
+            <span>
+              <span className="block text-sm font-medium">
+                Show “Made with Trenodo” at the bottom
+              </span>
+              <span className="mt-1 block text-xs leading-relaxed text-muted">
+                It&rsquo;s how most people find us, and leaving it on genuinely
+                helps a small tool grow. But it&rsquo;s your page — turn it off
+                whenever you like, and nothing else changes.
+              </span>
+            </span>
+          </label>
+        </div>
 
         {error && <ErrorText>{error}</ErrorText>}
 

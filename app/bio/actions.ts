@@ -139,6 +139,7 @@ export async function updateAppearanceAction(
     accentColor: accentRaw,
     backgroundKind: kind as "preset",
     backgroundValue,
+    showCredit: formData.get("showCredit") === "on",
   });
 
   revalidateBio(page.handle);

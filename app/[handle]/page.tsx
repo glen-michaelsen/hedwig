@@ -169,14 +169,16 @@ export default async function BioPublicPage({
           </div>
         )}
 
-        <footer className="mt-16 text-center">
-          <Link
-            href="/"
-            className="text-xs opacity-45 transition-opacity hover:opacity-80"
-          >
-            Made with Trenodo
-          </Link>
-        </footer>
+        {page.showCredit && (
+          <footer className="mt-16 text-center">
+            <Link
+              href="/"
+              className="text-xs opacity-45 transition-opacity hover:opacity-80"
+            >
+              Made with Trenodo
+            </Link>
+          </footer>
+        )}
       </main>
     </div>
   );
