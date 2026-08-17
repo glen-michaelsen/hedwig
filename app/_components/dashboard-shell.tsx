@@ -34,6 +34,7 @@ export async function DashboardShell({ children }: { children: ReactNode }) {
           ],
         },
         { href: "/bio", label: "Link in Bio" },
+        { href: "/press", label: "Press Kit" },
       ],
     },
     ...(admin

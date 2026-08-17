@@ -381,6 +381,96 @@ export const bioClick = sqliteTable(
 );
 
 /* ------------------------------------------------------------------ *
+ * Press kit
+ *
+ * A release is the unit press people ask for: the record, its links, and
+ * the files that go with it. Assets hang off the release rather than the
+ * account, because that's how they're sent.
+ * ------------------------------------------------------------------ */
+
+/**
+ * Reusable across releases — most accounts have one, a few have several
+ * (a solo name, a band, a production alias). Names are unique per account
+ * so picking from the list doesn't quietly create a second "Jonas Berg".
+ */
+export const artist = sqliteTable(
+  "artist",
+  {
+    id: text("id").primaryKey(),
+    accountId: text("account_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (t) => [uniqueIndex("artist_account_name_idx").on(t.accountId, t.name)],
+);
+
+/** `press_release` rather than `release`: RELEASE is SQL syntax. */
+export const pressRelease = sqliteTable(
+  "press_release",
+  {
+    id: text("id").primaryKey(),
+    accountId: text("account_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    artistId: text("artist_id")
+      .notNull()
+      .references(() => artist.id, { onDelete: "restrict" }),
+    title: text("title").notNull(),
+    kind: text("kind", { enum: ["single", "ep", "album"] }).notNull(),
+    /** Smart link, Linkfire, Spotify — whatever they hand out. */
+    url: text("url"),
+    /** YYYY-MM-DD. Kept as text: a release date is a calendar date, and
+     *  timezones have no business shifting it by a day. */
+    releaseDate: text("release_date"),
+    notes: text("notes"),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (t) => [index("press_release_account_idx").on(t.accountId)],
+);
+
+/**
+ * Every file attached to a release. One table rather than four: they differ
+ * only by `kind`, and the alternative is four tables with identical columns
+ * and four of every query.
+ */
+export const releaseAsset = sqliteTable(
+  "release_asset",
+  {
+    id: text("id").primaryKey(),
+    releaseId: text("release_id")
+      .notNull()
+      .references(() => pressRelease.id, { onDelete: "cascade" }),
+    kind: text("kind", {
+      enum: ["cover", "photo", "track", "document"],
+    }).notNull(),
+    r2Key: text("r2_key").notNull(),
+    filename: text("filename").notNull(),
+    contentType: text("content_type").notNull(),
+    sizeBytes: integer("size_bytes").notNull(),
+    /** Free text: photographer credit, track order, "radio edit". */
+    caption: text("caption"),
+    position: integer("position").notNull().default(0),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (t) => [index("release_asset_release_idx").on(t.releaseId, t.kind, t.position)],
+);
+
+export type Artist = typeof artist.$inferSelect;
+export type PressRelease = typeof pressRelease.$inferSelect;
+export type ReleaseAsset = typeof releaseAsset.$inferSelect;
+
+/* ------------------------------------------------------------------ *
  * Ideas — the public suggestion board at /ideas
  * ------------------------------------------------------------------ */
 
