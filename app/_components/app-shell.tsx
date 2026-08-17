@@ -25,9 +25,9 @@ export function AppShell({
   return (
     <div className="flex flex-1 flex-col">
       <header className="sticky top-0 z-50 border-b border-line/70 bg-background/80 backdrop-blur-xl">
-        <div className={`${container} flex h-18 items-center gap-1`}>
+        <div className={`${container} flex h-16 items-center gap-1 sm:h-18`}>
           <Link href="/account" className={`rounded-xl ${focusable}`}>
-            <Wordmark className="h-10" />
+            <Wordmark className="h-8 sm:h-10" />
           </Link>
 
           {tool && (
@@ -40,7 +40,7 @@ export function AppShell({
           )}
 
           {nav && nav.length > 0 && (
-            <nav className="ml-5 flex items-center gap-0.5">
+            <nav className="ml-2 flex items-center gap-0.5 sm:ml-5">
               {nav.map((item) => (
                 <NavLink key={item.href} href={item.href}>
                   {item.label}
@@ -51,7 +51,7 @@ export function AppShell({
 
           <form action={signOutAction} className="ml-auto">
             <button
-              className={`rounded-full px-4 py-2 text-sm text-muted transition-colors hover:bg-surface-muted hover:text-foreground ${focusable}`}
+              className={`rounded-full px-3 py-2 text-xs text-muted transition-colors hover:bg-surface-muted hover:text-foreground sm:px-4 sm:text-sm ${focusable}`}
             >
               Sign out
             </button>
