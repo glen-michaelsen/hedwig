@@ -41,6 +41,7 @@ export default async function BioEditorPage() {
   const blocks = parseBlocks(blockRows);
   const clicks = Object.fromEntries(stats.clicksByBlock);
   const url = bioPageUrl(page.handle);
+  const viewUrl = page.published ? url : `${url}?preview=1`;
 
   return (
     <>
@@ -57,7 +58,12 @@ export default async function BioEditorPage() {
         }
         action={
           <div className="flex flex-wrap items-center gap-3">
-            <Link href={url} className={buttonGhost}>
+            <Link
+              href={viewUrl}
+              target="_blank"
+              rel="noreferrer noopener"
+              className={buttonGhost}
+            >
               View page
             </Link>
             <form action={setPublishedAction}>

@@ -300,6 +300,30 @@ export async function getPublicPage(handle: string) {
   return { page, blocks: blocks.filter((b) => b.visible), socials };
 }
 
+/**
+ * Preview lookup for an owner viewing their own unpublished page. Scoped by
+ * accountId, not just handle, so a preview link never leaks another
+ * account's draft.
+ */
+export async function getPreviewPage(handle: string, accountId: string) {
+  const db = await getDb();
+
+  const page = await db
+    .select()
+    .from(bioPage)
+    .where(and(eq(bioPage.handle, handle), eq(bioPage.accountId, accountId)))
+    .get();
+
+  if (!page) return null;
+
+  const [blocks, socials] = await Promise.all([
+    listBlocks(page.id),
+    listSocials(page.id),
+  ]);
+
+  return { page, blocks: blocks.filter((b) => b.visible), socials };
+}
+
 /** An old handle resolves to the current one so the URL can redirect. */
 export async function resolveOldHandle(handle: string) {
   const db = await getDb();

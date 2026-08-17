@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { getAccount } from "@/lib/auth";
 import { todayIso } from "@/lib/clock";
 import { parseBlocks } from "@/lib/bio/blocks";
 import { socialLabel } from "@/lib/bio/socials";
@@ -17,14 +18,34 @@ function readHandle(raw: string): string | null {
   return handle.length > 0 ? handle : null;
 }
 
+/**
+ * Published pages are public. An unpublished one only renders for its own
+ * account, and only when asked for with `?preview` — otherwise it 404s like
+ * any other unpublished handle.
+ */
+async function findPage(handle: string, wantsPreview: boolean) {
+  const published = await dal.getPublicPage(handle);
+  if (published) return { found: published, isPreview: false };
+
+  if (!wantsPreview) return { found: null, isPreview: false };
+
+  const account = await getAccount();
+  if (!account) return { found: null, isPreview: false };
+
+  const preview = await dal.getPreviewPage(handle, account.id);
+  return { found: preview, isPreview: preview !== null };
+}
+
 export async function generateMetadata({
   params,
+  searchParams,
 }: PageProps<"/[handle]">): Promise<Metadata> {
   const { handle: raw } = await params;
+  const { preview } = await searchParams;
   const handle = readHandle(raw);
   if (!handle) return {};
 
-  const found = await dal.getPublicPage(handle);
+  const { found } = await findPage(handle, preview !== undefined);
   if (!found) return {};
 
   const avatar = publicImageUrl(found.page.avatarKey);
@@ -42,12 +63,14 @@ export async function generateMetadata({
 
 export default async function BioPublicPage({
   params,
+  searchParams,
 }: PageProps<"/[handle]">) {
   const { handle: raw } = await params;
+  const { preview } = await searchParams;
   const handle = readHandle(raw);
   if (!handle) notFound();
 
-  const found = await dal.getPublicPage(handle);
+  const { found, isPreview } = await findPage(handle, preview !== undefined);
 
   if (!found) {
     // A handle the artist used to have still gets people there.
@@ -64,7 +87,10 @@ export default async function BioPublicPage({
 
   // Counted here rather than by beacon: the page is server-rendered per
   // request today. If it ever gets edge-cached, this moves to a beacon.
-  await dal.recordView(page.id, await todayIso());
+  // Previews are the owner checking their own draft, not real traffic.
+  if (!isPreview) {
+    await dal.recordView(page.id, await todayIso());
+  }
 
   const backgroundStyle =
     page.backgroundKind === "image" && background
@@ -85,6 +111,12 @@ export default async function BioPublicPage({
           aria-hidden
           className="pointer-events-none absolute inset-0 bg-black/55"
         />
+      )}
+
+      {isPreview && (
+        <div className="sticky top-0 z-10 bg-amber-500 px-4 py-2 text-center text-sm font-medium text-white">
+          Preview — this page isn&rsquo;t published yet. Only you can see it.
+        </div>
       )}
 
       <main className="relative mx-auto w-full max-w-[34rem] px-6 py-16 sm:py-24">
