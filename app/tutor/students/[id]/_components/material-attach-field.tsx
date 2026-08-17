@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { KindBadge, actionPillBrand, input, label } from "@/app/_components/ui";
+import { KindBadge, input, label } from "@/app/_components/ui";
 
 export type MaterialOption = {
   id: string;
@@ -42,6 +42,7 @@ export function MaterialAttachField({
       )
     : [];
   const recent = available.slice(0, RECENT_COUNT);
+  const shown = needle ? results : recent;
 
   function attach(materialId: string) {
     setAttachedIds((current) =>
@@ -56,18 +57,18 @@ export function MaterialAttachField({
   }
 
   function onSearchKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
-    if (event.key === "ArrowDown" && results.length) {
+    if (event.key === "ArrowDown" && shown.length) {
       event.preventDefault();
-      setActiveIndex((i) => Math.min(i + 1, results.length - 1));
-    } else if (event.key === "ArrowUp" && results.length) {
+      setActiveIndex((i) => Math.min(i + 1, shown.length - 1));
+    } else if (event.key === "ArrowUp" && shown.length) {
       event.preventDefault();
       setActiveIndex((i) => Math.max(i - 1, 0));
     } else if (event.key === "Enter") {
       // Always swallow Enter here — this field sits inside the note form,
       // and letting it fall through would submit the whole thing.
       event.preventDefault();
-      if (results.length) {
-        attach(results[Math.min(activeIndex, results.length - 1)].id);
+      if (shown.length) {
+        attach(shown[Math.min(activeIndex, shown.length - 1)].id);
       }
     }
   }
@@ -108,32 +109,11 @@ export function MaterialAttachField({
         <div>
           <p className={label}>Add material</p>
 
-          {!needle && recent.length > 0 && (
-            <ul className="mb-3 grid gap-2 sm:grid-cols-2">
-              {recent.map((m) => (
-                <li
-                  key={m.id}
-                  className="flex items-center gap-2.5 rounded-2xl bg-surface-muted px-4 py-3 text-sm"
-                >
-                  <KindBadge kind={m.kind} />
-                  <span className="min-w-0 flex-1 truncate">{m.title}</span>
-                  <button
-                    type="button"
-                    onClick={() => attach(m.id)}
-                    className={`${actionPillBrand} shrink-0`}
-                  >
-                    Add
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-
           <input
             className={input}
             type="text"
             role="combobox"
-            aria-expanded={needle.length > 0}
+            aria-expanded={shown.length > 0}
             aria-controls="material-search-results"
             placeholder="Search your library"
             value={query}
@@ -144,35 +124,33 @@ export function MaterialAttachField({
             onKeyDown={onSearchKeyDown}
           />
 
-          {needle && (
-            <ul
-              id="material-search-results"
-              role="listbox"
-              className="mt-2 divide-y divide-line overflow-hidden rounded-2xl border border-line"
-            >
-              {results.length === 0 ? (
-                <li className="px-4 py-3 text-sm text-muted">
-                  Nothing matches that.
+          <ul
+            id="material-search-results"
+            role="listbox"
+            className="mt-2 divide-y divide-line overflow-hidden rounded-2xl border border-line"
+          >
+            {shown.length === 0 ? (
+              <li className="px-4 py-3 text-sm text-muted">
+                Nothing matches that.
+              </li>
+            ) : (
+              shown.map((m, i) => (
+                <li key={m.id} role="option" aria-selected={i === activeIndex}>
+                  <button
+                    type="button"
+                    onClick={() => attach(m.id)}
+                    onMouseEnter={() => setActiveIndex(i)}
+                    className={`flex w-full items-center gap-2.5 px-4 py-3 text-left text-sm transition-colors ${
+                      i === activeIndex ? "bg-brand-500/8" : "hover:bg-surface-muted"
+                    }`}
+                  >
+                    <KindBadge kind={m.kind} />
+                    <span className="min-w-0 flex-1 truncate">{m.title}</span>
+                  </button>
                 </li>
-              ) : (
-                results.map((m, i) => (
-                  <li key={m.id} role="option" aria-selected={i === activeIndex}>
-                    <button
-                      type="button"
-                      onClick={() => attach(m.id)}
-                      onMouseEnter={() => setActiveIndex(i)}
-                      className={`flex w-full items-center gap-2.5 px-4 py-3 text-left text-sm transition-colors ${
-                        i === activeIndex ? "bg-brand-500/8" : "hover:bg-surface-muted"
-                      }`}
-                    >
-                      <KindBadge kind={m.kind} />
-                      <span className="min-w-0 flex-1 truncate">{m.title}</span>
-                    </button>
-                  </li>
-                ))
-              )}
-            </ul>
-          )}
+              ))
+            )}
+          </ul>
         </div>
       )}
     </div>
