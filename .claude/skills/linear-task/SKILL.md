@@ -86,14 +86,33 @@ run can't pick it up again.
 Workers Builds does not run migrations, so schema-dependent code pushed
 without applying one puts new code in front of an old database on preview.
 
-- **Running locally** (wrangler is logged in): apply it to preview *before*
-  pushing — `npm run db:migrate:preview`. If the migration itself fails,
-  that's the failure path.
-- **Running in the cloud** (no Cloudflare credentials — check with
-  `npx wrangler whoami`): you cannot apply it. Take the **blocked path**
-  instead: commit nothing, and file the `Glen` issue saying the change needs
-  a migration applied by hand. Pushing schema code you can't migrate is worse
-  than not shipping it.
+Apply it to **preview**, before pushing:
+
+```bash
+npm run db:migrate:preview
+```
+
+That needs Cloudflare credentials — a logged-in wrangler locally, or
+`CLOUDFLARE_API_TOKEN` in the environment. Check with `npx wrangler whoami`.
+If neither is there, take the **blocked path**: commit nothing and file the
+`Glen` issue. Pushing schema code you can't migrate is worse than not
+shipping it.
+
+If the migration itself fails, that is the failure path — don't edit the
+migration to make it pass, and don't push the code without it.
+
+> ### Never touch the production database
+>
+> **Do not run `npm run db:migrate`.** That targets production, and applying
+> a migration there is a human decision taken at merge time.
+>
+> The API token this loop runs with can reach production — D1 tokens are
+> account-scoped, so Cloudflare can't fence it off. This rule is the only
+> thing keeping the loop out. The same goes for `wrangler d1 execute`:
+> preview only, always `--env preview`, and read-only unless a migration
+> requires otherwise.
+>
+> If an issue asks you to change production data, that is the blocked path.
 
 ## Step 4 — ship to dev
 
@@ -141,6 +160,8 @@ so explicitly in the comment so the next run isn't surprised by it.
 
 - Exactly one issue per run.
 - Never push to `main`. Never open a PR or a feature branch.
+- Never migrate, write to, or delete from the **production** database.
+  Preview is yours; production is not.
 - Never leave an issue in `In Progress` at the end of a run. Terminal states
   are `Done` (shipped) or `Todo` + a `Glen` blocker (blocked or failed).
 - Never weaken a check to make it pass.
