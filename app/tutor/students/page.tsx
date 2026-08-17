@@ -2,15 +2,8 @@ import Link from "next/link";
 import { requireAccount } from "@/lib/auth";
 import { listStudents } from "@/lib/dal/tutor";
 import { formatPhone } from "@/lib/phone";
-import {
-  Empty,
-  Panel,
-  PanelList,
-  PageHeader,
-  SectionTitle,
-  panelRow,
-} from "@/app/_components/ui";
-import { AddStudentForm } from "./_components/add-student-form";
+import { Empty, Panel, PanelList, PageHeader, panelRow } from "@/app/_components/ui";
+import { NewStudentModal } from "./_components/new-student-modal";
 
 function formatLastSeen(date: Date | null) {
   if (!date) return "never signed in";
@@ -30,6 +23,7 @@ export default async function StudentsPage() {
       <PageHeader
         title="Students"
         subtitle="Each student signs in with their phone number and a PIN — no email, no account."
+        action={<NewStudentModal />}
       />
 
       {students.length === 0 ? (
@@ -71,9 +65,6 @@ export default async function StudentsPage() {
           </PanelList>
         </Panel>
       )}
-
-      <SectionTitle>Add a student</SectionTitle>
-      <AddStudentForm />
     </>
   );
 }
