@@ -9,6 +9,21 @@ export function newPin(): string {
   return Array.from(bytes, (b) => String(b % 10)).join("");
 }
 
+/**
+ * One-way digest of an IP address, so rate limiting can count repeat
+ * submitters without keeping the addresses. Plain SHA-256 is enough: this
+ * guards a public form, not a secret.
+ */
+export async function hashIp(ip: string): Promise<string> {
+  const bits = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(ip),
+  );
+  return Array.from(new Uint8Array(bits), (b) =>
+    b.toString(16).padStart(2, "0"),
+  ).join("");
+}
+
 /* ---------------------------- PIN hashing ---------------------------- */
 
 // A 4-digit PIN only has 10k candidates, so the iteration count is not what

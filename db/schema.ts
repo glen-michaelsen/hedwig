@@ -380,6 +380,49 @@ export const bioClick = sqliteTable(
   (t) => [primaryKey({ columns: [t.blockId, t.day] })],
 );
 
+/* ------------------------------------------------------------------ *
+ * Ideas — the public suggestion board at /ideas
+ * ------------------------------------------------------------------ */
+
+export const idea = sqliteTable(
+  "idea",
+  {
+    id: text("id").primaryKey(),
+    title: text("title").notNull(),
+    detail: text("detail"),
+    /** Both optional — an idea is worth having without a name attached. */
+    name: text("name"),
+    email: text("email"),
+    area: text("area", { enum: ["platform", "link-in-bio", "tutor"] })
+      .notNull()
+      .default("platform"),
+    status: text("status", {
+      enum: ["new", "planned", "shipped", "declined"],
+    })
+      .notNull()
+      .default("new"),
+    /** Nothing reaches the public list until it has been read. */
+    published: integer("published", { mode: "boolean" })
+      .notNull()
+      .default(false),
+    /**
+     * SHA-256 of the submitter's IP, for the per-hour submission cap in
+     * lib/dal/ideas.ts. The address itself is never stored — this form is
+     * open to the public and the addresses are of no use to us afterwards.
+     */
+    ipHash: text("ip_hash"),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (t) => [
+    index("idea_published_idx").on(t.published, t.createdAt),
+    index("idea_ip_idx").on(t.ipHash, t.createdAt),
+  ],
+);
+
+export type Idea = typeof idea.$inferSelect;
+
 export type BioPage = typeof bioPage.$inferSelect;
 export type BioBlock = typeof bioBlock.$inferSelect;
 export type BioSocial = typeof bioSocial.$inferSelect;

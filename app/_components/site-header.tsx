@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { Wordmark, button, buttonGhost, container, focusable } from "./ui";
+import { featureItems } from "./nav-items";
+import { DesktopNav, MobileNav } from "./site-nav";
+import { Wordmark, container, focusable } from "./ui";
 
 /**
- * Public header. The two sign-in doors are always visible and always in the
- * same place — a student on a shared family phone shouldn't have to work out
- * which one is theirs.
+ * Public header. Both sign-in doors live under one "Log in" menu and are
+ * always in the same order — a student on a shared family phone shouldn't
+ * have to work out which one is theirs.
  */
 export function SiteHeader() {
   return (
@@ -14,15 +16,8 @@ export function SiteHeader() {
           <Wordmark className="h-10" />
         </Link>
 
-        <nav className="flex items-center gap-2.5">
-          <Link href="/login" className={buttonGhost}>
-            Student
-          </Link>
-          {/* "Musician", not "Tutor" — the account may never teach. */}
-          <Link href="/account/login" className={button}>
-            Musician
-          </Link>
-        </nav>
+        <DesktopNav />
+        <MobileNav />
       </div>
     </header>
   );
@@ -36,17 +31,17 @@ export function SiteFooter() {
       >
         <Wordmark className="h-7 opacity-70" />
         <nav className="flex flex-wrap items-center gap-6 text-sm text-muted">
-          <Link
-            href="/tutoring"
-            className="transition-colors hover:text-foreground"
-          >
-            Tutor
-          </Link>
-          <Link
-            href="/link-in-bio"
-            className="transition-colors hover:text-foreground"
-          >
-            Link in Bio
+          {featureItems.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="transition-colors hover:text-foreground"
+            >
+              {item.label}
+            </Link>
+          ))}
+          <Link href="/ideas" className="transition-colors hover:text-foreground">
+            Ideas
           </Link>
           <Link href="/login" className="transition-colors hover:text-foreground">
             Student sign in
