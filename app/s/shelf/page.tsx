@@ -13,7 +13,7 @@ export default async function ShelfPage() {
   return (
     <>
       <PageHeader
-        title="My material"
+        title="Material"
         subtitle="Everything your teacher has shared with you, in one place."
       />
       <StudentLibrary onShelf={onShelf} fromLessons={fromLessons} />

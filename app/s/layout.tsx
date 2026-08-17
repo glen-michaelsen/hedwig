@@ -16,14 +16,14 @@ export default async function PortalLayout({ children }: LayoutProps<"/s">) {
   return (
     <div className="flex flex-1 flex-col">
       <header className="sticky top-0 z-50 border-b border-line/70 bg-background/80 backdrop-blur-xl">
-        <div className={`${portalContainer} flex h-18 items-center gap-1`}>
+        <div className={`${portalContainer} flex h-16 items-center gap-2`}>
           <Link
             href="/s"
-            className={`mr-4 flex items-center gap-2.5 rounded-xl ${focusable}`}
+            className={`flex min-w-0 items-center gap-2.5 rounded-xl ${focusable}`}
           >
             <span
               aria-hidden
-              className="grid h-8 w-8 place-items-center rounded-xl bg-brand-600 text-sm font-semibold text-white shadow-brand"
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-brand-600 text-sm font-semibold text-white shadow-brand"
             >
               {studio.slice(0, 1).toUpperCase()}
             </span>
@@ -32,12 +32,7 @@ export default async function PortalLayout({ children }: LayoutProps<"/s">) {
             </span>
           </Link>
 
-          <nav className="flex items-center gap-0.5">
-            <NavLink href="/s">Lessons</NavLink>
-            <NavLink href="/s/shelf">My material</NavLink>
-          </nav>
-
-          <form action={studentLogoutAction} className="ml-auto">
+          <form action={studentLogoutAction} className="ml-auto shrink-0">
             <button
               className={`rounded-full px-4 py-2 text-sm text-muted transition-colors hover:bg-surface-muted hover:text-foreground ${focusable}`}
             >
@@ -45,6 +40,13 @@ export default async function PortalLayout({ children }: LayoutProps<"/s">) {
             </button>
           </form>
         </div>
+
+        <nav
+          className={`${portalContainer} flex items-center gap-0.5 border-t border-line/70 py-1.5`}
+        >
+          <NavLink href="/s">Lessons</NavLink>
+          <NavLink href="/s/shelf">Material</NavLink>
+        </nav>
       </header>
 
       <main className={`${portalContainer} flex-1 py-12 sm:py-16`}>
