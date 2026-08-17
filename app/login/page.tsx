@@ -3,6 +3,7 @@
 import {
   useActionState,
   useEffect,
+  useRef,
   useState,
   useSyncExternalStore,
 } from "react";
@@ -63,7 +64,14 @@ export default function StudentLoginPage() {
   // Ticked by default when there's already a number saved, until the student
   // says otherwise.
   const [rememberChoice, setRememberChoice] = useState<boolean | null>(null);
-  const remember = rememberChoice ?? savedPhone !== null;
+  const hasSavedPhone = savedPhone !== null;
+  const remember = rememberChoice ?? hasSavedPhone;
+
+  const pinRef = useRef<HTMLInputElement>(null);
+  // Phone is prefilled from a saved number, so the PIN is what's missing.
+  useEffect(() => {
+    if (hasSavedPhone) pinRef.current?.focus();
+  }, [hasSavedPhone]);
 
   useEffect(() => {
     try {
@@ -132,6 +140,7 @@ export default function StudentLoginPage() {
             name="phone"
             defaultValue={savedPhone}
             onValueChange={setPhone}
+            autoFocus={!hasSavedPhone}
             required
           />
         </div>
@@ -141,6 +150,7 @@ export default function StudentLoginPage() {
             PIN
           </label>
           <input
+            ref={pinRef}
             className={`${input} text-center font-mono text-2xl tracking-[0.4em]`}
             id="pin"
             name="pin"

@@ -64,6 +64,7 @@ export function PhoneInput({
   defaultValue,
   required,
   autoComplete = "tel",
+  autoFocus,
   onValueChange,
 }: {
   name: string;
@@ -72,6 +73,7 @@ export function PhoneInput({
   defaultValue?: string | null;
   required?: boolean;
   autoComplete?: string;
+  autoFocus?: boolean;
   onValueChange?: (e164: string) => void;
 }) {
   const options = useCountryOptions();
@@ -164,6 +166,7 @@ export function PhoneInput({
         type="tel"
         inputMode="tel"
         autoComplete={autoComplete}
+        autoFocus={autoFocus}
         placeholder="Phone number"
         value={national}
         onChange={(event) => handleNumberChange(event.target.value)}
