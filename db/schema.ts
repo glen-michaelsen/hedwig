@@ -421,6 +421,34 @@ export const idea = sqliteTable(
   ],
 );
 
+/**
+ * One row per visitor per idea. The primary key is the dedupe — a second
+ * vote from the same browser can't be written, whatever the application
+ * layer believes.
+ *
+ * `voterKey` is an opaque id from a cookie, not an identity: clearing
+ * cookies earns another vote. That's the deliberate trade for a button
+ * anyone can press without an account, and `ipHash` is what keeps that
+ * from scaling into ballot stuffing.
+ */
+export const ideaVote = sqliteTable(
+  "idea_vote",
+  {
+    ideaId: text("idea_id")
+      .notNull()
+      .references(() => idea.id, { onDelete: "cascade" }),
+    voterKey: text("voter_key").notNull(),
+    ipHash: text("ip_hash"),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (t) => [
+    primaryKey({ columns: [t.ideaId, t.voterKey] }),
+    index("idea_vote_ip_idx").on(t.ipHash, t.createdAt),
+  ],
+);
+
 export type Idea = typeof idea.$inferSelect;
 
 export type BioPage = typeof bioPage.$inferSelect;

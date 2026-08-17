@@ -1,8 +1,10 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { z } from "zod";
-import { submitIdea, type IdeaArea } from "@/lib/dal/ideas";
+import { submitIdea, toggleVote, type IdeaArea } from "@/lib/dal/ideas";
+import { ensureVoterKey } from "@/lib/visitor";
 
 export type IdeaFormState = { error?: string; done?: boolean };
 
@@ -59,4 +61,31 @@ export async function submitIdeaAction(
   }
 
   return { done: true };
+}
+
+export type VoteState = { voted: boolean; error?: string };
+
+/**
+ * Pressing the button again takes the vote back, so the same call handles
+ * both directions. The cookie is issued here, on the first press — not on
+ * page load, so reading the page leaves no trace.
+ */
+export async function toggleVoteAction(ideaId: string): Promise<VoteState> {
+  const voterKey = await ensureVoterKey();
+  const ip = (await headers()).get("cf-connecting-ip");
+
+  const result = await toggleVote({ ideaId, voterKey, ip });
+
+  if (!result.ok) {
+    return {
+      voted: false,
+      error:
+        result.reason === "rate-limited"
+          ? "That's a lot of votes at once — try again later."
+          : "That idea isn't available.",
+    };
+  }
+
+  revalidatePath("/ideas");
+  return { voted: result.voted };
 }

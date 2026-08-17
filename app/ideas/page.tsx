@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
 import { Panel, PanelList, containerNarrow } from "@/app/_components/ui";
-import { listPublishedIdeas, type PublishedIdea } from "@/lib/dal/ideas";
+import {
+  listPublishedIdeas,
+  votesByVoter,
+  type PublishedIdea,
+} from "@/lib/dal/ideas";
+import { getVoterKey } from "@/lib/visitor";
 import { IdeaForm } from "./_components/idea-form";
+import { LikeButton } from "./_components/like-button";
 
 export const metadata: Metadata = {
   title: "Ideas — Trenodo",
@@ -35,33 +41,49 @@ const STATUS_LABELS = {
   declined: "Not for now",
 } as const;
 
-function IdeaRow({ idea }: { idea: PublishedIdea }) {
+function IdeaRow({ idea, voted }: { idea: PublishedIdea; voted: boolean }) {
   return (
-    <li className="px-6 py-5">
-      <div className="flex flex-wrap items-center gap-2.5">
-        <span
-          className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] ${
-            STATUS_STYLES[idea.status]
-          }`}
-        >
-          {STATUS_LABELS[idea.status]}
-        </span>
-        <span className="text-xs text-faint">{AREA_LABELS[idea.area]}</span>
+    <li className="flex items-start gap-5 px-6 py-5">
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <span
+            className={`rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] ${
+              STATUS_STYLES[idea.status]
+            }`}
+          >
+            {STATUS_LABELS[idea.status]}
+          </span>
+          <span className="text-xs text-faint">{AREA_LABELS[idea.area]}</span>
+        </div>
+
+        <p className="mt-2.5 text-sm font-medium">{idea.title}</p>
+        {idea.detail && (
+          <p className="mt-1.5 text-sm leading-relaxed text-muted text-pretty">
+            {idea.detail}
+          </p>
+        )}
+        {idea.name && <p className="mt-2 text-xs text-faint">— {idea.name}</p>}
       </div>
 
-      <p className="mt-2.5 text-sm font-medium">{idea.title}</p>
-      {idea.detail && (
-        <p className="mt-1.5 text-sm leading-relaxed text-muted text-pretty">
-          {idea.detail}
-        </p>
-      )}
-      {idea.name && <p className="mt-2 text-xs text-faint">— {idea.name}</p>}
+      <div className="shrink-0 pt-0.5">
+        <LikeButton ideaId={idea.id} votes={idea.votes} voted={voted} />
+      </div>
     </li>
   );
 }
 
 export default async function IdeasPage() {
   const ideas = await listPublishedIdeas();
+
+  // Only visitors who have voted before carry a cookie, so this is usually
+  // a no-op — see lib/visitor.ts.
+  const voterKey = await getVoterKey();
+  const voted = voterKey
+    ? await votesByVoter(
+        voterKey,
+        ideas.map((entry) => entry.id),
+      )
+    : new Set<string>();
 
   return (
     <>
@@ -86,6 +108,10 @@ export default async function IdeasPage() {
             <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
               What others have asked for
             </h2>
+            <p className="mt-1.5 text-sm text-muted">
+              Vote for the ones you want — it helps decide what gets built
+              first.
+            </p>
 
             {ideas.length === 0 ? (
               <p className="mt-4 rounded-4xl border border-dashed border-line px-6 py-14 text-center text-sm text-muted">
@@ -95,7 +121,11 @@ export default async function IdeasPage() {
               <Panel className="mt-4">
                 <PanelList>
                   {ideas.map((idea) => (
-                    <IdeaRow key={idea.id} idea={idea} />
+                    <IdeaRow
+                      key={idea.id}
+                      idea={idea}
+                      voted={voted.has(idea.id)}
+                    />
                   ))}
                 </PanelList>
               </Panel>

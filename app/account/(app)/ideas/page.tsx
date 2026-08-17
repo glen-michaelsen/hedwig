@@ -59,6 +59,14 @@ function IdeaRow({ idea }: { idea: AdminIdea }) {
             </a>
           </>
         )}
+        {idea.votes > 0 && (
+          <>
+            <span aria-hidden>·</span>
+            <span>
+              {idea.votes} {idea.votes === 1 ? "vote" : "votes"}
+            </span>
+          </>
+        )}
         {idea.published && (
           <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-emerald-700 dark:text-emerald-300">
             public
