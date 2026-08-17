@@ -30,7 +30,9 @@ export function BlockRenderer({ block }: { block: ParsedBlock }) {
 
   if (block.kind === "text") {
     if (block.config.variant === "divider") {
-      return <hr className="border-0 border-t border-current opacity-15" />;
+      return (
+        <hr className="my-4 h-1 rounded-full border-0 bg-[var(--bio-accent)] opacity-30" />
+      );
     }
     if (block.config.variant === "heading") {
       return (
