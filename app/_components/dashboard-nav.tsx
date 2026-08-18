@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useId, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useId,
+  useState,
+  type ComponentType,
+  type ReactNode,
+} from "react";
 import { Wordmark, focusable } from "./ui";
 import { MoreIcon } from "./nav-icons";
 
@@ -14,7 +20,12 @@ export type ShellItem = {
    * would otherwise light up on every page nested beneath them.
    */
   exact?: boolean;
-  icon?: ReactNode;
+  /**
+   * The icon *component*, not a rendered element. The rail draws it at 16px
+   * and the bottom bar at 20px, and a component can be handed the size it
+   * needs — an element can only be wrapped in a box that lies about it.
+   */
+  icon?: ComponentType<{ className?: string }>;
 };
 
 export type ShellGroup = {
@@ -56,9 +67,7 @@ function NavItems({ groups }: { groups: ShellGroup[] }) {
                   } ${focusable}`}
                 >
                   {item.icon && (
-                    <span className="h-4 w-4 shrink-0" aria-hidden="true">
-                      {item.icon}
-                    </span>
+                    <item.icon className="h-4 w-4 shrink-0" />
                   )}
                   {item.label}
                 </Link>
@@ -152,11 +161,7 @@ export function DashboardMobileNav({
                     : "text-muted hover:text-foreground"
                 } ${focusable}`}
               >
-                {item.icon && (
-                  <span className="h-5 w-5" aria-hidden="true">
-                    {item.icon}
-                  </span>
-                )}
+                {item.icon && <item.icon className="h-5 w-5" />}
                 {item.label}
               </Link>
             );
