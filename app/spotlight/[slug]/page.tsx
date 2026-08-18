@@ -10,6 +10,7 @@ import {
   focusable,
 } from "@/app/_components/ui";
 import { getAccount, isAdmin } from "@/lib/auth";
+import { todayIso } from "@/lib/clock";
 import {
   getPublishedSpotlight,
   getSpotlightBySlugForAdmin,
@@ -79,6 +80,11 @@ export default async function SpotlightArticlePage({
   const hero = article.headerAssetId ?? article.coverAssetId;
   const released = formatDate(article.releaseDate);
 
+  // Both are plain YYYY-MM-DD, so a string compare is a date compare — and
+  // it can't be knocked a day out by a timezone the way parsing would.
+  const today = await todayIso();
+  const upcoming = article.releaseDate !== null && today < article.releaseDate;
+
   // Blank lines separate paragraphs — the editor is a plain textarea, so
   // this is the whole of the formatting contract.
   const paragraphs = article.body
@@ -110,18 +116,21 @@ export default async function SpotlightArticlePage({
             <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-transparent" />
           </div>
 
-          <div className={`${container} relative -mt-32 pb-2 sm:-mt-44`}>
+          {/* The cover straddles the edge of the photograph: `translate-y`
+              moves it down without moving the headline beside it, and the
+              article below carries matching top padding so nothing collides. */}
+          <div className={`${container} relative -mt-36 sm:-mt-52`}>
             <div className="flex flex-col gap-6 sm:flex-row sm:items-end">
               {article.coverAssetId && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={`/spotlight/image/${article.coverAssetId}?size=md`}
                   alt={`${article.releaseTitle} cover`}
-                  className="h-32 w-32 shrink-0 rounded-2xl object-cover shadow-float ring-1 ring-white/15 sm:h-44 sm:w-44"
+                  className="h-44 w-44 shrink-0 translate-y-10 rounded-3xl object-cover shadow-float ring-1 ring-white/15 sm:h-64 sm:w-64 sm:translate-y-16"
                 />
               )}
 
-              <div className="min-w-0 pb-1">
+              <div className="min-w-0 pb-8 sm:pb-12">
                 <p className="text-xs font-medium uppercase tracking-[0.14em] text-white/80">
                   {article.artistName} · {KIND_LABELS[article.releaseKind]}
                   {released && ` · ${released}`}
@@ -129,15 +138,19 @@ export default async function SpotlightArticlePage({
                 <h1 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-white text-balance sm:text-5xl">
                   {article.headline}
                 </h1>
-                <span className="mt-4 inline-flex text-white">
-                  <Hearts rating={article.rating} className="h-5 w-5" />
+                <span className="mt-5 inline-flex">
+                  <Hearts
+                    rating={article.rating}
+                    className="h-5 w-5"
+                    tone="light"
+                  />
                 </span>
               </div>
             </div>
           </div>
         </header>
 
-        <article className={`${containerNarrow} mt-14`}>
+        <article className={`${containerNarrow} mt-20 sm:mt-28`}>
           {paragraphs.map((paragraph, index) => (
             <p
               key={index}
@@ -159,7 +172,7 @@ export default async function SpotlightArticlePage({
                 rel="noreferrer noopener"
                 className={button}
               >
-                Listen to {article.releaseTitle}
+                {upcoming ? "Pre-save" : "Listen to"} {article.releaseTitle}
               </a>
             </div>
           )}

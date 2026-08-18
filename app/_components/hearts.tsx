@@ -23,17 +23,28 @@ export function HeartShape({
 /**
  * The rating, read out as text for anyone not looking at it — a row of six
  * identical icons tells a screen reader nothing on its own.
+ *
+ * `tone="light"` is for hearts sitting on a photograph. The brand purple at
+ * 30% disappears against a dark image, which makes a 5-of-6 rating look like
+ * a 5-of-5 one — the empty hearts have to stay countable for the score to
+ * mean anything.
  */
 export function Hearts({
   rating,
   className = "h-5 w-5",
+  tone = "brand",
 }: {
   rating: number;
   className?: string;
+  tone?: "brand" | "light";
 }) {
+  const filledTone =
+    tone === "light" ? "text-white" : "text-brand-600 dark:text-brand-300";
+  const emptyTone = tone === "light" ? "text-white/55" : "text-brand-600/30 dark:text-brand-300/30";
+
   return (
     <span
-      className="inline-flex items-center gap-1 text-brand-600 dark:text-brand-300"
+      className="inline-flex items-center gap-1"
       role="img"
       aria-label={`${rating} out of ${MAX_RATING} hearts`}
     >
@@ -41,7 +52,7 @@ export function Hearts({
         <HeartShape
           key={index}
           filled={index < rating}
-          className={`${className} ${index < rating ? "" : "opacity-30"}`}
+          className={`${className} ${index < rating ? filledTone : emptyTone}`}
         />
       ))}
     </span>

@@ -76,8 +76,8 @@ export default async function SpotlightIndexPage() {
                   <h2 className="mt-2 max-w-3xl text-2xl font-semibold text-white text-balance sm:text-4xl">
                     {lead.headline}
                   </h2>
-                  <span className="mt-4 inline-flex text-white">
-                    <Hearts rating={lead.rating} className="h-4 w-4" />
+                  <span className="mt-4 inline-flex">
+                    <Hearts rating={lead.rating} className="h-4 w-4" tone="light" />
                   </span>
                 </div>
               </div>
