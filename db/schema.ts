@@ -468,6 +468,55 @@ export const releaseAsset = sqliteTable(
   (t) => [index("release_asset_release_idx").on(t.releaseId, t.kind, t.position)],
 );
 
+/* ------------------------------------------------------------------ *
+ * Spotlight — editorial posts about releases, written by the platform
+ * admin. The article borrows the release's cover and date rather than
+ * copying them, so correcting a release corrects every post about it.
+ * ------------------------------------------------------------------ */
+
+export const spotlight = sqliteTable(
+  "spotlight",
+  {
+    id: text("id").primaryKey(),
+    /** One post per release: a second review of the same record is an edit. */
+    releaseId: text("release_id")
+      .notNull()
+      .unique()
+      .references(() => pressRelease.id, { onDelete: "cascade" }),
+    /** The public URL is /spotlight/<slug>. */
+    slug: text("slug").notNull(),
+    headline: text("headline").notNull(),
+    /** Plain text; blank lines separate paragraphs. */
+    body: text("body").notNull(),
+    /** Hearts, 1 to 6. */
+    rating: integer("rating").notNull(),
+    /**
+     * Which press photo runs at the top. Nullable, and cleared rather than
+     * cascading if that photo is deleted — losing the hero shouldn't take
+     * the article with it.
+     */
+    headerAssetId: text("header_asset_id").references(() => releaseAsset.id, {
+      onDelete: "set null",
+    }),
+    published: integer("published", { mode: "boolean" })
+      .notNull()
+      .default(false),
+    publishedAt: integer("published_at", { mode: "timestamp" }),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (t) => [
+    uniqueIndex("spotlight_slug_idx").on(t.slug),
+    index("spotlight_published_idx").on(t.published, t.publishedAt),
+  ],
+);
+
+export type Spotlight = typeof spotlight.$inferSelect;
+
 export type Artist = typeof artist.$inferSelect;
 export type PressRelease = typeof pressRelease.$inferSelect;
 export type ReleaseAsset = typeof releaseAsset.$inferSelect;

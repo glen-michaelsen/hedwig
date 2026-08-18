@@ -132,6 +132,16 @@ export function DesktopNav() {
     <nav className="hidden items-center gap-1 md:flex">
       <Dropdown label="Features" items={featureItems} />
       <Link
+        href="/spotlight"
+        className={`${triggerBase} ${
+          pathname.startsWith("/spotlight")
+            ? "bg-surface-muted text-foreground"
+            : "text-muted hover:bg-surface-muted hover:text-foreground"
+        }`}
+      >
+        Spotlight
+      </Link>
+      <Link
         href="/ideas"
         className={`${triggerBase} ${
           pathname.startsWith("/ideas")
@@ -218,6 +228,16 @@ export function MobileNav() {
             className="fixed inset-x-0 top-18 z-50 max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-b border-line bg-surface px-6 py-6 shadow-float"
           >
             <MobileSection title="Features" items={featureItems} />
+
+            <Link
+              href="/spotlight"
+              className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
+            >
+              Spotlight
+              <span className="mt-0.5 block text-xs font-normal text-muted">
+                New music, written up.
+              </span>
+            </Link>
 
             <Link
               href="/ideas"

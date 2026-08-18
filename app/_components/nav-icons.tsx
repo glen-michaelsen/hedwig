@@ -99,6 +99,19 @@ export function IdeasIcon({ className = "h-4 w-4" }: IconProps) {
   );
 }
 
+export function SpotlightIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>
+      <path
+        d="M10 16.5s-6-3.7-6-7.6A3.4 3.4 0 0 1 10 6.6a3.4 3.4 0 0 1 6 2.3c0 3.9-6 7.6-6 7.6Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function SettingsIcon({ className = "h-4 w-4" }: IconProps) {
   return (
     <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>

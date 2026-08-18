@@ -15,6 +15,7 @@ export const RESERVED_HANDLES = new Set([
   "login",
   "logout",
   "s",
+  "spotlight",
   "studio",
   "tutor",
   "tutoring",

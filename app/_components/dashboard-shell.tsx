@@ -14,6 +14,7 @@ import {
   LinkInBioIcon,
   PressKitIcon,
   SettingsIcon,
+  SpotlightIcon,
   TutorIcon,
 } from "./nav-icons";
 import { Wordmark, focusable } from "./ui";
@@ -48,6 +49,11 @@ export async function DashboardShell({ children }: { children: ReactNode }) {
           {
             title: "Admin",
             items: [
+              {
+                href: "/account/spotlight",
+                label: "Spotlight",
+                icon: <SpotlightIcon />,
+              },
               { href: "/account/ideas", label: "Ideas", icon: <IdeasIcon /> },
             ],
           } satisfies ShellGroup,
