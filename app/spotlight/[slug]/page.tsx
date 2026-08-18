@@ -135,7 +135,10 @@ export default async function SpotlightArticlePage({
                     />
                   )}
 
-                  <div className="min-w-0 pb-8 sm:pb-14">
+                  {/* Bottom padding matches the column gap above, so the
+                      space under the hearts reads as the same measure as the
+                      space between the cover and the text. */}
+                  <div className="min-w-0 pb-5 sm:pb-7">
                     <p className="text-xs font-medium uppercase tracking-[0.14em] text-white/80">
                       {article.artistName} · {KIND_LABELS[article.releaseKind]}
                       {released && ` · ${released}`}
