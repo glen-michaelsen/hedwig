@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { featureItems } from "./nav-items";
+import type { NavItem } from "./nav-items";
+import { featureItems, loginItems } from "./nav-items";
 import { DesktopNav, MobileNav } from "./site-nav";
 import { Wordmark, container, focusable } from "./ui";
 
@@ -23,42 +24,69 @@ export function SiteHeader() {
   );
 }
 
-export function SiteFooter() {
+/**
+ * A column of footer links, e.g. "Features" or "Log in". More columns will
+ * join these two as further tools ship — see nav-items.ts.
+ */
+function FooterColumn({ title, items }: { title: string; items: NavItem[] }) {
   return (
-    <footer className="border-t border-line/70 py-12">
-      <div
-        className={`${container} flex flex-wrap items-center justify-between gap-6`}
-      >
-        <Wordmark className="h-7 opacity-70" />
-        <nav className="flex flex-wrap items-center gap-6 text-sm text-muted">
-          {featureItems.map((item) => (
+    <div>
+      <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-white/50">
+        {title}
+      </h2>
+      <ul className="mt-4 flex flex-col gap-3">
+        {items.map((item) => (
+          <li key={item.href}>
             <Link
-              key={item.href}
               href={item.href}
-              className="transition-colors hover:text-foreground"
+              className="text-sm text-white/80 transition-colors hover:text-white"
             >
               {item.label}
             </Link>
-          ))}
-          <Link href="/ideas" className="transition-colors hover:text-foreground">
-            Ideas
-          </Link>
-          <Link href="/login" className="transition-colors hover:text-foreground">
-            Student sign in
-          </Link>
-          <Link
-            href="/account/login"
-            className="transition-colors hover:text-foreground"
-          >
-            Musician sign in
-          </Link>
-          <Link
-            href="/account/signup"
-            className="transition-colors hover:text-foreground"
-          >
-            Create an account
-          </Link>
-        </nav>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export function SiteFooter() {
+  const signInItems: NavItem[] = loginItems.map((item) => ({
+    ...item,
+    label: `${item.label} sign in`,
+  }));
+
+  return (
+    <footer className="bg-linear-to-br from-brand-600 via-brand-700 to-brand-900 text-white">
+      <div className={`${container} py-16 sm:py-20`}>
+        <div className="flex flex-col gap-12 sm:flex-row sm:items-start sm:justify-between">
+          <div className="max-w-xs">
+            <Wordmark className="h-8" variant="white" />
+            <p className="mt-4 text-sm leading-relaxed text-white/70 text-pretty">
+              Making life simpler and more efficient for musicians.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-10 sm:gap-16">
+            <FooterColumn title="Features" items={featureItems} />
+            <FooterColumn title="Log in" items={signInItems} />
+          </div>
+        </div>
+
+        <div className="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-8 text-sm text-white/60">
+          <p>&copy; {new Date().getFullYear()} Trenodo</p>
+          <div className="flex flex-wrap items-center gap-6">
+            <Link href="/ideas" className="transition-colors hover:text-white">
+              Ideas
+            </Link>
+            <Link
+              href="/account/signup"
+              className="transition-colors hover:text-white"
+            >
+              Create an account
+            </Link>
+          </div>
+        </div>
       </div>
     </footer>
   );

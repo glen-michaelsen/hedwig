@@ -209,11 +209,18 @@ export function Pill({
  * resizing or optimising, and this way it can't be blocked on the image
  * pipeline in a header that renders on every page.
  */
-export function Wordmark({ className = "h-7" }: { className?: string }) {
+export function Wordmark({
+  className = "h-7",
+  variant = "brand",
+}: {
+  className?: string;
+  /** "white" for use on the brand-gradient footer and other dark surfaces. */
+  variant?: "brand" | "white";
+}) {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src="/logo.svg"
+      src={variant === "white" ? "/logo-white.svg" : "/logo.svg"}
       alt="Trenodo"
       width={1980}
       height={500}
