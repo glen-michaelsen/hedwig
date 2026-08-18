@@ -128,7 +128,11 @@ export default async function SpotlightArticlePage({
           </div>
 
           {article.coverAssetId && (
-            <div className="flex justify-center">
+            // `relative` matters: the photograph above is a positioned
+            // element, so a static box pulled up by a negative margin paints
+            // underneath it. Giving the cover a position of its own puts it
+            // back on top.
+            <div className="relative z-10 flex justify-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={`/spotlight/image/${article.coverAssetId}?size=md`}
