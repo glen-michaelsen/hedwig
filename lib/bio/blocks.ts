@@ -6,7 +6,7 @@ import { z } from "zod";
  * a malformed block should not take a public page down.
  */
 
-export const BLOCK_KINDS = ["link", "text", "player", "video"] as const;
+export const BLOCK_KINDS = ["link", "text", "player", "video", "release"] as const;
 export type BlockKind = (typeof BLOCK_KINDS)[number];
 
 export const linkConfig = z.object({
@@ -30,23 +30,35 @@ export const videoConfig = z.object({
   provider: z.string().nullish(),
 });
 
+/**
+ * A release block only stores which release it points at. The title, smart
+ * link and date are read live from the press kit at render time, so editing
+ * a release updates every block that links to it.
+ */
+export const releaseConfig = z.object({
+  releaseId: z.string().min(1),
+});
+
 const CONFIG_BY_KIND = {
   link: linkConfig,
   text: textConfig,
   player: playerConfig,
   video: videoConfig,
+  release: releaseConfig,
 } as const;
 
 export type LinkConfig = z.infer<typeof linkConfig>;
 export type TextConfig = z.infer<typeof textConfig>;
 export type PlayerConfig = z.infer<typeof playerConfig>;
 export type VideoConfig = z.infer<typeof videoConfig>;
+export type ReleaseConfig = z.infer<typeof releaseConfig>;
 
 export type ParsedBlock =
   | { id: string; kind: "link"; visible: boolean; config: LinkConfig }
   | { id: string; kind: "text"; visible: boolean; config: TextConfig }
   | { id: string; kind: "player"; visible: boolean; config: PlayerConfig }
-  | { id: string; kind: "video"; visible: boolean; config: VideoConfig };
+  | { id: string; kind: "video"; visible: boolean; config: VideoConfig }
+  | { id: string; kind: "release"; visible: boolean; config: ReleaseConfig };
 
 export function parseBlockConfig(kind: string, raw: unknown) {
   const schema = CONFIG_BY_KIND[kind as BlockKind];
@@ -87,4 +99,5 @@ export const BLOCK_LABELS: Record<BlockKind, { title: string; hint: string }> = 
   text: { title: "Text", hint: "A heading, a note, or a divider" },
   player: { title: "Music", hint: "Spotify, Apple Music or SoundCloud" },
   video: { title: "Video", hint: "YouTube or Vimeo" },
+  release: { title: "Release", hint: "Pre-save or listen link from your press kit" },
 };

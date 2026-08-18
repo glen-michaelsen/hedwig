@@ -329,7 +329,9 @@ export const bioBlock = sqliteTable(
     pageId: text("page_id")
       .notNull()
       .references(() => bioPage.id, { onDelete: "cascade" }),
-    kind: text("kind", { enum: ["link", "text", "player", "video"] }).notNull(),
+    kind: text("kind", {
+      enum: ["link", "text", "player", "video", "release"],
+    }).notNull(),
     position: integer("position").notNull(),
     visible: integer("visible", { mode: "boolean" }).notNull().default(true),
     config: text("config").notNull(),

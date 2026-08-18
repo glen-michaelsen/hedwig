@@ -8,6 +8,7 @@ import { socialLabel } from "@/lib/bio/socials";
 import { resolveTheme, themeVars } from "@/lib/bio/theme";
 import { publicImageUrl } from "@/lib/bio/urls";
 import * as dal from "@/lib/dal/bio";
+import { listReleaseLinks, type ReleaseLink } from "@/lib/dal/press";
 import { BlockRenderer } from "./_components/blocks";
 
 /** URLs look like /@handle; the leading @ is part of the segment. */
@@ -84,12 +85,23 @@ export default async function BioPublicPage({
   const theme = resolveTheme(page);
   const avatar = publicImageUrl(page.avatarKey);
   const background = publicImageUrl(page.backgroundValue);
+  const today = await todayIso();
+
+  // Release blocks read their title, link and date live from the press kit,
+  // so editing a release updates every page that points at it. Only fetch
+  // when a release block is actually on the page.
+  const releasesById = new Map<string, ReleaseLink>();
+  if (blocks.some((b) => b.kind === "release")) {
+    for (const release of await listReleaseLinks(page.accountId)) {
+      releasesById.set(release.id, release);
+    }
+  }
 
   // Counted here rather than by beacon: the page is server-rendered per
   // request today. If it ever gets edge-cached, this moves to a beacon.
   // Previews are the owner checking their own draft, not real traffic.
   if (!isPreview) {
-    await dal.recordView(page.id, await todayIso());
+    await dal.recordView(page.id, today);
   }
 
   const backgroundStyle =
@@ -164,7 +176,16 @@ export default async function BioPublicPage({
         {blocks.length > 0 && (
           <div className="mt-10 space-y-3.5">
             {blocks.map((block) => (
-              <BlockRenderer key={block.id} block={block} />
+              <BlockRenderer
+                key={block.id}
+                block={block}
+                today={today}
+                release={
+                  block.kind === "release"
+                    ? (releasesById.get(block.config.releaseId) ?? null)
+                    : undefined
+                }
+              />
             ))}
           </div>
         )}

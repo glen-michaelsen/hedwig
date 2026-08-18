@@ -3,6 +3,7 @@ import { requireAccount } from "@/lib/auth";
 import { parseBlocks } from "@/lib/bio/blocks";
 import { bioPageUrl } from "@/lib/bio/urls";
 import * as dal from "@/lib/dal/bio";
+import { listReleaseLinks } from "@/lib/dal/press";
 import {
   PageHeader,
   SectionTitle,
@@ -32,10 +33,11 @@ export default async function BioEditorPage() {
     );
   }
 
-  const [blockRows, socials, stats] = await Promise.all([
+  const [blockRows, socials, stats, releases] = await Promise.all([
     dal.listBlocks(page.id),
     dal.listSocials(page.id),
     dal.getStats(page.id),
+    listReleaseLinks(account.id),
   ]);
 
   const blocks = parseBlocks(blockRows);
@@ -89,7 +91,7 @@ export default async function BioEditorPage() {
 
       <div className="space-y-14">
         <section>
-          <BlockEditor blocks={blocks} clicks={clicks} />
+          <BlockEditor blocks={blocks} clicks={clicks} releases={releases} />
         </section>
 
         <section>

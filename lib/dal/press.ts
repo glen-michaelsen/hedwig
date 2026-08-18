@@ -108,6 +108,29 @@ export async function listReleases(accountId: string) {
     .orderBy(sql`${pressRelease.releaseDate} is null`, desc(pressRelease.releaseDate), desc(pressRelease.createdAt));
 }
 
+/**
+ * The fields a link-in-bio release block needs: which release, its title, the
+ * smart link fans follow, and the date the copy switches from pre-save to
+ * listen. Scoped by account like everything else here.
+ */
+export async function listReleaseLinks(accountId: string) {
+  const db = await getDb();
+  return db
+    .select({
+      id: pressRelease.id,
+      title: pressRelease.title,
+      url: pressRelease.url,
+      releaseDate: pressRelease.releaseDate,
+    })
+    .from(pressRelease)
+    .where(eq(pressRelease.accountId, accountId))
+    .orderBy(
+      sql`${pressRelease.releaseDate} is null`,
+      desc(pressRelease.releaseDate),
+      desc(pressRelease.createdAt),
+    );
+}
+
 export async function getRelease(accountId: string, releaseId: string) {
   const db = await getDb();
   const [row] = await db
@@ -296,3 +319,4 @@ export async function deleteAsset(
 
 export type ReleaseSummary = Awaited<ReturnType<typeof listReleases>>[number];
 export type ReleaseAssetRow = Awaited<ReturnType<typeof listAssets>>[number];
+export type ReleaseLink = Awaited<ReturnType<typeof listReleaseLinks>>[number];

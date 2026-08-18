@@ -11,6 +11,7 @@ import {
 } from "@/lib/bio/r2-public";
 import { parseHex } from "@/lib/bio/theme";
 import * as dal from "@/lib/dal/bio";
+import * as press from "@/lib/dal/press";
 import { detectMusicProvider } from "@/lib/embed";
 import { detectProvider } from "@/lib/embed";
 
@@ -183,6 +184,9 @@ function configFromForm(kind: string, formData: FormData) {
     const url = String(formData.get("url") ?? "").trim();
     return { url, provider: detectProvider(url) };
   }
+  if (kind === "release") {
+    return { releaseId: String(formData.get("releaseId") ?? "").trim() };
+  }
   return null;
 }
 
@@ -205,8 +209,21 @@ export async function saveBlockAction(
       error:
         kind === "text"
           ? "Add some text for this block."
-          : "Check the link — it needs to be a full URL including https://",
+          : kind === "release"
+            ? "Choose a release for this block."
+            : "Check the link — it needs to be a full URL including https://",
     };
+  }
+
+  // A release block links to the account's own press kit. Re-fetch the release
+  // scoped by account so a tampered form can't point at someone else's, and
+  // refuse one with no smart link — there'd be nothing for fans to follow.
+  if (kind === "release" && "releaseId" in config) {
+    const release = await press.getRelease(account.id, config.releaseId);
+    if (!release) return { error: "Choose a release for this block." };
+    if (!release.url) {
+      return { error: "That release has no link yet. Add one in your press kit first." };
+    }
   }
 
   if (blockId) {

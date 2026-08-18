@@ -21,6 +21,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import {
   deleteBlockAction,
@@ -30,6 +31,7 @@ import {
 } from "../actions";
 import { BLOCK_KINDS, BLOCK_LABELS, type ParsedBlock } from "@/lib/bio/blocks";
 import type { BlockKind } from "@/lib/bio/blocks";
+import type { ReleaseLink } from "@/lib/dal/press";
 import { Modal } from "@/app/_components/modal";
 import {
   Empty,
@@ -47,11 +49,15 @@ import { useAction } from "./use-action";
 
 type Editing = { mode: "add" } | { mode: "edit"; block: ParsedBlock };
 
-function summarise(block: ParsedBlock): string {
+function summarise(block: ParsedBlock, releases: ReleaseLink[]): string {
   if (block.kind === "link") return block.config.label;
   if (block.kind === "text") {
     if (block.config.variant === "divider") return "Divider";
     return block.config.value?.slice(0, 60) ?? "Empty";
+  }
+  if (block.kind === "release") {
+    const release = releases.find((r) => r.id === block.config.releaseId);
+    return release ? release.title : "Release";
   }
   return block.config.url;
 }
@@ -59,9 +65,11 @@ function summarise(block: ParsedBlock): string {
 export function BlockEditor({
   blocks,
   clicks,
+  releases,
 }: {
   blocks: ParsedBlock[];
   clicks: Record<string, number>;
+  releases: ReleaseLink[];
 }) {
   const [editing, setEditing] = useState<Editing | null>(null);
   const [, startTransition] = useTransition();
@@ -137,6 +145,7 @@ export function BlockEditor({
                   <SortableRow
                     key={block.id}
                     block={block}
+                    releases={releases}
                     clicks={clicks[block.id] ?? 0}
                     onEdit={() => setEditing({ mode: "edit", block })}
                   />
@@ -153,7 +162,11 @@ export function BlockEditor({
       )}
 
       {editing && (
-        <BlockModal editing={editing} onClose={() => setEditing(null)} />
+        <BlockModal
+          editing={editing}
+          releases={releases}
+          onClose={() => setEditing(null)}
+        />
       )}
     </>
   );
@@ -161,10 +174,12 @@ export function BlockEditor({
 
 function SortableRow({
   block,
+  releases,
   clicks,
   onEdit,
 }: {
   block: ParsedBlock;
+  releases: ReleaseLink[];
   clicks: number;
   onEdit: () => void;
 }) {
@@ -192,7 +207,7 @@ function SortableRow({
         ref={setActivatorNodeRef}
         {...attributes}
         {...listeners}
-        aria-label={`Reorder ${summarise(block)}`}
+        aria-label={`Reorder ${summarise(block, releases)}`}
         // touch-none stops the browser scrolling the page instead of
         // starting the drag on a phone.
         className={`grid h-9 w-7 shrink-0 cursor-grab touch-none place-items-center rounded-xl text-faint transition-colors hover:bg-surface-muted hover:text-foreground active:cursor-grabbing ${focusable}`}
@@ -213,7 +228,7 @@ function SortableRow({
 
       <span className="min-w-0 flex-1">
         <span className="block truncate text-sm font-medium">
-          {summarise(block)}
+          {summarise(block, releases)}
         </span>
         {clicks > 0 && (
           <span className="mt-0.5 block text-xs tabular-nums text-faint">
@@ -243,7 +258,7 @@ function SortableRow({
           <input type="hidden" name="blockId" value={block.id} />
           <button
             className="px-1 text-xs text-faint transition-colors hover:text-rose-600"
-            aria-label={`Delete ${summarise(block)}`}
+            aria-label={`Delete ${summarise(block, releases)}`}
           >
             ✕
           </button>
@@ -255,14 +270,19 @@ function SortableRow({
 
 function BlockModal({
   editing,
+  releases,
   onClose,
 }: {
   editing: Editing;
+  releases: ReleaseLink[];
   onClose: () => void;
 }) {
   const existing = editing.mode === "edit" ? editing.block : null;
   const [kind, setKind] = useState<BlockKind>(existing?.kind ?? "link");
   const { error, pending, onSubmit } = useAction(saveBlockAction, onClose);
+
+  // Only releases with a smart link can be pre-saved or listened to.
+  const linkable = releases.filter((r) => r.url);
 
   return (
     <Modal
@@ -416,6 +436,48 @@ function BlockModal({
                 ? "Spotify, Apple Music and SoundCloud play in place. Bandcamp shows as a link."
                 : "YouTube and Vimeo play in place."}
             </p>
+          </div>
+        )}
+
+        {kind === "release" && (
+          <div>
+            <label className={label} htmlFor="releaseId">
+              Release
+            </label>
+            {linkable.length === 0 ? (
+              <p className="mt-1 rounded-2xl bg-amber-500/10 px-4 py-3 text-sm text-amber-700">
+                Add a release with a link in your{" "}
+                <Link href="/press" className="font-medium underline">
+                  press kit
+                </Link>{" "}
+                first.
+              </p>
+            ) : (
+              <>
+                <select
+                  className={input}
+                  id="releaseId"
+                  name="releaseId"
+                  defaultValue={
+                    existing?.kind === "release" ? existing.config.releaseId : ""
+                  }
+                  required
+                >
+                  <option value="" disabled>
+                    Choose a release…
+                  </option>
+                  {linkable.map((release) => (
+                    <option key={release.id} value={release.id}>
+                      {release.title}
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-2 text-xs text-faint">
+                  Shows “Pre-save” before the release date and “Listen” on or
+                  after it, linked to the release’s smart link.
+                </p>
+              </>
+            )}
           </div>
         )}
 

@@ -1,4 +1,5 @@
 import type { ParsedBlock } from "@/lib/bio/blocks";
+import type { ReleaseLink } from "@/lib/dal/press";
 import { embedUrl, musicEmbedUrl } from "@/lib/embed";
 import { TrackedLink } from "./tracked-link";
 
@@ -8,7 +9,39 @@ const cardClass =
 const frameClass =
   "overflow-hidden rounded-[var(--bio-radius)] border border-white/10";
 
-export function BlockRenderer({ block }: { block: ParsedBlock }) {
+export function BlockRenderer({
+  block,
+  release,
+  today,
+}: {
+  block: ParsedBlock;
+  /** Resolved live for release blocks; null if the release is gone. */
+  release?: ReleaseLink | null;
+  today: string;
+}) {
+  if (block.kind === "release") {
+    // The release, or its link, may have been removed since the block was
+    // added. A block with nothing to point at renders as nothing.
+    if (!release || !release.url) return null;
+
+    // Before the release date it's a pre-save; on or after, it's out. An
+    // undated release reads as already available.
+    const isOut = !release.releaseDate || today >= release.releaseDate;
+    const label = isOut
+      ? `Listen to ${release.title}`
+      : `Pre-save ${release.title}`;
+
+    return (
+      <TrackedLink
+        blockId={block.id}
+        href={release.url}
+        className="block rounded-[var(--bio-radius)] bg-[var(--bio-accent)] px-6 py-4 text-center text-[var(--bio-accent-fg)] transition-transform hover:-translate-y-px"
+      >
+        <span className="block text-[15px] font-semibold">{label}</span>
+      </TrackedLink>
+    );
+  }
+
   if (block.kind === "link") {
     return (
       <TrackedLink
