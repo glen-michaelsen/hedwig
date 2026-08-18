@@ -114,37 +114,44 @@ export default async function SpotlightArticlePage({
               />
             )}
             <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/35 to-transparent" />
-          </div>
 
-          {/* The cover straddles the edge of the photograph: `translate-y`
-              moves it down without moving the headline beside it, and the
-              article below carries matching top padding so nothing collides. */}
-          <div className={`${container} relative -mt-36 sm:-mt-52`}>
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-end">
-              {article.coverAssetId && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={`/spotlight/image/${article.coverAssetId}?size=md`}
-                  alt={`${article.releaseTitle} cover`}
-                  className="h-44 w-44 shrink-0 translate-y-10 rounded-3xl object-cover shadow-float ring-1 ring-white/15 sm:h-64 sm:w-64 sm:translate-y-16"
-                />
-              )}
+            {/*
+              Anchored to the bottom edge of the photograph rather than laid
+              out after it, so how far the cover hangs below doesn't depend on
+              how tall the headline happens to be. `items-end` puts both
+              bottoms on that edge; the cover's translate then pushes exactly
+              a fifth of itself past it, and the text block's own padding
+              lifts the hearts clear of it.
+            */}
+            <div className="absolute inset-x-0 bottom-0">
+              <div className={container}>
+                <div className="flex items-end gap-5 sm:gap-7">
+                  {article.coverAssetId && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={`/spotlight/image/${article.coverAssetId}?size=md`}
+                      alt={`${article.releaseTitle} cover`}
+                      className="h-28 w-28 shrink-0 translate-y-[20%] rounded-2xl object-cover shadow-float ring-1 ring-white/15 sm:h-64 sm:w-64 sm:rounded-3xl"
+                    />
+                  )}
 
-              <div className="min-w-0 pb-8 sm:pb-12">
-                <p className="text-xs font-medium uppercase tracking-[0.14em] text-white/80">
-                  {article.artistName} · {KIND_LABELS[article.releaseKind]}
-                  {released && ` · ${released}`}
-                </p>
-                <h1 className="mt-3 max-w-3xl text-3xl font-semibold tracking-tight text-white text-balance sm:text-5xl">
-                  {article.headline}
-                </h1>
-                <span className="mt-5 inline-flex">
-                  <Hearts
-                    rating={article.rating}
-                    className="h-5 w-5"
-                    tone="light"
-                  />
-                </span>
+                  <div className="min-w-0 pb-8 sm:pb-14">
+                    <p className="text-xs font-medium uppercase tracking-[0.14em] text-white/80">
+                      {article.artistName} · {KIND_LABELS[article.releaseKind]}
+                      {released && ` · ${released}`}
+                    </p>
+                    <h1 className="mt-3 max-w-3xl text-2xl font-semibold tracking-tight text-white text-balance sm:text-5xl">
+                      {article.headline}
+                    </h1>
+                    <span className="mt-5 inline-flex">
+                      <Hearts
+                        rating={article.rating}
+                        className="h-5 w-5"
+                        tone="light"
+                      />
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
