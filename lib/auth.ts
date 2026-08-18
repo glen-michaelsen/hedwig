@@ -33,6 +33,12 @@ export async function getAuth() {
       minPasswordLength: 10,
     },
     user: {
+      changeEmail: {
+        enabled: true,
+        // There's no transactional email yet (see README), so a
+        // verification link can't be sent — update in place instead.
+        updateEmailWithoutVerification: true,
+      },
       additionalFields: {
         studioName: { type: "string", required: false, input: true },
       },

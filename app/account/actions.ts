@@ -3,6 +3,7 @@
 import { APIError } from "better-auth/api";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getAuth } from "@/lib/auth";
 
@@ -78,4 +79,78 @@ export async function signOutAction() {
   const auth = await getAuth();
   await auth.api.signOut({ headers: await headers() });
   redirect("/account/login");
+}
+
+export type SettingsFormState = { error?: string; success?: boolean };
+
+const changeEmailSchema = z.object({
+  email: z.email("Enter a valid email address").trim(),
+});
+
+export async function changeEmailAction(
+  _prev: SettingsFormState,
+  formData: FormData,
+): Promise<SettingsFormState> {
+  const parsed = changeEmailSchema.safeParse({
+    email: formData.get("email"),
+  });
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Check the form" };
+  }
+
+  const auth = await getAuth();
+  try {
+    await auth.api.changeEmail({
+      body: { newEmail: parsed.data.email },
+      headers: await headers(),
+    });
+  } catch (error) {
+    if (error instanceof APIError) {
+      return { error: error.body?.message ?? "Could not change the email" };
+    }
+    throw error;
+  }
+
+  revalidatePath("/account", "layout");
+  return { success: true };
+}
+
+const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, "Enter your current password"),
+  newPassword: z.string().min(10, "Use at least 10 characters"),
+});
+
+export async function changePasswordAction(
+  _prev: SettingsFormState,
+  formData: FormData,
+): Promise<SettingsFormState> {
+  const parsed = changePasswordSchema.safeParse({
+    currentPassword: formData.get("currentPassword"),
+    newPassword: formData.get("newPassword"),
+  });
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Check the form" };
+  }
+
+  const auth = await getAuth();
+  try {
+    await auth.api.changePassword({
+      body: {
+        currentPassword: parsed.data.currentPassword,
+        newPassword: parsed.data.newPassword,
+      },
+      headers: await headers(),
+    });
+  } catch (error) {
+    if (error instanceof APIError) {
+      const message =
+        error.body?.code === "INVALID_PASSWORD"
+          ? "Current password is incorrect"
+          : (error.body?.message ?? "Could not change the password");
+      return { error: message };
+    }
+    throw error;
+  }
+
+  return { success: true };
 }
