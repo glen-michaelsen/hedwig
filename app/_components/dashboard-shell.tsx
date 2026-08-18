@@ -8,15 +8,6 @@ import {
   type ShellGroup,
   type ShellItem,
 } from "./dashboard-nav";
-import {
-  HomeIcon,
-  IdeasIcon,
-  LinkInBioIcon,
-  PressKitIcon,
-  SettingsIcon,
-  SpotlightIcon,
-  TutorIcon,
-} from "./nav-icons";
 import { Wordmark, focusable } from "./ui";
 
 /**
@@ -32,15 +23,15 @@ export async function DashboardShell({ children }: { children: ReactNode }) {
   const admin = await isAdmin(account);
 
   const toolItems: ShellItem[] = [
-    { href: "/tutor", label: "Tutor", icon: TutorIcon },
-    { href: "/bio", label: "Link in Bio", icon: LinkInBioIcon },
-    { href: "/press", label: "Press Kit", icon: PressKitIcon },
+    { href: "/tutor", label: "Tutor", icon: "tutor" },
+    { href: "/bio", label: "Link in Bio", icon: "bio" },
+    { href: "/press", label: "Press Kit", icon: "press" },
   ];
 
   const groups: ShellGroup[] = [
     {
       items: [
-        { href: "/account", label: "Home", exact: true, icon: HomeIcon },
+        { href: "/account", label: "Home", exact: true, icon: "home" },
       ],
     },
     { title: "Tools", items: toolItems },
@@ -52,9 +43,9 @@ export async function DashboardShell({ children }: { children: ReactNode }) {
               {
                 href: "/account/spotlight",
                 label: "Spotlight",
-                icon: SpotlightIcon,
+                icon: "spotlight",
               },
-              { href: "/account/ideas", label: "Ideas", icon: IdeasIcon },
+              { href: "/account/ideas", label: "Ideas", icon: "ideas" },
             ],
           } satisfies ShellGroup,
         ]
@@ -65,7 +56,7 @@ export async function DashboardShell({ children }: { children: ReactNode }) {
         {
           href: "/account/settings",
           label: "Settings",
-          icon: SettingsIcon,
+          icon: "settings",
         },
       ],
     },

@@ -2,15 +2,38 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  useEffect,
-  useId,
-  useState,
-  type ComponentType,
-  type ReactNode,
-} from "react";
+import { useEffect, useId, useState, type ReactNode } from "react";
 import { Wordmark, focusable } from "./ui";
-import { MoreIcon } from "./nav-icons";
+import {
+  HomeIcon,
+  IdeasIcon,
+  LinkInBioIcon,
+  MoreIcon,
+  PressKitIcon,
+  SettingsIcon,
+  SpotlightIcon,
+  TutorIcon,
+} from "./nav-icons";
+
+/**
+ * Icons are named here rather than passed in.
+ *
+ * The shell that builds this menu is a server component and these are client
+ * components, so anything crossing that boundary has to survive being
+ * serialised. A React element does; a component function does not — it throws
+ * at render, which is exactly what a earlier version of this file did.
+ */
+const ICONS = {
+  home: HomeIcon,
+  tutor: TutorIcon,
+  bio: LinkInBioIcon,
+  press: PressKitIcon,
+  spotlight: SpotlightIcon,
+  ideas: IdeasIcon,
+  settings: SettingsIcon,
+} as const;
+
+export type IconName = keyof typeof ICONS;
 
 export type ShellItem = {
   href: string;
@@ -21,11 +44,11 @@ export type ShellItem = {
    */
   exact?: boolean;
   /**
-   * The icon *component*, not a rendered element. The rail draws it at 16px
-   * and the bottom bar at 20px, and a component can be handed the size it
-   * needs — an element can only be wrapped in a box that lies about it.
+   * Which icon, by name. The rail draws it at 16px and the bottom bar at
+   * 20px: naming it lets each place ask for the size it needs, where passing
+   * a pre-rendered element would only allow a wrapper that lies about it.
    */
-  icon?: ComponentType<{ className?: string }>;
+  icon?: IconName;
 };
 
 export type ShellGroup = {
@@ -33,6 +56,11 @@ export type ShellGroup = {
   title?: string;
   items: ShellItem[];
 };
+
+function Glyph({ name, className }: { name: IconName; className: string }) {
+  const Icon = ICONS[name];
+  return <Icon className={className} />;
+}
 
 function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
@@ -66,9 +94,7 @@ function NavItems({ groups }: { groups: ShellGroup[] }) {
                       : "text-muted hover:bg-surface-muted hover:text-foreground"
                   } ${focusable}`}
                 >
-                  {item.icon && (
-                    <item.icon className="h-4 w-4 shrink-0" />
-                  )}
+                  {item.icon && <Glyph name={item.icon} className="h-4 w-4 shrink-0" />}
                   {item.label}
                 </Link>
               );
@@ -161,7 +187,7 @@ export function DashboardMobileNav({
                     : "text-muted hover:text-foreground"
                 } ${focusable}`}
               >
-                {item.icon && <item.icon className="h-5 w-5" />}
+                {item.icon && <Glyph name={item.icon} className="h-5 w-5" />}
                 {item.label}
               </Link>
             );
