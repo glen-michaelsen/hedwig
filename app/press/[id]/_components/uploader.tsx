@@ -8,9 +8,15 @@ import {
   isAllowedFile,
   type AssetKind,
 } from "@/lib/press/assets";
-import { buttonGhost, focusable } from "@/app/_components/ui";
+import { buttonGhost, focusable, Pill } from "@/app/_components/ui";
 
-type Progress = { name: string; sent: number; total: number };
+type Progress = {
+  name: string;
+  sent: number;
+  total: number;
+  fileIndex: number;
+  fileCount: number;
+};
 
 /**
  * Uploads in chunks straight to the release's upload route, which streams
@@ -32,7 +38,7 @@ export function Uploader({
   const [progress, setProgress] = useState<Progress | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  async function uploadOne(file: File) {
+  async function uploadOne(file: File, fileIndex: number, fileCount: number) {
     if (file.size > rule.maxBytes) {
       throw new Error(
         `${file.name} is ${formatBytes(file.size)} — the limit is ${formatBytes(rule.maxBytes)}.`,
@@ -91,6 +97,8 @@ export function Uploader({
           name: file.name,
           sent: Math.min(offset + partSize, file.size),
           total: file.size,
+          fileIndex,
+          fileCount,
         });
         partNumber += 1;
       }
@@ -131,9 +139,16 @@ export function Uploader({
     setError(null);
 
     try {
-      for (const file of Array.from(files)) {
-        setProgress({ name: file.name, sent: 0, total: file.size });
-        await uploadOne(file);
+      const list = Array.from(files);
+      for (const [index, file] of list.entries()) {
+        setProgress({
+          name: file.name,
+          sent: 0,
+          total: file.size,
+          fileIndex: index + 1,
+          fileCount: list.length,
+        });
+        await uploadOne(file, index + 1, list.length);
       }
       router.refresh();
     } catch (cause) {
@@ -176,8 +191,15 @@ export function Uploader({
       {progress && (
         <div className="mt-4">
           <div className="flex items-center justify-between text-xs text-muted">
-            <span className="truncate pr-4">{progress.name}</span>
-            <span className="tabular-nums">{percent}%</span>
+            <span className="flex min-w-0 items-center gap-2">
+              {progress.fileCount > 1 && (
+                <Pill active>
+                  {progress.fileIndex} of {progress.fileCount}
+                </Pill>
+              )}
+              <span className="truncate">{progress.name}</span>
+            </span>
+            <span className="shrink-0 pl-4 tabular-nums">{percent}%</span>
           </div>
           <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-surface-muted">
             <div
