@@ -5,6 +5,7 @@ import {
   pressRelease,
   releaseAsset,
   spotlight,
+  spotlightSkip,
 } from "@/db/schema";
 import { newId } from "@/lib/crypto";
 import { getDb } from "@/lib/db";
@@ -22,7 +23,11 @@ import { slugify } from "@/lib/spotlight/slug";
 
 /* --------------------------- admin: the picker -------------------------- */
 
-/** Every release on the platform, for choosing what to write about. */
+/**
+ * Every release on the platform, each carrying the decision made about it:
+ * written (has a spotlight), skipped, or neither. The page groups on these
+ * rather than running three queries.
+ */
 export async function listReleasesForPicker() {
   const db = await getDb();
   return db
@@ -43,10 +48,34 @@ export async function listReleasesForPicker() {
         where ${spotlight.releaseId} = ${pressRelease.id}
         limit 1
       )`,
+      spotlightPublished: sql<number | null>`(
+        select ${spotlight.published} from ${spotlight}
+        where ${spotlight.releaseId} = ${pressRelease.id}
+        limit 1
+      )`,
+      skipped: sql<number>`exists (
+        select 1 from ${spotlightSkip}
+        where ${spotlightSkip.releaseId} = ${pressRelease.id}
+      )`.mapWith(Number),
     })
     .from(pressRelease)
     .innerJoin(artist, eq(artist.id, pressRelease.artistId))
     .orderBy(desc(pressRelease.createdAt));
+}
+
+export async function skipRelease(releaseId: string) {
+  const db = await getDb();
+  await db
+    .insert(spotlightSkip)
+    .values({ releaseId })
+    // Skipping something already skipped is a no-op, not an error — two
+    // clicks on a slow connection shouldn't surface as one.
+    .onConflictDoNothing();
+}
+
+export async function unskipRelease(releaseId: string) {
+  const db = await getDb();
+  await db.delete(spotlightSkip).where(eq(spotlightSkip.releaseId, releaseId));
 }
 
 /** The press photos of one release, for picking the header image. */

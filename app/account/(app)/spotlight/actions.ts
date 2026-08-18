@@ -111,3 +111,15 @@ export async function deleteSpotlightAction(formData: FormData) {
   revalidatePath("/spotlight");
   redirect("/account/spotlight");
 }
+
+export async function skipReleaseAction(formData: FormData) {
+  await requireAdmin();
+  await dal.skipRelease(String(formData.get("releaseId")));
+  revalidatePath("/account/spotlight/new");
+}
+
+export async function unskipReleaseAction(formData: FormData) {
+  await requireAdmin();
+  await dal.unskipRelease(String(formData.get("releaseId")));
+  revalidatePath("/account/spotlight/new");
+}

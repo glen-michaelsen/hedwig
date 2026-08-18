@@ -515,6 +515,22 @@ export const spotlight = sqliteTable(
   ],
 );
 
+/**
+ * Releases the admin has looked at and decided not to write about.
+ *
+ * Its own table rather than a column on `press_release`: that row belongs to
+ * the musician, and an editorial decision about their record is not theirs to
+ * see. Deleting the row is how a skip is undone.
+ */
+export const spotlightSkip = sqliteTable("spotlight_skip", {
+  releaseId: text("release_id")
+    .primaryKey()
+    .references(() => pressRelease.id, { onDelete: "cascade" }),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
 export type Spotlight = typeof spotlight.$inferSelect;
 
 export type Artist = typeof artist.$inferSelect;
