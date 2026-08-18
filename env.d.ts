@@ -5,6 +5,7 @@ declare global {
   interface CloudflareEnv {
     DB: D1Database;
     MEDIA: R2Bucket;
+    IMAGES: ImagesBinding;
     APP_URL: string;
     /** Email of the one platform admin. See isAdmin() in lib/auth.ts. */
     ADMIN_EMAIL?: string;

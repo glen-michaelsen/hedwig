@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAccount } from "@/lib/auth";
 import * as dal from "@/lib/dal/press";
-import { deleteObject } from "@/lib/r2";
+import { deletePressObject } from "@/lib/press/images";
 
 export type ReleaseFormState = { error?: string };
 
@@ -113,7 +113,7 @@ export async function deleteReleaseAction(formData: FormData) {
   const keys = await dal.deleteRelease(account.id, releaseId);
   // Rows first, then the objects: an orphaned object costs storage, while a
   // row pointing at a deleted object is a broken page.
-  await Promise.all(keys.map((key) => deleteObject(key)));
+  await Promise.all(keys.map((key) => deletePressObject(key)));
 
   revalidatePath("/press");
   redirect("/press");
@@ -124,7 +124,7 @@ export async function deleteAssetAction(formData: FormData) {
   const releaseId = String(formData.get("releaseId"));
 
   const key = await dal.deleteAsset(account.id, String(formData.get("assetId")));
-  if (key) await deleteObject(key);
+  if (key) await deletePressObject(key);
 
   revalidatePath(`/press/${releaseId}`);
 }

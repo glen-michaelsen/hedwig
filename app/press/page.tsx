@@ -56,7 +56,7 @@ export default async function PressPage() {
                   {release.coverAssetId ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={`/press/${release.id}/asset/${release.coverAssetId}`}
+                      src={`/press/${release.id}/asset/${release.coverAssetId}?size=sm`}
                       alt=""
                       className="h-12 w-12 shrink-0 rounded-xl object-cover"
                     />

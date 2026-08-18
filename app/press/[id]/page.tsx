@@ -158,7 +158,7 @@ export default async function ReleasePage({
           <div className="flex flex-wrap items-center gap-5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={`/press/${id}/asset/${cover.id}`}
+              src={`/press/${id}/asset/${cover.id}?size=sm`}
               alt="Album cover"
               className="h-32 w-32 rounded-2xl object-cover"
             />
@@ -196,14 +196,14 @@ export default async function ReleasePage({
             {photos.map((photo) => (
               <figure key={photo.id} className="min-w-0">
                 <a
-                  href={`/press/${id}/asset/${photo.id}`}
+                  href={`/press/${id}/asset/${photo.id}?size=lg`}
                   target="_blank"
                   rel="noreferrer"
                   className={`block overflow-hidden rounded-2xl ${focusable}`}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={`/press/${id}/asset/${photo.id}`}
+                    src={`/press/${id}/asset/${photo.id}?size=md`}
                     alt={photo.filename}
                     className="aspect-[4/3] w-full object-cover transition-transform hover:scale-[1.02]"
                   />

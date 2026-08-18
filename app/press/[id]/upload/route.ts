@@ -7,6 +7,7 @@ import {
   isAssetKind,
   type AssetKind,
 } from "@/lib/press/assets";
+import { deletePressObject } from "@/lib/press/images";
 import {
   createUpload,
   deleteObject,
@@ -169,7 +170,7 @@ async function complete(
     return bad("Not found", 404);
   }
 
-  if (added.replacedKey) await deleteObject(added.replacedKey);
+  if (added.replacedKey) await deletePressObject(added.replacedKey);
 
   revalidatePath(`/press/${releaseId}`);
   return Response.json({ id: added.id });

@@ -30,6 +30,12 @@
 			"bucket_name": "hedwig-media"
 		}
 	],
+	// Resizes press-kit images so a 48px thumbnail isn't a 25 MB download.
+	// The variants are cached back into MEDIA, so a transform runs once per
+	// image and size. Code falls back to the original if this is unavailable.
+	"images": {
+		"binding": "IMAGES"
+	},
 	// trenodo.com is the product. The Worker, D1 database and R2 bucket keep
 	// the "hedwig" codename — renaming the database would mean migrating the
 	// data, and renaming the Worker would break the self-reference binding.
@@ -95,6 +101,9 @@
 					"bucket_name": "hedwig-media-preview"
 				}
 			],
+			"images": {
+				"binding": "IMAGES"
+			},
 			"routes": [{ "pattern": "preview.trenodo.com", "custom_domain": true }],
 			"workers_dev": true,
 			"vars": {
