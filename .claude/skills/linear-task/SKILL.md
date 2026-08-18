@@ -8,9 +8,10 @@ description: Work exactly one Linear issue from Todo labelled "Claude", ship it 
 Work **exactly one** issue this run. Every run must end with the issue in a
 correct terminal state — never stranded in progress.
 
-> **This file must live on `main`.** The scheduled run clones the default
-> branch to read it, while the work it does ships to `dev`. If you ever edit
-> this skill, the change only takes effect once it reaches `main`.
+> **This file lives on `dev`, which is the default branch.** The scheduled
+> run clones the default branch to read it, and `dev` is also where the work
+> ships — so an edit to this skill takes effect on the next run. It was on
+> `main` until 2026-08-18; that indirection is gone.
 
 ## Config
 
@@ -40,16 +41,29 @@ someone else's work into your commit.
 
 ## Step 0 — get on the right branch, before anything else
 
-A cloud run starts from a **single-branch clone of `main`**, and `main` is not
-where the work lives. `dev` can be many commits ahead of it.
+A cloud run starts from a single-branch clone of the repo's **default
+branch**, which is `dev`. That is where the work lives, so the clone is
+usually already right — but confirm it rather than assume it, **before
+reading any code, before judging whether something exists, and before
+picking an issue**:
 
-Do this **before reading any code, before judging whether something exists,
-and before picking an issue**:
+```bash
+git rev-parse --abbrev-ref HEAD   # expect: dev
+```
+
+If that prints anything other than `dev`, the clone is single-branch and
+`dev` won't be there yet. Fetch it explicitly:
 
 ```bash
 git remote set-branches origin '*'
 git fetch origin
 git checkout -B dev origin/dev
+```
+
+Either way, end this step on current `origin/dev`:
+
+```bash
+git pull --ff-only
 ```
 
 Everything after this line — reading `AGENTS.md`, grepping for a feature,
