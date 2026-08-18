@@ -31,7 +31,7 @@ export function BlockRenderer({ block }: { block: ParsedBlock }) {
   if (block.kind === "text") {
     if (block.config.variant === "divider") {
       return (
-        <hr className="my-4 h-1 rounded-full border-0 bg-[var(--bio-accent)] opacity-30" />
+        <hr className="my-8 h-1 rounded-full border-0 bg-[var(--bio-accent)] opacity-30" />
       );
     }
     if (block.config.variant === "heading") {
