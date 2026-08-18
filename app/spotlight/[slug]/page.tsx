@@ -103,8 +103,58 @@ export default async function SpotlightArticlePage({
           </div>
         )}
 
-        <header className="relative">
-          <div className="relative aspect-4/3 w-full bg-surface-muted sm:aspect-[21/9]">
+        {/*
+          Two layouts rather than one that bends. A phone is too narrow to put
+          a cover beside a headline without shrinking both past the point of
+          being worth showing, so it stacks: photograph, cover centred across
+          the edge, then the words on paper. Desktop keeps everything on the
+          photograph, where there is room for it.
+        */}
+
+        {/* Phone */}
+        <header className="sm:hidden">
+          <div className="relative aspect-4/3 w-full bg-surface-muted">
+            {hero && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={`/spotlight/image/${hero}?size=md`}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            )}
+            {/* Lighter than the desktop scrim: nothing is set over this one,
+                so it only has to seat the cover rather than carry text. */}
+            <div className="absolute inset-0 bg-linear-to-t from-black/45 to-transparent" />
+          </div>
+
+          {article.coverAssetId && (
+            <div className="flex justify-center">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/spotlight/image/${article.coverAssetId}?size=md`}
+                alt={`${article.releaseTitle} cover`}
+                className="-mt-24 h-44 w-44 rounded-3xl object-cover shadow-float ring-1 ring-white/15"
+              />
+            </div>
+          )}
+
+          <div className={`${containerNarrow} mt-7 text-center`}>
+            <p className="text-xs font-medium uppercase tracking-[0.14em] text-muted">
+              {article.artistName} · {KIND_LABELS[article.releaseKind]}
+              {released && ` · ${released}`}
+            </p>
+            <h1 className="mt-3 text-3xl font-semibold tracking-tight text-balance">
+              {article.headline}
+            </h1>
+            <span className="mt-5 inline-flex">
+              <Hearts rating={article.rating} className="h-5 w-5" />
+            </span>
+          </div>
+        </header>
+
+        {/* Desktop */}
+        <header className="relative hidden sm:block">
+          <div className="relative aspect-[21/9] w-full bg-surface-muted">
             {hero && (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -125,25 +175,25 @@ export default async function SpotlightArticlePage({
             */}
             <div className="absolute inset-x-0 bottom-0">
               <div className={container}>
-                <div className="flex items-end gap-5 sm:gap-7">
+                <div className="flex items-end gap-7">
                   {article.coverAssetId && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={`/spotlight/image/${article.coverAssetId}?size=md`}
                       alt={`${article.releaseTitle} cover`}
-                      className="h-28 w-28 shrink-0 translate-y-[20%] rounded-2xl object-cover shadow-float ring-1 ring-white/15 sm:h-64 sm:w-64 sm:rounded-3xl"
+                      className="h-64 w-64 shrink-0 translate-y-[20%] rounded-3xl object-cover shadow-float ring-1 ring-white/15"
                     />
                   )}
 
                   {/* Bottom padding matches the column gap above, so the
                       space under the hearts reads as the same measure as the
                       space between the cover and the text. */}
-                  <div className="min-w-0 pb-5 sm:pb-7">
+                  <div className="min-w-0 pb-7">
                     <p className="text-xs font-medium uppercase tracking-[0.14em] text-white/80">
                       {article.artistName} · {KIND_LABELS[article.releaseKind]}
                       {released && ` · ${released}`}
                     </p>
-                    <h1 className="mt-3 max-w-3xl text-2xl font-semibold tracking-tight text-white text-balance sm:text-5xl">
+                    <h1 className="mt-3 max-w-3xl text-5xl font-semibold tracking-tight text-white text-balance">
                       {article.headline}
                     </h1>
                     <span className="mt-5 inline-flex">
@@ -160,7 +210,7 @@ export default async function SpotlightArticlePage({
           </div>
         </header>
 
-        <article className={`${containerNarrow} mt-20 sm:mt-28`}>
+        <article className={`${containerNarrow} mt-12 sm:mt-28`}>
           {paragraphs.map((paragraph, index) => (
             <p
               key={index}
