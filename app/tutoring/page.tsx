@@ -96,22 +96,21 @@ function Hero() {
           </span>
 
           <h1 className="mt-7 text-4xl font-semibold leading-[1.1] tracking-tight text-balance sm:text-5xl">
-            Teaching, without the admin tax.
+            Organising and making every session more efficient.
           </h1>
 
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
-            I taught lessons for years before I taught myself to code, and the
-            part that wore me down was never the teaching — it was the
-            spreadsheet of PINs, the scattered PDFs, the homework I meant to
-            text and forgot. Tutor is what I built to carry that instead.
+            You get a clean overview of everything you teach with, ready to
+            share the moment you write up a lesson note. A few minutes after
+            each session is all it takes to make a real difference.
           </p>
 
           <div className="mt-10 flex flex-wrap items-center gap-3.5">
             <Link href="/account/signup" className={`${button} ${buttonLarge}`}>
-              Create your account
+              Create account
             </Link>
-            <Link href="/" className={`${buttonGhost} ${buttonLarge}`}>
-              Back to Trenodo
+            <Link href="/login" className={`${buttonGhost} ${buttonLarge}`}>
+              Student
             </Link>
           </div>
         </div>
@@ -124,23 +123,23 @@ function Features() {
   const features = [
     {
       icon: icons.library,
-      title: "One library, tagged not foldered",
-      body: "PDF sheet music, links to chords and theory, YouTube and Vimeo — all in one place. Tag by grade, technique or composer and find it mid-lesson.",
+      title: "Your own library",
+      body: "Sheet music, chord links and practice videos, all tagged and easy to find — right when you need it mid-lesson.",
     },
     {
       icon: icons.note,
-      title: "Lesson notes that do the sharing",
-      body: "Write what you covered, set the homework, attach the material. That's the delivery — no separate assignment to remember to send.",
+      title: "Lesson notes",
+      body: "Write what you covered, set the homework, attach the material. Your student sees it all in one place — nothing extra to send.",
     },
     {
       icon: icons.lock,
-      title: "A private half, always",
-      body: "Every note has a section the student never sees. Record the honest observation — the nerves, the parent pushing too hard — without a second system.",
+      title: "Private notes",
+      body: "Keep a section on every lesson note just for yourself, for the things you'd rather not put in front of the student.",
     },
     {
       icon: icons.shelf,
-      title: "A shelf that stays put",
-      body: "Scales, theory reference, the piece they're working towards. Pin it once and it stays available, whichever lesson it came from.",
+      title: "Shelf for base material",
+      body: "Scales, theory, the piece they're working towards. Pin it once and it stays there, however many lessons go by.",
     },
   ];
 
@@ -188,17 +187,17 @@ function Steps() {
     {
       n: "01",
       title: "Add your students",
-      body: "Name and phone number. Trenodo generates a PIN you read out once — siblings can share one number, the PIN tells them apart.",
+      body: "Name and phone number. Trenodo generates a PIN you read out once.",
     },
     {
       n: "02",
       title: "Write up the lesson",
-      body: "What you covered, the homework, and tick the material you worked through. Keep the candid part in the private section.",
+      body: "What you covered, the homework, and tick the material you worked through.",
     },
     {
       n: "03",
       title: "They practise",
-      body: "Phone number, PIN, and their week is on screen — with the PDF, the chord chart and the video right there under it.",
+      body: "Phone number, PIN, and their week is on screen. With all the material at hand, they practise more — and better.",
     },
   ];
 
@@ -236,49 +235,13 @@ function Steps() {
   );
 }
 
-function Details() {
-  const details = [
-    {
-      title: "Made for families",
-      body: "One phone number can cover every sibling at your studio. They each get their own PIN, their own feed, and their own notes.",
-    },
-    {
-      title: "Files stay yours",
-      body: "Sheet music is served only to the student it was shared with, through a check on every request. Nothing sits on a public URL.",
-    },
-    {
-      title: "Dead links surface",
-      body: "Chord and theory links rot. Trenodo keeps track of which ones stopped working so your library doesn't quietly decay.",
-    },
-  ];
-
-  return (
-    <section className="border-t border-line/70 bg-surface-muted/40 py-24 sm:py-32">
-      <div className={container}>
-        <div className="grid gap-x-10 gap-y-12 sm:grid-cols-3">
-          {details.map((detail) => (
-            <div key={detail.title}>
-              <h3 className="text-base font-semibold tracking-tight">
-                {detail.title}
-              </h3>
-              <p className="mt-2.5 text-[15px] leading-relaxed text-muted text-pretty">
-                {detail.body}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function ClosingCta() {
   return (
     <section className={`${containerNarrow} py-24 sm:py-32`}>
       <div className="relative isolate overflow-hidden rounded-5xl border border-line bg-surface px-8 py-16 text-center shadow-float sm:px-16">
         <div className="brand-wash" />
         <h2 className="text-4xl font-semibold tracking-tight text-balance">
-          Set up your studio tonight
+          Set up your musician account
         </h2>
         <p className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-muted text-pretty">
           Add one student, write one lesson note, and see what they see. It takes
@@ -286,10 +249,10 @@ function ClosingCta() {
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-3.5">
           <Link href="/account/signup" className={`${button} ${buttonLarge}`}>
-            Create your studio
+            Create account
           </Link>
           <Link href="/account/login" className={`${buttonGhost} ${buttonLarge}`}>
-            I already have one
+            Log in
           </Link>
         </div>
       </div>
@@ -305,7 +268,6 @@ export default function TutoringPage() {
         <Hero />
         <Features />
         <Steps />
-        <Details />
         <ClosingCta />
       </main>
       <SiteFooter />
