@@ -114,6 +114,24 @@ body {
   color: var(--color-brand-900);
 }
 
+/* Native color swatches ignore the input's own border-radius — Chrome wraps
+   the swatch in its own box, Firefox draws it square — so the patch pokes
+   into the rounded corners unless it's rounded to match explicitly. */
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+  border-radius: inherit;
+}
+
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: inherit;
+}
+
+input[type="color"]::-moz-color-swatch {
+  border: none;
+  border-radius: inherit;
+}
+
 /* A soft wash of brand colour behind hero and auth panels. Sits at the
    very back and never intercepts clicks. */
 .brand-wash {
