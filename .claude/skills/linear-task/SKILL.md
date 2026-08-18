@@ -38,6 +38,32 @@ at the board, and do not do work you can't record. Same if the repo has
 uncommitted changes you didn't make — report and stop rather than sweeping
 someone else's work into your commit.
 
+## Step 0 — get on the right branch, before anything else
+
+A cloud run starts from a **single-branch clone of `main`**, and `main` is not
+where the work lives. `dev` can be many commits ahead of it.
+
+Do this **before reading any code, before judging whether something exists,
+and before picking an issue**:
+
+```bash
+git remote set-branches origin '*'
+git fetch origin
+git checkout -B dev origin/dev
+```
+
+Everything after this line — reading `AGENTS.md`, grepping for a feature,
+deciding whether an issue is even feasible — happens on `dev`.
+
+> This is not hypothetical. A run once filed a blocker saying Press Kit was
+> "not in this codebase", citing `db/schema.ts`, the `app/` tree and
+> `docs/link-in-bio.md`. Every citation was correct for `main` and wrong for
+> `dev`, where Press Kit had already shipped. The report was accurate and
+> the conclusion was still false, because it was reading the wrong branch.
+>
+> If you find yourself concluding that a feature the issue assumes exists
+> is missing, re-check which branch you are on before filing anything.
+
 ## Step 1 — pick one issue
 
 Find candidate issues: state `Todo`, label `Claude`.
@@ -61,14 +87,11 @@ run can't pick it up again.
 
 1. Read `AGENTS.md` and `README.md` first. They are not optional context —
    they carry the tenancy rule, the light-theme rule, and the Next 16 caveats.
-2. Sync. A cloud run starts from a **single-branch clone of `main`**, so
-   `dev` won't be there and a plain `git fetch origin` won't bring it. Make
-   it available explicitly:
+2. Confirm you are still on `dev` from Step 0, and current with it:
 
    ```bash
-   git remote set-branches origin '*'
-   git fetch origin
-   git checkout -B dev origin/dev
+   git rev-parse --abbrev-ref HEAD   # must print: dev
+   git pull --ff-only
    ```
 
    Base the work on **current `origin/dev`** — never `main`, never a stale
