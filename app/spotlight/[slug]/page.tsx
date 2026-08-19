@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Hearts } from "@/app/_components/hearts";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
+import { ShareBox } from "./_components/share-box";
 import {
   button,
   container,
@@ -241,7 +242,9 @@ export default async function SpotlightArticlePage({
             </div>
           )}
 
-          <div className="mt-16 border-t border-line pt-8">
+          <ShareBox title={article.headline} />
+
+          <div className="mt-8">
             <Link
               href="/spotlight"
               className={`text-sm text-muted transition-colors hover:text-foreground ${focusable}`}
