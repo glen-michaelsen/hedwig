@@ -142,6 +142,15 @@ input[type="color"]::-moz-color-swatch {
   z-index: -1;
 }
 
+/* Safari fails to clip .brand-wash's blurred pseudo-elements to a rounded
+   ancestor via overflow:hidden alone (WebKit bug 254151) — only the top
+   corners show it, since that's where the wash blobs sit. A mask forces
+   the clip through compositing instead, which Safari applies correctly. */
+.brand-wash-clip {
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
+}
+
 .brand-wash::before,
 .brand-wash::after {
   content: "";

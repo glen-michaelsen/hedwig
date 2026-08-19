@@ -244,7 +244,7 @@ function Steps() {
 function ClosingCta() {
   return (
     <section className={`${containerNarrow} py-24 sm:py-32`}>
-      <div className="relative isolate overflow-hidden rounded-5xl border border-line bg-surface px-8 py-16 text-center shadow-float sm:px-16">
+      <div className="brand-wash-clip relative isolate overflow-hidden rounded-5xl border border-line bg-surface px-8 py-16 text-center shadow-float sm:px-16">
         <div className="brand-wash" />
         <h2 className="text-4xl font-semibold tracking-tight text-balance">
           Your page, your handle, your colours
