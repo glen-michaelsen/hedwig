@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
+import { TrackPlayer } from "@/app/_components/track-player";
 import { actionPill, container, focusable } from "@/app/_components/ui";
 import { getPublicRelease, listPublicAssets } from "@/lib/dal/press";
 import { formatBytes } from "@/lib/press/assets";
@@ -132,18 +133,17 @@ export default async function PublicPressKitPage({
                     </div>
 
                     {/*
-                      `preload="metadata"` fetches only the header, so a page
-                      with six tracks doesn't pull six masters before anyone
-                      presses play. The route answers Range requests, so
-                      playback starts on the first chunk and seeking jumps
-                      straight to the offset.
+                      The player preloads metadata only, so a page with six
+                      tracks fetches six headers rather than six masters. The
+                      route answers Range requests, so playback starts on the
+                      first chunk and seeking jumps straight to the offset.
                     */}
-                    <audio
-                      controls
-                      preload="metadata"
-                      src={asset(track.id)}
-                      className="mt-3 h-10 w-full"
-                    />
+                    <div className="mt-3">
+                      <TrackPlayer
+                        src={asset(track.id)}
+                        title={track.filename}
+                      />
+                    </div>
                   </li>
                 ))}
               </ul>

@@ -14,6 +14,7 @@ import {
   buttonGhost,
   focusable,
 } from "@/app/_components/ui";
+import { TrackPlayer } from "@/app/_components/track-player";
 import { DeleteAssetButton } from "./_components/delete-asset-button";
 import { Uploader } from "./_components/uploader";
 
@@ -293,12 +294,12 @@ export default async function ReleasePage({
           <ul>
             {tracks.map((track) => (
               <FileRow key={track.id} asset={track} releaseId={id}>
-                <audio
-                  controls
-                  preload="none"
-                  src={`/press/${id}/asset/${track.id}`}
-                  className="mt-2 h-9 w-full max-w-md"
-                />
+                <div className="mt-3 max-w-lg">
+                  <TrackPlayer
+                    src={`/press/${id}/asset/${track.id}`}
+                    title={track.filename}
+                  />
+                </div>
               </FileRow>
             ))}
           </ul>
