@@ -85,10 +85,15 @@ export async function deleteObject(key: string) {
  * turned into an offset without knowing the size.
  */
 /**
- * How much one response may stream. Measured against this Worker: ~400 KB was
- * already fatal, 64 KB was comfortable.
+ * How much one response may stream.
+ *
+ * This existed at 256 KB while the account was on the Workers Free plan,
+ * where 10 ms of CPU per request meant ~400 KB was already fatal. On Paid
+ * the ceiling is far higher, so a download hands over the whole file and
+ * only an open-ended range is chunked — a player asking for "everything from
+ * here" doesn't need 50 MB in one response to start playing.
  */
-const MAX_STREAM_BYTES = 256 * 1024;
+const MAX_STREAM_BYTES = 8 * 1024 * 1024;
 
 export async function objectResponse(
   key: string,
@@ -120,31 +125,13 @@ export async function objectResponse(
   const rangeHeader = request.headers.get("range");
   const match = rangeHeader?.match(/^bytes=(\d*)-(\d*)$/);
 
+  // No range asked for: hand over the whole file. This is what a download
+  // is, and a truncated one is worse than a slow one.
   if (!match) {
-    // Small enough to hand over whole.
-    if (size <= MAX_STREAM_BYTES) {
-      const object = await env.MEDIA.get(key);
-      if (!object) return null;
-      return new Response(object.body, {
-        headers: { ...baseHeaders, "content-length": String(size) },
-      });
-    }
-
-    // Too big: a client that asked for everything at once gets the first
-    // chunk and the fact that ranges are supported, rather than a dead
-    // isolate halfway through the file.
-    const first = await env.MEDIA.get(key, {
-      range: { offset: 0, length: MAX_STREAM_BYTES },
-    });
-    if (!first) return null;
-
-    return new Response(first.body, {
-      status: 206,
-      headers: {
-        ...baseHeaders,
-        "content-length": String(MAX_STREAM_BYTES),
-        "content-range": `bytes 0-${MAX_STREAM_BYTES - 1}/${size}`,
-      },
+    const object = await env.MEDIA.get(key);
+    if (!object) return null;
+    return new Response(object.body, {
+      headers: { ...baseHeaders, "content-length": String(size) },
     });
   }
 
