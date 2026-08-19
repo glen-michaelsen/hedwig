@@ -28,6 +28,11 @@ export const featureItems: NavItem[] = [
     label: "Tutor",
     description: "Students, material and lesson notes.",
   },
+  {
+    href: "/press-kit",
+    label: "Press Kit",
+    description: "Cover art, photos, tracks and the paperwork.",
+  },
 ];
 
 export const loginItems: NavItem[] = [

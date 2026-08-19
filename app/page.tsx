@@ -124,7 +124,7 @@ function Tools() {
       emoji: "📸",
       name: "Press Kit",
       body: "Photos, tracks, lyrics and the story, in a page you can send to a promoter without attaching nine files.",
-      href: "/press",
+      href: "/press-kit",
     },
   ];
 
