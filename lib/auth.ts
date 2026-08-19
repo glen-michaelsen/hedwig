@@ -27,6 +27,12 @@ export async function getAuth() {
     }),
     secret: env.BETTER_AUTH_SECRET,
     baseURL: env.APP_URL,
+    session: {
+      // Musicians sign in occasionally, not daily — a week-long default
+      // logs them out between visits. 90 days, rolling on each visit, keeps
+      // them signed in as long as they keep coming back.
+      expiresIn: 60 * 60 * 24 * 90,
+    },
     emailAndPassword: {
       enabled: true,
       autoSignIn: true,
