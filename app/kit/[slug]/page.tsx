@@ -5,7 +5,6 @@ import { TrackPlayer } from "@/app/_components/track-player";
 import { actionPill, container } from "@/app/_components/ui";
 import { getPublicRelease, listPublicAssets } from "@/lib/dal/press";
 import { formatBytes } from "@/lib/press/assets";
-import { ensureDimensions } from "@/lib/press/dimensions";
 import { PhotoGallery } from "./_components/photo-gallery";
 
 export const dynamic = "force-dynamic";
@@ -49,20 +48,18 @@ export default async function PublicPressKitPage({
   const tracks = assets.filter((asset) => asset.kind === "track");
   const documents = assets.filter((asset) => asset.kind === "document");
 
-  // Measured once, on the first view that needs them, then stored.
-  const galleryPhotos = await Promise.all(
-    photos.map(async (photo) => {
-      const size = await ensureDimensions(photo);
-      return {
-        id: photo.id,
-        filename: photo.filename,
-        caption: photo.caption,
-        sizeBytes: photo.sizeBytes,
-        width: size?.width ?? null,
-        height: size?.height ?? null,
-      };
-    }),
-  );
+  // No measuring here. Dimensions are recorded at upload; anything older is
+  // measured when a visitor actually opens that one photo. Doing it during
+  // render meant pulling every original through the Images binding at once,
+  // which is what took the Worker over its CPU limit.
+  const galleryPhotos = photos.map((photo) => ({
+    id: photo.id,
+    filename: photo.filename,
+    caption: photo.caption,
+    sizeBytes: photo.sizeBytes,
+    width: photo.width,
+    height: photo.height,
+  }));
 
   const released = formatDate(release.releaseDate);
   const asset = (id: string) => `/kit/${slug}/asset/${id}`;

@@ -10,6 +10,26 @@ import {
 } from "@/lib/press/assets";
 import { buttonGhost, focusable, Pill } from "@/app/_components/ui";
 
+
+/**
+ * Pixel size of an image file, read in the browser. Free here — the bytes
+ * are already in memory — where doing it on the server means pulling the
+ * original back out of R2.
+ */
+async function imageSize(
+  file: File,
+): Promise<{ width: number; height: number } | null> {
+  if (!file.type.startsWith("image/")) return null;
+  try {
+    const bitmap = await createImageBitmap(file);
+    const size = { width: bitmap.width, height: bitmap.height };
+    bitmap.close();
+    return size;
+  } catch {
+    return null;
+  }
+}
+
 type Progress = {
   name: string;
   sent: number;
@@ -115,6 +135,7 @@ export function Uploader({
             kind,
             filename: file.name,
             contentType: file.type || "application/octet-stream",
+            ...(await imageSize(file)),
           }),
         },
       );

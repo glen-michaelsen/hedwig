@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "@/app/_components/modal";
 import { actionPill, focusable } from "@/app/_components/ui";
 import { formatBytes } from "@/lib/press/assets";
@@ -37,7 +37,52 @@ export function PhotoGallery({
   assetBase: string;
 }) {
   const [openId, setOpenId] = useState<string | null>(null);
-  const open = photos.find((photo) => photo.id === openId) ?? null;
+  const [measured, setMeasured] = useState<
+    Record<string, { width: number; height: number }>
+  >({});
+
+  const found = photos.find((photo) => photo.id === openId) ?? null;
+  const open = found
+    ? { ...found, ...(measured[found.id] ?? {}) }
+    : null;
+
+  /**
+   * Photos uploaded before dimensions were recorded have none, so the panel
+   * asks for this one — and only this one, on open. Measuring the whole
+   * gallery up front is what took the Worker over its CPU limit.
+   */
+  useEffect(() => {
+    if (!found || found.width !== null || measured[found.id]) return;
+
+    let cancelled = false;
+    const id = found.id;
+
+    async function measure() {
+      try {
+        const response = await fetch(`${assetBase}/${id}/info`);
+        if (!response.ok) return;
+
+        const data = (await response.json()) as {
+          width?: number | null;
+          height?: number | null;
+        };
+        if (cancelled || !data.width || !data.height) return;
+
+        setMeasured((previous) => ({
+          ...previous,
+          [id]: { width: data.width as number, height: data.height as number },
+        }));
+      } catch {
+        // The panel simply shows the file size without a pixel size.
+      }
+    }
+
+    void measure();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [found, assetBase, measured]);
 
   return (
     <>

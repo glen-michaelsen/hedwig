@@ -324,6 +324,9 @@ export async function addAsset(
     filename: string;
     contentType: string;
     sizeBytes: number;
+    /** Measured in the browser at upload; null for anything not an image. */
+    width?: number | null;
+    height?: number | null;
   },
 ): Promise<{ id: string; replacedKey: string | null } | null> {
   const db = await getDb();
@@ -480,6 +483,8 @@ export async function getPublicAsset(slug: string, assetId: string) {
       filename: releaseAsset.filename,
       contentType: releaseAsset.contentType,
       sizeBytes: releaseAsset.sizeBytes,
+      width: releaseAsset.width,
+      height: releaseAsset.height,
     })
     .from(releaseAsset)
     .innerJoin(pressRelease, eq(pressRelease.id, releaseAsset.releaseId))

@@ -134,6 +134,8 @@ async function complete(
     filename?: string;
     contentType?: string;
     size?: number;
+    width?: number;
+    height?: number;
   };
 
   const key = String(body.key ?? "");
@@ -162,6 +164,12 @@ async function complete(
     contentType: String(body.contentType ?? "application/octet-stream"),
     // R2 knows the real size; the client's claim is only a pre-check.
     sizeBytes: object.size,
+    // Dimensions are the client's word, because measuring server-side means
+    // reading the whole image back through the Images binding — which is
+    // exactly what took the Worker over its CPU limit when the page did it.
+    // A wrong number here is a cosmetic error on one panel, nothing more.
+    width: Number.isFinite(body.width) ? Number(body.width) : null,
+    height: Number.isFinite(body.height) ? Number(body.height) : null,
   });
 
   if (!added) {
