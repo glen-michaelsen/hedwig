@@ -222,6 +222,13 @@ export default async function ReleasePage({
               <p className="mt-0.5 text-xs text-faint">
                 {formatBytes(cover.sizeBytes)}
               </p>
+              <PhotoCredit
+                releaseId={id}
+                assetId={cover.id}
+                value={cover.caption ?? ""}
+                placeholder="Artwork credit"
+              />
+
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <a
                   href={`/press/${id}/asset/${cover.id}?download`}

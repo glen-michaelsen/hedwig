@@ -19,10 +19,13 @@ function PhotoCredit({
   releaseId,
   assetId,
   value,
+  placeholder = "Photo credit",
 }: {
   releaseId: string;
   assetId: string;
   value: string;
+  /** "Artwork credit" for a cover, where "photo" is the wrong word. */
+  placeholder?: string;
 }) {
   const [text, setText] = useState(value);
   const [saved, setSaved] = useState(value);
@@ -61,8 +64,8 @@ function PhotoCredit({
         onKeyDown={(event) => {
           if (event.key === "Enter") event.currentTarget.blur();
         }}
-        placeholder="Photo credit"
-        aria-label="Photo credit"
+        placeholder={placeholder}
+        aria-label={placeholder}
         maxLength={200}
       />
       {text !== saved && !pending && (

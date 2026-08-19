@@ -5,6 +5,7 @@ import { TrackPlayer } from "@/app/_components/track-player";
 import { actionPill, container } from "@/app/_components/ui";
 import { getPublicRelease, listPublicAssets } from "@/lib/dal/press";
 import { formatBytes } from "@/lib/press/assets";
+import { ImageViewer } from "./_components/image-viewer";
 import { PhotoGallery } from "./_components/photo-gallery";
 
 export const dynamic = "force-dynamic";
@@ -72,12 +73,26 @@ export default async function PublicPressKitPage({
         <div className={`${container} pt-12 sm:pt-16`}>
           <div className="flex flex-col gap-7 sm:flex-row sm:items-end">
             {cover && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={`${asset(cover.id)}?size=md`}
-                alt={`${release.title} cover`}
-                className="h-48 w-48 shrink-0 rounded-3xl object-cover shadow-float sm:h-60 sm:w-60"
-              />
+              <ImageViewer
+                image={{
+                  id: cover.id,
+                  filename: cover.filename,
+                  caption: cover.caption,
+                  sizeBytes: cover.sizeBytes,
+                  width: cover.width,
+                  height: cover.height,
+                }}
+                assetBase={`/kit/${slug}/asset`}
+                label="the album cover"
+                className="shrink-0 rounded-3xl"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`${asset(cover.id)}?size=md`}
+                  alt={`${release.title} cover`}
+                  className="h-48 w-48 cursor-zoom-in rounded-3xl object-cover shadow-float transition-transform duration-500 hover:scale-[1.02] sm:h-60 sm:w-60"
+                />
+              </ImageViewer>
             )}
 
             <div className="min-w-0">
