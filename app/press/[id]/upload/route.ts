@@ -1,4 +1,6 @@
 import { revalidatePath } from "next/cache";
+import { warmLargestVariant } from "@/lib/press/images";
+import { isResizableImage } from "@/lib/press/variants";
 import { getAccount } from "@/lib/auth";
 import { addAsset, getRelease } from "@/lib/dal/press";
 import {
@@ -179,6 +181,18 @@ async function complete(
   }
 
   if (added.replacedKey) await deletePressObject(added.replacedKey);
+
+  // Cut the large copy now, while this request is about this one image.
+  // Left until later, a page showing four photos triggers four transforms
+  // of four originals at once — which is what took the isolate past its CPU
+  // limit. Failure here isn't fatal: the asset route still cuts on demand.
+  if (isResizableImage(String(body.contentType ?? ""))) {
+    try {
+      await warmLargestVariant(key);
+    } catch {
+      // Left for the asset route to do lazily.
+    }
+  }
 
   revalidatePath(`/press/${releaseId}`);
   return Response.json({ id: added.id });
