@@ -244,6 +244,19 @@ export async function listPublishedSpotlights() {
     .limit(100);
 }
 
+/** The most recent other published articles, for the "keep reading" widget. */
+export async function listRelatedSpotlights(excludeId: string, limit = 3) {
+  const db = await getDb();
+  return db
+    .select(articleColumns)
+    .from(spotlight)
+    .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
+    .innerJoin(artist, eq(artist.id, pressRelease.artistId))
+    .where(and(eq(spotlight.published, true), ne(spotlight.id, excludeId)))
+    .orderBy(desc(spotlight.publishedAt), desc(spotlight.createdAt))
+    .limit(limit);
+}
+
 export async function getPublishedSpotlight(slug: string) {
   const db = await getDb();
   const [row] = await db

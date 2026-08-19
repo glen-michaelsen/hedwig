@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Hearts } from "@/app/_components/hearts";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
+import { MoreSpotlights } from "./_components/more-spotlights";
 import { ShareBox } from "./_components/share-box";
 import {
   button,
@@ -15,6 +16,7 @@ import { todayIso } from "@/lib/clock";
 import {
   getPublishedSpotlight,
   getSpotlightBySlugForAdmin,
+  listRelatedSpotlights,
 } from "@/lib/dal/spotlight";
 
 export const dynamic = "force-dynamic";
@@ -80,6 +82,7 @@ export default async function SpotlightArticlePage({
   const { article, isDraft } = found;
   const hero = article.headerAssetId ?? article.coverAssetId;
   const released = formatDate(article.releaseDate);
+  const related = await listRelatedSpotlights(article.id);
 
   // Both are plain YYYY-MM-DD, so a string compare is a date compare — and
   // it can't be knocked a day out by a timezone the way parsing would.
@@ -243,6 +246,8 @@ export default async function SpotlightArticlePage({
           )}
 
           <ShareBox title={article.headline} />
+
+          <MoreSpotlights articles={related} />
 
           <div className="mt-8">
             <Link
