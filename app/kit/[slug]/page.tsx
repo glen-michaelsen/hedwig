@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
 import { TrackPlayer } from "@/app/_components/track-player";
-import { actionPill, container, focusable } from "@/app/_components/ui";
+import { actionPill, container } from "@/app/_components/ui";
 import { getPublicRelease, listPublicAssets } from "@/lib/dal/press";
 import { formatBytes } from "@/lib/press/assets";
+import { ensureDimensions } from "@/lib/press/dimensions";
+import { PhotoGallery } from "./_components/photo-gallery";
 
 export const dynamic = "force-dynamic";
 
@@ -46,6 +48,21 @@ export default async function PublicPressKitPage({
   const photos = assets.filter((asset) => asset.kind === "photo");
   const tracks = assets.filter((asset) => asset.kind === "track");
   const documents = assets.filter((asset) => asset.kind === "document");
+
+  // Measured once, on the first view that needs them, then stored.
+  const galleryPhotos = await Promise.all(
+    photos.map(async (photo) => {
+      const size = await ensureDimensions(photo);
+      return {
+        id: photo.id,
+        filename: photo.filename,
+        caption: photo.caption,
+        sizeBytes: photo.sizeBytes,
+        width: size?.width ?? null,
+        height: size?.height ?? null,
+      };
+    }),
+  );
 
   const released = formatDate(release.releaseDate);
   const asset = (id: string) => `/kit/${slug}/asset/${id}`;
@@ -155,35 +172,11 @@ export default async function PublicPressKitPage({
               <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
                 Press photos
               </h2>
-              <div className="mt-4 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {photos.map((photo) => (
-                  <figure key={photo.id} className="min-w-0">
-                    <a
-                      href={`${asset(photo.id)}?size=lg`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className={`block overflow-hidden rounded-3xl ${focusable}`}
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={`${asset(photo.id)}?size=md`}
-                        alt={photo.filename}
-                        className="aspect-4/3 w-full object-cover transition-transform duration-500 hover:scale-[1.02]"
-                      />
-                    </a>
-                    <figcaption className="mt-3 flex items-center justify-between gap-3">
-                      <span className="min-w-0 truncate text-xs text-muted">
-                        {photo.caption ?? photo.filename}
-                      </span>
-                      <a
-                        href={`${asset(photo.id)}?download`}
-                        className={actionPill}
-                      >
-                        Download
-                      </a>
-                    </figcaption>
-                  </figure>
-                ))}
+              <div className="mt-4">
+                <PhotoGallery
+                  photos={galleryPhotos}
+                  assetBase={`/kit/${slug}/asset`}
+                />
               </div>
             </section>
           )}

@@ -147,3 +147,32 @@ export async function toggleReleasePublishedAction(formData: FormData) {
   revalidatePath("/press");
   revalidatePath(`/press/${releaseId}`);
 }
+
+/* ------------------------------- captions ------------------------------- */
+
+function captionValue(formData: FormData): string | null {
+  const text = String(formData.get("caption") ?? "").trim();
+  return text.length > 0 ? text.slice(0, 200) : null;
+}
+
+export async function setAssetCaptionAction(formData: FormData) {
+  const account = await requireAccount();
+  const releaseId = String(formData.get("releaseId"));
+
+  await dal.setAssetCaption(
+    account.id,
+    String(formData.get("assetId")),
+    captionValue(formData),
+  );
+
+  revalidatePath(`/press/${releaseId}`);
+}
+
+export async function setAllPhotoCaptionsAction(formData: FormData) {
+  const account = await requireAccount();
+  const releaseId = String(formData.get("releaseId"));
+
+  await dal.setAllPhotoCaptions(account.id, releaseId, captionValue(formData));
+
+  revalidatePath(`/press/${releaseId}`);
+}

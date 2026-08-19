@@ -474,8 +474,19 @@ export const releaseAsset = sqliteTable(
     filename: text("filename").notNull(),
     contentType: text("content_type").notNull(),
     sizeBytes: integer("size_bytes").notNull(),
-    /** Free text: photographer credit, track order, "radio edit". */
+    /**
+     * For photos this is the photographer credit, shown on the public kit
+     * and offered as "set on all" in the editor. For other kinds it's free
+     * text — track order, "radio edit", and so on.
+     */
     caption: text("caption"),
+    /**
+     * Pixel dimensions, for images only. Filled the first time anyone needs
+     * them rather than at upload, so photos uploaded before this existed get
+     * them too — same lazy pattern as the resized variants.
+     */
+    width: integer("width"),
+    height: integer("height"),
     position: integer("position").notNull().default(0),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()

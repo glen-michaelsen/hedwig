@@ -293,6 +293,9 @@ export async function listAssets(accountId: string, releaseId: string) {
       contentType: releaseAsset.contentType,
       sizeBytes: releaseAsset.sizeBytes,
       caption: releaseAsset.caption,
+      width: releaseAsset.width,
+      height: releaseAsset.height,
+      r2Key: releaseAsset.r2Key,
       position: releaseAsset.position,
       createdAt: releaseAsset.createdAt,
     })
@@ -451,6 +454,9 @@ export async function listPublicAssets(releaseId: string) {
       contentType: releaseAsset.contentType,
       sizeBytes: releaseAsset.sizeBytes,
       caption: releaseAsset.caption,
+      width: releaseAsset.width,
+      height: releaseAsset.height,
+      r2Key: releaseAsset.r2Key,
     })
     .from(releaseAsset)
     .innerJoin(pressRelease, eq(pressRelease.id, releaseAsset.releaseId))
@@ -490,3 +496,48 @@ export async function getPublicAsset(slug: string, assetId: string) {
 }
 
 export type PublicAsset = Awaited<ReturnType<typeof listPublicAssets>>[number];
+
+/* ------------------------------- captions ------------------------------- */
+
+/** The photographer credit on one file. */
+export async function setAssetCaption(
+  accountId: string,
+  assetId: string,
+  caption: string | null,
+) {
+  const db = await getDb();
+
+  const asset = await getAsset(accountId, assetId);
+  if (!asset) return;
+
+  await db
+    .update(releaseAsset)
+    .set({ caption })
+    .where(eq(releaseAsset.id, assetId));
+}
+
+/**
+ * The same credit on every photo of a release. One shoot usually has one
+ * photographer, so typing the name once is the common case and typing it six
+ * times is the punishment for not offering this.
+ */
+export async function setAllPhotoCaptions(
+  accountId: string,
+  releaseId: string,
+  caption: string | null,
+) {
+  const db = await getDb();
+
+  const release = await getRelease(accountId, releaseId);
+  if (!release) return;
+
+  await db
+    .update(releaseAsset)
+    .set({ caption })
+    .where(
+      and(
+        eq(releaseAsset.releaseId, releaseId),
+        eq(releaseAsset.kind, "photo"),
+      ),
+    );
+}

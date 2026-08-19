@@ -16,6 +16,7 @@ import {
 } from "@/app/_components/ui";
 import { TrackPlayer } from "@/app/_components/track-player";
 import { DeleteAssetButton } from "./_components/delete-asset-button";
+import { PhotoCredit, SetAllCredits } from "./_components/photo-credits";
 import { Uploader } from "./_components/uploader";
 
 const KIND_LABELS = { single: "Single", ep: "EP", album: "Album" } as const;
@@ -246,6 +247,11 @@ export default async function ReleasePage({
         {photos.length === 0 ? (
           <p className="text-sm text-muted">No press photos yet.</p>
         ) : (
+          <>
+          <SetAllCredits
+            releaseId={id}
+            suggestion={photos.find((photo) => photo.caption)?.caption ?? ""}
+          />
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
             {photos.map((photo) => (
               <figure key={photo.id} className="min-w-0">
@@ -266,7 +272,14 @@ export default async function ReleasePage({
                   <p className="truncate text-xs text-muted">
                     {photo.filename}
                   </p>
-                  <div className="mt-1.5 flex items-center gap-2">
+
+                  <PhotoCredit
+                    releaseId={id}
+                    assetId={photo.id}
+                    value={photo.caption ?? ""}
+                  />
+
+                  <div className="mt-2 flex items-center gap-2">
                     <a
                       href={`/press/${id}/asset/${photo.id}?download`}
                       className={actionPill}
@@ -284,6 +297,7 @@ export default async function ReleasePage({
               </figure>
             ))}
           </div>
+          </>
         )}
       </Section>
 
