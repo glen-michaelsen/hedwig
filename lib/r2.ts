@@ -84,6 +84,12 @@ export async function deleteObject(key: string) {
  * `head()` first, because a suffix range ("give me the last 200 KB") can't be
  * turned into an offset without knowing the size.
  */
+/**
+ * How much one response may stream. Measured against this Worker: ~400 KB was
+ * already fatal, 64 KB was comfortable.
+ */
+const MAX_STREAM_BYTES = 256 * 1024;
+
 export async function objectResponse(
   key: string,
   request: Request,
@@ -115,10 +121,30 @@ export async function objectResponse(
   const match = rangeHeader?.match(/^bytes=(\d*)-(\d*)$/);
 
   if (!match) {
-    const object = await env.MEDIA.get(key);
-    if (!object) return null;
-    return new Response(object.body, {
-      headers: { ...baseHeaders, "content-length": String(size) },
+    // Small enough to hand over whole.
+    if (size <= MAX_STREAM_BYTES) {
+      const object = await env.MEDIA.get(key);
+      if (!object) return null;
+      return new Response(object.body, {
+        headers: { ...baseHeaders, "content-length": String(size) },
+      });
+    }
+
+    // Too big: a client that asked for everything at once gets the first
+    // chunk and the fact that ranges are supported, rather than a dead
+    // isolate halfway through the file.
+    const first = await env.MEDIA.get(key, {
+      range: { offset: 0, length: MAX_STREAM_BYTES },
+    });
+    if (!first) return null;
+
+    return new Response(first.body, {
+      status: 206,
+      headers: {
+        ...baseHeaders,
+        "content-length": String(MAX_STREAM_BYTES),
+        "content-range": `bytes 0-${MAX_STREAM_BYTES - 1}/${size}`,
+      },
     });
   }
 
@@ -149,7 +175,17 @@ export async function objectResponse(
     });
   }
 
-  const length = end - start + 1;
+  // Serve at most one chunk per request, even when more was asked for.
+  //
+  // `preload="metadata"` sends `Range: bytes=0-` — open-ended — which read
+  // literally means "the whole 52 MB master". Streaming that through the
+  // Worker burns CPU in proportion to the bytes and blows the limit, killing
+  // the isolate and every other request it was serving, which is how a page
+  // ends up as a 1102 because of an audio tag. Returning fewer bytes than
+  // asked for is explicitly allowed: the browser simply asks for the next
+  // range, and playback and seeking both still work.
+  const end_capped = Math.min(end, start + MAX_STREAM_BYTES - 1);
+  const length = end_capped - start + 1;
   const object = await env.MEDIA.get(key, { range: { offset: start, length } });
   if (!object) return null;
 
@@ -158,7 +194,7 @@ export async function objectResponse(
     headers: {
       ...baseHeaders,
       "content-length": String(length),
-      "content-range": `bytes ${start}-${end}/${size}`,
+      "content-range": `bytes ${start}-${end_capped}/${size}`,
     },
   });
 }
