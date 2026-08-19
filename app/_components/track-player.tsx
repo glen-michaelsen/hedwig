@@ -113,8 +113,20 @@ export function TrackPlayer({ src, title }: { src: string; title: string }) {
     setCurrent(value);
   }
 
-  const playedPercent = duration > 0 ? (current / duration) * 100 : 0;
+  const playedRatio = duration > 0 ? current / duration : 0;
   const bufferedPercent = duration > 0 ? (buffered / duration) * 100 : 0;
+
+  /**
+   * Where the thumb's centre actually is.
+   *
+   * A range thumb is inset by half its width at each end — at 0% its centre
+   * sits THUMB/2 in from the left, not at the left edge — so a fill drawn to
+   * a plain percentage of the track stops short of the dot everywhere except
+   * dead centre. This is that same curve, so the fill ends exactly under the
+   * thumb and the two read as one shape.
+   */
+  const THUMB = 14;
+  const playedWidth = `calc(${playedRatio * 100}% + ${(0.5 - playedRatio) * THUMB}px)`;
 
   return (
     <div className="flex items-center gap-4 rounded-full bg-surface-muted px-3 py-2.5">
@@ -141,9 +153,11 @@ export function TrackPlayer({ src, title }: { src: string; title: string }) {
             style={{ width: `${bufferedPercent}%` }}
           />
         </div>
+        {/* Square on the right: a rounded cap would read as a pill sitting
+            beside the thumb rather than running into it. */}
         <div
-          className="pointer-events-none absolute inset-y-0 left-0 h-1.5 rounded-full bg-brand-600"
-          style={{ width: `${playedPercent}%` }}
+          className="pointer-events-none absolute inset-y-0 left-0 h-1.5 rounded-l-full bg-brand-600"
+          style={{ width: playedWidth }}
         />
 
         <input
