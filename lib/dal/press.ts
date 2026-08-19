@@ -1,7 +1,8 @@
 import "server-only";
-import { and, asc, desc, eq, sql } from "drizzle-orm";
+import { and, asc, desc, eq, ne, sql } from "drizzle-orm";
 import { artist, pressRelease, releaseAsset } from "@/db/schema";
 import { newId } from "@/lib/crypto";
+import { slugify } from "@/lib/slug";
 import { getDb } from "@/lib/db";
 import type { AssetKind } from "@/lib/press/assets";
 
@@ -70,14 +71,101 @@ export type ReleaseInput = {
   notes: string | null;
 };
 
+/**
+ * The public address of a release, from the artist and the title:
+ * "ISSE" + "Nova Vita" becomes /kit/isse-nova-vita.
+ *
+ * A clash gets -2, -3 … rather than a random suffix, because the whole point
+ * of a slug is that a human can read it off a link in an email.
+ */
+async function uniqueReleaseSlug(
+  artistName: string,
+  title: string,
+  exceptId?: string,
+): Promise<string> {
+  const db = await getDb();
+  const base = slugify(`${artistName} ${title}`);
+
+  for (let attempt = 0; attempt < 50; attempt++) {
+    const candidate = attempt === 0 ? base : `${base}-${attempt + 1}`;
+
+    const clash = await db
+      .select({ id: pressRelease.id })
+      .from(pressRelease)
+      .where(
+        exceptId
+          ? and(eq(pressRelease.slug, candidate), ne(pressRelease.id, exceptId))
+          : eq(pressRelease.slug, candidate),
+      )
+      .limit(1);
+
+    if (clash.length === 0) return candidate;
+  }
+
+  return `${base}-${newId().slice(0, 8)}`;
+}
+
 export async function createRelease(
   accountId: string,
   input: ReleaseInput,
 ): Promise<string> {
   const db = await getDb();
   const id = newId();
-  await db.insert(pressRelease).values({ id, accountId, ...input });
+
+  const [owner] = await db
+    .select({ name: artist.name })
+    .from(artist)
+    .where(eq(artist.id, input.artistId))
+    .limit(1);
+
+  await db.insert(pressRelease).values({
+    id,
+    accountId,
+    ...input,
+    slug: await uniqueReleaseSlug(owner?.name ?? "release", input.title),
+  });
+
   return id;
+}
+
+/**
+ * Publishing opens /kit/<slug> to anyone with the link; unpublishing closes
+ * it again. Spotlight is deliberately untouched by this — an article about a
+ * release is the platform's, not the musician's, and pulling a press kit
+ * shouldn't silently retract someone else's writing.
+ */
+export async function setReleasePublished(
+  accountId: string,
+  releaseId: string,
+  published: boolean,
+): Promise<string | null> {
+  const db = await getDb();
+
+  const release = await getRelease(accountId, releaseId);
+  if (!release) return null;
+
+  // Releases made before sharing existed have no slug; mint one on the way
+  // out rather than at publish-time-minus-one, so the link is stable from
+  // the first share onwards.
+  const slug =
+    release.slug ??
+    (await uniqueReleaseSlug(release.artistName, release.title, releaseId));
+
+  await db
+    .update(pressRelease)
+    .set({
+      slug,
+      published,
+      publishedAt: published
+        ? sql`coalesce(published_at, unixepoch())`
+        : sql`published_at`,
+      updatedAt: new Date(),
+    })
+    .where(
+      and(eq(pressRelease.id, releaseId), eq(pressRelease.accountId, accountId)),
+    );
+
+  return slug;
 }
 
 export async function listReleases(accountId: string) {
@@ -88,6 +176,8 @@ export async function listReleases(accountId: string) {
       title: pressRelease.title,
       kind: pressRelease.kind,
       releaseDate: pressRelease.releaseDate,
+      slug: pressRelease.slug,
+      published: pressRelease.published,
       artistName: artist.name,
       coverAssetId: sql<string | null>`(
         select ${releaseAsset.id} from ${releaseAsset}
@@ -141,6 +231,8 @@ export async function getRelease(accountId: string, releaseId: string) {
       url: pressRelease.url,
       releaseDate: pressRelease.releaseDate,
       notes: pressRelease.notes,
+      slug: pressRelease.slug,
+      published: pressRelease.published,
       artistId: pressRelease.artistId,
       artistName: artist.name,
     })
@@ -320,3 +412,81 @@ export async function deleteAsset(
 export type ReleaseSummary = Awaited<ReturnType<typeof listReleases>>[number];
 export type ReleaseAssetRow = Awaited<ReturnType<typeof listAssets>>[number];
 export type ReleaseLink = Awaited<ReturnType<typeof listReleaseLinks>>[number];
+
+/* -------------------------------- public -------------------------------- */
+/*
+ * Reached from /kit/<slug> with no session at all. Both functions filter on
+ * `published`, so unpublishing a release closes the page and every file on
+ * it in the same instant.
+ */
+
+export async function getPublicRelease(slug: string) {
+  const db = await getDb();
+  const [row] = await db
+    .select({
+      id: pressRelease.id,
+      title: pressRelease.title,
+      kind: pressRelease.kind,
+      url: pressRelease.url,
+      releaseDate: pressRelease.releaseDate,
+      notes: pressRelease.notes,
+      slug: pressRelease.slug,
+      artistName: artist.name,
+    })
+    .from(pressRelease)
+    .innerJoin(artist, eq(artist.id, pressRelease.artistId))
+    .where(and(eq(pressRelease.slug, slug), eq(pressRelease.published, true)))
+    .limit(1);
+
+  return row ?? null;
+}
+
+export async function listPublicAssets(releaseId: string) {
+  const db = await getDb();
+  return db
+    .select({
+      id: releaseAsset.id,
+      kind: releaseAsset.kind,
+      filename: releaseAsset.filename,
+      contentType: releaseAsset.contentType,
+      sizeBytes: releaseAsset.sizeBytes,
+      caption: releaseAsset.caption,
+    })
+    .from(releaseAsset)
+    .innerJoin(pressRelease, eq(pressRelease.id, releaseAsset.releaseId))
+    .where(
+      and(
+        eq(releaseAsset.releaseId, releaseId),
+        eq(pressRelease.published, true),
+      ),
+    )
+    .orderBy(asc(releaseAsset.position), asc(releaseAsset.createdAt));
+}
+
+/** One file, proved to belong to a published release by the join. */
+export async function getPublicAsset(slug: string, assetId: string) {
+  const db = await getDb();
+  const [row] = await db
+    .select({
+      id: releaseAsset.id,
+      kind: releaseAsset.kind,
+      r2Key: releaseAsset.r2Key,
+      filename: releaseAsset.filename,
+      contentType: releaseAsset.contentType,
+      sizeBytes: releaseAsset.sizeBytes,
+    })
+    .from(releaseAsset)
+    .innerJoin(pressRelease, eq(pressRelease.id, releaseAsset.releaseId))
+    .where(
+      and(
+        eq(releaseAsset.id, assetId),
+        eq(pressRelease.slug, slug),
+        eq(pressRelease.published, true),
+      ),
+    )
+    .limit(1);
+
+  return row ?? null;
+}
+
+export type PublicAsset = Awaited<ReturnType<typeof listPublicAssets>>[number];

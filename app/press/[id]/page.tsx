@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAccount } from "@/lib/auth";
+import { getEnv } from "@/lib/db";
+import { CopyLink } from "../_components/copy-link";
+import { toggleReleasePublishedAction } from "../actions";
 import { getRelease, listAssets, type ReleaseAssetRow } from "@/lib/dal/press";
 import { ASSET_RULES, formatBytes, type AssetKind } from "@/lib/press/assets";
 import {
   Card,
   PageHeader,
   actionPill,
+  button,
   buttonGhost,
   focusable,
 } from "@/app/_components/ui";
@@ -110,6 +114,11 @@ export default async function ReleasePage({
 
   const date = formatDate(release.releaseDate);
 
+  // Built from APP_URL rather than the request, so the copied link is the
+  // public address even when the admin is on a workers.dev host.
+  const { APP_URL } = await getEnv();
+  const shareUrl = release.slug ? `${APP_URL}/kit/${release.slug}` : null;
+
   return (
     <>
       <PageHeader
@@ -134,19 +143,63 @@ export default async function ReleasePage({
           </>
         }
         action={
-          <div className="flex items-center gap-2.5">
-            <Link className={buttonGhost} href="/press">
-              All releases
-            </Link>
+          <div className="flex flex-wrap items-center gap-2.5">
             <Link className={buttonGhost} href={`/press/${id}/edit`}>
               Edit details
             </Link>
+            <form action={toggleReleasePublishedAction}>
+              <input type="hidden" name="releaseId" value={id} />
+              <input
+                type="hidden"
+                name="published"
+                value={release.published ? "0" : "1"}
+              />
+              <button className={release.published ? buttonGhost : button}>
+                {release.published ? "Unpublish" : "Publish"}
+              </button>
+            </form>
           </div>
         }
       />
 
+      <Card className={release.published ? "" : "border-dashed"}>
+        {release.published && shareUrl ? (
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-[0.1em] text-emerald-700 dark:text-emerald-300">
+                Public
+              </p>
+              <p className="mt-1.5 truncate text-sm text-muted">{shareUrl}</p>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              <CopyLink url={shareUrl} />
+              <a
+                href={`/kit/${release.slug}`}
+                target="_blank"
+                rel="noreferrer"
+                className={actionPill}
+              >
+                Open
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
+                Not shared
+              </p>
+              <p className="mt-1.5 text-sm text-muted text-pretty">
+                Publish to get a link you can send to press. Nothing here is
+                reachable until you do.
+              </p>
+            </div>
+          </div>
+        )}
+      </Card>
+
       {release.notes && (
-        <Card>
+        <Card className="mt-6">
           <p className="text-sm leading-relaxed text-muted text-pretty">
             {release.notes}
           </p>

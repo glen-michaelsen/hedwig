@@ -423,6 +423,19 @@ export const pressRelease = sqliteTable(
       .references(() => artist.id, { onDelete: "restrict" }),
     title: text("title").notNull(),
     kind: text("kind", { enum: ["single", "ep", "album"] }).notNull(),
+    /**
+     * The public address, /kit/<slug>, built from artist and title.
+     *
+     * Set once and never regenerated: a renamed release keeps the link that
+     * was already emailed to a journalist. Nullable only because releases
+     * created before sharing existed have none until they're published.
+     */
+    slug: text("slug"),
+    /** Off until the musician says otherwise. Unpublishing kills the link. */
+    published: integer("published", { mode: "boolean" })
+      .notNull()
+      .default(false),
+    publishedAt: integer("published_at", { mode: "timestamp" }),
     /** Smart link, Linkfire, Spotify — whatever they hand out. */
     url: text("url"),
     /** YYYY-MM-DD. Kept as text: a release date is a calendar date, and
@@ -436,7 +449,10 @@ export const pressRelease = sqliteTable(
       .notNull()
       .default(sql`(unixepoch())`),
   },
-  (t) => [index("press_release_account_idx").on(t.accountId)],
+  (t) => [
+    index("press_release_account_idx").on(t.accountId),
+    uniqueIndex("press_release_slug_idx").on(t.slug),
+  ],
 );
 
 /**

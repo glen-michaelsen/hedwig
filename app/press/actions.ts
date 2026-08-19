@@ -128,3 +128,22 @@ export async function deleteAssetAction(formData: FormData) {
 
   revalidatePath(`/press/${releaseId}`);
 }
+
+/**
+ * Opens or closes the public /kit/<slug> page. Spotlight is untouched by
+ * design: an article about a release belongs to the platform, and pulling a
+ * press kit shouldn't silently retract someone else's writing.
+ */
+export async function toggleReleasePublishedAction(formData: FormData) {
+  const account = await requireAccount();
+  const releaseId = String(formData.get("releaseId"));
+
+  await dal.setReleasePublished(
+    account.id,
+    releaseId,
+    formData.get("published") === "1",
+  );
+
+  revalidatePath("/press");
+  revalidatePath(`/press/${releaseId}`);
+}

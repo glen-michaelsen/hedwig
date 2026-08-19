@@ -12,6 +12,7 @@ export const RESERVED_HANDLES = new Set([
   "api",
   "bio",
   "i",
+  "kit",
   "login",
   "logout",
   "press",
