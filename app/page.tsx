@@ -82,9 +82,12 @@ function Mission() {
           I&rsquo;m not a professional musician — just someone who has
           taught, gigged and released a little music on the side, and felt
           firsthand how much of that work has nothing to do with music at
-          all: chasing a spreadsheet for a student&rsquo;s PIN, hunting for
-          the right chord chart before a lesson, cobbling together a Linktree
-          that doesn&rsquo;t actually point anywhere useful.
+          all: keeping track of where every student is up to, remembering to
+          actually tell people when a new track is out, and cobbling
+          together a Linktree that doesn&rsquo;t point anywhere useful. Then
+          there&rsquo;s the rest of it — marketing, social media,
+          partnerships, booking — the parts of being a working musician that
+          never show up in the practice room.
         </p>
         <p className="mt-4 text-lg leading-relaxed text-muted text-pretty">
           This isn&rsquo;t an attempt to build the biggest platform out
