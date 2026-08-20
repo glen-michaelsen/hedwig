@@ -32,6 +32,13 @@ export async function getAuth() {
       // logs them out between visits. 90 days, rolling on each visit, keeps
       // them signed in as long as they keep coming back.
       expiresIn: 60 * 60 * 24 * 90,
+      // Push the 90 days out again on any visit older than a day. Without
+      // this the window is fixed from the sign-in, so a daily user is still
+      // thrown out three months later for no reason they can see.
+      updateAge: 60 * 60 * 24,
+      // Five minutes of the session held in a signed cookie, so ordinary
+      // navigation doesn't hit D1 for a row it just read.
+      cookieCache: { enabled: true, maxAge: 60 * 5 },
     },
     emailAndPassword: {
       enabled: true,
