@@ -702,11 +702,35 @@ export function SetlistBoard({
           </button>
         </form>
 
+        {/*
+          The overlay repeats the row's exact grid and padding. dnd-kit sizes
+          the overlay wrapper to the row being dragged, so anything smaller
+          inside it — a compact pill, say — reads as the row shrinking the
+          moment you pick it up.
+        */}
         <DragOverlay>
           {dragging && (
-            <div className="flex items-center gap-3 rounded-2xl border border-brand-400 bg-surface px-3 py-2.5 shadow-float">
-              <span className="text-sm font-medium">{dragging.title}</span>
-              <span className="text-sm tabular-nums text-muted">
+            <div className="grid h-full w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 rounded-2xl border border-brand-400 bg-surface px-3 py-2.5 shadow-float sm:grid-cols-[auto_minmax(0,2.2fr)_minmax(0,1.6fr)_4rem_auto]">
+              <span className="text-faint" aria-hidden="true">
+                <svg viewBox="0 0 20 20" className="h-4 w-4">
+                  <path
+                    d="M7 5h.01M7 10h.01M7 15h.01M13 5h.01M13 10h.01M13 15h.01"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  />
+                </svg>
+              </span>
+
+              <p className="min-w-0 truncate text-sm font-medium">
+                {dragging.title}
+              </p>
+
+              <p className="col-start-2 min-w-0 truncate text-xs text-muted sm:col-start-3 sm:text-sm">
+                {dragging.artist ?? ""}
+              </p>
+
+              <span className="col-start-3 row-start-1 text-right text-sm tabular-nums text-muted sm:col-start-4">
                 {formatDuration(dragging.durationSeconds)}
               </span>
             </div>
