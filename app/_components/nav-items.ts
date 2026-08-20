@@ -1,8 +1,6 @@
 export type NavItem = {
   href: string;
   label: string;
-  /** One line of context, shown under the label in the dropdown. */
-  description: string;
 };
 
 /*
@@ -18,28 +16,12 @@ export type NavItem = {
  * second list to keep in step.
  */
 export const featureItems: NavItem[] = [
-  {
-    href: "/link-in-bio",
-    label: "Link in Bio",
-    description: "One page for everything you release.",
-  },
-  {
-    href: "/tutoring",
-    label: "Tutor",
-    description: "Students, material and lesson notes.",
-  },
-  {
-    href: "/press-kit",
-    label: "Press Kit",
-    description: "Cover art, photos, tracks and the paperwork.",
-  },
+  { href: "/link-in-bio", label: "Link in Bio" },
+  { href: "/tutoring", label: "Tutor" },
+  { href: "/press-kit", label: "Press Kit" },
 ];
 
 export const loginItems: NavItem[] = [
-  { href: "/login", label: "Student", description: "Phone number and PIN." },
-  {
-    href: "/account/login",
-    label: "Musician",
-    description: "Email and password.",
-  },
+  { href: "/login", label: "Student" },
+  { href: "/account/login", label: "Musician" },
 ];

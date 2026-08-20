@@ -91,12 +91,9 @@ function Dropdown({
             <Link
               key={item.href}
               href={item.href}
-              className={`block rounded-2xl px-4 py-3 transition-colors hover:bg-surface-muted ${focusable}`}
+              className={`block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
             >
-              <span className="block text-sm font-medium">{item.label}</span>
-              <span className="mt-0.5 block text-xs leading-relaxed text-muted">
-                {item.description}
-              </span>
+              {item.label}
             </Link>
           ))}
         </div>
@@ -275,12 +272,9 @@ function MobileSection({ title, items }: { title: string; items: NavItem[] }) {
         <Link
           key={item.href}
           href={item.href}
-          className={`block rounded-2xl px-4 py-3 transition-colors hover:bg-surface-muted ${focusable}`}
+          className={`block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
         >
-          <span className="block text-sm font-medium">{item.label}</span>
-          <span className="mt-0.5 block text-xs text-muted">
-            {item.description}
-          </span>
+          {item.label}
         </Link>
       ))}
     </div>
