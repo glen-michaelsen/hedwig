@@ -215,9 +215,8 @@ export default async function ReleasePage({
               <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
                 Not shared
               </p>
-              <p className="mt-1.5 text-sm text-muted text-pretty">
-                Publish to get a link you can send to press. Nothing here is
-                reachable until you do.
+              <p className="mt-1.5 text-sm text-muted">
+                Publish to get a public link.
               </p>
             </div>
           </div>

@@ -31,8 +31,7 @@ export const ASSET_RULES: Record<AssetKind, AssetRule> = {
     mimeTypes: ["image/jpeg", "image/png", "image/webp"],
     accept: ".jpg,.jpeg,.png,.webp",
     maxBytes: 25 * MB,
-    // 3000×3000 is what the stores ask for, and what press will want back.
-    hint: "JPG, PNG or WebP. 3000×3000 is the safe size to send anywhere.",
+    hint: "JPG, PNG or WebP · 3000×3000 recommended · max 25 MB",
   },
   photo: {
     label: "Press photo",
@@ -40,7 +39,7 @@ export const ASSET_RULES: Record<AssetKind, AssetRule> = {
     mimeTypes: ["image/jpeg", "image/png", "image/webp"],
     accept: ".jpg,.jpeg,.png,.webp",
     maxBytes: 25 * MB,
-    hint: "Full resolution — a magazine can shrink one, but can't grow it.",
+    hint: "JPG, PNG or WebP · full resolution · max 25 MB",
   },
   track: {
     label: "Track",
@@ -57,7 +56,7 @@ export const ASSET_RULES: Record<AssetKind, AssetRule> = {
     ],
     accept: ".mp3,.wav,.flac",
     maxBytes: 300 * MB,
-    hint: "MP3, WAV or FLAC. Masters are welcome — uploads are chunked.",
+    hint: "MP3, WAV or FLAC · max 300 MB",
   },
   document: {
     label: "Document",
@@ -72,7 +71,7 @@ export const ASSET_RULES: Record<AssetKind, AssetRule> = {
     ],
     accept: ".pdf,.doc,.docx,.rtf,.txt,.md",
     maxBytes: 50 * MB,
-    hint: "Lyrics, one-sheet, bio, credits. PDF travels best.",
+    hint: "PDF, DOC, DOCX, RTF or TXT · max 50 MB",
   },
 };
 

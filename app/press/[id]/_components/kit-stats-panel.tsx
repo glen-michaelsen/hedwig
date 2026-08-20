@@ -44,9 +44,7 @@ export function KitStatsPanel({
 
       {nothingYet && (
         <p className="mt-5 text-sm text-muted">
-          {published
-            ? "Nothing yet — numbers appear once someone opens the link."
-            : "This kit isn't published, so there's nothing to count."}
+          {published ? "No activity yet." : "Not published yet."}
         </p>
       )}
 
