@@ -27,6 +27,15 @@ import {
 import { deleteStudentAction, unpinFromShelfAction } from "../../actions";
 import { AccessPanel } from "./_components/access-panel";
 
+export async function generateMetadata({
+  params,
+}: PageProps<"/tutor/students/[id]">) {
+  const { id } = await params;
+  const tutor = await requireAccount();
+  const student = await getStudent(tutor.id, id);
+  return { title: student ? `Student: ${student.name}` : "Students" };
+}
+
 export default async function StudentPage({
   params,
 }: PageProps<"/tutor/students/[id]">) {

@@ -3,6 +3,8 @@ import { requireAccount } from "@/lib/auth";
 import { Card, PageHeader, buttonQuiet } from "@/app/_components/ui";
 import { GigForm } from "./_components/gig-form";
 
+export const metadata = { title: "New gig" };
+
 export default async function NewGigPage() {
   await requireAccount();
 

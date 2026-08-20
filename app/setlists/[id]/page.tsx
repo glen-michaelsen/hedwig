@@ -17,6 +17,15 @@ function formatDate(value: string | null) {
   }).format(new Date(year, month - 1, day));
 }
 
+export async function generateMetadata({
+  params,
+}: PageProps<"/setlists/[id]">) {
+  const { id } = await params;
+  const account = await requireAccount();
+  const data = await getSetlist(account.id, id);
+  return { title: data ? `Setlist: ${data.gig.name}` : "Setlists" };
+}
+
 export default async function SetlistPage({
   params,
 }: PageProps<"/setlists/[id]">) {

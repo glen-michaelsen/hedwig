@@ -47,6 +47,8 @@ const bioIcon = (
   />
 );
 
+export const metadata = { title: "Home" };
+
 export default async function AccountHomePage() {
   const account = await requireAccount();
   const [{ studentCount, materialCount }, bioPage] = await Promise.all([

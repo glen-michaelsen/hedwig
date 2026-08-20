@@ -14,6 +14,15 @@ import { DeleteSpotlightButton } from "./_components/delete-spotlight-button";
 
 const KIND_LABELS = { single: "Single", ep: "EP", album: "Album" } as const;
 
+export async function generateMetadata({
+  params,
+}: PageProps<"/account/spotlight/[id]">) {
+  const { id } = await params;
+  await requireAdmin();
+  const article = await getSpotlight(id);
+  return { title: article ? `Edit spotlight: ${article.headline}` : "Spotlight" };
+}
+
 export default async function EditSpotlightPage({
   params,
 }: PageProps<"/account/spotlight/[id]">) {

@@ -5,6 +5,8 @@ import { Card, PageHeader, buttonQuiet } from "@/app/_components/ui";
 import { createReleaseAction } from "../actions";
 import { ReleaseForm } from "../_components/release-form";
 
+export const metadata = { title: "New release" };
+
 export default async function NewReleasePage() {
   const account = await requireAccount();
   const artists = await listArtists(account.id);

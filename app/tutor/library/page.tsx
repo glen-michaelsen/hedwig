@@ -16,6 +16,8 @@ import {
 } from "@/app/_components/ui";
 import { DeleteMaterialButton } from "./_components/delete-material-button";
 
+export const metadata = { title: "Library" };
+
 export default async function LibraryPage({
   searchParams,
 }: PageProps<"/tutor/library">) {

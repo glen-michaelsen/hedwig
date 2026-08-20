@@ -11,6 +11,8 @@ import {
 import { requireAdmin } from "@/lib/auth";
 import { listSpotlights } from "@/lib/dal/spotlight";
 
+export const metadata = { title: "Spotlight" };
+
 export default async function AdminSpotlightPage() {
   await requireAdmin();
   const articles = await listSpotlights();

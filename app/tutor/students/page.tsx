@@ -14,6 +14,8 @@ function formatLastSeen(date: Date | null) {
   return `seen ${Math.floor(days / 30)} months ago`;
 }
 
+export const metadata = { title: "Students" };
+
 export default async function StudentsPage() {
   const tutor = await requireAccount();
   const students = await listStudents(tutor.id);

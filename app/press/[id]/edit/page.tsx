@@ -7,6 +7,15 @@ import { updateReleaseAction } from "../../actions";
 import { ReleaseForm } from "../../_components/release-form";
 import { DeleteReleaseButton } from "./_components/delete-release-button";
 
+export async function generateMetadata({
+  params,
+}: PageProps<"/press/[id]/edit">) {
+  const { id } = await params;
+  const account = await requireAccount();
+  const release = await getRelease(account.id, id);
+  return { title: release ? `Edit release: ${release.title}` : "Edit release" };
+}
+
 export default async function EditReleasePage({
   params,
 }: PageProps<"/press/[id]/edit">) {

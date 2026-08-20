@@ -10,6 +10,15 @@ import { actionPill } from "@/app/_components/ui";
  * white. Deliberately not the dashboard shell — a rail and a nav bar are
  * wasted ink and wasted space at arm's length in the dark.
  */
+export async function generateMetadata({
+  params,
+}: PageProps<"/setlists/[id]/print">) {
+  const { id } = await params;
+  const account = await requireAccount();
+  const data = await getSetlist(account.id, id);
+  return { title: data ? `Setlist: ${data.gig.name} (print)` : "Setlists" };
+}
+
 export default async function SetlistPrintPage({
   params,
 }: PageProps<"/setlists/[id]/print">) {

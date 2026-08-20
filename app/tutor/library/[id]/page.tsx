@@ -11,6 +11,15 @@ import { PageHeader, actionPill, focusable } from "@/app/_components/ui";
 import { DeleteMaterialButton } from "../_components/delete-material-button";
 import { EditMaterialForm } from "./_components/edit-material-form";
 
+export async function generateMetadata({
+  params,
+}: PageProps<"/tutor/library/[id]">) {
+  const { id } = await params;
+  const tutor = await requireAccount();
+  const material = await getMaterial(tutor.id, id);
+  return { title: material ? `Material: ${material.title}` : "Library" };
+}
+
 export default async function EditMaterialPage({
   params,
 }: PageProps<"/tutor/library/[id]">) {

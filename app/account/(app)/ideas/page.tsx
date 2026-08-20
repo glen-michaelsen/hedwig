@@ -121,6 +121,8 @@ function IdeaRow({ idea }: { idea: AdminIdea }) {
   );
 }
 
+export const metadata = { title: "Ideas" };
+
 export default async function AdminIdeasPage() {
   await requireAdmin();
   const ideas = await listAllIdeas();

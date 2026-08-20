@@ -21,6 +21,8 @@ function formatDate(value: string | null) {
   }).format(new Date(year, month - 1, day));
 }
 
+export const metadata = { title: "Setlists" };
+
 export default async function SetlistsPage() {
   const account = await requireAccount();
   const gigs = await listGigs(account.id);

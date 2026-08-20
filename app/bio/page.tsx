@@ -17,6 +17,8 @@ import { ProfileForm } from "./_components/profile-form";
 import { SocialsForm } from "./_components/socials-form";
 import { setPublishedAction } from "./actions";
 
+export const metadata = { title: "Link in Bio" };
+
 export default async function BioEditorPage() {
   const account = await requireAccount();
   const page = await dal.getPageForAccount(account.id);

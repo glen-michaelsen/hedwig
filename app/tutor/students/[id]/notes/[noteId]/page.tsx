@@ -5,6 +5,19 @@ import { PageHeader } from "@/app/_components/ui";
 import { deleteNoteAction } from "../../../../actions";
 import { NoteForm } from "../../_components/note-form";
 
+export async function generateMetadata({
+  params,
+}: PageProps<"/tutor/students/[id]/notes/[noteId]">) {
+  const { id, noteId } = await params;
+  const tutor = await requireAccount();
+  const [student, note] = await Promise.all([
+    getStudent(tutor.id, id),
+    getNote(tutor.id, noteId),
+  ]);
+  if (!student || !note || note.studentId !== id) return { title: "Lesson note" };
+  return { title: `${student.name} — ${note.date}` };
+}
+
 export default async function EditNotePage({
   params,
 }: PageProps<"/tutor/students/[id]/notes/[noteId]">) {

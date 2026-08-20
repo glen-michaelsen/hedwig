@@ -26,6 +26,8 @@ function formatDate(value: string | null) {
   }).format(new Date(year, month - 1, day));
 }
 
+export const metadata = { title: "Press Kit" };
+
 export default async function PressPage() {
   const account = await requireAccount();
   const releases = await listReleases(account.id);

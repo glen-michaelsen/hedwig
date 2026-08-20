@@ -3,6 +3,8 @@ import { PageHeader } from "@/app/_components/ui";
 import { ChangeEmailForm } from "./_components/change-email-form";
 import { ChangePasswordForm } from "./_components/change-password-form";
 
+export const metadata = { title: "Settings" };
+
 export default async function SettingsPage() {
   const tutor = await requireAccount();
 

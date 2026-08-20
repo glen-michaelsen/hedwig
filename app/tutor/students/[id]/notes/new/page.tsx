@@ -10,6 +10,15 @@ function validDate(value: unknown): value is string {
   return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value);
 }
 
+export async function generateMetadata({
+  params,
+}: PageProps<"/tutor/students/[id]/notes/new">) {
+  const { id } = await params;
+  const tutor = await requireAccount();
+  const student = await getStudent(tutor.id, id);
+  return { title: student ? `New lesson: ${student.name}` : "New lesson" };
+}
+
 export default async function NewNotePage({
   params,
   searchParams,

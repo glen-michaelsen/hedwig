@@ -116,6 +116,8 @@ function ReleaseCard({ release }: { release: ReleaseOption }) {
  * choice, so the back button returns to the picker instead of losing a
  * half-written article to a wizard's internal state.
  */
+export const metadata = { title: "New spotlight" };
+
 export default async function NewSpotlightPage({
   searchParams,
 }: PageProps<"/account/spotlight/new">) {
