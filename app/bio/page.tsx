@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { requireAccount } from "@/lib/auth";
+import { getEnv } from "@/lib/db";
 import { parseBlocks } from "@/lib/bio/blocks";
 import { bioPageUrl } from "@/lib/bio/urls";
 import * as dal from "@/lib/dal/bio";
@@ -13,6 +14,7 @@ import {
 import { AppearanceForm } from "./_components/appearance-form";
 import { BlockEditor } from "./_components/block-editor";
 import { ClaimHandle } from "./_components/claim-handle";
+import { CopyLink } from "./_components/copy-link";
 import { ProfileForm } from "./_components/profile-form";
 import { SocialsForm } from "./_components/socials-form";
 import { setPublishedAction } from "./actions";
@@ -35,16 +37,18 @@ export default async function BioEditorPage() {
     );
   }
 
-  const [blockRows, socials, stats, releases] = await Promise.all([
+  const [blockRows, socials, stats, releases, { APP_URL }] = await Promise.all([
     dal.listBlocks(page.id),
     dal.listSocials(page.id),
     dal.getStats(page.id),
     listReleaseLinks(account.id),
+    getEnv(),
   ]);
 
   const blocks = parseBlocks(blockRows);
   const clicks = Object.fromEntries(stats.clicksByBlock);
   const url = bioPageUrl(page.handle);
+  const shareUrl = `${APP_URL}${url}`;
   const viewUrl = page.published ? url : `${url}?preview=1`;
 
   return (
@@ -54,8 +58,13 @@ export default async function BioEditorPage() {
         subtitle={
           <>
             Live at{" "}
-            <Link href={url} className="font-medium text-brand-600 hover:underline">
-              /@{page.handle}
+            <Link
+              href={url}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="font-medium text-brand-600 hover:underline"
+            >
+              trenodo.com{url}
             </Link>
             . Changes save straight to the live page.
           </>
@@ -70,6 +79,7 @@ export default async function BioEditorPage() {
             >
               View page
             </Link>
+            <CopyLink url={shareUrl} className={buttonGhost} />
             <form action={setPublishedAction}>
               <input
                 type="hidden"
