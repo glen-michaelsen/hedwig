@@ -637,6 +637,73 @@ export type PressRelease = typeof pressRelease.$inferSelect;
 export type ReleaseAsset = typeof releaseAsset.$inferSelect;
 
 /* ------------------------------------------------------------------ *
+ * Setlists
+ *
+ * A gig is the event; its sets are the blocks of stage time; the songs
+ * hang off a set. Durations are seconds throughout — minutes lose the
+ * 3:45 that every song actually is.
+ * ------------------------------------------------------------------ */
+
+export const gig = sqliteTable(
+  "gig",
+  {
+    id: text("id").primaryKey(),
+    accountId: text("account_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    name: text("name").notNull(),
+    /** YYYY-MM-DD. A gig is on a date, not at an instant in UTC. */
+    date: text("date"),
+    location: text("location"),
+    notes: text("notes"),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+    updatedAt: integer("updated_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (t) => [index("gig_account_idx").on(t.accountId, t.date)],
+);
+
+export const gigSet = sqliteTable(
+  "gig_set",
+  {
+    id: text("id").primaryKey(),
+    gigId: text("gig_id")
+      .notNull()
+      .references(() => gig.id, { onDelete: "cascade" }),
+    /** "Set 1", or whatever they call it. */
+    name: text("name").notNull(),
+    /** How long this set is meant to run. The thing songs are measured against. */
+    targetMinutes: integer("target_minutes").notNull().default(45),
+    position: integer("position").notNull().default(0),
+  },
+  (t) => [index("gig_set_gig_idx").on(t.gigId, t.position)],
+);
+
+export const setSong = sqliteTable(
+  "set_song",
+  {
+    id: text("id").primaryKey(),
+    setId: text("set_id")
+      .notNull()
+      .references(() => gigSet.id, { onDelete: "cascade" }),
+    title: text("title").notNull(),
+    artist: text("artist"),
+    /** Seconds. Null when nobody has timed it yet. */
+    durationSeconds: integer("duration_seconds"),
+    note: text("note"),
+    position: integer("position").notNull().default(0),
+  },
+  (t) => [index("set_song_set_idx").on(t.setId, t.position)],
+);
+
+export type Gig = typeof gig.$inferSelect;
+export type GigSet = typeof gigSet.$inferSelect;
+export type SetSong = typeof setSong.$inferSelect;
+
+/* ------------------------------------------------------------------ *
  * Ideas — the public suggestion board at /ideas
  * ------------------------------------------------------------------ */
 

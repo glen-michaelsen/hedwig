@@ -10,6 +10,7 @@ import {
   LinkInBioIcon,
   MoreIcon,
   PressKitIcon,
+  SetlistIcon,
   SettingsIcon,
   SpotlightIcon,
   TutorIcon,
@@ -30,6 +31,7 @@ const ICONS = {
   press: PressKitIcon,
   spotlight: SpotlightIcon,
   ideas: IdeasIcon,
+  setlists: SetlistIcon,
   settings: SettingsIcon,
 } as const;
 

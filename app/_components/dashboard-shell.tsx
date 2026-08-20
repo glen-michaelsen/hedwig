@@ -26,6 +26,7 @@ export async function DashboardShell({ children }: { children: ReactNode }) {
     { href: "/tutor", label: "Tutor", icon: "tutor" },
     { href: "/bio", label: "Link in Bio", icon: "bio" },
     { href: "/press", label: "Press Kit", icon: "press" },
+    { href: "/setlists", label: "Setlists", icon: "setlists" },
   ];
 
   const groups: ShellGroup[] = [

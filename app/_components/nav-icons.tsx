@@ -112,6 +112,20 @@ export function SpotlightIcon({ className = "h-4 w-4" }: IconProps) {
   );
 }
 
+export function SetlistIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>
+      <path
+        d="M4 5.5h12M4 10h12M4 14.5h7"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <circle cx="15" cy="14.5" r="1.6" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
 export function SettingsIcon({ className = "h-4 w-4" }: IconProps) {
   return (
     <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>
