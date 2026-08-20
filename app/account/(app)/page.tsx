@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { requireAccount } from "@/lib/auth";
 import { getPageForAccount } from "@/lib/dal/bio";
+import { listReleases } from "@/lib/dal/press";
 import { getDashboard } from "@/lib/dal/tutor";
 import { PageHeader, focusable } from "@/app/_components/ui";
 
@@ -47,20 +48,32 @@ const bioIcon = (
   />
 );
 
+const pressIcon = (
+  <Icon
+    path={
+      <>
+        <path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2.2l.9-1.8A1 1 0 0 1 9.5 4.6h5a1 1 0 0 1 .9.6L16.3 7h2.2A1.5 1.5 0 0 1 20 8.5v9A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5z" />
+        <circle cx="12" cy="12.5" r="3" />
+      </>
+    }
+  />
+);
+
 export const metadata = { title: "Home" };
 
 export default async function AccountHomePage() {
   const account = await requireAccount();
-  const [{ studentCount, materialCount }, bioPage] = await Promise.all([
+  const [{ studentCount, materialCount }, bioPage, releases] = await Promise.all([
     getDashboard(account.id),
     getPageForAccount(account.id),
+    listReleases(account.id),
   ]);
 
   return (
     <>
       <PageHeader
         title={`Hello, ${account.name.split(" ")[0]}`}
-        subtitle="Your tools. More are on the way — press kit and link in bio next."
+        subtitle="Your tools. More are on the way."
       />
 
       <div className="grid gap-6 sm:grid-cols-2">
@@ -101,6 +114,27 @@ export default async function AccountHomePage() {
                 ? `Live at /@${bioPage.handle}`
                 : `Draft at /@${bioPage.handle}`
               : "Not set up yet"}
+          </p>
+        </Link>
+
+        <Link
+          href="/press"
+          className={`group rounded-4xl border border-line bg-surface p-8 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift ${focusable}`}
+        >
+          <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-500/12 text-brand-600">
+            {pressIcon}
+          </span>
+          <h2 className="mt-6 text-lg font-semibold tracking-tight">
+            Press Kit
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">
+            Cover art, photos, masters and the paperwork — organised by
+            release, ready to send.
+          </p>
+          <p className="mt-5 text-sm tabular-nums text-faint">
+            {releases.length === 0
+              ? "Not set up yet"
+              : `${releases.length} ${releases.length === 1 ? "release" : "releases"}`}
           </p>
         </Link>
       </div>

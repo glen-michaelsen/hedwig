@@ -48,7 +48,7 @@ export async function signUpAction(
     throw error;
   }
 
-  redirect("/tutor");
+  redirect("/account");
 }
 
 export async function signInAction(
@@ -72,7 +72,7 @@ export async function signInAction(
     throw error;
   }
 
-  redirect("/tutor");
+  redirect("/account");
 }
 
 export async function signOutAction() {
