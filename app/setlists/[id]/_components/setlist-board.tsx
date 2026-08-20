@@ -161,7 +161,7 @@ function SongRow({
     <li
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`group flex items-center gap-3 rounded-2xl border border-line bg-surface px-3 py-2.5 ${
+      className={`group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 rounded-2xl border border-line bg-surface px-3 py-2.5 sm:grid-cols-[auto_minmax(0,2.2fr)_minmax(0,1.6fr)_4rem_auto] ${
         isDragging ? "opacity-40" : ""
       }`}
     >
@@ -182,18 +182,19 @@ function SongRow({
         </svg>
       </button>
 
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium">{song.title}</p>
-        {song.artist && (
-          <p className="truncate text-xs text-muted">{song.artist}</p>
-        )}
-      </div>
+      <p className="min-w-0 truncate text-sm font-medium">{song.title}</p>
 
-      <span className="shrink-0 text-sm tabular-nums text-muted">
+      {/* Its own column from sm up, so titles and artists line up down the
+          list rather than each row finding its own width. */}
+      <p className="col-start-2 min-w-0 truncate text-xs text-muted sm:col-start-3 sm:text-sm">
+        {song.artist ?? ""}
+      </p>
+
+      <span className="col-start-3 row-start-1 shrink-0 text-right text-sm tabular-nums text-muted sm:col-start-4">
         {formatDuration(song.durationSeconds)}
       </span>
 
-      <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+      <div className="col-start-3 row-start-2 flex shrink-0 items-center justify-end gap-1 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100 sm:col-start-5 sm:row-start-1">
         <button
           type="button"
           className={actionPill}
@@ -287,12 +288,22 @@ function SetColumn({
           </form>
         ) : (
           <>
-            <div className="min-w-0">
-              <h3 className="truncate text-sm font-semibold">{set.name}</h3>
-              <p className="mt-0.5 text-xs text-muted">
+            <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
+              <h3 className="text-base font-semibold">{set.name}</h3>
+              <p className="text-xs text-muted">
                 {set.songs.length} {set.songs.length === 1 ? "song" : "songs"} ·{" "}
                 {formatLength(played)} of {set.targetMinutes} min
               </p>
+              <span
+                className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${TONE_STYLES[verdict.tone]}`}
+              >
+                {verdict.label}
+              </span>
+              {untimed > 0 && (
+                <span className="text-[11px] text-faint">
+                  {untimed} without a length
+                </span>
+              )}
             </div>
 
             <div className="flex shrink-0 items-center gap-1">
@@ -319,19 +330,6 @@ function SetColumn({
               </button>
             </div>
           </>
-        )}
-      </div>
-
-      <div className="mt-3 flex flex-wrap items-center gap-2">
-        <span
-          className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${TONE_STYLES[verdict.tone]}`}
-        >
-          {verdict.label}
-        </span>
-        {untimed > 0 && (
-          <span className="text-[11px] text-faint">
-            {untimed} without a length
-          </span>
         )}
       </div>
 
@@ -392,7 +390,7 @@ function SetColumn({
           });
         }}
         id={`add-song-${set.id}`}
-        className="mt-3 grid gap-2 sm:grid-cols-[1fr_1fr_4.5rem]"
+        className="mt-3 grid gap-2 sm:grid-cols-[minmax(0,2.2fr)_minmax(0,1.6fr)_6rem_auto]"
       >
         <input
           className={`${inputBase} w-full !py-2 text-sm`}
@@ -410,7 +408,7 @@ function SetColumn({
           name="duration"
           placeholder="3:45"
         />
-        <button className={`${actionPillBrand} sm:col-span-3`}>Add song</button>
+        <button className={actionPillBrand}>Add song</button>
       </form>
     </div>
   );
@@ -575,7 +573,10 @@ export function SetlistBoard({
         onDragOver={onDragOver}
         onDragEnd={onDragEnd}
       >
-        <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-3">
+        {/* Full width, stacked. Columns squeezed the song list to nothing —
+            a setlist row needs room for title, artist and length side by
+            side, which a third of the page cannot give it. */}
+        <div className="flex flex-col gap-5">
           {sets.map((set) => (
             <SetColumn
               key={set.id}
