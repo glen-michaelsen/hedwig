@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireAccount } from "@/lib/auth";
 import * as dal from "@/lib/dal/press";
+import * as stats from "@/lib/dal/kit-stats";
+import { fetchLinkMeta } from "@/lib/links";
 import { deletePressObject } from "@/lib/press/images";
 
 export type ReleaseFormState = { error?: string };
@@ -175,4 +177,83 @@ export async function setAllPhotoCaptionsAction(formData: FormData) {
   await dal.setAllPhotoCaptions(account.id, releaseId, captionValue(formData));
 
   revalidatePath(`/press/${releaseId}`);
+}
+
+/* ------------------------------- coverage ------------------------------- */
+
+const COVERAGE_KINDS = [
+  "review",
+  "feature",
+  "interview",
+  "playlist",
+  "radio",
+  "social",
+  "other",
+] as const;
+
+export type CoverageState = { error?: string; added?: boolean };
+
+/**
+ * Adding a piece of coverage is one field — the link — because that is what
+ * someone has in their hand when a review lands. The title and outlet are
+ * read from the page, and everything else is optional.
+ */
+export async function addCoverageAction(
+  _prev: CoverageState,
+  formData: FormData,
+): Promise<CoverageState> {
+  const account = await requireAccount();
+  const releaseId = String(formData.get("releaseId"));
+
+  const url = String(formData.get("url") ?? "").trim();
+  if (!z.url().safeParse(url).success) {
+    return { error: "Paste a full link, including https://" };
+  }
+
+  const rawKind = String(formData.get("kind") ?? "other");
+  const kind = (COVERAGE_KINDS as readonly string[]).includes(rawKind)
+    ? (rawKind as stats.CoverageKind)
+    : "other";
+
+  const publishedOn = nullable(formData.get("publishedOn"));
+  if (publishedOn && !/^\d{4}-\d{2}-\d{2}$/.test(publishedOn)) {
+    return { error: "That date doesn't look right" };
+  }
+
+  // Best effort — a paywalled review still deserves to be recorded.
+  let title: string | null = null;
+  try {
+    title = (await fetchLinkMeta(url)).title;
+  } catch {
+    title = null;
+  }
+
+  let outlet = nullable(formData.get("outlet"));
+  if (!outlet) {
+    try {
+      outlet = new URL(url).hostname.replace(/^www\./, "");
+    } catch {
+      outlet = null;
+    }
+  }
+
+  const ok = await stats.addCoverage(account.id, releaseId, {
+    url,
+    title,
+    outlet,
+    kind,
+    note: nullable(formData.get("note")),
+    publishedOn,
+  });
+
+  if (!ok) return { error: "That release no longer exists" };
+
+  revalidatePath(`/press/${releaseId}`);
+  return { added: true };
+}
+
+export async function deleteCoverageAction(formData: FormData) {
+  const account = await requireAccount();
+  await stats.deleteCoverage(account.id, String(formData.get("coverageId")));
+  revalidatePath(`/press/${String(formData.get("releaseId"))}`);
 }

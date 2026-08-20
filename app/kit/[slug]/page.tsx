@@ -1,7 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
-import { TrackPlayer } from "@/app/_components/track-player";
+import { headers } from "next/headers";
+import { todayIso } from "@/lib/clock";
+import { recordKitEvent } from "@/lib/dal/kit-stats";
+import { isProbablyBot } from "@/lib/press/bots";
+import { TrackedPlayer } from "./_components/tracked-player";
+import { TrackedLink } from "./_components/tracking";
 import { actionPill, container } from "@/app/_components/ui";
 import { getPublicRelease, listPublicAssets } from "@/lib/dal/press";
 import { formatBytes } from "@/lib/press/assets";
@@ -42,6 +47,21 @@ export default async function PublicPressKitPage({
 
   const release = await getPublicRelease(slug);
   if (!release) notFound();
+
+  // One counter per visit, crawlers excluded. Failing to count is never
+  // worth failing to render.
+  const userAgent = (await headers()).get("user-agent");
+  if (!isProbablyBot(userAgent)) {
+    try {
+      await recordKitEvent({
+        releaseId: release.id,
+        kind: "view",
+        day: await todayIso(),
+      });
+    } catch {
+      // Counting is best-effort.
+    }
+  }
 
   const assets = await listPublicAssets(release.id);
   const cover = assets.find((asset) => asset.kind === "cover");
@@ -84,6 +104,7 @@ export default async function PublicPressKitPage({
                 }}
                 assetBase={`/kit/${slug}/asset`}
                 label="the album cover"
+                trackSlug={slug}
                 className="shrink-0 rounded-3xl"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -109,14 +130,13 @@ export default async function PublicPressKitPage({
 
               <div className="mt-5 flex flex-wrap items-center gap-2.5">
                 {release.url && (
-                  <a
+                  <TrackedLink
+                    slug={slug}
                     href={release.url}
-                    target="_blank"
-                    rel="noreferrer noopener"
                     className={actionPill}
                   >
                     Listen online
-                  </a>
+                  </TrackedLink>
                 )}
                 {cover && (
                   <a
@@ -168,7 +188,9 @@ export default async function PublicPressKitPage({
                       first chunk and seeking jumps straight to the offset.
                     */}
                     <div className="mt-3">
-                      <TrackPlayer
+                      <TrackedPlayer
+                        slug={slug}
+                        assetId={track.id}
                         src={asset(track.id)}
                         title={track.filename}
                       />
@@ -188,6 +210,7 @@ export default async function PublicPressKitPage({
                 <PhotoGallery
                   photos={galleryPhotos}
                   assetBase={`/kit/${slug}/asset`}
+                  slug={slug}
                 />
               </div>
             </section>

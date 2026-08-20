@@ -1,4 +1,7 @@
+import { todayIso } from "@/lib/clock";
 import { getPublicAsset } from "@/lib/dal/press";
+import { recordKitEvent } from "@/lib/dal/kit-stats";
+import { isProbablyBot } from "@/lib/press/bots";
 import { getImageVariant } from "@/lib/press/images";
 import { isImageVariant, isResizableImage } from "@/lib/press/variants";
 import { objectResponse } from "@/lib/r2";
@@ -25,6 +28,21 @@ export async function GET(
 
   const url = new URL(request.url);
   const wantsDownload = url.searchParams.has("download");
+
+  // Only the deliberate act counts. Viewing a photo on the page fetches the
+  // same object, and calling that a download would flatter every number.
+  if (wantsDownload && !isProbablyBot(request.headers.get("user-agent"))) {
+    try {
+      await recordKitEvent({
+        releaseId: asset.releaseId,
+        kind: "download",
+        assetId: asset.id,
+        day: await todayIso(),
+      });
+    } catch {
+      // Best-effort.
+    }
+  }
 
   // On screen an image is a resized copy; the original is only ever handed
   // over as a download, same rule as the private press kit.

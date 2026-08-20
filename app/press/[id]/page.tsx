@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAccount } from "@/lib/auth";
+import { daysAgoIso } from "@/lib/clock";
 import { getEnv } from "@/lib/db";
 import { CopyLink } from "../_components/copy-link";
 import { toggleReleasePublishedAction } from "../actions";
@@ -15,6 +16,14 @@ import {
   focusable,
 } from "@/app/_components/ui";
 import { TrackPlayer } from "@/app/_components/track-player";
+import {
+  getKitDailyViews,
+  getKitDownloads,
+  getKitStats,
+  listCoverage,
+} from "@/lib/dal/kit-stats";
+import { CoverageSection } from "./_components/coverage";
+import { KitStatsPanel } from "./_components/kit-stats-panel";
 import { DeleteAssetButton } from "./_components/delete-asset-button";
 import { PhotoCredit, SetAllCredits } from "./_components/photo-credits";
 import { Uploader } from "./_components/uploader";
@@ -119,6 +128,14 @@ export default async function ReleasePage({
   // Built from APP_URL rather than the request, so the copied link is the
   // public address even when the admin is on a workers.dev host.
   const { APP_URL } = await getEnv();
+
+  const since = await daysAgoIso(29);
+  const [totals, daily, downloads, coverage] = await Promise.all([
+    getKitStats(account.id, id),
+    getKitDailyViews(account.id, id, since),
+    getKitDownloads(account.id, id),
+    listCoverage(account.id, id),
+  ]);
   const shareUrl = release.slug ? `${APP_URL}/kit/${release.slug}` : null;
 
   return (
@@ -207,6 +224,29 @@ export default async function ReleasePage({
           </p>
         </Card>
       )}
+
+      <section className="mt-10">
+        <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
+          Activity
+        </h2>
+        <div className="mt-4">
+          <KitStatsPanel
+            totals={totals}
+            daily={daily}
+            downloads={downloads}
+            published={release.published}
+          />
+        </div>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
+          Coverage
+        </h2>
+        <Card className="mt-4">
+          <CoverageSection releaseId={id} items={coverage} />
+        </Card>
+      </section>
 
       <Section title={ASSET_RULES.cover.plural} releaseId={id} kind="cover">
         {cover ? (

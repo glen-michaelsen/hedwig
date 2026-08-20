@@ -39,12 +39,22 @@ function PauseIcon() {
  * handler on a div, so arrow keys, Home/End and screen readers work without
  * any of it being reimplemented.
  */
-export function TrackPlayer({ src, title }: { src: string; title: string }) {
+export function TrackPlayer({
+  src,
+  title,
+  onFirstPlay,
+}: {
+  src: string;
+  title: string;
+  /** Called once, the first time this track is started. */
+  onFirstPlay?: () => void;
+}) {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [playing, setPlaying] = useState(false);
   const [current, setCurrent] = useState(0);
   const [duration, setDuration] = useState(0);
   const [buffered, setBuffered] = useState(0);
+  const reported = useRef(false);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -75,6 +85,11 @@ export function TrackPlayer({ src, title }: { src: string; title: string }) {
     }
     function onPlay() {
       setPlaying(true);
+      // Once per mount: a pause and resume is the same listen.
+      if (!reported.current) {
+        reported.current = true;
+        onFirstPlay?.();
+      }
     }
     function onPause() {
       setPlaying(false);
@@ -97,7 +112,7 @@ export function TrackPlayer({ src, title }: { src: string; title: string }) {
       audio.removeEventListener("pause", onPause);
       audio.removeEventListener("ended", onPause);
     };
-  }, []);
+  }, [onFirstPlay]);
 
   function toggle() {
     const audio = audioRef.current;

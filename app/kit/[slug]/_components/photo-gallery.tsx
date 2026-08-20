@@ -8,10 +8,12 @@ export type GalleryPhoto = ViewableImage;
 export function PhotoGallery({
   photos,
   assetBase,
+  slug,
 }: {
   photos: GalleryPhoto[];
   /** `/kit/<slug>/asset` — the id and query are added here. */
   assetBase: string;
+  slug: string;
 }) {
   return (
     <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -21,6 +23,7 @@ export function PhotoGallery({
             image={photo}
             assetBase={assetBase}
             label={photo.filename}
+            trackSlug={slug}
             className="block w-full overflow-hidden rounded-3xl"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}

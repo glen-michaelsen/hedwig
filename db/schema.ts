@@ -567,6 +567,71 @@ export const spotlightSkip = sqliteTable("spotlight_skip", {
 
 export type Spotlight = typeof spotlight.$inferSelect;
 
+/* ------------------------------------------------------------------ *
+ * Press kit analytics and coverage
+ * ------------------------------------------------------------------ */
+
+/**
+ * What happened on a public kit, as daily counters rather than a row per
+ * hit — same shape as the bio page's stats, and for the same reason: a
+ * journalist scrubbing a track would otherwise write hundreds of rows.
+ *
+ * `assetId` is null for whole-page events (a visit, an outbound click) and
+ * set for anything about one file.
+ */
+export const kitEvent = sqliteTable(
+  "kit_event",
+  {
+    releaseId: text("release_id")
+      .notNull()
+      .references(() => pressRelease.id, { onDelete: "cascade" }),
+    /** "" rather than null: a primary key column cannot be nullable. */
+    assetId: text("asset_id").notNull().default(""),
+    kind: text("kind", {
+      enum: ["view", "play", "download", "photo", "link"],
+    }).notNull(),
+    day: text("day").notNull(),
+    count: integer("count").notNull().default(0),
+  },
+  (t) => [
+    primaryKey({ columns: [t.releaseId, t.assetId, t.kind, t.day] }),
+    index("kit_event_release_idx").on(t.releaseId, t.day),
+  ],
+);
+
+/**
+ * Where a release was written about. Entered by hand: there is no reliable
+ * way to discover a review, and the musician usually hears about it first.
+ */
+export const coverage = sqliteTable(
+  "coverage",
+  {
+    id: text("id").primaryKey(),
+    releaseId: text("release_id")
+      .notNull()
+      .references(() => pressRelease.id, { onDelete: "cascade" }),
+    url: text("url").notNull(),
+    /** Read from the page when it can be; editable either way. */
+    title: text("title"),
+    /** Publication or handle. Defaults to the link's domain. */
+    outlet: text("outlet"),
+    kind: text("kind", {
+      enum: ["review", "feature", "interview", "playlist", "radio", "social", "other"],
+    })
+      .notNull()
+      .default("other"),
+    note: text("note"),
+    /** YYYY-MM-DD, when it appeared. */
+    publishedOn: text("published_on"),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (t) => [index("coverage_release_idx").on(t.releaseId, t.publishedOn)],
+);
+
+export type Coverage = typeof coverage.$inferSelect;
+
 export type Artist = typeof artist.$inferSelect;
 export type PressRelease = typeof pressRelease.$inferSelect;
 export type ReleaseAsset = typeof releaseAsset.$inferSelect;

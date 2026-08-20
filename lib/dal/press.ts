@@ -485,6 +485,7 @@ export async function getPublicAsset(slug: string, assetId: string) {
       sizeBytes: releaseAsset.sizeBytes,
       width: releaseAsset.width,
       height: releaseAsset.height,
+      releaseId: releaseAsset.releaseId,
     })
     .from(releaseAsset)
     .innerJoin(pressRelease, eq(pressRelease.id, releaseAsset.releaseId))

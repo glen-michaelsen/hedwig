@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Modal } from "@/app/_components/modal";
 import { actionPill, focusable } from "@/app/_components/ui";
 import { formatBytes } from "@/lib/press/assets";
+import { sendKitEvent } from "./tracking";
 
 export type ViewableImage = {
   id: string;
@@ -37,6 +38,7 @@ export function ImageViewer({
   children,
   className = "",
   label,
+  trackSlug,
 }: {
   image: ViewableImage;
   /** `/kit/<slug>/asset` — the id and query are added here. */
@@ -45,6 +47,8 @@ export function ImageViewer({
   className?: string;
   /** What this image is, for the button's accessible name. */
   label: string;
+  /** The kit's slug, when opening should be counted. */
+  trackSlug?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [measured, setMeasured] = useState<{
@@ -91,7 +95,10 @@ export function ImageViewer({
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setOpen(true);
+          if (trackSlug) sendKitEvent(trackSlug, "photo", image.id);
+        }}
         aria-label={`Open ${label}`}
         className={`${focusable} ${className}`}
       >
