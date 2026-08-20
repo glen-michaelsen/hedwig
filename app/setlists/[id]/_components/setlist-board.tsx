@@ -21,7 +21,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import {
   addSetAction,
   addSongAction,
@@ -33,12 +33,16 @@ import {
   updateSetAction,
   updateSongAction,
 } from "../../actions";
+import { Modal } from "@/app/_components/modal";
 import {
   actionPill,
   actionPillBrand,
-  buttonGhost,
+  button,
+  buttonQuiet,
   focusable,
+  input,
   inputBase,
+  label,
 } from "@/app/_components/ui";
 import {
   fitVerdict,
@@ -221,6 +225,81 @@ function SongRow({
   );
 }
 
+
+/* --------------------------------- menu --------------------------------- */
+
+/**
+ * The three-dot menu. Opens on click, closes on Escape, an outside click, or
+ * choosing something — the same rules as the public header's dropdown, for
+ * the same reason: a hover menu has no equivalent under a finger.
+ */
+function OverflowMenu({
+  label,
+  items,
+}: {
+  label: string;
+  items: { label: string; onSelect: () => void; danger?: boolean }[];
+}) {
+  const [open, setOpen] = useState(false);
+  const wrapper = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function onPointerDown(event: PointerEvent) {
+      if (!wrapper.current?.contains(event.target as Node)) setOpen(false);
+    }
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setOpen(false);
+    }
+
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [open]);
+
+  return (
+    <div ref={wrapper} className="relative">
+      <button
+        type="button"
+        aria-label={label}
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+        className={`grid h-9 w-9 place-items-center rounded-full border border-line bg-surface text-muted transition-colors hover:text-foreground ${focusable}`}
+      >
+        <svg viewBox="0 0 20 20" aria-hidden="true" className="h-4 w-4">
+          <circle cx="4" cy="10" r="1.5" fill="currentColor" />
+          <circle cx="10" cy="10" r="1.5" fill="currentColor" />
+          <circle cx="16" cy="10" r="1.5" fill="currentColor" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full z-40 mt-2 w-44 overflow-hidden rounded-2xl border border-line bg-surface p-1.5 shadow-float">
+          {items.map((item) => (
+            <button
+              key={item.label}
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                item.onSelect();
+              }}
+              className={`block w-full rounded-xl px-3 py-2 text-left text-sm transition-colors hover:bg-surface-muted ${
+                item.danger ? "text-rose-700 dark:text-rose-300" : ""
+              } ${focusable}`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ---------------------------------- set --------------------------------- */
 
 function SetColumn({
@@ -237,6 +316,7 @@ function SetColumn({
     data: { setId: set.id },
   });
   const [editingSet, setEditingSet] = useState(false);
+  const [addingSong, setAddingSong] = useState(false);
   const [, startTransition] = useTransition();
 
   const played = totalSeconds(set.songs);
@@ -256,81 +336,51 @@ function SetColumn({
   return (
     <div className="flex min-w-0 flex-col rounded-4xl border border-line bg-surface-muted/40 p-4">
       <div className="flex items-start justify-between gap-3">
-        {editingSet ? (
-          <form
-            action={(formData) => {
-              formData.set("gigId", gigId);
-              formData.set("setId", set.id);
-              startTransition(async () => {
-                await updateSetAction(formData);
-                setEditingSet(false);
-                onChanged();
-              });
-            }}
-            className="flex flex-1 items-center gap-2"
+        <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
+          <h3 className="text-base font-semibold">{set.name}</h3>
+          <p className="text-xs text-muted">
+            {set.songs.length} {set.songs.length === 1 ? "song" : "songs"} ·{" "}
+            {formatLength(played)} of {set.targetMinutes} min
+          </p>
+          <span
+            className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${TONE_STYLES[verdict.tone]}`}
           >
-            <input
-              className={`${inputBase} w-full !py-1.5 text-sm`}
-              name="name"
-              defaultValue={set.name}
-              autoFocus
-            />
-            <input
-              className={`${inputBase} w-20 !py-1.5 text-sm`}
-              name="targetMinutes"
-              type="number"
-              min={5}
-              max={300}
-              defaultValue={set.targetMinutes}
-              aria-label="Minutes"
-            />
-            <button className={actionPillBrand}>Save</button>
-          </form>
-        ) : (
-          <>
-            <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
-              <h3 className="text-base font-semibold">{set.name}</h3>
-              <p className="text-xs text-muted">
-                {set.songs.length} {set.songs.length === 1 ? "song" : "songs"} ·{" "}
-                {formatLength(played)} of {set.targetMinutes} min
-              </p>
-              <span
-                className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${TONE_STYLES[verdict.tone]}`}
-              >
-                {verdict.label}
-              </span>
-              {untimed > 0 && (
-                <span className="text-[11px] text-faint">
-                  {untimed} without a length
-                </span>
-              )}
-            </div>
+            {verdict.label}
+          </span>
+          {untimed > 0 && (
+            <span className="text-[11px] text-faint">
+              {untimed} without a length
+            </span>
+          )}
+        </div>
 
-            <div className="flex shrink-0 items-center gap-1">
-              <button
-                type="button"
-                className={actionPill}
-                onClick={() => setEditingSet(true)}
-              >
-                Edit
-              </button>
-              <button
-                type="button"
-                className={actionPill}
-                onClick={() => act(duplicateSetAction, { setId: set.id })}
-              >
-                Copy
-              </button>
-              <button
-                type="button"
-                className={`${actionPill} hover:text-rose-700`}
-                onClick={() => act(deleteSetAction, { setId: set.id })}
-              >
-                Delete
-              </button>
-            </div>
-          </>
-        )}
+        {/* One button for the thing you do constantly, a menu for the three
+            you do rarely. */}
+        <div className="flex shrink-0 items-center gap-2">
+          <button
+            type="button"
+            className={actionPillBrand}
+            onClick={() => setAddingSong(true)}
+          >
+            Add song
+          </button>
+
+          <OverflowMenu
+            label={`More actions for ${set.name}`}
+            items={[
+              { label: "Edit set", onSelect: () => setEditingSet(true) },
+              {
+                label: "Duplicate set",
+                onSelect: () => act(duplicateSetAction, { setId: set.id }),
+              },
+              {
+                label: "Delete set",
+                danger: true,
+                onSelect: () => act(deleteSetAction, { setId: set.id }),
+              },
+            ]}
+          />
+        </div>
       </div>
 
       {/* The bar reads as "how full is this slot", which is the question
@@ -376,40 +426,127 @@ function SetColumn({
         )}
       </div>
 
-      <form
-        action={(formData) => {
-          formData.set("gigId", gigId);
-          formData.set("setId", set.id);
-          const form = document.getElementById(
-            `add-song-${set.id}`,
-          ) as HTMLFormElement | null;
-          startTransition(async () => {
-            await addSongAction(formData);
-            form?.reset();
-            onChanged();
-          });
-        }}
-        id={`add-song-${set.id}`}
-        className="mt-3 grid gap-2 sm:grid-cols-[minmax(0,2.2fr)_minmax(0,1.6fr)_6rem_auto]"
+      <Modal
+        open={addingSong}
+        onClose={() => setAddingSong(false)}
+        title={`Add a song to ${set.name}`}
       >
-        <input
-          className={`${inputBase} w-full !py-2 text-sm`}
-          name="title"
-          placeholder="Song"
-          required
-        />
-        <input
-          className={`${inputBase} w-full !py-2 text-sm`}
-          name="artist"
-          placeholder="Artist"
-        />
-        <input
-          className={`${inputBase} w-full !py-2 text-sm`}
-          name="duration"
-          placeholder="3:45"
-        />
-        <button className={actionPillBrand}>Add song</button>
-      </form>
+        <form
+          action={(formData) => {
+            formData.set("gigId", gigId);
+            formData.set("setId", set.id);
+            startTransition(async () => {
+              await addSongAction(formData);
+              setAddingSong(false);
+              onChanged();
+            });
+          }}
+          className="space-y-4 px-6 py-6 sm:px-7"
+        >
+          <div>
+            <label className={label} htmlFor={`title-${set.id}`}>
+              Song
+            </label>
+            <input
+              className={input}
+              id={`title-${set.id}`}
+              name="title"
+              required
+              autoFocus
+            />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_8rem]">
+            <div>
+              <label className={label} htmlFor={`artist-${set.id}`}>
+                Artist
+              </label>
+              <input className={input} id={`artist-${set.id}`} name="artist" />
+            </div>
+            <div>
+              <label className={label} htmlFor={`duration-${set.id}`}>
+                Length
+              </label>
+              <input
+                className={input}
+                id={`duration-${set.id}`}
+                name="duration"
+                placeholder="3:45"
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 pt-1">
+            <button className={button}>Add song</button>
+            <button
+              type="button"
+              className={buttonQuiet}
+              onClick={() => setAddingSong(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+      <Modal
+        open={editingSet}
+        onClose={() => setEditingSet(false)}
+        title={`Edit ${set.name}`}
+      >
+        <form
+          action={(formData) => {
+            formData.set("gigId", gigId);
+            formData.set("setId", set.id);
+            startTransition(async () => {
+              await updateSetAction(formData);
+              setEditingSet(false);
+              onChanged();
+            });
+          }}
+          className="space-y-4 px-6 py-6 sm:px-7"
+        >
+          <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_8rem]">
+            <div>
+              <label className={label} htmlFor={`set-name-${set.id}`}>
+                Name
+              </label>
+              <input
+                className={input}
+                id={`set-name-${set.id}`}
+                name="name"
+                defaultValue={set.name}
+                autoFocus
+              />
+            </div>
+            <div>
+              <label className={label} htmlFor={`set-minutes-${set.id}`}>
+                Minutes
+              </label>
+              <input
+                className={input}
+                id={`set-minutes-${set.id}`}
+                name="targetMinutes"
+                type="number"
+                min={5}
+                max={300}
+                defaultValue={set.targetMinutes}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 pt-1">
+            <button className={button}>Save</button>
+            <button
+              type="button"
+              className={buttonQuiet}
+              onClick={() => setEditingSet(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 }
@@ -524,48 +661,8 @@ export function SetlistBoard({
     startTransition(() => saveArrangementAction(gigId, arrangement));
   }
 
-  const wholeShow = sets.reduce((sum, set) => sum + totalSeconds(set.songs), 0);
-  const wholeTarget = sets.reduce((sum, set) => sum + set.targetMinutes, 0);
-
   return (
     <div>
-      <div className="mb-6 flex flex-wrap items-center gap-4 rounded-3xl border border-line bg-surface px-5 py-4">
-        <div>
-          <p className="text-xl font-semibold tabular-nums">
-            {formatLength(wholeShow)}
-          </p>
-          <p className="text-xs text-muted">
-            of {wholeTarget} min booked · {sets.reduce((n, s) => n + s.songs.length, 0)} songs
-          </p>
-        </div>
-
-        <form
-          action={(formData) => {
-            formData.set("gigId", gigId);
-            startTransition(() => addSetAction(formData));
-          }}
-          className="ml-auto flex items-center gap-2"
-        >
-          <input
-            className={`${inputBase} w-28 !py-2 text-sm`}
-            name="name"
-            placeholder={`Set ${sets.length + 1}`}
-            defaultValue={`Set ${sets.length + 1}`}
-            aria-label="Set name"
-          />
-          <input
-            className={`${inputBase} w-20 !py-2 text-sm`}
-            name="targetMinutes"
-            type="number"
-            min={5}
-            max={300}
-            defaultValue={45}
-            aria-label="Minutes"
-          />
-          <button className={buttonGhost}>Add set</button>
-        </form>
-      </div>
-
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
@@ -586,6 +683,24 @@ export function SetlistBoard({
             />
           ))}
         </div>
+
+        {/* Adding a set is rare next to adding songs, so it sits after the
+            last one, quiet but findable, rather than in a bar at the top. */}
+        <form
+          action={(formData) => {
+            formData.set("gigId", gigId);
+            formData.set("name", `Set ${sets.length + 1}`);
+            formData.set("targetMinutes", String(sets[0]?.targetMinutes ?? 45));
+            startTransition(() => addSetAction(formData));
+          }}
+          className="mt-5"
+        >
+          <button
+            className={`w-full rounded-3xl border border-dashed border-line-strong px-4 py-4 text-sm font-medium text-muted transition-colors hover:border-brand-400 hover:text-foreground ${focusable}`}
+          >
+            + Add set
+          </button>
+        </form>
 
         <DragOverlay>
           {dragging && (
