@@ -525,6 +525,13 @@ export const spotlight = sqliteTable(
     headerAssetId: text("header_asset_id").references(() => releaseAsset.id, {
       onDelete: "set null",
     }),
+    /**
+     * Which part of the header photo stays visible when it's cropped to a
+     * wide banner, as CSS object-position percentages. 50/50 is centred,
+     * which is right until someone's head is in the top third.
+     */
+    headerFocusX: integer("header_focus_x").notNull().default(50),
+    headerFocusY: integer("header_focus_y").notNull().default(50),
     published: integer("published", { mode: "boolean" })
       .notNull()
       .default(false),

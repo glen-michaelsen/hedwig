@@ -10,6 +10,7 @@ import {
   label,
 } from "@/app/_components/ui";
 import { MAX_RATING, slugify } from "@/lib/spotlight/slug";
+import { HeaderPosition } from "./header-position";
 import type { SpotlightFormState } from "../actions";
 
 export type PhotoOption = { id: string; filename: string };
@@ -20,6 +21,8 @@ export type SpotlightDefaults = {
   body?: string;
   rating?: number;
   headerAssetId?: string | null;
+  headerFocusX?: number;
+  headerFocusY?: number;
 };
 
 function RatingPicker({ value, onChange }: { value: number; onChange: (next: number) => void }) {
@@ -85,6 +88,10 @@ export function SpotlightForm({
   const [headerAssetId, setHeaderAssetId] = useState(
     defaults?.headerAssetId ?? "",
   );
+  const [focus, setFocus] = useState({
+    x: defaults?.headerFocusX ?? 50,
+    y: defaults?.headerFocusY ?? 50,
+  });
 
   return (
     <form action={formAction} className="space-y-8">
@@ -128,9 +135,10 @@ export function SpotlightForm({
                 <button
                   key={photo.id}
                   type="button"
-                  onClick={() =>
-                    setHeaderAssetId(selected ? "" : photo.id)
-                  }
+                  onClick={() => {
+                    setHeaderAssetId(selected ? "" : photo.id);
+                    setFocus({ x: 50, y: 50 });
+                  }}
                   aria-pressed={selected}
                   className={`group relative overflow-hidden rounded-2xl border-2 transition-colors ${
                     selected
@@ -155,6 +163,22 @@ export function SpotlightForm({
           </div>
         )}
         <input type="hidden" name="headerAssetId" value={headerAssetId} />
+
+        {/* Reposition only once there's something to reposition. A new
+            header starts centred, which is right more often than not. */}
+        {headerAssetId && (
+          <div className="mt-5">
+            <p className="mb-2 text-xs text-muted">
+              How it will crop at the top of the article
+            </p>
+            <HeaderPosition
+              src={`/spotlight/image/${headerAssetId}?size=md`}
+              x={focus.x}
+              y={focus.y}
+              onChange={setFocus}
+            />
+          </div>
+        )}
       </div>
 
       <div>

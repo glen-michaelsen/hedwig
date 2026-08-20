@@ -64,6 +64,11 @@ export default async function SpotlightIndexPage() {
                   <img
                     src={`/spotlight/image/${lead.headerAssetId ?? lead.coverAssetId}?size=lg`}
                     alt=""
+                    style={{
+                      objectPosition: lead.headerAssetId
+                        ? `${lead.headerFocusX}% ${lead.headerFocusY}%`
+                        : "50% 50%",
+                    }}
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                   />
                 )}
@@ -97,6 +102,11 @@ export default async function SpotlightIndexPage() {
                         <img
                           src={`/spotlight/image/${article.headerAssetId ?? article.coverAssetId}?size=md`}
                           alt=""
+                          style={{
+                            objectPosition: article.headerAssetId
+                              ? `${article.headerFocusX}% ${article.headerFocusY}%`
+                              : "50% 50%",
+                          }}
                           className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       )}

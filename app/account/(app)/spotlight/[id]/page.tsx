@@ -74,6 +74,8 @@ export default async function EditSpotlightPage({
             body: article.body,
             rating: article.rating,
             headerAssetId: article.headerAssetId,
+            headerFocusX: article.headerFocusX,
+            headerFocusY: article.headerFocusY,
           }}
           submitLabel="Save changes"
         />

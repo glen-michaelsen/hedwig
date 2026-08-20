@@ -105,6 +105,8 @@ const articleColumns = {
   body: spotlight.body,
   rating: spotlight.rating,
   headerAssetId: spotlight.headerAssetId,
+  headerFocusX: spotlight.headerFocusX,
+  headerFocusY: spotlight.headerFocusY,
   published: spotlight.published,
   publishedAt: spotlight.publishedAt,
   createdAt: spotlight.createdAt,
@@ -181,6 +183,8 @@ export type SpotlightInput = {
   body: string;
   rating: number;
   headerAssetId: string | null;
+  headerFocusX: number;
+  headerFocusY: number;
 };
 
 export async function createSpotlight(input: SpotlightInput): Promise<string> {
@@ -205,6 +209,8 @@ export async function updateSpotlight(id: string, input: SpotlightInput) {
       body: input.body,
       rating: input.rating,
       headerAssetId: input.headerAssetId,
+      headerFocusX: input.headerFocusX,
+      headerFocusY: input.headerFocusY,
       slug: await uniqueSlug(input.headline, id),
       updatedAt: new Date(),
     })
@@ -240,7 +246,14 @@ export async function listPublishedSpotlights() {
     .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
     .innerJoin(artist, eq(artist.id, pressRelease.artistId))
     .where(eq(spotlight.published, true))
-    .orderBy(desc(spotlight.publishedAt), desc(spotlight.createdAt))
+    // By the record's release date, not by when the piece was written: the
+    // page reads as a run of new music. Undated releases fall to the end
+    // instead of the top, where a missing date would look like today.
+    .orderBy(
+      sql`${pressRelease.releaseDate} is null`,
+      desc(pressRelease.releaseDate),
+      desc(spotlight.publishedAt),
+    )
     .limit(100);
 }
 

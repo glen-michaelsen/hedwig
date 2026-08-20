@@ -81,6 +81,11 @@ export default async function SpotlightArticlePage({
 
   const { article, isDraft } = found;
   const hero = article.headerAssetId ?? article.coverAssetId;
+  // Only a chosen header is framed by hand; a cover standing in for one is
+  // square and has nothing to crop away.
+  const heroPosition = article.headerAssetId
+    ? `${article.headerFocusX}% ${article.headerFocusY}%`
+    : "50% 50%";
   const released = formatDate(article.releaseDate);
   const related = await listRelatedSpotlights(article.id);
 
@@ -123,6 +128,7 @@ export default async function SpotlightArticlePage({
               <img
                 src={`/spotlight/image/${hero}?size=md`}
                 alt=""
+                style={{ objectPosition: heroPosition }}
                 className="h-full w-full object-cover"
               />
             )}
@@ -168,6 +174,7 @@ export default async function SpotlightArticlePage({
               <img
                 src={`/spotlight/image/${hero}?size=lg`}
                 alt=""
+                style={{ objectPosition: heroPosition }}
                 className="h-full w-full object-cover"
               />
             )}

@@ -36,6 +36,14 @@ function readForm(
 
   const headerAssetId = String(formData.get("headerAssetId") ?? "").trim();
 
+  // Percentages from the drag handle. Anything outside 0-100 is a broken
+  // client, not a user, so it clamps rather than errors.
+  const focus = (name: string) => {
+    const value = Number(formData.get(name));
+    if (!Number.isFinite(value)) return 50;
+    return Math.min(100, Math.max(0, Math.round(value)));
+  };
+
   return {
     ok: true,
     value: {
@@ -43,6 +51,8 @@ function readForm(
       body,
       rating,
       headerAssetId: headerAssetId.length > 0 ? headerAssetId : null,
+      headerFocusX: focus("headerFocusX"),
+      headerFocusY: focus("headerFocusY"),
     },
   };
 }
