@@ -28,7 +28,6 @@ import {
   deleteSetAction,
   deleteSongAction,
   duplicateSetAction,
-  duplicateSongAction,
   saveArrangementAction,
   updateSetAction,
   updateSongAction,
@@ -205,13 +204,6 @@ function SongRow({
           onClick={() => setEditing(true)}
         >
           Edit
-        </button>
-        <button
-          type="button"
-          className={actionPill}
-          onClick={() => act(duplicateSongAction, { songId: song.id })}
-        >
-          Copy
         </button>
         <button
           type="button"
