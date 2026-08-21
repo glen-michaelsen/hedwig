@@ -231,9 +231,6 @@ export function MobileNav() {
               className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
             >
               Spotlight
-              <span className="mt-0.5 block text-xs font-normal text-muted">
-                New music, written up.
-              </span>
             </Link>
 
             <Link
@@ -241,9 +238,6 @@ export function MobileNav() {
               className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
             >
               Ideas
-              <span className="mt-0.5 block text-xs font-normal text-muted">
-                Tell us what to build next.
-              </span>
             </Link>
 
             <MobileSection title="Log in" items={loginItems} />
