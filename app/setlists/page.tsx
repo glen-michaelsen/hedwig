@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireAccount } from "@/lib/auth";
-import { listGigs } from "@/lib/dal/setlist";
+import { todayIso } from "@/lib/clock";
+import { listGigs, type GigRow } from "@/lib/dal/setlist";
 import {
   Empty,
   PageHeader,
@@ -9,6 +10,15 @@ import {
   button,
   focusable,
 } from "@/app/_components/ui";
+
+export const metadata = { title: "Setlists" };
+
+const TABS = [
+  { key: "upcoming", label: "Upcoming" },
+  { key: "past", label: "Past" },
+] as const;
+
+type TabKey = (typeof TABS)[number]["key"];
 
 function formatDate(value: string | null) {
   if (!value) return "No date yet";
@@ -21,11 +31,59 @@ function formatDate(value: string | null) {
   }).format(new Date(year, month - 1, day));
 }
 
-export const metadata = { title: "Setlists" };
+function GigList({ gigs }: { gigs: GigRow[] }) {
+  return (
+    <Panel>
+      <PanelList>
+        {gigs.map((gig) => (
+          <li key={gig.id}>
+            <Link
+              href={`/setlists/${gig.id}`}
+              className={`flex items-center gap-4 px-6 py-4 transition-colors hover:bg-surface-muted ${focusable}`}
+            >
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium">{gig.name}</p>
+                <p className="mt-0.5 truncate text-xs text-muted">
+                  {formatDate(gig.date)}
+                  {gig.location && ` · ${gig.location}`}
+                </p>
+              </div>
+              <span className="shrink-0 text-xs text-faint">
+                {gig.setCount} {gig.setCount === 1 ? "set" : "sets"} ·{" "}
+                {gig.songCount} {gig.songCount === 1 ? "song" : "songs"}
+              </span>
+            </Link>
+          </li>
+        ))}
+      </PanelList>
+    </Panel>
+  );
+}
 
-export default async function SetlistsPage() {
+export default async function SetlistsPage({
+  searchParams,
+}: PageProps<"/setlists">) {
   const account = await requireAccount();
-  const gigs = await listGigs(account.id);
+  const { show } = await searchParams;
+
+  const [gigs, today] = await Promise.all([listGigs(account.id), todayIso()]);
+
+  // A gig on today's date is still upcoming — you play it tonight. Undated
+  // ones sit with upcoming too: they're plans, not history.
+  const upcoming = gigs.filter((gig) => gig.date === null || gig.date >= today);
+  // Most recent first, so last night's gig is at the top where it's most
+  // likely to be reused.
+  const past = gigs
+    .filter((gig) => gig.date !== null && gig.date < today)
+    .reverse();
+
+  const tab: TabKey =
+    typeof show === "string" && TABS.some((entry) => entry.key === show)
+      ? (show as TabKey)
+      : "upcoming";
+
+  const shown = tab === "upcoming" ? upcoming : past;
+  const counts = { upcoming: upcoming.length, past: past.length };
 
   return (
     <>
@@ -39,33 +97,37 @@ export default async function SetlistsPage() {
         }
       />
 
+      <div className="mb-6 flex flex-wrap gap-2">
+        {TABS.map((entry) => (
+          <Link
+            key={entry.key}
+            href={`/setlists?show=${entry.key}`}
+            className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+              tab === entry.key
+                ? "border-transparent bg-brand-600 text-white"
+                : "border-line bg-surface text-muted hover:border-line-strong hover:text-foreground"
+            } ${focusable}`}
+          >
+            {entry.label}
+            <span
+              className={`tabular-nums ${
+                tab === entry.key ? "text-white/70" : "text-faint"
+              }`}
+            >
+              {counts[entry.key]}
+            </span>
+          </Link>
+        ))}
+      </div>
+
       {gigs.length === 0 ? (
         <Empty>No gigs yet. Add one and start building the sets.</Empty>
+      ) : shown.length === 0 ? (
+        <Empty>
+          {tab === "upcoming" ? "Nothing booked yet." : "No past gigs."}
+        </Empty>
       ) : (
-        <Panel>
-          <PanelList>
-            {gigs.map((gig) => (
-              <li key={gig.id}>
-                <Link
-                  href={`/setlists/${gig.id}`}
-                  className={`flex items-center gap-4 px-6 py-4 transition-colors hover:bg-surface-muted ${focusable}`}
-                >
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">{gig.name}</p>
-                    <p className="mt-0.5 truncate text-xs text-muted">
-                      {formatDate(gig.date)}
-                      {gig.location && ` · ${gig.location}`}
-                    </p>
-                  </div>
-                  <span className="shrink-0 text-xs text-faint">
-                    {gig.setCount} {gig.setCount === 1 ? "set" : "sets"} ·{" "}
-                    {gig.songCount} {gig.songCount === 1 ? "song" : "songs"}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </PanelList>
-        </Panel>
+        <GigList gigs={shown} />
       )}
     </>
   );

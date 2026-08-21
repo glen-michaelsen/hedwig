@@ -1,5 +1,5 @@
 import "server-only";
-import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import { gig, gigSet, setSong } from "@/db/schema";
 import { newId } from "@/lib/crypto";
 import { getDb } from "@/lib/db";
@@ -39,8 +39,9 @@ export async function listGigs(accountId: string) {
     })
     .from(gig)
     .where(eq(gig.accountId, accountId))
-    // Upcoming first is what a musician wants; undated last, not on top.
-    .orderBy(sql`${gig.date} is null`, desc(gig.date), desc(gig.createdAt));
+    // Chronological. The page splits this into upcoming and past, and each
+    // side wants its own end of the same ordering, so sorting happens there.
+    .orderBy(sql`${gig.date} is null`, asc(gig.date), asc(gig.createdAt));
 }
 
 export async function createGig(
