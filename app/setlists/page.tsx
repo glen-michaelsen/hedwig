@@ -48,7 +48,12 @@ function GigList({ gigs }: { gigs: GigRow[] }) {
               className={`absolute inset-0 transition-colors hover:bg-surface-muted ${focusable}`}
               aria-label={gig.name}
             />
-            <div className="pointer-events-none flex items-center gap-4 px-6 py-4">
+            {/* `relative` matters: the stretched link above is a positioned
+                element with a hover background, so static content paints
+                *under* it and disappears the moment the row is hovered.
+                Positioning the content puts it back on top; it stays
+                pointer-events-none so clicks still reach the link. */}
+            <div className="pointer-events-none relative flex items-center gap-4 px-6 py-4">
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{gig.name}</p>
                 <p className="mt-0.5 truncate text-xs text-muted">
