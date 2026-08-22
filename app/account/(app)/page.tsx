@@ -1,8 +1,10 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { requireAccount } from "@/lib/auth";
+import { todayIso } from "@/lib/clock";
 import { getPageForAccount } from "@/lib/dal/bio";
 import { listReleases } from "@/lib/dal/press";
+import { listGigs } from "@/lib/dal/setlist";
 import { getDashboard } from "@/lib/dal/tutor";
 import { PageHeader, focusable } from "@/app/_components/ui";
 
@@ -59,15 +61,32 @@ const pressIcon = (
   />
 );
 
+const setlistIcon = (
+  <Icon
+    path={
+      <>
+        <path d="M5 6.5h14M5 11h14M5 15.5h8" />
+        <circle cx="17" cy="15.5" r="1.8" />
+      </>
+    }
+  />
+);
+
 export const metadata = { title: "Home" };
 
 export default async function AccountHomePage() {
   const account = await requireAccount();
-  const [{ studentCount, materialCount }, bioPage, releases] = await Promise.all([
-    getDashboard(account.id),
-    getPageForAccount(account.id),
-    listReleases(account.id),
-  ]);
+  const [{ studentCount, materialCount }, bioPage, releases, gigs, today] =
+    await Promise.all([
+      getDashboard(account.id),
+      getPageForAccount(account.id),
+      listReleases(account.id),
+      listGigs(account.id),
+      todayIso(),
+    ]);
+  const upcomingGigCount = gigs.filter(
+    (gig) => gig.date === null || gig.date >= today,
+  ).length;
 
   return (
     <>
@@ -135,6 +154,26 @@ export default async function AccountHomePage() {
             {releases.length === 0
               ? "Not set up yet"
               : `${releases.length} ${releases.length === 1 ? "release" : "releases"}`}
+          </p>
+        </Link>
+
+        <Link
+          href="/setlists"
+          className={`group rounded-4xl border border-line bg-surface p-8 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift ${focusable}`}
+        >
+          <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand-500/12 text-brand-600">
+            {setlistIcon}
+          </span>
+          <h2 className="mt-6 text-lg font-semibold tracking-tight">
+            Setlists
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">
+            A gig, its sets, and what you&apos;re playing in each.
+          </p>
+          <p className="mt-5 text-sm tabular-nums text-faint">
+            {gigs.length === 0
+              ? "Not set up yet"
+              : `${upcomingGigCount} upcoming · ${gigs.length} ${gigs.length === 1 ? "gig" : "gigs"}`}
           </p>
         </Link>
       </div>
