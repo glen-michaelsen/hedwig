@@ -77,7 +77,7 @@ export default async function BioEditorPage() {
               rel="noreferrer noopener"
               className={buttonGhost}
             >
-              View page
+              View
             </Link>
             <CopyLink url={shareUrl} className={buttonGhost} />
             <form action={setPublishedAction}>
