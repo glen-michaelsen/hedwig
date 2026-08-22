@@ -97,6 +97,75 @@ export async function deleteGig(accountId: string, gigId: string) {
   await db.delete(gig).where(and(eq(gig.id, gigId), eq(gig.accountId, accountId)));
 }
 
+/** A copy of the gig, its sets and every song in them. */
+export async function duplicateGig(accountId: string, gigId: string) {
+  const db = await getDb();
+
+  const source = await getGig(accountId, gigId);
+  if (!source) return;
+
+  const sets = await db
+    .select()
+    .from(gigSet)
+    .where(eq(gigSet.gigId, gigId))
+    .orderBy(asc(gigSet.position));
+
+  const songs =
+    sets.length === 0
+      ? []
+      : await db
+          .select()
+          .from(setSong)
+          .where(
+            inArray(
+              setSong.setId,
+              sets.map((set) => set.id),
+            ),
+          )
+          .orderBy(asc(setSong.position));
+
+  const newGigId = newId();
+
+  await db.insert(gig).values({
+    id: newGigId,
+    accountId,
+    name: `${source.name} (Copy)`,
+    date: source.date,
+    location: source.location,
+    notes: source.notes,
+  });
+
+  const setIdMap = new Map(sets.map((set) => [set.id, newId()]));
+
+  if (sets.length > 0) {
+    await db.insert(gigSet).values(
+      sets.map((set) => ({
+        id: setIdMap.get(set.id)!,
+        gigId: newGigId,
+        name: set.name,
+        targetMinutes: set.targetMinutes,
+        position: set.position,
+      })),
+    );
+  }
+
+  if (songs.length > 0) {
+    await db.insert(setSong).values(
+      songs.map((song) => ({
+        id: newId(),
+        setId: setIdMap.get(song.setId)!,
+        title: song.title,
+        artist: song.artist,
+        durationSeconds: song.durationSeconds,
+        note: song.note,
+        position: song.position,
+      })),
+    );
+  }
+
+  return newGigId;
+}
+
 /* ----------------------------- sets and songs ---------------------------- */
 
 /** The whole setlist in one read: the editor shows all of it at once. */

@@ -87,6 +87,12 @@ export async function deleteGigAction(formData: FormData) {
   redirect("/setlists");
 }
 
+export async function duplicateGigAction(formData: FormData) {
+  const account = await requireAccount();
+  await dal.duplicateGig(account.id, String(formData.get("gigId")));
+  revalidatePath("/setlists");
+}
+
 /* --------------------------------- sets --------------------------------- */
 
 function setValues(formData: FormData) {

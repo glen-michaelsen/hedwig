@@ -2,11 +2,13 @@ import Link from "next/link";
 import { requireAccount } from "@/lib/auth";
 import { todayIso } from "@/lib/clock";
 import { listGigs, type GigRow } from "@/lib/dal/setlist";
+import { duplicateGigAction } from "./actions";
 import {
   Empty,
   PageHeader,
   Panel,
   PanelList,
+  actionPill,
   button,
   focusable,
 } from "@/app/_components/ui";
@@ -36,11 +38,17 @@ function GigList({ gigs }: { gigs: GigRow[] }) {
     <Panel>
       <PanelList>
         {gigs.map((gig) => (
-          <li key={gig.id}>
+          // The row is a "stretched link": the anchor covers the whole li so
+          // the row stays clickable, and the duplicate button sits on top of
+          // it (pointer-events re-enabled) rather than nested inside it, so
+          // clicking it can't also trigger the navigation underneath.
+          <li key={gig.id} className="group relative">
             <Link
               href={`/setlists/${gig.id}`}
-              className={`flex items-center gap-4 px-6 py-4 transition-colors hover:bg-surface-muted ${focusable}`}
-            >
+              className={`absolute inset-0 transition-colors hover:bg-surface-muted ${focusable}`}
+              aria-label={gig.name}
+            />
+            <div className="pointer-events-none flex items-center gap-4 px-6 py-4">
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{gig.name}</p>
                 <p className="mt-0.5 truncate text-xs text-muted">
@@ -52,7 +60,20 @@ function GigList({ gigs }: { gigs: GigRow[] }) {
                 {gig.setCount} {gig.setCount === 1 ? "set" : "sets"} ·{" "}
                 {gig.songCount} {gig.songCount === 1 ? "song" : "songs"}
               </span>
-            </Link>
+              <form
+                action={duplicateGigAction}
+                className="pointer-events-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100"
+              >
+                <input type="hidden" name="gigId" value={gig.id} />
+                <button
+                  type="submit"
+                  className={actionPill}
+                  aria-label={`Duplicate ${gig.name}`}
+                >
+                  Duplicate
+                </button>
+              </form>
+            </div>
           </li>
         ))}
       </PanelList>
