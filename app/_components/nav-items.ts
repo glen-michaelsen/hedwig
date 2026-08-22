@@ -19,6 +19,7 @@ export const featureItems: NavItem[] = [
   { href: "/link-in-bio", label: "Link in Bio" },
   { href: "/tutoring", label: "Tutor" },
   { href: "/press-kit", label: "Press Kit" },
+  { href: "/setlist", label: "Setlist" },
 ];
 
 export const loginItems: NavItem[] = [

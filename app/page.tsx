@@ -102,9 +102,11 @@ function Mission() {
 }
 
 /**
- * All three tools are live now, so a per-card "Available now" pill would say
- * the same thing three times over — it stops meaning anything. Just the
- * tools themselves, each linking out to a subpage of its own.
+ * All four tools are live now, so a per-card "Available now" pill would say
+ * the same thing four times over — it stops meaning anything. Just the
+ * tools themselves, each linking out to a subpage of its own. Four cards
+ * read as a 2x2 grid rather than three-plus-a-lonely-fourth, which also
+ * keeps each card from getting too narrow on a wide screen.
  */
 function Tools() {
   const tools = [
@@ -126,11 +128,17 @@ function Tools() {
       body: "Photos, tracks, lyrics and the story, in a page you can send to a promoter without attaching nine files.",
       href: "/press-kit",
     },
+    {
+      emoji: "🎤",
+      name: "Setlist",
+      body: "Drag songs into sets, watch each one head toward its target length, and print a sheet for the stage.",
+      href: "/setlist",
+    },
   ];
 
   return (
     <section className={`${container} pb-24 sm:pb-32`}>
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2">
         {tools.map((tool) => (
           <Link
             key={tool.name}
