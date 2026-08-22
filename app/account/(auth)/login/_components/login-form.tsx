@@ -11,7 +11,7 @@ import {
   label,
 } from "@/app/_components/ui";
 
-export function LoginForm() {
+export function LoginForm({ returnTo }: { returnTo?: string }) {
   const [state, action, pending] = useActionState<AuthFormState, FormData>(
     signInAction,
     {},
@@ -27,6 +27,7 @@ export function LoginForm() {
       </p>
 
       <form action={action} className="mt-8 space-y-5">
+        {returnTo && <input type="hidden" name="next" value={returnTo} />}
         <div>
           <label className={label} htmlFor="email">
             Email

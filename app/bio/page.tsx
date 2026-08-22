@@ -22,7 +22,7 @@ import { setPublishedAction } from "./actions";
 export const metadata = { title: "Link in Bio" };
 
 export default async function BioEditorPage() {
-  const account = await requireAccount();
+  const account = await requireAccount("/bio");
   const page = await dal.getPageForAccount(account.id);
 
   if (!page) {

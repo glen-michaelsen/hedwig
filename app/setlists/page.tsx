@@ -89,7 +89,7 @@ function GigList({ gigs }: { gigs: GigRow[] }) {
 export default async function SetlistsPage({
   searchParams,
 }: PageProps<"/setlists">) {
-  const account = await requireAccount();
+  const account = await requireAccount("/setlists");
   const { show } = await searchParams;
 
   const [gigs, today] = await Promise.all([listGigs(account.id), todayIso()]);

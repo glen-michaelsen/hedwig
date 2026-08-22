@@ -38,7 +38,7 @@ function StatCard({
 export const metadata = { title: "Tutor" };
 
 export default async function DashboardPage() {
-  const tutor = await requireAccount();
+  const tutor = await requireAccount("/tutor");
   const { studentCount, materialCount, recentNotes } = await getDashboard(
     tutor.id,
   );

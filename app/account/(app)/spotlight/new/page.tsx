@@ -121,7 +121,7 @@ export const metadata = { title: "New spotlight" };
 export default async function NewSpotlightPage({
   searchParams,
 }: PageProps<"/account/spotlight/new">) {
-  await requireAdmin();
+  await requireAdmin("/account/spotlight/new");
   const { release, show } = await searchParams;
   const releaseId = typeof release === "string" ? release : undefined;
 

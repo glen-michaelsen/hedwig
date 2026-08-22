@@ -6,7 +6,7 @@ import { ChangePasswordForm } from "./_components/change-password-form";
 export const metadata = { title: "Settings" };
 
 export default async function SettingsPage() {
-  const tutor = await requireAccount();
+  const tutor = await requireAccount("/account/settings");
 
   return (
     <>

@@ -22,7 +22,7 @@ export default async function LibraryPage({
   searchParams,
 }: PageProps<"/tutor/library">) {
   const { q, tag } = await searchParams;
-  const tutor = await requireAccount();
+  const tutor = await requireAccount("/tutor/library");
 
   const query = typeof q === "string" ? q : undefined;
   const tagId = typeof tag === "string" ? tag : undefined;

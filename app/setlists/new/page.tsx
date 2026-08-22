@@ -6,7 +6,7 @@ import { GigForm } from "./_components/gig-form";
 export const metadata = { title: "New gig" };
 
 export default async function NewGigPage() {
-  await requireAccount();
+  await requireAccount("/setlists/new");
 
   return (
     <>

@@ -14,7 +14,7 @@ import { listSpotlights } from "@/lib/dal/spotlight";
 export const metadata = { title: "Spotlight" };
 
 export default async function AdminSpotlightPage() {
-  await requireAdmin();
+  await requireAdmin("/account/spotlight");
   const articles = await listSpotlights();
   const live = articles.filter((article) => article.published).length;
 

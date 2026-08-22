@@ -18,7 +18,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/account/spotlight/[id]">) {
   const { id } = await params;
-  await requireAdmin();
+  await requireAdmin(`/account/spotlight/${id}`);
   const article = await getSpotlight(id);
   return { title: article ? `Edit spotlight: ${article.headline}` : "Spotlight" };
 }
@@ -27,7 +27,7 @@ export default async function EditSpotlightPage({
   params,
 }: PageProps<"/account/spotlight/[id]">) {
   const { id } = await params;
-  await requireAdmin();
+  await requireAdmin(`/account/spotlight/${id}`);
 
   const article = await getSpotlight(id);
   if (!article) notFound();

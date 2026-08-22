@@ -9,7 +9,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/tutor/students/[id]/notes/[noteId]">) {
   const { id, noteId } = await params;
-  const tutor = await requireAccount();
+  const tutor = await requireAccount(`/tutor/students/${id}/notes/${noteId}`);
   const [student, note] = await Promise.all([
     getStudent(tutor.id, id),
     getNote(tutor.id, noteId),
@@ -22,7 +22,7 @@ export default async function EditNotePage({
   params,
 }: PageProps<"/tutor/students/[id]/notes/[noteId]">) {
   const { id, noteId } = await params;
-  const tutor = await requireAccount();
+  const tutor = await requireAccount(`/tutor/students/${id}/notes/${noteId}`);
 
   const [student, note] = await Promise.all([
     getStudent(tutor.id, id),

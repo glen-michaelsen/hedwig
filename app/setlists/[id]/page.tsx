@@ -21,7 +21,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/setlists/[id]">) {
   const { id } = await params;
-  const account = await requireAccount();
+  const account = await requireAccount(`/setlists/${id}`);
   const data = await getSetlist(account.id, id);
   return { title: data ? `Setlist: ${data.gig.name}` : "Setlists" };
 }
@@ -30,7 +30,7 @@ export default async function SetlistPage({
   params,
 }: PageProps<"/setlists/[id]">) {
   const { id } = await params;
-  const account = await requireAccount();
+  const account = await requireAccount(`/setlists/${id}`);
 
   const data = await getSetlist(account.id, id);
   if (!data) notFound();

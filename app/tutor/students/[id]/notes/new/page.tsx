@@ -14,7 +14,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/tutor/students/[id]/notes/new">) {
   const { id } = await params;
-  const tutor = await requireAccount();
+  const tutor = await requireAccount(`/tutor/students/${id}/notes/new`);
   const student = await getStudent(tutor.id, id);
   return { title: student ? `New lesson: ${student.name}` : "New lesson" };
 }
@@ -25,7 +25,7 @@ export default async function NewNotePage({
 }: PageProps<"/tutor/students/[id]/notes/new">) {
   const { id } = await params;
   const { date } = await searchParams;
-  const tutor = await requireAccount();
+  const tutor = await requireAccount(`/tutor/students/${id}/notes/new`);
 
   const student = await getStudent(tutor.id, id);
   if (!student) notFound();

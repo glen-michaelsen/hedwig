@@ -124,7 +124,7 @@ function IdeaRow({ idea }: { idea: AdminIdea }) {
 export const metadata = { title: "Ideas" };
 
 export default async function AdminIdeasPage() {
-  await requireAdmin();
+  await requireAdmin("/account/ideas");
   const ideas = await listAllIdeas();
   const publishedCount = ideas.filter((idea) => idea.published).length;
 

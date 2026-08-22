@@ -31,7 +31,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/tutor/students/[id]">) {
   const { id } = await params;
-  const tutor = await requireAccount();
+  const tutor = await requireAccount(`/tutor/students/${id}`);
   const student = await getStudent(tutor.id, id);
   return { title: student ? `Student: ${student.name}` : "Students" };
 }
@@ -40,7 +40,7 @@ export default async function StudentPage({
   params,
 }: PageProps<"/tutor/students/[id]">) {
   const { id } = await params;
-  const tutor = await requireAccount();
+  const tutor = await requireAccount(`/tutor/students/${id}`);
 
   const student = await getStudent(tutor.id, id);
   if (!student) notFound();

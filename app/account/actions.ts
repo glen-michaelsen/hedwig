@@ -59,6 +59,12 @@ export async function signInAction(
   const password = String(formData.get("password") ?? "");
   if (!email || !password) return { error: "Enter your email and password" };
 
+  // Only an in-app path is honoured. A full URL here would let a crafted
+  // link send someone to another site with a fresh session in hand.
+  const next = String(formData.get("next") ?? "");
+  const destination =
+    next.startsWith("/") && !next.startsWith("//") ? next : "/account";
+
   const auth = await getAuth();
   try {
     await auth.api.signInEmail({
@@ -72,13 +78,16 @@ export async function signInAction(
     throw error;
   }
 
-  redirect("/account");
+  redirect(destination);
 }
 
 export async function signOutAction() {
   const auth = await getAuth();
   await auth.api.signOut({ headers: await headers() });
-  redirect("/account/login");
+  // The front page, not the login form: the form redirects signed-in
+  // visitors to the dashboard, and the session cookie cache can still say
+  // "signed in" for a few seconds after signing out.
+  redirect("/");
 }
 
 export type SettingsFormState = { error?: string; success?: boolean };

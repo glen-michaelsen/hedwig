@@ -75,7 +75,7 @@ const setlistIcon = (
 export const metadata = { title: "Home" };
 
 export default async function AccountHomePage() {
-  const account = await requireAccount();
+  const account = await requireAccount("/account");
   const [{ studentCount, materialCount }, bioPage, releases, gigs, today] =
     await Promise.all([
       getDashboard(account.id),

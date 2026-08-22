@@ -17,7 +17,7 @@ function formatLastSeen(date: Date | null) {
 export const metadata = { title: "Students" };
 
 export default async function StudentsPage() {
-  const tutor = await requireAccount();
+  const tutor = await requireAccount("/tutor/students");
   const students = await listStudents(tutor.id);
 
   return (

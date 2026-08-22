@@ -15,7 +15,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/tutor/library/[id]">) {
   const { id } = await params;
-  const tutor = await requireAccount();
+  const tutor = await requireAccount(`/tutor/library/${id}`);
   const material = await getMaterial(tutor.id, id);
   return { title: material ? `Material: ${material.title}` : "Library" };
 }
@@ -24,7 +24,7 @@ export default async function EditMaterialPage({
   params,
 }: PageProps<"/tutor/library/[id]">) {
   const { id } = await params;
-  const tutor = await requireAccount();
+  const tutor = await requireAccount(`/tutor/library/${id}`);
 
   const material = await getMaterial(tutor.id, id);
   if (!material) notFound();

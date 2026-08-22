@@ -107,7 +107,7 @@ function FileRow({
 
 export async function generateMetadata({ params }: PageProps<"/press/[id]">) {
   const { id } = await params;
-  const account = await requireAccount();
+  const account = await requireAccount(`/press/${id}`);
   const release = await getRelease(account.id, id);
   return { title: release ? `Press Kit: ${release.title}` : "Press Kit" };
 }
@@ -116,7 +116,7 @@ export default async function ReleasePage({
   params,
 }: PageProps<"/press/[id]">) {
   const { id } = await params;
-  const account = await requireAccount();
+  const account = await requireAccount(`/press/${id}`);
 
   const release = await getRelease(account.id, id);
   if (!release) notFound();

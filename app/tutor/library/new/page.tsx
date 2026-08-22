@@ -6,7 +6,7 @@ import { MaterialForm } from "./_components/material-form";
 export const metadata = { title: "Add material" };
 
 export default async function NewMaterialPage() {
-  const tutor = await requireAccount();
+  const tutor = await requireAccount("/tutor/library/new");
   const tags = await listTags(tutor.id);
 
   return (

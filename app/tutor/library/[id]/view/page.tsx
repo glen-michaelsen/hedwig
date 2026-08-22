@@ -13,7 +13,7 @@ export async function generateMetadata({
   params,
 }: PageProps<"/tutor/library/[id]/view">) {
   const { id } = await params;
-  const tutor = await requireAccount();
+  const tutor = await requireAccount(`/tutor/library/${id}/view`);
   const material = await getMaterial(tutor.id, id);
   return { title: material ? material.title : "Library" };
 }
@@ -22,7 +22,7 @@ export default async function ViewMaterialPage({
   params,
 }: PageProps<"/tutor/library/[id]/view">) {
   const { id } = await params;
-  const tutor = await requireAccount();
+  const tutor = await requireAccount(`/tutor/library/${id}/view`);
 
   const material = await getMaterial(tutor.id, id);
   if (!material) notFound();

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { signOutAction } from "@/app/account/actions";
-import { isAdmin, requireAccount } from "@/lib/auth";
+import { getAccount, isAdmin } from "@/lib/auth";
 import {
   DashboardMobileNav,
   DashboardSidebar,
@@ -19,7 +19,13 @@ import { Wordmark, focusable } from "./ui";
  * as another feature of the product.
  */
 export async function DashboardShell({ children }: { children: ReactNode }) {
-  const account = await requireAccount();
+  // Deliberately getAccount rather than requireAccount: this is a layout,
+  // so it renders above the page and its redirect would fire first — losing
+  // the return path the page builds from its own params. Every page inside
+  // requires an account itself, so bowing out here hands the redirect to the
+  // one that knows where the visitor was going.
+  const account = await getAccount();
+  if (!account) return null;
   const admin = await isAdmin(account);
 
   const toolItems: ShellItem[] = [

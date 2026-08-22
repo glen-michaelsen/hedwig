@@ -85,11 +85,26 @@ export async function getAccount(): Promise<Account | null> {
   };
 }
 
-/** Use at the top of every signed-in page, action and route handler. */
-export async function requireAccount(): Promise<Account> {
+/**
+ * Use at the top of every signed-in page, action and route handler.
+ *
+ * `returnTo` is where to send them after signing in. It has to be passed in:
+ * a Server Component gets no header carrying the request path, and this app
+ * has no middleware to add one — Next 16 made middleware Node-only, which
+ * OpenNext can't bundle into a Worker.
+ */
+export async function requireAccount(returnTo?: string): Promise<Account> {
   const account = await getAccount();
-  if (!account) redirect("/account/login");
+  if (!account) redirect(loginPath(returnTo));
   return account;
+}
+
+/** Only ever an in-app path — an absolute URL here would be an open redirect. */
+export function loginPath(returnTo?: string): string {
+  if (!returnTo || !returnTo.startsWith("/") || returnTo.startsWith("//")) {
+    return "/account/login";
+  }
+  return `/account/login?next=${encodeURIComponent(returnTo)}`;
 }
 
 /**
@@ -110,8 +125,8 @@ export async function isAdmin(account: Account): Promise<boolean> {
  * 404s rather than redirecting: a musician who guesses the URL shouldn't be
  * told that an admin area exists, only that this page doesn't.
  */
-export async function requireAdmin(): Promise<Account> {
-  const account = await requireAccount();
+export async function requireAdmin(returnTo?: string): Promise<Account> {
+  const account = await requireAccount(returnTo);
   if (!(await isAdmin(account))) notFound();
   return account;
 }

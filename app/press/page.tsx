@@ -29,7 +29,7 @@ function formatDate(value: string | null) {
 export const metadata = { title: "Press Kit" };
 
 export default async function PressPage() {
-  const account = await requireAccount();
+  const account = await requireAccount("/press");
   const releases = await listReleases(account.id);
   const { APP_URL } = await getEnv();
 
