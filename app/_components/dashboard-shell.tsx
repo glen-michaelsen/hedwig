@@ -21,11 +21,15 @@ import { Wordmark, focusable } from "./ui";
 export async function DashboardShell({ children }: { children: ReactNode }) {
   // Deliberately getAccount rather than requireAccount: this is a layout,
   // so it renders above the page and its redirect would fire first — losing
-  // the return path the page builds from its own params. Every page inside
-  // requires an account itself, so bowing out here hands the redirect to the
-  // one that knows where the visitor was going.
+  // the return path the page builds from its own params.
+  //
+  // The children still have to be rendered, though. Returning null here
+  // means the page never runs, so its redirect never happens and the
+  // visitor gets a blank screen. Rendering them without the chrome lets the
+  // page redirect with the path it knows; nothing is painted either way,
+  // because that redirect throws before anything reaches the browser.
   const account = await getAccount();
-  if (!account) return null;
+  if (!account) return <>{children}</>;
   const admin = await isAdmin(account);
 
   const toolItems: ShellItem[] = [
