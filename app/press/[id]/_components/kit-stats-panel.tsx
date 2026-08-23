@@ -182,14 +182,16 @@ export function KitStatsPanel({
     <Card>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {TILES.map((tile) => (
+          // The icon sits in the corner rather than above the number, so the
+          // box is only as tall as the figure and its label.
           <div
             key={tile.kind}
-            className="rounded-3xl border border-line bg-surface-muted/40 px-4 py-4"
+            className="relative rounded-3xl border border-line bg-surface-muted/40 px-4 py-3.5"
           >
-            <span className="grid h-8 w-8 place-items-center rounded-full bg-brand-500/12 text-brand-700 dark:text-brand-300">
-              <tile.Icon />
+            <span className="absolute right-3 top-3 text-brand-500/70">
+              <tile.Icon className="h-4 w-4" />
             </span>
-            <p className="mt-3 text-2xl font-semibold tabular-nums">
+            <p className="text-2xl font-semibold tabular-nums">
               {totals[tile.kind]}
             </p>
             <p className="mt-0.5 text-xs text-muted">{tile.label}</p>
