@@ -56,7 +56,7 @@ export function StudentBottomNav({
   return (
     <>
       <nav
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] shadow-float-up sm:hidden"
+        className="shrink-0 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] shadow-float-up sm:hidden"
         aria-label="Primary"
       >
         <div className="mx-auto flex max-w-2xl items-stretch">

@@ -16,8 +16,13 @@ export default async function PortalLayout({ children }: LayoutProps<"/s">) {
   const studio = await getStudioForStudent(student.id);
 
   return (
-    <div className="flex flex-1 flex-col">
-      <header className="sticky top-0 z-50 border-b border-line/70 bg-background/80 backdrop-blur-xl">
+    // Fixed to the screen, with only `main` scrolling inside it — not the
+    // page. A `position: fixed`/`sticky` bar pinned to a scrolling page gets
+    // dragged around as Safari's own toolbar collapses and expands during
+    // scroll, which is the "ducking" a fixed bottom nav is prone to there.
+    // Chrome that's simply outside the scroll region never has that problem.
+    <div className="flex h-dvh flex-col overflow-hidden">
+      <header className="shrink-0 border-b border-line/70 bg-background/80 backdrop-blur-xl">
         <div className={`${portalContainer} flex h-16 items-center gap-2`}>
           <Link
             href="/s"
@@ -53,8 +58,8 @@ export default async function PortalLayout({ children }: LayoutProps<"/s">) {
         </div>
       </header>
 
-      <main className={`${portalContainer} flex-1 py-12 pb-28 sm:py-16 sm:pb-16`}>
-        {children}
+      <main className="min-h-0 flex-1 overflow-y-auto">
+        <div className={`${portalContainer} py-12 sm:py-16`}>{children}</div>
       </main>
 
       <StudentBottomNav studio={studio} studentName={student.name} />
