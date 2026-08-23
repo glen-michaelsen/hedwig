@@ -187,3 +187,18 @@ input[type="color"]::-moz-color-swatch {
     transition-duration: 0.01ms !important;
   }
 }
+
+/*
+ * Tailwind v4's reset gives buttons `cursor: default`, which reads as
+ * "not clickable" on anything without an obvious affordance — the publish
+ * toggle and sign out both looked inert. Put the pointer back everywhere
+ * rather than remembering it per button.
+ */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled),
+  summary,
+  label[for] {
+    cursor: pointer;
+  }
+}

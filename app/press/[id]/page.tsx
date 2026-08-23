@@ -26,6 +26,7 @@ import { KitStatsPanel } from "./_components/kit-stats-panel";
 import { displayName } from "@/lib/press/naming";
 import { DeleteAssetButton } from "./_components/delete-asset-button";
 import { RenameAssetButton } from "./_components/rename-asset-button";
+import { SubmitButton } from "@/app/_components/submit-button";
 import { CreditEditor, PhotoCard } from "./_components/photo-card";
 import { Uploader } from "./_components/uploader";
 
@@ -127,10 +128,33 @@ export default async function ReleasePage({
   const { id } = await params;
   const account = await requireAccount(`/press/${id}`);
 
-  const release = await getRelease(account.id, id);
+  const since = await daysAgoIso(29);
+  // The window itself, so the chart can draw the quiet days too. Pure date
+  // arithmetic — no round trips hiding in here.
+  const days = await Promise.all(
+    Array.from({ length: 30 }, (_, index) => daysAgoIso(29 - index)),
+  );
+
+  /*
+   * One batch rather than a chain. Every query is scoped by account, so
+   * fetching them together is safe even before we know the release exists —
+   * and it turns eight round trips to D1 into one wait instead of several,
+   * which is what made publishing feel like nothing had happened.
+   */
+  const [release, assets, { APP_URL }, totals, daily, downloads, plays, coverage] =
+    await Promise.all([
+      getRelease(account.id, id),
+      listAssets(account.id, id),
+      getEnv(),
+      getKitStats(account.id, id),
+      getKitDaily(account.id, id, since),
+      getKitTopAssets(account.id, id, "download"),
+      getKitTopAssets(account.id, id, "play"),
+      listCoverage(account.id, id),
+    ]);
+
   if (!release) notFound();
 
-  const assets = await listAssets(account.id, id);
   const byKind = (kind: AssetKind) =>
     assets.filter((asset) => asset.kind === kind);
 
@@ -140,23 +164,6 @@ export default async function ReleasePage({
   const documents = byKind("document");
 
   const date = formatDate(release.releaseDate);
-
-  // Built from APP_URL rather than the request, so the copied link is the
-  // public address even when the admin is on a workers.dev host.
-  const { APP_URL } = await getEnv();
-
-  const since = await daysAgoIso(29);
-  // The window itself, so the chart can draw the quiet days too.
-  const days = await Promise.all(
-    Array.from({ length: 30 }, (_, index) => daysAgoIso(29 - index)),
-  );
-  const [totals, daily, downloads, plays, coverage] = await Promise.all([
-    getKitStats(account.id, id),
-    getKitDaily(account.id, id, since),
-    getKitTopAssets(account.id, id, "download"),
-    getKitTopAssets(account.id, id, "play"),
-    listCoverage(account.id, id),
-  ]);
   const shareUrl = release.slug ? `${APP_URL}/kit/${release.slug}` : null;
 
   return (
@@ -194,9 +201,12 @@ export default async function ReleasePage({
                 name="published"
                 value={release.published ? "0" : "1"}
               />
-              <button className={release.published ? buttonGhost : button}>
+              <SubmitButton
+                className={release.published ? buttonGhost : button}
+                pendingLabel={release.published ? "Unpublishing…" : "Publishing…"}
+              >
                 {release.published ? "Unpublish" : "Publish"}
-              </button>
+              </SubmitButton>
             </form>
           </div>
         }

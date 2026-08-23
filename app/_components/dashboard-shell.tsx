@@ -8,6 +8,7 @@ import {
   type ShellGroup,
   type ShellItem,
 } from "./dashboard-nav";
+import { SubmitButton } from "./submit-button";
 import { Wordmark, focusable } from "./ui";
 
 /**
@@ -79,11 +80,12 @@ export async function DashboardShell({ children }: { children: ReactNode }) {
         {account.email}
       </p>
       <form action={signOutAction}>
-        <button
+        <SubmitButton
           className={`mt-1.5 rounded-full text-xs text-muted transition-colors hover:text-foreground ${focusable}`}
+          pendingLabel="Signing out…"
         >
           Sign out
-        </button>
+        </SubmitButton>
       </form>
     </div>
   );

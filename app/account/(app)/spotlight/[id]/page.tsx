@@ -6,6 +6,7 @@ import {
   buttonGhost,
   buttonQuiet,
 } from "@/app/_components/ui";
+import { SubmitButton } from "@/app/_components/submit-button";
 import { requireAdmin } from "@/lib/auth";
 import { getSpotlight, listPhotosForRelease } from "@/lib/dal/spotlight";
 import { togglePublishedAction, updateSpotlightAction } from "../actions";
@@ -58,15 +59,16 @@ export default async function EditSpotlightPage({
                 name="published"
                 value={article.published ? "0" : "1"}
               />
-              <button
+              <SubmitButton
                 className={
                   article.published
                     ? buttonGhost
                     : "inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-5 py-2.5 text-sm font-medium text-white shadow-brand transition-all hover:bg-brand-500"
                 }
+                pendingLabel={article.published ? "Unpublishing…" : "Publishing…"}
               >
                 {article.published ? "Unpublish" : "Publish"}
-              </button>
+              </SubmitButton>
             </form>
           </div>
         }
