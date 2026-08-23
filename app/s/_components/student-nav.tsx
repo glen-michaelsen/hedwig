@@ -7,6 +7,7 @@ import { focusable } from "@/app/_components/ui";
 const items = [
   { href: "/s", label: "Lessons" },
   { href: "/s/shelf", label: "Material" },
+  { href: "/s/search", label: "Search" },
 ] as const;
 
 /** Note pages live under a lesson, so they keep "Lessons" highlighted too. */

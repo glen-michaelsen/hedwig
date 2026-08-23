@@ -27,10 +27,10 @@ export function MaterialList({ materials }: { materials: StudentMaterial[] }) {
       <ul className="grid gap-3 sm:grid-cols-2">
         {materials.map((m) => {
           const chip =
-            "flex w-full items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3.5 text-left shadow-soft transition-all hover:-translate-y-px hover:shadow-lift";
+            "flex w-full min-w-0 items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3.5 text-left shadow-soft transition-all hover:-translate-y-px hover:shadow-lift";
 
           return (
-            <li key={m.id}>
+            <li key={m.id} className="min-w-0">
               {m.kind === "link" ? (
                 <a
                   href={m.url ?? "#"}
@@ -39,7 +39,9 @@ export function MaterialList({ materials }: { materials: StudentMaterial[] }) {
                   className={`${chip} ${focusable}`}
                 >
                   <KindBadge kind={m.kind} />
-                  <span className="truncate text-sm font-medium">{m.title}</span>
+                  <span className="min-w-0 flex-1 truncate text-sm font-medium">
+                    {m.title}
+                  </span>
                 </a>
               ) : (
                 <button
@@ -47,7 +49,9 @@ export function MaterialList({ materials }: { materials: StudentMaterial[] }) {
                   className={`${chip} ${focusable}`}
                 >
                   <KindBadge kind={m.kind} />
-                  <span className="truncate text-sm font-medium">{m.title}</span>
+                  <span className="min-w-0 flex-1 truncate text-sm font-medium">
+                    {m.title}
+                  </span>
                 </button>
               )}
             </li>

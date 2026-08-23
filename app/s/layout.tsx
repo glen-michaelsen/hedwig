@@ -4,6 +4,7 @@ import { getStudioForStudent } from "@/lib/dal/student";
 import { getStudentSession } from "@/lib/student-session";
 import { focusable } from "@/app/_components/ui";
 import { studentLogoutAction } from "@/app/actions";
+import { StudentBottomNav } from "@/app/s/_components/student-bottom-nav";
 import { StudentNav } from "@/app/s/_components/student-nav";
 
 const portalContainer = "mx-auto w-full max-w-2xl px-6 sm:px-8";
@@ -33,7 +34,10 @@ export default async function PortalLayout({ children }: LayoutProps<"/s">) {
             </span>
           </Link>
 
-          <form action={studentLogoutAction} className="ml-auto shrink-0">
+          <form
+            action={studentLogoutAction}
+            className="ml-auto hidden shrink-0 sm:block"
+          >
             <button
               className={`rounded-full px-4 py-2 text-sm text-muted transition-colors hover:bg-surface-muted hover:text-foreground ${focusable}`}
             >
@@ -42,12 +46,18 @@ export default async function PortalLayout({ children }: LayoutProps<"/s">) {
           </form>
         </div>
 
-        <StudentNav />
+        {/* Below sm this row is redundant with the bottom nav, and Sign out
+            moves into its "More" panel. */}
+        <div className="hidden sm:block">
+          <StudentNav />
+        </div>
       </header>
 
-      <main className={`${portalContainer} flex-1 py-12 sm:py-16`}>
+      <main className={`${portalContainer} flex-1 py-12 pb-28 sm:py-16 sm:pb-16`}>
         {children}
       </main>
+
+      <StudentBottomNav studio={studio} studentName={student.name} />
     </div>
   );
 }

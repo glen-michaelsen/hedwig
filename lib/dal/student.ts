@@ -216,6 +216,8 @@ export async function getReadableMaterial(studentId: string, materialId: string)
     .get();
 }
 
+export type StudentFeedNote = Awaited<ReturnType<typeof getFeed>>[number];
+
 /** Studio name for the portal header. */
 export async function getStudioForStudent(studentId: string) {
   const db = await getDb();
