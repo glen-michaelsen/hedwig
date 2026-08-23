@@ -110,6 +110,7 @@ export async function addSetAction(formData: FormData) {
   const gigId = String(formData.get("gigId"));
 
   await dal.addSet(account.id, gigId, setValues(formData));
+  revalidatePath("/setlists");
   revalidatePath(`/setlists/${gigId}`);
 }
 
@@ -117,6 +118,7 @@ export async function updateSetAction(formData: FormData) {
   const account = await requireAccount();
 
   await dal.updateSet(account.id, String(formData.get("setId")), setValues(formData));
+  revalidatePath("/setlists");
   revalidatePath(`/setlists/${String(formData.get("gigId"))}`);
 }
 
@@ -124,6 +126,7 @@ export async function deleteSetAction(formData: FormData) {
   const account = await requireAccount();
 
   await dal.deleteSet(account.id, String(formData.get("setId")));
+  revalidatePath("/setlists");
   revalidatePath(`/setlists/${String(formData.get("gigId"))}`);
 }
 
@@ -131,6 +134,7 @@ export async function duplicateSetAction(formData: FormData) {
   const account = await requireAccount();
 
   await dal.duplicateSet(account.id, String(formData.get("setId")));
+  revalidatePath("/setlists");
   revalidatePath(`/setlists/${String(formData.get("gigId"))}`);
 }
 
@@ -151,6 +155,7 @@ export async function addSongAction(formData: FormData) {
   if (!values.title) return;
 
   await dal.addSong(account.id, String(formData.get("setId")), values);
+  revalidatePath("/setlists");
   revalidatePath(`/setlists/${String(formData.get("gigId"))}`);
 }
 
@@ -160,6 +165,7 @@ export async function updateSongAction(formData: FormData) {
   if (!values.title) return;
 
   await dal.updateSong(account.id, String(formData.get("songId")), values);
+  revalidatePath("/setlists");
   revalidatePath(`/setlists/${String(formData.get("gigId"))}`);
 }
 
@@ -167,6 +173,7 @@ export async function deleteSongAction(formData: FormData) {
   const account = await requireAccount();
 
   await dal.deleteSong(account.id, String(formData.get("songId")));
+  revalidatePath("/setlists");
   revalidatePath(`/setlists/${String(formData.get("gigId"))}`);
 }
 
@@ -174,6 +181,7 @@ export async function duplicateSongAction(formData: FormData) {
   const account = await requireAccount();
 
   await dal.duplicateSong(account.id, String(formData.get("songId")));
+  revalidatePath("/setlists");
   revalidatePath(`/setlists/${String(formData.get("gigId"))}`);
 }
 
@@ -188,5 +196,6 @@ export async function saveArrangementAction(
   const account = await requireAccount();
 
   await dal.saveArrangement(account.id, gigId, arrangement);
+  revalidatePath("/setlists");
   revalidatePath(`/setlists/${gigId}`);
 }

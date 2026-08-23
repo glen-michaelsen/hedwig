@@ -2,13 +2,12 @@ import Link from "next/link";
 import { requireAccount } from "@/lib/auth";
 import { todayIso } from "@/lib/clock";
 import { listGigs, type GigRow } from "@/lib/dal/setlist";
-import { duplicateGigAction } from "./actions";
+import { GigRowMenu } from "./_components/gig-row-menu";
 import {
   Empty,
   PageHeader,
   Panel,
   PanelList,
-  actionPill,
   button,
   focusable,
 } from "@/app/_components/ui";
@@ -39,10 +38,10 @@ function GigList({ gigs }: { gigs: GigRow[] }) {
       <PanelList>
         {gigs.map((gig) => (
           // The row is a "stretched link": the anchor covers the whole li so
-          // the row stays clickable, and the duplicate button sits on top of
-          // it (pointer-events re-enabled) rather than nested inside it, so
-          // clicking it can't also trigger the navigation underneath.
-          <li key={gig.id} className="group relative">
+          // the row stays clickable, and the row menu sits on top of it
+          // (pointer-events re-enabled) rather than nested inside it, so
+          // opening it can't also trigger the navigation underneath.
+          <li key={gig.id} className="relative">
             <Link
               href={`/setlists/${gig.id}`}
               className={`absolute inset-0 transition-colors hover:bg-surface-muted ${focusable}`}
@@ -65,19 +64,9 @@ function GigList({ gigs }: { gigs: GigRow[] }) {
                 {gig.setCount} {gig.setCount === 1 ? "set" : "sets"} ·{" "}
                 {gig.songCount} {gig.songCount === 1 ? "song" : "songs"}
               </span>
-              <form
-                action={duplicateGigAction}
-                className="pointer-events-auto shrink-0 opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100"
-              >
-                <input type="hidden" name="gigId" value={gig.id} />
-                <button
-                  type="submit"
-                  className={actionPill}
-                  aria-label={`Duplicate ${gig.name}`}
-                >
-                  Duplicate
-                </button>
-              </form>
+              <div className="pointer-events-auto shrink-0">
+                <GigRowMenu gigId={gig.id} gigName={gig.name} />
+              </div>
             </div>
           </li>
         ))}

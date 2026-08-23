@@ -21,7 +21,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import {
   addSetAction,
   addSongAction,
@@ -33,6 +33,7 @@ import {
   updateSongAction,
 } from "../../actions";
 import { Modal } from "@/app/_components/modal";
+import { OverflowMenu } from "../../_components/overflow-menu";
 import {
   actionPill,
   actionPillBrand,
@@ -217,80 +218,6 @@ function SongRow({
   );
 }
 
-
-/* --------------------------------- menu --------------------------------- */
-
-/**
- * The three-dot menu. Opens on click, closes on Escape, an outside click, or
- * choosing something — the same rules as the public header's dropdown, for
- * the same reason: a hover menu has no equivalent under a finger.
- */
-function OverflowMenu({
-  label,
-  items,
-}: {
-  label: string;
-  items: { label: string; onSelect: () => void; danger?: boolean }[];
-}) {
-  const [open, setOpen] = useState(false);
-  const wrapper = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-
-    function onPointerDown(event: PointerEvent) {
-      if (!wrapper.current?.contains(event.target as Node)) setOpen(false);
-    }
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpen(false);
-    }
-
-    document.addEventListener("pointerdown", onPointerDown);
-    document.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.removeEventListener("pointerdown", onPointerDown);
-      document.removeEventListener("keydown", onKeyDown);
-    };
-  }, [open]);
-
-  return (
-    <div ref={wrapper} className="relative">
-      <button
-        type="button"
-        aria-label={label}
-        aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}
-        className={`grid h-9 w-9 place-items-center rounded-full border border-line bg-surface text-muted transition-colors hover:text-foreground ${focusable}`}
-      >
-        <svg viewBox="0 0 20 20" aria-hidden="true" className="h-4 w-4">
-          <circle cx="4" cy="10" r="1.5" fill="currentColor" />
-          <circle cx="10" cy="10" r="1.5" fill="currentColor" />
-          <circle cx="16" cy="10" r="1.5" fill="currentColor" />
-        </svg>
-      </button>
-
-      {open && (
-        <div className="absolute right-0 top-full z-40 mt-2 w-44 overflow-hidden rounded-2xl border border-line bg-surface p-1.5 shadow-float">
-          {items.map((item) => (
-            <button
-              key={item.label}
-              type="button"
-              onClick={() => {
-                setOpen(false);
-                item.onSelect();
-              }}
-              className={`block w-full rounded-xl px-3 py-2 text-left text-sm transition-colors hover:bg-surface-muted ${
-                item.danger ? "text-rose-700 dark:text-rose-300" : ""
-              } ${focusable}`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
 
 /* ---------------------------------- set --------------------------------- */
 
