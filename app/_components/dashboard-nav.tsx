@@ -167,7 +167,16 @@ export function DashboardMobileNav({
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
-  const onATool = tools.some((item) => isActive(pathname, item.href));
+  // "More" reads as selected only for pages that live exclusively inside its
+  // own overlay (Admin, Account) — not simply "isn't a tool", which used to
+  // catch the account home page too and light More up for no reason.
+  const toolHrefs = new Set(tools.map((item) => item.href));
+  const moreOnlyHrefs = groups
+    .filter((group) => group.title && group.title !== "Tools")
+    .flatMap((group) => group.items)
+    .map((item) => item.href)
+    .filter((href) => !toolHrefs.has(href));
+  const moreActive = open || moreOnlyHrefs.some((href) => isActive(pathname, href));
 
   return (
     <>
@@ -175,7 +184,7 @@ export function DashboardMobileNav({
         className="shrink-0 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] shadow-float-up lg:hidden"
         aria-label="Primary"
       >
-        <div className="mx-auto flex max-w-5xl items-stretch">
+        <div className="mx-auto flex max-w-5xl items-stretch gap-1 px-1.5 py-2">
           {tools.map((item) => {
             const active = isActive(pathname, item.href);
             return (
@@ -183,16 +192,16 @@ export function DashboardMobileNav({
                 key={item.href}
                 href={item.href}
                 aria-current={active ? "page" : undefined}
-                className={`flex flex-1 flex-col items-center py-1 text-[11px] font-medium ${focusable}`}
+                className={`flex flex-1 ${focusable}`}
               >
                 <span
-                  className={`flex flex-col items-center gap-0.5 rounded-2xl px-4 py-1.5 transition-all ${
+                  className={`flex w-full flex-col items-center gap-1 rounded-2xl px-1 py-2.5 text-center text-[11px] leading-tight font-medium transition-all ${
                     active
                       ? "bg-linear-to-br from-brand-500 to-brand-700 text-white shadow-brand"
                       : "text-muted hover:text-foreground"
                   }`}
                 >
-                  {item.icon && <Glyph name={item.icon} className="h-5 w-5" />}
+                  {item.icon && <Glyph name={item.icon} className="h-5 w-5 shrink-0" />}
                   {item.label}
                 </span>
               </Link>
@@ -204,16 +213,16 @@ export function DashboardMobileNav({
             aria-expanded={open}
             aria-controls={panelId}
             onClick={() => setOpen(true)}
-            className={`flex flex-1 flex-col items-center py-1 text-[11px] font-medium ${focusable}`}
+            className={`flex flex-1 ${focusable}`}
           >
             <span
-              className={`flex flex-col items-center gap-0.5 rounded-2xl px-4 py-1.5 transition-all ${
-                open || !onATool
+              className={`flex w-full flex-col items-center gap-1 rounded-2xl px-1 py-2.5 text-center text-[11px] leading-tight font-medium transition-all ${
+                moreActive
                   ? "bg-linear-to-br from-brand-500 to-brand-700 text-white shadow-brand"
                   : "text-muted hover:text-foreground"
               }`}
             >
-              <MoreIcon className="h-5 w-5" />
+              <MoreIcon className="h-5 w-5 shrink-0" />
               More
             </span>
           </button>

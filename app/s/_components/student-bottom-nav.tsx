@@ -59,7 +59,7 @@ export function StudentBottomNav({
         className="shrink-0 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] shadow-float-up sm:hidden"
         aria-label="Primary"
       >
-        <div className="mx-auto flex max-w-2xl items-stretch">
+        <div className="mx-auto flex max-w-2xl items-stretch gap-1 px-1.5 py-2">
           {tabs.map(({ href, label, Icon }) => {
             const active = isActive(pathname, href);
             return (
@@ -67,16 +67,16 @@ export function StudentBottomNav({
                 key={href}
                 href={href}
                 aria-current={active ? "page" : undefined}
-                className={`flex flex-1 flex-col items-center py-1 text-[11px] font-medium ${focusable}`}
+                className={`flex flex-1 ${focusable}`}
               >
                 <span
-                  className={`flex flex-col items-center gap-0.5 rounded-2xl px-4 py-1.5 transition-all ${
+                  className={`flex w-full flex-col items-center gap-1 rounded-2xl px-1 py-2.5 text-center text-[11px] leading-tight font-medium transition-all ${
                     active
                       ? "bg-linear-to-br from-brand-500 to-brand-700 text-white shadow-brand"
                       : "text-muted hover:text-foreground"
                   }`}
                 >
-                  <Icon className="h-5 w-5" />
+                  <Icon className="h-5 w-5 shrink-0" />
                   {label}
                 </span>
               </Link>
@@ -88,10 +88,10 @@ export function StudentBottomNav({
             aria-expanded={open}
             aria-controls={panelId}
             onClick={() => setOpen(true)}
-            className={`flex flex-1 flex-col items-center py-1 text-[11px] font-medium ${focusable}`}
+            className={`flex flex-1 ${focusable}`}
           >
             <span
-              className={`flex flex-col items-center gap-0.5 rounded-2xl px-4 py-1.5 transition-all ${
+              className={`flex w-full flex-col items-center gap-1 rounded-2xl px-1 py-2.5 text-center text-[11px] leading-tight font-medium transition-all ${
                 open
                   ? "bg-linear-to-br from-brand-500 to-brand-700 text-white shadow-brand"
                   : "text-muted hover:text-foreground"
