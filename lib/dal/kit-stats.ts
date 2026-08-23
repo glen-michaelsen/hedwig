@@ -117,6 +117,9 @@ export async function getKitTopAssets(
     .select({
       assetId: kitEvent.assetId,
       filename: releaseAsset.filename,
+      // The name the musician gave it, so the tables match the lists above
+      // rather than showing a delivery filename nobody recognises.
+      title: releaseAsset.title,
       assetKind: releaseAsset.kind,
       total: sql<number>`sum(${kitEvent.count})`.mapWith(Number),
     })
@@ -130,7 +133,12 @@ export async function getKitTopAssets(
         eq(kitEvent.kind, kind),
       ),
     )
-    .groupBy(kitEvent.assetId, releaseAsset.filename, releaseAsset.kind)
+    .groupBy(
+      kitEvent.assetId,
+      releaseAsset.filename,
+      releaseAsset.title,
+      releaseAsset.kind,
+    )
     .orderBy(desc(sql`sum(${kitEvent.count})`))
     .limit(10);
 }

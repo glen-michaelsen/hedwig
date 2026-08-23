@@ -1,4 +1,5 @@
 import { Card } from "@/app/_components/ui";
+import { displayName } from "@/lib/press/naming";
 import type { DailyRow, KitEventKind, TopAssetRow } from "@/lib/dal/kit-stats";
 
 
@@ -112,7 +113,9 @@ function TopTable({
               key={row.assetId}
               className="flex items-center justify-between gap-4 border-b border-line py-2 last:border-b-0"
             >
-              <span className="min-w-0 truncate text-sm">{row.filename}</span>
+              <span className="min-w-0 truncate text-sm">
+                {displayName(row)}
+              </span>
               <span className="shrink-0 text-sm tabular-nums text-muted">
                 {row.total}
               </span>
