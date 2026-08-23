@@ -1,16 +1,79 @@
 import { Card } from "@/app/_components/ui";
 import type { DailyRow, KitEventKind, TopAssetRow } from "@/lib/dal/kit-stats";
 
+
+type IconProps = { className?: string };
+
+function EyeIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>
+      <path
+        d="M1.8 10S4.7 5 10 5s8.2 5 8.2 5-2.9 5-8.2 5-8.2-5-8.2-5Z"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+      />
+      <circle cx="10" cy="10" r="2.2" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+  );
+}
+
+function PlayIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>
+      <path d="M7 4.8v10.4L16 10 7 4.8Z" fill="currentColor" />
+    </svg>
+  );
+}
+
+function DownloadIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>
+      <path
+        d="M10 3v9m0 0 3.5-3.5M10 12 6.5 8.5M3.5 15.5h13"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function LinkOutIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>
+      <path
+        d="M11 4h5v5M16 4l-7 7"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M15 12v3.5A1.5 1.5 0 0 1 13.5 17h-9A1.5 1.5 0 0 1 3 15.5v-9A1.5 1.5 0 0 1 4.5 5H8"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
 /**
  * Photo opens are recorded but not shown: knowing someone enlarged a picture
  * says nothing about whether the release travelled. Visits, plays, downloads
  * and outbound clicks are the ones worth a musician's attention.
  */
-const TILES: { kind: KitEventKind; label: string }[] = [
-  { kind: "view", label: "Visits" },
-  { kind: "play", label: "Plays" },
-  { kind: "download", label: "Downloads" },
-  { kind: "link", label: "Listen clicks" },
+const TILES: {
+  kind: KitEventKind;
+  label: string;
+  Icon: (props: IconProps) => React.ReactElement;
+}[] = [
+  { kind: "view", label: "Visits", Icon: EyeIcon },
+  { kind: "play", label: "Plays", Icon: PlayIcon },
+  { kind: "download", label: "Downloads", Icon: DownloadIcon },
+  { kind: "link", label: "Listen clicks", Icon: LinkOutIcon },
 ];
 
 /** The three series on the chart, in stacking order. */
@@ -117,10 +180,16 @@ export function KitStatsPanel({
 
   return (
     <Card>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {TILES.map((tile) => (
-          <div key={tile.kind}>
-            <p className="text-2xl font-semibold tabular-nums">
+          <div
+            key={tile.kind}
+            className="rounded-3xl border border-line bg-surface-muted/40 px-4 py-4"
+          >
+            <span className="grid h-8 w-8 place-items-center rounded-full bg-brand-500/12 text-brand-700 dark:text-brand-300">
+              <tile.Icon />
+            </span>
+            <p className="mt-3 text-2xl font-semibold tabular-nums">
               {totals[tile.kind]}
             </p>
             <p className="mt-0.5 text-xs text-muted">{tile.label}</p>
@@ -134,7 +203,9 @@ export function KitStatsPanel({
         </p>
       )}
 
-      <div className="mt-8">
+      {/* Bled past the card's padding so the rules meet its edges and the
+          chart reads as a band rather than another block in a stack. */}
+      <div className="-mx-7 mt-8 border-y border-line px-7 py-7 sm:-mx-8 sm:px-8">
         <div className="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-2">
           <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
             Last 30 days
@@ -205,7 +276,7 @@ export function KitStatsPanel({
         </div>
       </div>
 
-      <div className="mt-8 grid gap-8 sm:grid-cols-2">
+      <div className="mt-7 grid gap-8 sm:grid-cols-2">
         <TopTable
           title="Most downloaded"
           rows={downloads}
