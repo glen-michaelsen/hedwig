@@ -1,0 +1,1 @@
+ALTER TABLE `release_asset` ADD `title` text;

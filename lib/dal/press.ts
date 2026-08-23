@@ -290,6 +290,7 @@ export async function listAssets(accountId: string, releaseId: string) {
       id: releaseAsset.id,
       kind: releaseAsset.kind,
       filename: releaseAsset.filename,
+      title: releaseAsset.title,
       contentType: releaseAsset.contentType,
       sizeBytes: releaseAsset.sizeBytes,
       caption: releaseAsset.caption,
@@ -389,6 +390,7 @@ export async function getAsset(accountId: string, assetId: string) {
       kind: releaseAsset.kind,
       r2Key: releaseAsset.r2Key,
       filename: releaseAsset.filename,
+      title: releaseAsset.title,
       contentType: releaseAsset.contentType,
       sizeBytes: releaseAsset.sizeBytes,
     })
@@ -454,6 +456,7 @@ export async function listPublicAssets(releaseId: string) {
       id: releaseAsset.id,
       kind: releaseAsset.kind,
       filename: releaseAsset.filename,
+      title: releaseAsset.title,
       contentType: releaseAsset.contentType,
       sizeBytes: releaseAsset.sizeBytes,
       caption: releaseAsset.caption,
@@ -481,6 +484,7 @@ export async function getPublicAsset(slug: string, assetId: string) {
       kind: releaseAsset.kind,
       r2Key: releaseAsset.r2Key,
       filename: releaseAsset.filename,
+      title: releaseAsset.title,
       contentType: releaseAsset.contentType,
       sizeBytes: releaseAsset.sizeBytes,
       width: releaseAsset.width,
@@ -546,4 +550,21 @@ export async function setAllPhotoCaptions(
         eq(releaseAsset.kind, "photo"),
       ),
     );
+}
+
+/**
+ * A display name for one file. Empty clears it, so the file name comes back
+ * rather than leaving an empty label on the page.
+ */
+export async function setAssetTitle(
+  accountId: string,
+  assetId: string,
+  title: string | null,
+) {
+  const db = await getDb();
+
+  const asset = await getAsset(accountId, assetId);
+  if (!asset) return;
+
+  await db.update(releaseAsset).set({ title }).where(eq(releaseAsset.id, assetId));
 }

@@ -475,6 +475,12 @@ export const releaseAsset = sqliteTable(
     contentType: text("content_type").notNull(),
     sizeBytes: integer("size_bytes").notNull(),
     /**
+     * A name to show instead of the file name. Masters arrive called
+     * "01 - The Last Light_DKT662200501_44k_-24b.wav", which is the right
+     * name for an archive and the wrong one for a press page.
+     */
+    title: text("title"),
+    /**
      * For photos this is the photographer credit, shown on the public kit
      * and offered as "set on all" in the editor. For other kinds it's free
      * text — track order, "radio edit", and so on.

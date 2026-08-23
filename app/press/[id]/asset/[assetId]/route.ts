@@ -1,5 +1,6 @@
 import { getAccount } from "@/lib/auth";
 import { getAsset } from "@/lib/dal/press";
+import { downloadName } from "@/lib/press/naming";
 import { getObject } from "@/lib/r2";
 import { getImageVariant } from "@/lib/press/images";
 import { isImageVariant, isResizableImage } from "@/lib/press/variants";
@@ -53,7 +54,7 @@ export async function GET(
   const object = await getObject(asset.r2Key);
   if (!object) return new Response("Not found", { status: 404 });
 
-  const filename = asset.filename.replace(/["\\]/g, "");
+  const filename = downloadName(asset).replace(/["\\]/g, "");
 
   return new Response(object.body, {
     headers: {

@@ -24,7 +24,9 @@ import {
 } from "@/lib/dal/kit-stats";
 import { CoverageSection } from "./_components/coverage";
 import { KitStatsPanel } from "./_components/kit-stats-panel";
+import { displayName } from "@/lib/press/naming";
 import { DeleteAssetButton } from "./_components/delete-asset-button";
+import { RenameAssetButton } from "./_components/rename-asset-button";
 import { PhotoCredit, SetAllCredits } from "./_components/photo-credits";
 import { Uploader } from "./_components/uploader";
 
@@ -80,14 +82,22 @@ function FileRow({
   return (
     <li className="flex flex-wrap items-center gap-3 border-b border-line py-3 last:border-b-0">
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium">{asset.filename}</p>
-        <p className="mt-0.5 text-xs text-faint">
+        <p className="truncate text-sm font-medium">{displayName(asset)}</p>
+        <p className="mt-0.5 truncate text-xs text-faint">
+          {asset.title ? `${asset.filename} · ` : ""}
           {formatBytes(asset.sizeBytes)}
         </p>
         {children}
       </div>
 
       <div className="flex shrink-0 items-center gap-2">
+        <RenameAssetButton
+          releaseId={releaseId}
+          assetId={asset.id}
+          filename={asset.filename}
+          title={asset.title}
+          className={actionPill}
+        />
         <a
           href={`/press/${releaseId}/asset/${asset.id}?download`}
           className={actionPill}
@@ -97,7 +107,7 @@ function FileRow({
         <DeleteAssetButton
           releaseId={releaseId}
           assetId={asset.id}
-          filename={asset.filename}
+          filename={displayName(asset)}
           className={deletePill}
         />
       </div>

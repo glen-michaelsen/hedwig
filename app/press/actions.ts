@@ -257,3 +257,18 @@ export async function deleteCoverageAction(formData: FormData) {
   await stats.deleteCoverage(account.id, String(formData.get("coverageId")));
   revalidatePath(`/press/${String(formData.get("releaseId"))}`);
 }
+
+/** Renaming a file changes what pages call it, never the stored object. */
+export async function renameAssetAction(formData: FormData) {
+  const account = await requireAccount();
+  const releaseId = String(formData.get("releaseId"));
+
+  const raw = String(formData.get("title") ?? "").trim();
+  await dal.setAssetTitle(
+    account.id,
+    String(formData.get("assetId")),
+    raw.length > 0 ? raw.slice(0, 200) : null,
+  );
+
+  revalidatePath(`/press/${releaseId}`);
+}

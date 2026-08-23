@@ -10,6 +10,7 @@ import { TrackedLink } from "./_components/tracking";
 import { actionPill, container } from "@/app/_components/ui";
 import { getPublicRelease, listPublicAssets } from "@/lib/dal/press";
 import { formatBytes } from "@/lib/press/assets";
+import { displayName } from "@/lib/press/naming";
 import { ImageViewer } from "./_components/image-viewer";
 import { PhotoGallery } from "./_components/photo-gallery";
 
@@ -167,7 +168,7 @@ export default async function PublicPressKitPage({
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div className="min-w-0">
                         <p className="truncate text-sm font-medium">
-                          {track.filename}
+                          {displayName(track)}
                         </p>
                         <p className="mt-0.5 text-xs text-faint">
                           {formatBytes(track.sizeBytes)}
@@ -192,7 +193,7 @@ export default async function PublicPressKitPage({
                         slug={slug}
                         assetId={track.id}
                         src={asset(track.id)}
-                        title={track.filename}
+                        title={displayName(track)}
                       />
                     </div>
                   </li>
@@ -229,7 +230,7 @@ export default async function PublicPressKitPage({
                   >
                     <div className="min-w-0">
                       <p className="truncate text-sm font-medium">
-                        {document.filename}
+                        {displayName(document)}
                       </p>
                       <p className="mt-0.5 text-xs text-faint">
                         {formatBytes(document.sizeBytes)}

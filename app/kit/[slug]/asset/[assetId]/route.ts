@@ -4,6 +4,7 @@ import { recordKitEvent } from "@/lib/dal/kit-stats";
 import { isProbablyBot } from "@/lib/press/bots";
 import { getImageVariant } from "@/lib/press/images";
 import { isImageVariant, isResizableImage } from "@/lib/press/variants";
+import { downloadName } from "@/lib/press/naming";
 import { objectResponse } from "@/lib/r2";
 
 /**
@@ -67,7 +68,7 @@ export async function GET(
 
   const response = await objectResponse(asset.r2Key, request, {
     contentType: asset.contentType,
-    filename: asset.filename,
+    filename: downloadName(asset),
     download: wantsDownload,
     // Public, but short: unpublishing has to take effect quickly, and a CDN
     // holding a track for a year would outlive the decision to share it.
