@@ -25,6 +25,7 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import {
   deleteBlockAction,
+  lookupVideoTitleAction,
   reorderBlocksAction,
   saveBlockAction,
   toggleBlockAction,
@@ -59,6 +60,7 @@ function summarise(block: ParsedBlock, releases: ReleaseLink[]): string {
     const release = releases.find((r) => r.id === block.config.releaseId);
     return release ? release.title : "Release";
   }
+  if (block.kind === "video") return block.config.title || block.config.url;
   return block.config.url;
 }
 
@@ -284,6 +286,30 @@ function BlockModal({
   // Only releases with a smart link can be pre-saved or listened to.
   const linkable = releases.filter((r) => r.url);
 
+  const [videoTitle, setVideoTitle] = useState(
+    existing?.kind === "video" ? (existing.config.title ?? "") : "",
+  );
+  const [lookingUpTitle, setLookingUpTitle] = useState(false);
+
+  /**
+   * Fills the title from the video page as soon as a URL is entered — only
+   * when the field is empty, so it never overwrites something typed by hand.
+   * Checked again when the answer arrives, since typing can race the lookup.
+   */
+  async function fillVideoTitle(url: string) {
+    if (!url.trim() || videoTitle.trim()) return;
+
+    setLookingUpTitle(true);
+    try {
+      const found = await lookupVideoTitleAction(url);
+      setVideoTitle((current) => (current.trim() ? current : (found ?? "")));
+    } catch {
+      // A title is a convenience — the server tries again on save.
+    } finally {
+      setLookingUpTitle(false);
+    }
+  }
+
   return (
     <Modal
       open
@@ -430,11 +456,49 @@ function BlockModal({
                   : "https://youtube.com/watch?v=…"
               }
               required
+              onBlur={
+                kind === "video"
+                  ? (event) => fillVideoTitle(event.target.value)
+                  : undefined
+              }
+              onPaste={
+                kind === "video"
+                  ? (event) => {
+                      const pasted = event.clipboardData.getData("text");
+                      if (pasted) setTimeout(() => fillVideoTitle(pasted), 0);
+                    }
+                  : undefined
+              }
             />
             <p className="mt-2 text-xs text-faint">
               {kind === "player"
                 ? "Spotify, Apple Music and SoundCloud play in place. Bandcamp shows as a link."
                 : "YouTube and Vimeo play in place."}
+            </p>
+          </div>
+        )}
+
+        {kind === "video" && (
+          <div>
+            <label className={label} htmlFor="title">
+              Title{" "}
+              {lookingUpTitle && (
+                <span className="font-normal normal-case tracking-normal text-faint">
+                  — reading the page…
+                </span>
+              )}
+            </label>
+            <input
+              className={input}
+              id="title"
+              name="title"
+              value={videoTitle}
+              onChange={(event) => setVideoTitle(event.target.value)}
+              placeholder="Filled in from the link"
+            />
+            <p className="mt-2 text-xs text-faint">
+              Only shown to you here, to keep track of what you&rsquo;ve added
+              — fans just see the video.
             </p>
           </div>
         )}

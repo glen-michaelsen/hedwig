@@ -28,6 +28,9 @@ export const playerConfig = z.object({
 export const videoConfig = z.object({
   url: z.url(),
   provider: z.string().nullish(),
+  // Shown only in the admin block list, so it's easier to tell blocks apart
+  // at a glance — fans never see it.
+  title: z.string().max(200).nullish(),
 });
 
 /**

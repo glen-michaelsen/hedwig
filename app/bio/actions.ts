@@ -14,6 +14,7 @@ import * as dal from "@/lib/dal/bio";
 import * as press from "@/lib/dal/press";
 import { detectMusicProvider } from "@/lib/embed";
 import { detectProvider } from "@/lib/embed";
+import { fetchLinkMeta } from "@/lib/links";
 
 export type ActionResult = { error?: string } | void;
 
@@ -161,8 +162,20 @@ export async function setPublishedAction(formData: FormData) {
 
 /* --------------------------------- blocks ------------------------------ */
 
+/**
+ * Reads a video page's title so the form can fill it in as soon as a URL is
+ * pasted — same lookup the tutor library uses for its links and videos.
+ */
+export async function lookupVideoTitleAction(
+  url: string,
+): Promise<string | null> {
+  await requireAccount();
+  if (!z.url().safeParse(url.trim()).success) return null;
+  return (await fetchLinkMeta(url.trim())).title;
+}
+
 /** Builds the config for a kind out of the submitted fields. */
-function configFromForm(kind: string, formData: FormData) {
+async function configFromForm(kind: string, formData: FormData) {
   if (kind === "link") {
     return {
       label: String(formData.get("label") ?? "").trim(),
@@ -182,7 +195,13 @@ function configFromForm(kind: string, formData: FormData) {
   }
   if (kind === "video") {
     const url = String(formData.get("url") ?? "").trim();
-    return { url, provider: detectProvider(url) };
+    let title = nullable(formData.get("title"));
+    if (!title && url) {
+      // Best effort — the client already tries this on blur/paste, but a
+      // fallback here covers a save that beat the lookup, or JS being off.
+      title = (await fetchLinkMeta(url)).title;
+    }
+    return { url, provider: detectProvider(url), title };
   }
   if (kind === "release") {
     return { releaseId: String(formData.get("releaseId") ?? "").trim() };
@@ -200,7 +219,7 @@ export async function saveBlockAction(
   const kind = String(formData.get("kind") ?? "");
   const blockId = nullable(formData.get("blockId"));
 
-  const raw = configFromForm(kind, formData);
+  const raw = await configFromForm(kind, formData);
   if (!raw) return { error: "Unknown block type." };
 
   const config = parseBlockConfig(kind, raw);
