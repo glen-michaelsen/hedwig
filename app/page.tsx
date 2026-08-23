@@ -246,7 +246,7 @@ function ClosingCta() {
       <div className="brand-wash-clip relative isolate overflow-hidden rounded-5xl border border-line bg-surface px-8 py-16 text-center shadow-float sm:px-16">
         <div className="brand-wash" />
         <h2 className="text-4xl font-semibold tracking-tight text-balance">
-          Set up your musician account tonight
+          Create your free account today
         </h2>
         <p className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-muted text-pretty">
           Teach, release and gig from one place — students and lesson
