@@ -172,7 +172,7 @@ export function DashboardMobileNav({
   return (
     <>
       <nav
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] shadow-float backdrop-blur-xl lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] shadow-float-up lg:hidden"
         aria-label="Primary"
       >
         <div className="mx-auto flex max-w-5xl items-stretch">
