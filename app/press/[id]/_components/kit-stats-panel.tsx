@@ -20,13 +20,31 @@ export function KitStatsPanel({
   daily,
   downloads,
   published,
+  days,
 }: {
   totals: Record<KitEventKind, number>;
+  /** Only the days that had visits; the rest of the window is filled in here. */
   daily: { day: string; count: number }[];
   downloads: DownloadRow[];
   published: boolean;
+  /** Every date in the window, oldest first, as YYYY-MM-DD. */
+  days: string[];
 }) {
-  const busiest = Math.max(1, ...daily.map((entry) => entry.count));
+  const counts = new Map(daily.map((entry) => [entry.day, entry.count]));
+  const series = days.map((day) => {
+    const [, month, dayOfMonth] = day.split("-").map(Number);
+    return {
+      day,
+      count: counts.get(day) ?? 0,
+      label: new Intl.DateTimeFormat("en-GB", {
+        day: "numeric",
+        month: "short",
+      }).format(new Date(2000, month - 1, dayOfMonth)),
+    };
+  });
+
+  const busiest = Math.max(0, ...series.map((entry) => entry.count));
+  const windowTotal = series.reduce((sum, entry) => sum + entry.count, 0);
   const nothingYet = ORDER.every((kind) => totals[kind] === 0);
 
   return (
@@ -48,23 +66,55 @@ export function KitStatsPanel({
         </p>
       )}
 
-      {daily.length > 0 && (
-        <div className="mt-7">
+      <div className="mt-8">
+        <div className="flex items-baseline justify-between gap-4">
           <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
             Visits, last 30 days
           </p>
-          <div className="mt-3 flex h-20 items-end gap-1">
-            {daily.map((entry) => (
+          <p className="text-xs text-faint tabular-nums">
+            {windowTotal} in total
+            {busiest > 0 && ` · busiest day ${busiest}`}
+          </p>
+        </div>
+
+        {/*
+          Every day in the window gets a column, including the empty ones.
+          Drawing only the days that have data made a single visit fill the
+          whole width, which looks like a wall of traffic and says nothing
+          about when it happened — the common case early on is one or two
+          days with anything in them at all.
+        */}
+        <div className="mt-3 flex h-24 items-end gap-[3px]">
+          {series.map((entry) => {
+            const height = busiest > 0 ? (entry.count / busiest) * 100 : 0;
+            return (
               <div
                 key={entry.day}
-                title={`${entry.day}: ${entry.count}`}
-                className="min-w-1 flex-1 rounded-t bg-brand-500/70"
-                style={{ height: `${(entry.count / busiest) * 100}%` }}
-              />
-            ))}
-          </div>
+                className="group relative flex h-full flex-1 items-end"
+                title={`${entry.label}: ${entry.count} ${entry.count === 1 ? "visit" : "visits"}`}
+              >
+                {/* A day with nothing still shows a hairline, so the axis
+                    reads as a month rather than as blank space. */}
+                <div
+                  className={`w-full rounded-t transition-colors ${
+                    entry.count > 0
+                      ? "bg-brand-500 group-hover:bg-brand-600"
+                      : "bg-line group-hover:bg-line-strong"
+                  }`}
+                  style={{
+                    height: entry.count > 0 ? `max(6px, ${height}%)` : "3px",
+                  }}
+                />
+              </div>
+            );
+          })}
         </div>
-      )}
+
+        <div className="mt-2 flex justify-between text-[11px] text-faint">
+          <span>{series[0]?.label}</span>
+          <span>Today</span>
+        </div>
+      </div>
 
       {downloads.length > 0 && (
         <div className="mt-7">

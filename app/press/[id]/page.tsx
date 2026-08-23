@@ -137,6 +137,10 @@ export default async function ReleasePage({
   const { APP_URL } = await getEnv();
 
   const since = await daysAgoIso(29);
+  // The window itself, so the chart can draw the quiet days too.
+  const days = await Promise.all(
+    Array.from({ length: 30 }, (_, index) => daysAgoIso(29 - index)),
+  );
   const [totals, daily, downloads, coverage] = await Promise.all([
     getKitStats(account.id, id),
     getKitDailyViews(account.id, id, since),
@@ -239,6 +243,7 @@ export default async function ReleasePage({
           <KitStatsPanel
             totals={totals}
             daily={daily}
+            days={days}
             downloads={downloads}
             published={release.published}
           />
