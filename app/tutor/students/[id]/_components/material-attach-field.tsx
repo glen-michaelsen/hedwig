@@ -88,7 +88,7 @@ export function MaterialAttachField({
             {attached.map((m) => (
               <li
                 key={m.id}
-                className="flex items-center gap-2.5 rounded-2xl bg-surface-muted px-4 py-3 text-sm"
+                className="flex min-w-0 items-center gap-2.5 rounded-2xl bg-surface-muted px-4 py-3 text-sm"
               >
                 <KindBadge kind={m.kind} />
                 <span className="min-w-0 flex-1 truncate">{m.title}</span>
