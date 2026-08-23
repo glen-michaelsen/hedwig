@@ -51,11 +51,6 @@ function FooterColumn({ title, items }: { title: string; items: NavItem[] }) {
 }
 
 export function SiteFooter() {
-  const signInItems: NavItem[] = loginItems.map((item) => ({
-    ...item,
-    label: `${item.label} sign in`,
-  }));
-
   return (
     <footer className="bg-linear-to-br from-brand-600 via-brand-700 to-brand-900 text-white">
       <div className={`${container} py-16 sm:py-20`}>
@@ -69,7 +64,7 @@ export function SiteFooter() {
 
           <div className="grid grid-cols-2 gap-10 sm:gap-16">
             <FooterColumn title="Features" items={featureItems} />
-            <FooterColumn title="Log in" items={signInItems} />
+            <FooterColumn title="Log in" items={loginItems} />
           </div>
         </div>
 
