@@ -91,18 +91,24 @@ export async function DashboardShell({ children }: { children: ReactNode }) {
   );
 
   return (
-    <div className="flex flex-1">
+    // Fixed to the screen, with only `main` scrolling inside it — not the
+    // page. A fixed/sticky bar pinned to a scrolling page gets dragged
+    // around as Safari's own toolbar collapses and expands during scroll;
+    // chrome that's simply outside the scroll region never has that problem.
+    <div className="flex h-dvh flex-1 overflow-hidden">
       <DashboardSidebar groups={groups} footer={footer} />
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center border-b border-line/70 bg-background/80 px-5 backdrop-blur-xl lg:hidden">
+        <header className="flex h-16 shrink-0 items-center border-b border-line/70 bg-background/80 px-5 backdrop-blur-xl lg:hidden">
           <Link href="/account" className={`block ${focusable}`}>
             <Wordmark className="h-7" />
           </Link>
         </header>
 
-        <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-10 pb-28 sm:px-8 sm:py-14 sm:pb-32 lg:pb-14">
-          {children}
+        <main className="min-h-0 flex-1 overflow-y-auto">
+          <div className="mx-auto w-full max-w-5xl px-6 py-10 sm:px-8 sm:py-14">
+            {children}
+          </div>
         </main>
 
         <DashboardMobileNav tools={toolItems} groups={groups} footer={footer} />
