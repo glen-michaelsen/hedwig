@@ -17,9 +17,9 @@ import {
 } from "@/app/_components/ui";
 import { TrackPlayer } from "@/app/_components/track-player";
 import {
-  getKitDailyViews,
-  getKitDownloads,
+  getKitDaily,
   getKitStats,
+  getKitTopAssets,
   listCoverage,
 } from "@/lib/dal/kit-stats";
 import { CoverageSection } from "./_components/coverage";
@@ -141,10 +141,11 @@ export default async function ReleasePage({
   const days = await Promise.all(
     Array.from({ length: 30 }, (_, index) => daysAgoIso(29 - index)),
   );
-  const [totals, daily, downloads, coverage] = await Promise.all([
+  const [totals, daily, downloads, plays, coverage] = await Promise.all([
     getKitStats(account.id, id),
-    getKitDailyViews(account.id, id, since),
-    getKitDownloads(account.id, id),
+    getKitDaily(account.id, id, since),
+    getKitTopAssets(account.id, id, "download"),
+    getKitTopAssets(account.id, id, "play"),
     listCoverage(account.id, id),
   ]);
   const shareUrl = release.slug ? `${APP_URL}/kit/${release.slug}` : null;
@@ -245,6 +246,7 @@ export default async function ReleasePage({
             daily={daily}
             days={days}
             downloads={downloads}
+            plays={plays}
             published={release.published}
           />
         </div>

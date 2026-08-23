@@ -1,61 +1,129 @@
 import { Card } from "@/app/_components/ui";
-import type { DownloadRow, KitEventKind } from "@/lib/dal/kit-stats";
-
-const LABELS: Record<KitEventKind, string> = {
-  view: "Visits",
-  play: "Plays",
-  download: "Downloads",
-  photo: "Photos opened",
-  link: "Listen clicks",
-};
-
-const ORDER: KitEventKind[] = ["view", "play", "download", "photo", "link"];
+import type { DailyRow, KitEventKind, TopAssetRow } from "@/lib/dal/kit-stats";
 
 /**
- * What press did with the kit. Counters are daily totals, so these are
- * complete for the whole life of the link rather than a sampled window.
+ * Photo opens are recorded but not shown: knowing someone enlarged a picture
+ * says nothing about whether the release travelled. Visits, plays, downloads
+ * and outbound clicks are the ones worth a musician's attention.
+ */
+const TILES: { kind: KitEventKind; label: string }[] = [
+  { kind: "view", label: "Visits" },
+  { kind: "play", label: "Plays" },
+  { kind: "download", label: "Downloads" },
+  { kind: "link", label: "Listen clicks" },
+];
+
+/** The three series on the chart, in stacking order. */
+const SERIES: { kind: KitEventKind; label: string; bar: string; dot: string }[] =
+  [
+    { kind: "view", label: "Visits", bar: "bg-brand-600", dot: "bg-brand-600" },
+    { kind: "play", label: "Plays", bar: "bg-brand-400", dot: "bg-brand-400" },
+    {
+      kind: "download",
+      label: "Downloads",
+      bar: "bg-brand-200",
+      dot: "bg-brand-200",
+    },
+  ];
+
+function TopTable({
+  title,
+  rows,
+  empty,
+}: {
+  title: string;
+  rows: TopAssetRow[];
+  empty: string;
+}) {
+  return (
+    <div>
+      <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
+        {title}
+      </p>
+      {rows.length === 0 ? (
+        <p className="mt-3 text-sm text-muted">{empty}</p>
+      ) : (
+        <ul className="mt-3">
+          {rows.map((row) => (
+            <li
+              key={row.assetId}
+              className="flex items-center justify-between gap-4 border-b border-line py-2 last:border-b-0"
+            >
+              <span className="min-w-0 truncate text-sm">{row.filename}</span>
+              <span className="shrink-0 text-sm tabular-nums text-muted">
+                {row.total}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+/**
+ * What press did with the kit. Counters are daily totals, so these cover the
+ * whole life of the link rather than a sampled window.
  */
 export function KitStatsPanel({
   totals,
   daily,
-  downloads,
-  published,
   days,
+  downloads,
+  plays,
+  published,
 }: {
   totals: Record<KitEventKind, number>;
-  /** Only the days that had visits; the rest of the window is filled in here. */
-  daily: { day: string; count: number }[];
-  downloads: DownloadRow[];
-  published: boolean;
+  /** Only the days that saw something; the rest of the window is filled here. */
+  daily: DailyRow[];
   /** Every date in the window, oldest first, as YYYY-MM-DD. */
   days: string[];
+  downloads: TopAssetRow[];
+  plays: TopAssetRow[];
+  published: boolean;
 }) {
-  const counts = new Map(daily.map((entry) => [entry.day, entry.count]));
+  const byDay = new Map<string, Partial<Record<KitEventKind, number>>>();
+  for (const row of daily) {
+    const entry = byDay.get(row.day) ?? {};
+    entry[row.kind] = row.count;
+    byDay.set(row.day, entry);
+  }
+
   const series = days.map((day) => {
-    const [, month, dayOfMonth] = day.split("-").map(Number);
+    const counts = byDay.get(day) ?? {};
+    const parts = SERIES.map((entry) => ({
+      ...entry,
+      count: counts[entry.kind] ?? 0,
+    }));
     return {
       day,
-      count: counts.get(day) ?? 0,
+      parts,
+      total: parts.reduce((sum, part) => sum + part.count, 0),
       label: new Intl.DateTimeFormat("en-GB", {
         day: "numeric",
         month: "short",
-      }).format(new Date(2000, month - 1, dayOfMonth)),
+      }).format(
+        new Date(
+          Number(day.slice(0, 4)),
+          Number(day.slice(5, 7)) - 1,
+          Number(day.slice(8, 10)),
+        ),
+      ),
     };
   });
 
-  const busiest = Math.max(0, ...series.map((entry) => entry.count));
-  const windowTotal = series.reduce((sum, entry) => sum + entry.count, 0);
-  const nothingYet = ORDER.every((kind) => totals[kind] === 0);
+  const busiest = Math.max(1, ...series.map((entry) => entry.total));
+  const nothingYet = TILES.every((tile) => totals[tile.kind] === 0);
 
   return (
     <Card>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
-        {ORDER.map((kind) => (
-          <div key={kind}>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        {TILES.map((tile) => (
+          <div key={tile.kind}>
             <p className="text-2xl font-semibold tabular-nums">
-              {totals[kind]}
+              {totals[tile.kind]}
             </p>
-            <p className="mt-0.5 text-xs text-muted">{LABELS[kind]}</p>
+            <p className="mt-0.5 text-xs text-muted">{tile.label}</p>
           </div>
         ))}
       </div>
@@ -67,47 +135,68 @@ export function KitStatsPanel({
       )}
 
       <div className="mt-8">
-        <div className="flex items-baseline justify-between gap-4">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-2">
           <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
-            Visits, last 30 days
+            Last 30 days
           </p>
-          <p className="text-xs text-faint tabular-nums">
-            {windowTotal} in total
-            {busiest > 0 && ` · busiest day ${busiest}`}
-          </p>
+          <div className="flex flex-wrap items-center gap-4">
+            {SERIES.map((entry) => (
+              <span
+                key={entry.kind}
+                className="flex items-center gap-1.5 text-xs text-muted"
+              >
+                <span className={`h-2.5 w-2.5 rounded-full ${entry.dot}`} />
+                {entry.label}
+              </span>
+            ))}
+          </div>
         </div>
 
         {/*
           Every day in the window gets a column, including the empty ones.
-          Drawing only the days that have data made a single visit fill the
-          whole width, which looks like a wall of traffic and says nothing
-          about when it happened — the common case early on is one or two
-          days with anything in them at all.
+          Drawing only the days that saw something made a single visit fill
+          the whole width, which looks like a wall of traffic and says
+          nothing about when it happened.
+
+          The three series stack rather than sitting side by side: at thirty
+          days, three bars per day are two pixels each and unreadable, while
+          a stack answers "how busy was that day, and with what".
         */}
-        <div className="mt-3 flex h-24 items-end gap-[3px]">
-          {series.map((entry) => {
-            const height = busiest > 0 ? (entry.count / busiest) * 100 : 0;
-            return (
-              <div
-                key={entry.day}
-                className="group relative flex h-full flex-1 items-end"
-                title={`${entry.label}: ${entry.count} ${entry.count === 1 ? "visit" : "visits"}`}
-              >
-                {/* A day with nothing still shows a hairline, so the axis
-                    reads as a month rather than as blank space. */}
-                <div
-                  className={`w-full rounded-t transition-colors ${
-                    entry.count > 0
-                      ? "bg-brand-500 group-hover:bg-brand-600"
-                      : "bg-line group-hover:bg-line-strong"
-                  }`}
-                  style={{
-                    height: entry.count > 0 ? `max(6px, ${height}%)` : "3px",
-                  }}
-                />
-              </div>
-            );
-          })}
+        <div className="mt-4 flex h-28 items-end gap-[3px]">
+          {series.map((entry) => (
+            <div
+              key={entry.day}
+              className="group flex h-full flex-1 flex-col justify-end"
+              title={
+                entry.total === 0
+                  ? `${entry.label}: nothing`
+                  : `${entry.label}: ${entry.parts
+                      .filter((part) => part.count > 0)
+                      .map((part) => `${part.count} ${part.label.toLowerCase()}`)
+                      .join(", ")}`
+              }
+            >
+              {entry.total === 0 ? (
+                // A quiet day still shows a hairline, so the row reads as a
+                // month rather than as blank space.
+                <div className="h-[3px] w-full rounded-full bg-line transition-colors group-hover:bg-line-strong" />
+              ) : (
+                entry.parts
+                  .filter((part) => part.count > 0)
+                  .map((part, index, visible) => (
+                    <div
+                      key={part.kind}
+                      className={`w-full ${part.bar} ${
+                        index === 0 ? "rounded-t" : ""
+                      } ${index === visible.length - 1 ? "rounded-b-[2px]" : ""}`}
+                      style={{
+                        height: `max(5px, ${(part.count / busiest) * 100}%)`,
+                      }}
+                    />
+                  ))
+              )}
+            </div>
+          ))}
         </div>
 
         <div className="mt-2 flex justify-between text-[11px] text-faint">
@@ -116,26 +205,18 @@ export function KitStatsPanel({
         </div>
       </div>
 
-      {downloads.length > 0 && (
-        <div className="mt-7">
-          <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
-            Most downloaded
-          </p>
-          <ul className="mt-3">
-            {downloads.map((row) => (
-              <li
-                key={row.assetId}
-                className="flex items-center justify-between gap-4 border-b border-line py-2 last:border-b-0"
-              >
-                <span className="min-w-0 truncate text-sm">{row.filename}</span>
-                <span className="shrink-0 text-sm tabular-nums text-muted">
-                  {row.total}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <div className="mt-8 grid gap-8 sm:grid-cols-2">
+        <TopTable
+          title="Most downloaded"
+          rows={downloads}
+          empty="Nothing downloaded yet."
+        />
+        <TopTable
+          title="Most listened"
+          rows={plays}
+          empty="No tracks played yet."
+        />
+      </div>
     </Card>
   );
 }

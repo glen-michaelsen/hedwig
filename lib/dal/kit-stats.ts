@@ -73,8 +73,12 @@ export async function getKitStats(accountId: string, releaseId: string) {
   return byKind;
 }
 
-/** Daily visit counts, for the little chart. */
-export async function getKitDailyViews(
+/**
+ * Daily counts per kind, for the chart. One query rather than one per
+ * series: the rows are tiny and three round trips to D1 for the same table
+ * would be three times the latency for no benefit.
+ */
+export async function getKitDaily(
   accountId: string,
   releaseId: string,
   since: string,
@@ -83,6 +87,7 @@ export async function getKitDailyViews(
   return db
     .select({
       day: kitEvent.day,
+      kind: kitEvent.kind,
       count: sql<number>`sum(${kitEvent.count})`.mapWith(Number),
     })
     .from(kitEvent)
@@ -91,22 +96,28 @@ export async function getKitDailyViews(
       and(
         eq(kitEvent.releaseId, releaseId),
         eq(pressRelease.accountId, accountId),
-        eq(kitEvent.kind, "view"),
         gte(kitEvent.day, since),
       ),
     )
-    .groupBy(kitEvent.day)
+    .groupBy(kitEvent.day, kitEvent.kind)
     .orderBy(kitEvent.day);
 }
 
-/** Which files people actually took, most-taken first. */
-export async function getKitDownloads(accountId: string, releaseId: string) {
+/**
+ * The files that got the most of one kind of attention — downloads, or
+ * plays. Same shape either way, so the page can put two tables side by side.
+ */
+export async function getKitTopAssets(
+  accountId: string,
+  releaseId: string,
+  kind: KitEventKind,
+) {
   const db = await getDb();
   return db
     .select({
       assetId: kitEvent.assetId,
       filename: releaseAsset.filename,
-      kind: releaseAsset.kind,
+      assetKind: releaseAsset.kind,
       total: sql<number>`sum(${kitEvent.count})`.mapWith(Number),
     })
     .from(kitEvent)
@@ -116,12 +127,12 @@ export async function getKitDownloads(accountId: string, releaseId: string) {
       and(
         eq(kitEvent.releaseId, releaseId),
         eq(pressRelease.accountId, accountId),
-        eq(kitEvent.kind, "download"),
+        eq(kitEvent.kind, kind),
       ),
     )
     .groupBy(kitEvent.assetId, releaseAsset.filename, releaseAsset.kind)
     .orderBy(desc(sql`sum(${kitEvent.count})`))
-    .limit(20);
+    .limit(10);
 }
 
 /* ------------------------------- coverage ------------------------------- */
@@ -207,4 +218,5 @@ export async function deleteCoverage(accountId: string, coverageId: string) {
 }
 
 export type CoverageRow = Awaited<ReturnType<typeof listCoverage>>[number];
-export type DownloadRow = Awaited<ReturnType<typeof getKitDownloads>>[number];
+export type TopAssetRow = Awaited<ReturnType<typeof getKitTopAssets>>[number];
+export type DailyRow = Awaited<ReturnType<typeof getKitDaily>>[number];
