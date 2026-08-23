@@ -51,45 +51,52 @@ export default async function SpotlightIndexPage() {
             </p>
           </div>
         ) : (
-          <div className={`${container} mt-12 sm:mt-16`}>
-            {/* The newest piece gets the full width — a magazine cover, not
-                another card in a grid. */}
-            <Link
-              href={`/spotlight/${lead.slug}`}
-              className={`group block overflow-hidden rounded-[2rem] ${focusable}`}
-            >
-              <div className="relative aspect-[16/10] w-full bg-surface-muted sm:aspect-[21/9]">
-                {(lead.headerAssetId ?? lead.coverAssetId) && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={`/spotlight/image/${lead.headerAssetId ?? lead.coverAssetId}?size=lg`}
-                    alt=""
-                    style={{
-                      objectPosition: lead.headerAssetId
-                        ? `${lead.headerFocusX}% ${lead.headerFocusY}%`
-                        : "50% 50%",
-                    }}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                  />
-                )}
-                <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/25 to-transparent" />
+          <div className="mt-8 sm:mt-16">
+            {/* The newest piece bleeds to the screen edges on mobile —
+                a magazine cover, not another card in a list — then settles
+                into the container and gains rounded corners from sm up. */}
+            <div className="mx-auto w-full sm:max-w-5xl sm:px-8">
+              <Link
+                href={`/spotlight/${lead.slug}`}
+                className={`group relative block overflow-hidden sm:rounded-[2rem] sm:shadow-lift ${focusable}`}
+              >
+                <div className="relative aspect-[4/5] w-full bg-surface-muted sm:aspect-[21/9]">
+                  {(lead.headerAssetId ?? lead.coverAssetId) && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={`/spotlight/image/${lead.headerAssetId ?? lead.coverAssetId}?size=lg`}
+                      alt=""
+                      style={{
+                        objectPosition: lead.headerAssetId
+                          ? `${lead.headerFocusX}% ${lead.headerFocusY}%`
+                          : "50% 50%",
+                      }}
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-linear-to-t from-black/85 via-black/30 to-transparent" />
 
-                <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10">
-                  <p className="text-xs font-medium uppercase tracking-[0.12em] text-white/75">
-                    {lead.artistName} · {KIND_LABELS[lead.releaseKind]}
-                  </p>
-                  <h2 className="mt-2 max-w-3xl text-2xl font-semibold text-white text-balance sm:text-4xl">
-                    {lead.headline}
-                  </h2>
-                  <span className="mt-4 inline-flex">
-                    <Hearts rating={lead.rating} className="h-4 w-4" tone="light" />
+                  <span className="absolute left-6 top-6 inline-flex items-center rounded-full bg-brand-500 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white sm:left-10 sm:top-10">
+                    Latest
                   </span>
+
+                  <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10">
+                    <p className="text-xs font-medium uppercase tracking-[0.12em] text-white/75">
+                      {lead.artistName} · {KIND_LABELS[lead.releaseKind]}
+                    </p>
+                    <h2 className="mt-2 max-w-3xl text-3xl font-semibold text-white text-balance sm:text-4xl">
+                      {lead.headline}
+                    </h2>
+                    <span className="mt-4 inline-flex">
+                      <Hearts rating={lead.rating} className="h-4 w-4" tone="light" />
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </Link>
+              </Link>
+            </div>
 
             {rest.length > 0 && (
-              <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              <div className={`${container} mt-12 grid gap-8 sm:mt-14 sm:grid-cols-2 lg:grid-cols-3`}>
                 {rest.map((article) => (
                   <Link
                     key={article.id}
