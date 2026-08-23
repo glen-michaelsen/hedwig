@@ -13,7 +13,6 @@ import {
   actionPill,
   button,
   buttonGhost,
-  focusable,
 } from "@/app/_components/ui";
 import { TrackPlayer } from "@/app/_components/track-player";
 import {
@@ -27,7 +26,7 @@ import { KitStatsPanel } from "./_components/kit-stats-panel";
 import { displayName } from "@/lib/press/naming";
 import { DeleteAssetButton } from "./_components/delete-asset-button";
 import { RenameAssetButton } from "./_components/rename-asset-button";
-import { PhotoCredit, SetAllCredits } from "./_components/photo-credits";
+import { CreditEditor, PhotoCard } from "./_components/photo-card";
 import { Uploader } from "./_components/uploader";
 
 const KIND_LABELS = { single: "Single", ep: "EP", album: "Album" } as const;
@@ -285,12 +284,15 @@ export default async function ReleasePage({
               <p className="mt-0.5 text-xs text-faint">
                 {formatBytes(cover.sizeBytes)}
               </p>
-              <PhotoCredit
-                releaseId={id}
-                assetId={cover.id}
-                value={cover.caption ?? ""}
-                placeholder="Artwork credit"
-              />
+              <div className="mt-2">
+                <CreditEditor
+                  releaseId={id}
+                  assetId={cover.id}
+                  filename={cover.filename}
+                  caption={cover.caption}
+                  emptyLabel="Add artwork credit"
+                />
+              </div>
 
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <a
@@ -317,57 +319,21 @@ export default async function ReleasePage({
         {photos.length === 0 ? (
           <p className="text-sm text-muted">No press photos yet.</p>
         ) : (
-          <>
-          <SetAllCredits
-            releaseId={id}
-            suggestion={photos.find((photo) => photo.caption)?.caption ?? ""}
-          />
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
             {photos.map((photo) => (
-              <figure key={photo.id} className="min-w-0">
-                <a
-                  href={`/press/${id}/asset/${photo.id}?size=lg`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`block overflow-hidden rounded-2xl ${focusable}`}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`/press/${id}/asset/${photo.id}?size=md`}
-                    alt={photo.filename}
-                    className="aspect-[4/3] w-full object-cover transition-transform hover:scale-[1.02]"
-                  />
-                </a>
-                <figcaption className="mt-2 min-w-0">
-                  <p className="truncate text-xs text-muted">
-                    {photo.filename}
-                  </p>
-
-                  <PhotoCredit
-                    releaseId={id}
-                    assetId={photo.id}
-                    value={photo.caption ?? ""}
-                  />
-
-                  <div className="mt-2 flex items-center gap-2">
-                    <a
-                      href={`/press/${id}/asset/${photo.id}?download`}
-                      className={actionPill}
-                    >
-                      Download
-                    </a>
-                    <DeleteAssetButton
-                      releaseId={id}
-                      assetId={photo.id}
-                      filename={photo.filename}
-                      className={deletePill}
-                    />
-                  </div>
-                </figcaption>
-              </figure>
+              <PhotoCard
+                key={photo.id}
+                releaseId={id}
+                photo={{
+                  id: photo.id,
+                  filename: photo.filename,
+                  caption: photo.caption,
+                }}
+                src={`/press/${id}/asset/${photo.id}?size=md`}
+                href={`/press/${id}/asset/${photo.id}?size=lg`}
+              />
             ))}
           </div>
-          </>
         )}
       </Section>
 
