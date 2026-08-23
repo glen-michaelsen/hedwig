@@ -67,14 +67,18 @@ export function StudentBottomNav({
                 key={href}
                 href={href}
                 aria-current={active ? "page" : undefined}
-                className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition-colors ${
-                  active
-                    ? "text-brand-700 dark:text-brand-300"
-                    : "text-muted hover:text-foreground"
-                } ${focusable}`}
+                className={`flex flex-1 flex-col items-center py-1 text-[11px] font-medium ${focusable}`}
               >
-                <Icon className="h-5 w-5" />
-                {label}
+                <span
+                  className={`flex flex-col items-center gap-0.5 rounded-2xl px-4 py-1.5 transition-all ${
+                    active
+                      ? "bg-linear-to-br from-brand-500 to-brand-700 text-white shadow-brand"
+                      : "text-muted hover:text-foreground"
+                  }`}
+                >
+                  <Icon className="h-5 w-5" />
+                  {label}
+                </span>
               </Link>
             );
           })}
@@ -84,12 +88,18 @@ export function StudentBottomNav({
             aria-expanded={open}
             aria-controls={panelId}
             onClick={() => setOpen(true)}
-            className={`flex flex-1 flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition-colors ${
-              open ? "text-foreground" : "text-muted hover:text-foreground"
-            } ${focusable}`}
+            className={`flex flex-1 flex-col items-center py-1 text-[11px] font-medium ${focusable}`}
           >
-            <DotsIcon className="h-5 w-5" />
-            More
+            <span
+              className={`flex flex-col items-center gap-0.5 rounded-2xl px-4 py-1.5 transition-all ${
+                open
+                  ? "bg-linear-to-br from-brand-500 to-brand-700 text-white shadow-brand"
+                  : "text-muted hover:text-foreground"
+              }`}
+            >
+              <DotsIcon className="h-5 w-5" />
+              More
+            </span>
           </button>
         </div>
       </nav>
