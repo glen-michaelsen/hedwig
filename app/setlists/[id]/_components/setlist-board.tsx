@@ -253,7 +253,11 @@ function SetColumn({
   }
 
   return (
-    <div className="flex min-w-0 flex-col rounded-4xl border border-line bg-surface-muted/40 p-4">
+    <div
+      // Focus ring on the set while its own menu is open, so the portalled
+      // dropdown still reads as connected to the set it belongs to.
+      className="flex min-w-0 flex-col rounded-4xl border border-line bg-surface-muted/40 p-4 transition-colors has-[[aria-expanded=true]]:border-brand-400 has-[[aria-expanded=true]]:ring-2 has-[[aria-expanded=true]]:ring-brand-400/20"
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
           <h3 className="text-base font-semibold">{set.name}</h3>
