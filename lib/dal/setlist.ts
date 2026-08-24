@@ -27,18 +27,20 @@ export async function listGigs(accountId: string) {
       name: gig.name,
       date: gig.date,
       location: gig.location,
-      setCount: sql<number>`(
-        select count(*) from ${gigSet} where ${gigSet.gigId} = ${gig.id}
-      )`.mapWith(Number),
-      songCount: sql<number>`(
-        select count(*) from ${setSong}
-        where ${setSong.setId} in (
-          select ${gigSet.id} from ${gigSet} where ${gigSet.gigId} = ${gig.id}
-        )
-      )`.mapWith(Number),
+      // Correlated subqueries here would have drizzle drop the table
+      // qualifier on `gig.id` (it only qualifies columns when the query has
+      // a join), which then collides with gig_set's own `id` column and
+      // undercounts everything. Joining and counting distinct ids sidesteps
+      // that: the qualifiers are unambiguous once there's more than one
+      // table in play.
+      setCount: sql<number>`count(distinct ${gigSet.id})`.mapWith(Number),
+      songCount: sql<number>`count(distinct ${setSong.id})`.mapWith(Number),
     })
     .from(gig)
+    .leftJoin(gigSet, eq(gigSet.gigId, gig.id))
+    .leftJoin(setSong, eq(setSong.setId, gigSet.id))
     .where(eq(gig.accountId, accountId))
+    .groupBy(gig.id)
     // Chronological. The page splits this into upcoming and past, and each
     // side wants its own end of the same ordering, so sorting happens there.
     .orderBy(sql`${gig.date} is null`, asc(gig.date), asc(gig.createdAt));
