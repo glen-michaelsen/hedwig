@@ -41,13 +41,7 @@ function GigList({ gigs }: { gigs: GigRow[] }) {
           // the row stays clickable, and the row menu sits on top of it
           // (pointer-events re-enabled) rather than nested inside it, so
           // opening it can't also trigger the navigation underneath.
-          <li
-            key={gig.id}
-            // Focus ring on the row while its own menu is open, so a portalled
-            // dropdown (positioned by fixed coordinates, not nesting) still
-            // reads as connected to the row it belongs to.
-            className="relative transition-colors has-[[aria-expanded=true]]:bg-surface-muted has-[[aria-expanded=true]]:ring-2 has-[[aria-expanded=true]]:ring-inset has-[[aria-expanded=true]]:ring-brand-400"
-          >
+          <li key={gig.id} className="relative">
             <Link
               href={`/setlists/${gig.id}`}
               className={`absolute inset-0 transition-colors hover:bg-surface-muted ${focusable}`}

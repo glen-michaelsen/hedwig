@@ -4,6 +4,7 @@ import { getStudioForStudent } from "@/lib/dal/student";
 import { getStudentSession } from "@/lib/student-session";
 import { focusable } from "@/app/_components/ui";
 import { studentLogoutAction } from "@/app/actions";
+import { ViewportLock } from "@/app/_components/viewport-lock";
 import { StudentBottomNav } from "@/app/s/_components/student-bottom-nav";
 import { StudentNav } from "@/app/s/_components/student-nav";
 
@@ -21,7 +22,8 @@ export default async function PortalLayout({ children }: LayoutProps<"/s">) {
     // dragged around as Safari's own toolbar collapses and expands during
     // scroll, which is the "ducking" a fixed bottom nav is prone to there.
     // Chrome that's simply outside the scroll region never has that problem.
-    <div className="flex h-dvh flex-col overflow-hidden">
+    <div className="flex h-[var(--app-vh,100dvh)] flex-col overflow-hidden">
+      <ViewportLock />
       <header className="shrink-0 border-b border-line/70">
         {/* Full-bleed on desktop rather than boxed to `portalContainer` —
             this is the bold identity bar, not page content. */}

@@ -66,7 +66,10 @@ export function OverflowMenu({
         aria-label={label}
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className={`grid h-9 w-9 place-items-center rounded-full border border-line bg-surface text-muted transition-colors hover:text-foreground ${focusable}`}
+        // `after` extends the tappable area past the visible circle without
+        // making the circle itself any bigger — a precise 36px target is
+        // easy to miss with a thumb.
+        className={`relative grid h-9 w-9 place-items-center rounded-full border border-line bg-surface text-muted transition-colors after:absolute after:-inset-2.5 hover:text-foreground ${focusable}`}
       >
         <svg viewBox="0 0 20 20" aria-hidden="true" className="h-4 w-4">
           <circle cx="4" cy="10" r="1.5" fill="currentColor" />

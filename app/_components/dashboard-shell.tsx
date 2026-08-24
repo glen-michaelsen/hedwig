@@ -10,6 +10,7 @@ import {
 } from "./dashboard-nav";
 import { SubmitButton } from "./submit-button";
 import { Wordmark, focusable } from "./ui";
+import { ViewportLock } from "./viewport-lock";
 
 /**
  * Chrome for everything a signed-in musician sees.
@@ -95,7 +96,8 @@ export async function DashboardShell({ children }: { children: ReactNode }) {
     // page. A fixed/sticky bar pinned to a scrolling page gets dragged
     // around as Safari's own toolbar collapses and expands during scroll;
     // chrome that's simply outside the scroll region never has that problem.
-    <div className="flex h-dvh overflow-hidden">
+    <div className="flex h-[var(--app-vh,100dvh)] overflow-hidden">
+      <ViewportLock />
       <DashboardSidebar groups={groups} footer={footer} />
 
       <div className="flex min-w-0 flex-1 flex-col">
