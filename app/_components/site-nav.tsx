@@ -212,45 +212,36 @@ export function MobileNav() {
       </button>
 
       {open && (
-        <>
-          <button
-            type="button"
-            tabIndex={-1}
-            aria-hidden="true"
-            onClick={() => setOpen(false)}
-            className="fixed inset-x-0 bottom-0 top-18 z-40 cursor-default bg-foreground/20 backdrop-blur-sm"
-          />
-          <div
-            id={panelId}
-            className="fixed inset-x-0 top-18 z-50 max-h-[calc(100dvh-4.5rem)] overflow-y-auto border-b border-line bg-surface px-6 py-6 shadow-float"
+        <div
+          id={panelId}
+          className="fixed inset-x-0 top-18 bottom-0 z-50 overflow-y-auto bg-surface px-6 py-6"
+        >
+          <MobileSection title="Features" items={featureItems} />
+
+          <Link
+            href="/spotlight"
+            className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
           >
-            <MobileSection title="Features" items={featureItems} />
+            Spotlight
+          </Link>
 
-            <Link
-              href="/spotlight"
-              className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
-            >
-              Spotlight
-            </Link>
+          <Link
+            href="/ideas"
+            className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
+          >
+            Ideas
+          </Link>
 
-            <Link
-              href="/ideas"
-              className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
-            >
-              Ideas
-            </Link>
+          <MobileSection title="Log in" items={loginItems} />
 
-            <MobileSection title="Log in" items={loginItems} />
-
-            <Link
-              href="/account/signup"
-              className={`${button} mt-6 w-full`}
-              onClick={() => setOpen(false)}
-            >
-              Create an account
-            </Link>
-          </div>
-        </>
+          <Link
+            href="/account/signup"
+            className={`${button} mt-6 w-full`}
+            onClick={() => setOpen(false)}
+          >
+            Create an account
+          </Link>
+        </div>
       )}
     </div>
   );
