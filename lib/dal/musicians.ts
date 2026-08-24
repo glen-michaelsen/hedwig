@@ -111,19 +111,22 @@ export async function listMusicians(excludeAccountId: string) {
       studentCount: sql<number>`(
         select count(*) from ${student} where ${student.tutorId} = ${user.id}
       )`.mapWith(Number),
-      bioPageCount: sql<number>`(
-        select count(*) from ${bioPage} where ${bioPage.accountId} = ${user.id}
-      )`.mapWith(Number),
+      // bioPage.accountId is unique, so this is a one-row-or-none join, not
+      // a fan-out — a draft page (unpublished) has nothing public to link
+      // to, so it's dropped in the map below rather than shown as if live.
+      bioHandle: bioPage.handle,
+      bioPublished: bioPage.published,
     })
     .from(user)
+    .leftJoin(bioPage, eq(bioPage.accountId, user.id))
     .orderBy(desc(user.createdAt));
 
   return rows
     .filter((row) => row.id !== excludeAccountId)
-    .map(({ lastSeenSeconds, bioPageCount, ...row }) => ({
+    .map(({ lastSeenSeconds, bioHandle, bioPublished, ...row }) => ({
       ...row,
       lastSeen: lastSeenSeconds ? new Date(lastSeenSeconds * 1000) : null,
-      hasBioPage: bioPageCount > 0,
+      bioHandle: bioPublished ? bioHandle : null,
     }));
 }
 

@@ -109,10 +109,15 @@ export default async function MusiciansPage() {
                       {musician.studentCount}{" "}
                       {musician.studentCount === 1 ? "student" : "students"}
                     </span>
-                    {musician.hasBioPage && (
-                      <span className="rounded-full bg-surface-muted px-2.5 py-1 text-xs text-muted">
-                        Bio page
-                      </span>
+                    {musician.bioHandle && (
+                      <a
+                        href={`/@${musician.bioHandle}`}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="rounded-full bg-surface-muted px-2.5 py-1 text-xs text-muted transition-colors hover:bg-brand-500/10 hover:text-brand-700"
+                      >
+                        @{musician.bioHandle} ↗
+                      </a>
                     )}
                   </div>
                 </li>
