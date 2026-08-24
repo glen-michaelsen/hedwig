@@ -1,5 +1,8 @@
+import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { listInvites, listMusicians, type InviteRow } from "@/lib/dal/musicians";
+import { waitlistSummary } from "@/lib/dal/waitlist";
+import { WAITLIST_FEATURES } from "@/lib/waitlist";
 import { revokeInviteAction } from "./actions";
 import { InviteMusicianButton } from "./_components/invite-musician-button";
 import {
@@ -9,6 +12,7 @@ import {
   PanelList,
   SectionTitle,
   actionPill,
+  focusable,
 } from "@/app/_components/ui";
 
 // Reads every account's activity live, and none of the actions that create
@@ -45,9 +49,10 @@ const STATUS_STYLES = {
 
 export default async function MusiciansPage() {
   const account = await requireAdmin("/account/musicians");
-  const [musicians, invites] = await Promise.all([
+  const [musicians, invites, waitlist] = await Promise.all([
     listMusicians(account.id),
     listInvites(account.id),
+    waitlistSummary(),
   ]);
 
   const pendingCount = invites.filter(
@@ -68,6 +73,40 @@ export default async function MusiciansPage() {
         }
         action={<InviteMusicianButton />}
       />
+
+      <Link
+        href="/account/musicians/waitlist"
+        className={`mb-10 block rounded-4xl border border-line bg-surface p-6 shadow-soft transition-all hover:-translate-y-0.5 hover:shadow-lift ${focusable}`}
+      >
+        <div className="flex flex-wrap items-center justify-between gap-6">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
+              Waitlist
+            </p>
+            <p className="mt-1.5 text-3xl font-semibold tabular-nums">
+              {waitlist.total}
+            </p>
+            <p className="mt-0.5 text-sm text-muted">
+              {waitlist.total === 0
+                ? "Nobody yet"
+                : `${waitlist.total} waiting for an invite`}
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {WAITLIST_FEATURES.map((feature) => (
+              <span
+                key={feature.key}
+                className="rounded-full bg-surface-muted px-3 py-1.5 text-xs text-muted"
+              >
+                {feature.label}{" "}
+                <span className="font-medium tabular-nums text-foreground">
+                  {waitlist.counts[feature.key]}
+                </span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </Link>
 
       <section>
         <SectionTitle>Accounts</SectionTitle>

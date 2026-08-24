@@ -7,6 +7,8 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getAuth } from "@/lib/auth";
 import { acceptInvite, getOpenInvite } from "@/lib/dal/musicians";
+import { joinWaitlist } from "@/lib/dal/waitlist";
+import { isWaitlistFeature, type WaitlistFeature } from "@/lib/waitlist";
 
 export type AuthFormState = { error?: string };
 
@@ -68,6 +70,58 @@ export async function signUpAction(
   }
 
   redirect("/account");
+}
+
+export type WaitlistFormState = { error?: string; done?: boolean };
+
+const waitlistSchema = z.object({
+  name: z.string().min(1, "Your name is required").trim(),
+  email: z.email("Enter a valid email address").trim(),
+  phone: z.string().trim().optional(),
+});
+
+export async function joinWaitlistAction(
+  _prev: WaitlistFormState,
+  formData: FormData,
+): Promise<WaitlistFormState> {
+  // Honeypot: a field no human sees, so anything in it came from a bot. It
+  // gets the same success screen as everyone else — telling a script it was
+  // caught only teaches it to stop filling the field in.
+  if (String(formData.get("website") ?? "").trim()) return { done: true };
+
+  const parsed = waitlistSchema.safeParse({
+    name: formData.get("name"),
+    email: formData.get("email"),
+    phone: formData.get("phone"),
+  });
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Check the form" };
+  }
+
+  const features = formData
+    .getAll("features")
+    .map(String)
+    .filter(isWaitlistFeature) as WaitlistFeature[];
+  if (features.length === 0) {
+    return { error: "Pick at least one thing you're interested in" };
+  }
+
+  // Cloudflare sets this on every request; it's absent only in local dev.
+  const ip = (await headers()).get("cf-connecting-ip");
+
+  const result = await joinWaitlist({
+    name: parsed.data.name,
+    email: parsed.data.email,
+    phone: parsed.data.phone || null,
+    features,
+    ip,
+  });
+
+  if (!result.ok) {
+    return { error: "That's a lot of attempts at once — try again in a bit." };
+  }
+
+  return { done: true };
 }
 
 export async function signInAction(

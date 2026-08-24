@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
-import { signUpAction, type AuthFormState } from "../../../actions";
+import { signUpAction, type AuthFormState } from "../../actions";
 import {
   Card,
   ErrorText,

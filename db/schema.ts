@@ -808,6 +808,32 @@ export const ideaVote = sqliteTable(
   ],
 );
 
+/* ------------------------------------------------------------------ *
+ * Waitlist
+ *
+ * Public, no account needed — the counterpart to invite-only signup.
+ * `email` is unique so re-submitting (say, to add a feature) updates the
+ * existing row instead of piling up duplicates.
+ * ------------------------------------------------------------------ */
+
+export const waitlist = sqliteTable(
+  "waitlist",
+  {
+    id: text("id").primaryKey(),
+    name: text("name").notNull(),
+    email: text("email").notNull().unique(),
+    phone: text("phone"),
+    /** JSON array of WaitlistFeature keys — see lib/waitlist.ts. */
+    features: text("features").notNull(),
+    /** Same rate-limiting scheme as `idea` — see lib/dal/waitlist.ts. */
+    ipHash: text("ip_hash"),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (t) => [index("waitlist_ip_idx").on(t.ipHash, t.createdAt)],
+);
+
 export type Idea = typeof idea.$inferSelect;
 
 export type BioPage = typeof bioPage.$inferSelect;
