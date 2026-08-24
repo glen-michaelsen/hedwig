@@ -140,6 +140,28 @@ export function SettingsIcon({ className = "h-4 w-4" }: IconProps) {
   );
 }
 
+export function MusiciansIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>
+      <circle cx="7.5" cy="7" r="2.5" stroke="currentColor" strokeWidth="1.5" />
+      <path
+        d="M2.5 16c.4-2.8 2.4-4.5 5-4.5s4.6 1.7 5 4.5"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M12.5 5.3c1.1.2 1.9 1.1 1.9 2.2 0 1.1-.8 2-1.9 2.2M15 11.7c1.6.5 2.7 1.8 3 4"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function MoreIcon({ className = "h-4 w-4" }: IconProps) {
   return (
     <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" className={className}>

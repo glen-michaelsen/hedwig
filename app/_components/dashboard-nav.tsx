@@ -9,6 +9,7 @@ import {
   IdeasIcon,
   LinkInBioIcon,
   MoreIcon,
+  MusiciansIcon,
   PressKitIcon,
   SetlistIcon,
   SettingsIcon,
@@ -33,6 +34,7 @@ const ICONS = {
   ideas: IdeasIcon,
   setlists: SetlistIcon,
   settings: SettingsIcon,
+  musicians: MusiciansIcon,
 } as const;
 
 export type IconName = keyof typeof ICONS;

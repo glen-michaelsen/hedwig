@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getAuth } from "@/lib/auth";
+import { acceptInvite, getOpenInvite } from "@/lib/dal/musicians";
 
 export type AuthFormState = { error?: string };
 
@@ -16,10 +17,23 @@ const signUpSchema = z.object({
   password: z.string().min(10, "Use at least 10 characters"),
 });
 
+/**
+ * Accounts are admin-only, by invite — see lib/dal/musicians.ts. The form
+ * always carries the invite id it was loaded with; a submission without
+ * one, or with one that's since expired or been used, can't create an
+ * account at all. The email is locked to the invite's own on the client,
+ * but re-checked here since the client can't be trusted to enforce that.
+ */
 export async function signUpAction(
   _prev: AuthFormState,
   formData: FormData,
 ): Promise<AuthFormState> {
+  const inviteId = String(formData.get("invite") ?? "");
+  const invite = inviteId ? await getOpenInvite(inviteId) : null;
+  if (!invite) {
+    return { error: "That invite link isn't valid any more." };
+  }
+
   const parsed = signUpSchema.safeParse({
     name: formData.get("name"),
     studioName: formData.get("studioName"),
@@ -30,9 +44,13 @@ export async function signUpAction(
     return { error: parsed.error.issues[0]?.message ?? "Check the form" };
   }
 
+  if (parsed.data.email.toLowerCase() !== invite.email.toLowerCase()) {
+    return { error: "This invite was sent to a different email address." };
+  }
+
   const auth = await getAuth();
   try {
-    await auth.api.signUpEmail({
+    const result = await auth.api.signUpEmail({
       body: {
         name: parsed.data.name,
         email: parsed.data.email,
@@ -41,6 +59,7 @@ export async function signUpAction(
       },
       headers: await headers(),
     });
+    await acceptInvite(invite.id, result.user.id);
   } catch (error) {
     if (error instanceof APIError) {
       return { error: error.body?.message ?? "Could not create the account" };

@@ -54,6 +54,11 @@ export async function DashboardShell({ children }: { children: ReactNode }) {
             title: "Admin",
             items: [
               {
+                href: "/account/musicians",
+                label: "Musicians",
+                icon: "musicians",
+              },
+              {
                 href: "/account/spotlight",
                 label: "Spotlight",
                 icon: "spotlight",

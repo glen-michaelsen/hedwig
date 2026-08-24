@@ -71,6 +71,36 @@ export const verification = sqliteTable("verification", {
 });
 
 /* ------------------------------------------------------------------ *
+ * Invites
+ *
+ * Signup is admin-only: an account can only be created against a live
+ * invite. The invite's own id is the token in the signup link — one
+ * fewer column, and nothing else ever needs to reference an invite by a
+ * separate public value.
+ * ------------------------------------------------------------------ */
+
+export const invite = sqliteTable(
+  "invite",
+  {
+    id: text("id").primaryKey(),
+    email: text("email").notNull(),
+    invitedBy: text("invited_by")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    createdAt: integer("created_at", { mode: "timestamp" })
+      .notNull()
+      .default(sql`(unixepoch())`),
+    expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+    acceptedAt: integer("accepted_at", { mode: "timestamp" }),
+    acceptedUserId: text("accepted_user_id").references(() => user.id, {
+      onDelete: "set null",
+    }),
+    revokedAt: integer("revoked_at", { mode: "timestamp" }),
+  },
+  (t) => [index("invite_email_idx").on(t.email)],
+);
+
+/* ------------------------------------------------------------------ *
  * Students
  * ------------------------------------------------------------------ */
 

@@ -11,7 +11,13 @@ import {
   label,
 } from "@/app/_components/ui";
 
-export function SignupForm() {
+export function SignupForm({
+  invite,
+  email,
+}: {
+  invite: string;
+  email: string;
+}) {
   const [state, action, pending] = useActionState<AuthFormState, FormData>(
     signUpAction,
     {},
@@ -27,6 +33,8 @@ export function SignupForm() {
       </p>
 
       <form action={action} className="mt-8 space-y-5">
+        <input type="hidden" name="invite" value={invite} />
+
         <div>
           <label className={label} htmlFor="name">
             Your name
@@ -54,13 +62,16 @@ export function SignupForm() {
             Email
           </label>
           <input
-            className={input}
+            className={`${input} cursor-not-allowed text-muted`}
             id="email"
             name="email"
             type="email"
-            autoComplete="email"
-            required
+            defaultValue={email}
+            readOnly
           />
+          <p className="mt-2 text-xs text-faint">
+            Your invite was sent to this address.
+          </p>
         </div>
 
         <div>
