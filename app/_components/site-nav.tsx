@@ -72,7 +72,7 @@ function Dropdown({
         onClick={() => setOpen((value) => !value)}
         className={`${triggerBase} ${
           open || active
-            ? "bg-surface-muted text-foreground"
+            ? "bg-linear-to-br from-brand-500 to-brand-700 text-white shadow-brand"
             : "text-muted hover:bg-surface-muted hover:text-foreground"
         }`}
       >
@@ -132,7 +132,7 @@ export function DesktopNav() {
         href="/spotlight"
         className={`${triggerBase} ${
           pathname.startsWith("/spotlight")
-            ? "bg-surface-muted text-foreground"
+            ? "bg-linear-to-br from-brand-500 to-brand-700 text-white shadow-brand"
             : "text-muted hover:bg-surface-muted hover:text-foreground"
         }`}
       >
@@ -142,7 +142,7 @@ export function DesktopNav() {
         href="/ideas"
         className={`${triggerBase} ${
           pathname.startsWith("/ideas")
-            ? "bg-surface-muted text-foreground"
+            ? "bg-linear-to-br from-brand-500 to-brand-700 text-white shadow-brand"
             : "text-muted hover:bg-surface-muted hover:text-foreground"
         }`}
       >
