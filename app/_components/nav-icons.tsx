@@ -142,13 +142,10 @@ export function SettingsIcon({ className = "h-4 w-4" }: IconProps) {
 
 export function MoreIcon({ className = "h-4 w-4" }: IconProps) {
   return (
-    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>
-      <path
-        d="M3 6h14M3 10h14M3 14h14"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
+    <svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" className={className}>
+      <circle cx="4.5" cy="10" r="1.6" />
+      <circle cx="10" cy="10" r="1.6" />
+      <circle cx="15.5" cy="10" r="1.6" />
     </svg>
   );
 }
