@@ -80,8 +80,8 @@ function FileRow({
   children?: React.ReactNode;
 }) {
   return (
-    <li className="flex flex-wrap items-center gap-3 border-b border-line py-3 last:border-b-0">
-      <div className="min-w-0 flex-1">
+    <li className="flex flex-col gap-3 border-b border-line py-3 last:border-b-0 sm:flex-row sm:flex-wrap sm:items-center">
+      <div className="min-w-0 sm:flex-1">
         <p className="truncate text-sm font-medium">{displayName(asset)}</p>
         <p className="mt-0.5 truncate text-xs text-faint">
           {asset.title ? `${asset.filename} · ` : ""}
@@ -90,7 +90,7 @@ function FileRow({
         {children}
       </div>
 
-      <div className="flex shrink-0 items-center gap-2">
+      <div className="flex flex-wrap shrink-0 items-center gap-2">
         <RenameAssetButton
           releaseId={releaseId}
           assetId={asset.id}
