@@ -12,6 +12,12 @@ import {
   focusable,
 } from "@/app/_components/ui";
 
+// Without this the page risks being frozen at whatever it looked like at
+// build/deploy time rather than read fresh each visit — the same failure
+// mode documented on the Spotlight index, and the likely reason the set/song
+// counts here went stale before revalidatePath alone was added as a fix.
+export const dynamic = "force-dynamic";
+
 export const metadata = { title: "Setlists" };
 
 const TABS = [

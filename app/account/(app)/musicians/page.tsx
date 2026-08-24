@@ -11,6 +11,12 @@ import {
   actionPill,
 } from "@/app/_components/ui";
 
+// Reads every account's activity live, and none of the actions that create
+// that activity know this page exists to revalidate it — so it can't rely on
+// revalidatePath from elsewhere. Without this it risks being frozen at
+// whatever it looked like at build/deploy time, same as the Spotlight index.
+export const dynamic = "force-dynamic";
+
 export const metadata = { title: "Musicians" };
 
 function formatDate(date: Date) {
