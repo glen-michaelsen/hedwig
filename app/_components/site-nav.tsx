@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { featureItems, loginItems, type NavItem } from "./nav-items";
 import { button, focusable } from "./ui";
 
@@ -211,38 +212,50 @@ export function MobileNav() {
         </svg>
       </button>
 
-      {open && (
-        <div
-          id={panelId}
-          className="fixed inset-x-0 top-18 bottom-0 z-50 overflow-y-auto bg-surface px-6 py-6"
-        >
-          <MobileSection title="Features" items={featureItems} />
-
-          <Link
-            href="/spotlight"
-            className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
+      {open &&
+        createPortal(
+          // Portalled to the body rather than nested in the header: the
+          // header has `backdrop-blur-xl`, and a `backdrop-filter` on an
+          // ancestor becomes the containing block for `position: fixed`
+          // descendants — so nested here, "fixed" was measured against the
+          // header's own h-18 box instead of the screen, collapsing this to
+          // almost nothing with the real page showing through underneath.
+          //
+          // It fills the full height below the header (not just its own
+          // content) so there's no gap of dimmed page showing at the bottom
+          // on a short menu — this panel *is* the whole screen from here on.
+          <div
+            id={panelId}
+            className="fixed inset-x-0 top-18 bottom-0 z-50 overflow-y-auto bg-surface px-6 py-6"
           >
-            Spotlight
-          </Link>
+            <MobileSection title="Features" items={featureItems} />
 
-          <Link
-            href="/ideas"
-            className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
-          >
-            Ideas
-          </Link>
+            <Link
+              href="/spotlight"
+              className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
+            >
+              Spotlight
+            </Link>
 
-          <MobileSection title="Log in" items={loginItems} />
+            <Link
+              href="/ideas"
+              className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
+            >
+              Ideas
+            </Link>
 
-          <Link
-            href="/account/signup"
-            className={`${button} mt-6 w-full`}
-            onClick={() => setOpen(false)}
-          >
-            Create an account
-          </Link>
-        </div>
-      )}
+            <MobileSection title="Log in" items={loginItems} />
+
+            <Link
+              href="/account/signup"
+              className={`${button} mt-6 w-full`}
+              onClick={() => setOpen(false)}
+            >
+              Create an account
+            </Link>
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
