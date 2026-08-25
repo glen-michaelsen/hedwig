@@ -18,6 +18,7 @@ import {
   getSpotlightBySlugForAdmin,
   listRelatedSpotlights,
 } from "@/lib/dal/spotlight";
+import { MAX_RATING } from "@/lib/spotlight/slug";
 
 export const dynamic = "force-dynamic";
 
@@ -58,12 +59,20 @@ export async function generateMetadata({
   if (!found) return { title: "Not found — Trenodo" };
 
   const { article } = found;
+  const description = `${article.artistName} — ${article.releaseTitle}`;
   return {
     title: `${article.headline} — Trenodo Spotlight`,
-    description: `${article.artistName} — ${article.releaseTitle}`,
+    description,
+    alternates: {
+      canonical: `/spotlight/${article.slug}`,
+    },
     openGraph: {
       title: article.headline,
-      description: `${article.artistName} — ${article.releaseTitle}`,
+      description,
+      url: `/spotlight/${article.slug}`,
+      siteName: "Trenodo",
+      type: "article",
+      publishedTime: (article.publishedAt ?? article.createdAt).toISOString(),
       images: article.headerAssetId ?? article.coverAssetId
         ? [`/spotlight/image/${article.headerAssetId ?? article.coverAssetId}?size=md`]
         : undefined,
@@ -101,8 +110,64 @@ export default async function SpotlightArticlePage({
     .map((block) => block.trim())
     .filter(Boolean);
 
+  // Mirrors what's on the page — the same headline, the same paragraphs,
+  // the same rating out of the site's real MAX_RATING — never rewritten
+  // for the schema.
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Review",
+        headline: article.headline,
+        url: `https://trenodo.com/spotlight/${article.slug}`,
+        datePublished: (article.publishedAt ?? article.createdAt).toISOString(),
+        author: { "@type": "Organization", name: "Trenodo Spotlight" },
+        reviewBody: paragraphs.join("\n\n"),
+        reviewRating: {
+          "@type": "Rating",
+          ratingValue: article.rating,
+          bestRating: MAX_RATING,
+          worstRating: 1,
+        },
+        itemReviewed: {
+          "@type": "MusicRelease",
+          name: article.releaseTitle,
+          byArtist: { "@type": "MusicGroup", name: article.artistName },
+          ...(released ? { datePublished: article.releaseDate } : {}),
+          ...(article.releaseUrl ? { url: article.releaseUrl } : {}),
+        },
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "Spotlight",
+            item: "https://trenodo.com/spotlight",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: article.headline,
+            item: `https://trenodo.com/spotlight/${article.slug}`,
+          },
+        ],
+      },
+    ],
+  };
+
   return (
     <>
+      {!isDraft && (
+        <script
+          type="application/ld+json"
+          // Built from the same already-published article data rendered
+          // below — never raw user input reaching this template directly —
+          // so this is safe without further escaping.
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      )}
       <SiteHeader />
 
       <main className="flex-1 pb-24">

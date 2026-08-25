@@ -1,10 +1,13 @@
 import type { MetadataRoute } from "next";
+import { listPublishedSpotlights } from "@/lib/dal/spotlight";
 
 /**
- * The static marketing pages only. A musician's own pages (/@handle,
- * /kit/*, /spotlight/*) aren't listed here — whether those belong in a
- * sitemap is a separate call (there could be thousands of them, and not
- * every one may want the exposure), not something to fold into this quietly.
+ * The static marketing pages, plus every published Spotlight article below.
+ * A musician's own pages (/@handle, /kit/*) aren't listed — whether those
+ * belong in a sitemap is a separate call (there could be thousands of them,
+ * and not every one may want the exposure), not something to fold into this
+ * quietly. Spotlight is different: it's Trenodo's own editorial content,
+ * meant to be found.
  */
 const PAGES: {
   path: string;
@@ -22,12 +25,27 @@ const PAGES: {
   { path: "/account/login", priority: 0.3, changeFrequency: "yearly" },
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+// Rebuilds against the live Spotlight list at most once an hour — new
+// articles show up on a normal schedule without making this a fully
+// dynamic route.
+export const revalidate = 3600;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
-  return PAGES.map((page) => ({
+  const staticEntries = PAGES.map((page) => ({
     url: `https://trenodo.com${page.path}`,
     lastModified,
     changeFrequency: page.changeFrequency,
     priority: page.priority,
   }));
+
+  const articles = await listPublishedSpotlights();
+  const articleEntries = articles.map((article) => ({
+    url: `https://trenodo.com/spotlight/${article.slug}`,
+    lastModified: article.publishedAt ?? article.createdAt,
+    changeFrequency: "monthly" as const,
+    priority: 0.5,
+  }));
+
+  return [...staticEntries, ...articleEntries];
 }

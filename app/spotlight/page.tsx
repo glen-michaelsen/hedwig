@@ -5,9 +5,22 @@ import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
 import { container, focusable } from "@/app/_components/ui";
 import { listPublishedSpotlights } from "@/lib/dal/spotlight";
 
+const PAGE_DESCRIPTION =
+  "New music, written up one release at a time — no algorithm, just one musician telling another musician's story.";
+
 export const metadata: Metadata = {
   title: "Spotlight — Trenodo",
-  description: "New music, written up one release at a time.",
+  description: PAGE_DESCRIPTION,
+  alternates: {
+    canonical: "/spotlight",
+  },
+  openGraph: {
+    title: "Spotlight — Trenodo",
+    description: PAGE_DESCRIPTION,
+    url: "/spotlight",
+    siteName: "Trenodo",
+    type: "website",
+  },
 };
 
 // Reads the database and there's no cache in front of this Worker, so a
@@ -30,8 +43,37 @@ export default async function SpotlightIndexPage() {
   const articles = await listPublishedSpotlights();
   const [lead, ...rest] = articles;
 
+  // Lists what's actually published, generated fresh from the same query
+  // the page renders from — nothing hand-written to fall out of step with
+  // the real list.
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "Trenodo Spotlight",
+    url: "https://trenodo.com/spotlight",
+    description: PAGE_DESCRIPTION,
+    blogPost: articles.map((article) => ({
+      "@type": "Review",
+      headline: article.headline,
+      url: `https://trenodo.com/spotlight/${article.slug}`,
+      datePublished: (article.publishedAt ?? article.createdAt).toISOString(),
+      itemReviewed: {
+        "@type": "MusicRelease",
+        name: article.releaseTitle,
+        byArtist: { "@type": "MusicGroup", name: article.artistName },
+      },
+    })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        // Built from live, already-published article data — never raw user
+        // input reaching this template directly — so this is safe without
+        // further escaping.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <SiteHeader />
 
       <main className="flex-1 pb-20">
