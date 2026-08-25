@@ -11,10 +11,74 @@ import {
 } from "../_components/ui";
 import { BioMockup } from "./_components/bio-mockup";
 
+const PAGE_DESCRIPTION =
+  "A free link in bio page for musicians — your music, tour dates and links in one place. Blocks and themes built for artists, not just anyone.";
+
 export const metadata: Metadata = {
-  title: "Link in Bio — Trenodo",
-  description:
-    "One page for everything you point people at: your music, your dates, your links. Themed presets, your own colours, and blocks for links, text, players and video — built for musicians rather than everyone.",
+  title: "Free Link in Bio for Musicians — Trenodo",
+  description: PAGE_DESCRIPTION,
+  alternates: {
+    canonical: "/link-in-bio",
+  },
+  openGraph: {
+    title: "Free Link in Bio for Musicians",
+    description: PAGE_DESCRIPTION,
+    url: "/link-in-bio",
+    siteName: "Trenodo",
+    type: "website",
+  },
+};
+
+/**
+ * The one place both the visible FAQ and its schema.org markup are written,
+ * so they can't drift apart — Google's FAQ rich result (and any AI answer
+ * engine reading the JSON-LD) has to match what a visitor actually sees.
+ */
+const FAQS = [
+  {
+    q: "Is Trenodo's Link in Bio really free?",
+    a: "Yes — free, forever. It's how musicians find the rest of Trenodo, not a trial that runs out.",
+  },
+  {
+    q: "How is it different from Linktree or other link-in-bio tools?",
+    a: "It's built around what musicians actually share — a release, a player, tour dates — instead of a generic grid of buttons. A track link looks like a track link, not a t-shirt link.",
+  },
+  {
+    q: "Do I need an invite to sign up?",
+    a: "Right now, yes — Trenodo's still small and growing carefully. Join the waitlist and you'll hear back with an invite, or when it opens up for everyone.",
+  },
+  {
+    q: "Can I pick my own handle, and change it later?",
+    a: "Yes. Your page lives at trenodo.com/@yourhandle, and if you change it, the old one keeps redirecting — handy since printed QR codes and old bio links outlive handle changes.",
+  },
+  {
+    q: "Do I need to be a musician to use it?",
+    a: "It's built specifically for musicians — the release, player and video blocks assume that's what you're sharing. If that's not you, a general-purpose link-in-bio tool will probably fit better.",
+  },
+] as const;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      name: "Trenodo Link in Bio",
+      url: "https://trenodo.com/link-in-bio",
+      description: PAGE_DESCRIPTION,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Any (web-based)",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      audience: { "@type": "Audience", audienceType: "Musicians" },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: FAQS.map((faq) => ({
+        "@type": "Question",
+        name: faq.q,
+        acceptedAnswer: { "@type": "Answer", text: faq.a },
+      })),
+    },
+  ],
 };
 
 /* --------------------------------- icons --------------------------------- */
@@ -95,7 +159,7 @@ function Hero() {
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium text-muted shadow-soft">
               <span aria-hidden>🔗</span>
-              Link in Bio
+              Free Link in Bio
             </span>
 
             <h1 className="mt-7 text-4xl font-semibold leading-[1.1] tracking-tight text-balance sm:text-5xl">
@@ -120,7 +184,7 @@ function Hero() {
             </div>
 
             <p className="mt-6 text-sm text-muted">
-              Your page lives at trenodo.com/@yourhandle.
+              Free, forever — your page lives at trenodo.com/@yourhandle.
             </p>
           </div>
 
@@ -249,6 +313,34 @@ function Steps() {
   );
 }
 
+function Faq() {
+  return (
+    <section className="border-y border-line/70 bg-surface-muted/40 py-24 sm:py-32">
+      <div className={containerNarrow}>
+        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-600">
+          Questions
+        </p>
+        <h2 className="mt-3 text-4xl font-semibold tracking-tight text-balance">
+          Before you ask
+        </h2>
+
+        <dl className="mt-12 space-y-9">
+          {FAQS.map((faq) => (
+            <div key={faq.q}>
+              <dt className="text-lg font-semibold tracking-tight text-balance">
+                {faq.q}
+              </dt>
+              <dd className="mt-2 text-[15px] leading-relaxed text-muted text-pretty">
+                {faq.a}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
 function ClosingCta() {
   return (
     <section className={`${containerNarrow} py-24 sm:py-32`}>
@@ -277,11 +369,18 @@ function ClosingCta() {
 export default function LinkInBioPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        // Static, hand-written content only — never user input — so this is
+        // safe without further escaping.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <SiteHeader />
       <main className="flex-1">
         <Hero />
         <Features />
         <Steps />
+        <Faq />
         <ClosingCta />
       </main>
       <SiteFooter />

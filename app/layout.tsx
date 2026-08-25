@@ -13,6 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  // Every relative URL in metadata (canonical links, OG images) resolves
+  // against this — without it they'd resolve against whatever host served
+  // the request, which breaks the moment a crawler hits www or a preview.
+  metadataBase: new URL("https://trenodo.com"),
   title: "Trenodo",
   description:
     "Tools for working musicians — teaching, links and press, in one account.",
