@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { DashboardMockup } from "./_components/marketing/dashboard-mockup";
 import { Hearts } from "./_components/hearts";
 import { SiteFooter, SiteHeader } from "./_components/site-header";
 import {
@@ -12,10 +13,73 @@ import {
 } from "./_components/ui";
 import { listPublishedSpotlights } from "@/lib/dal/spotlight";
 
+const PAGE_DESCRIPTION =
+  "Trenodo is a musician tool box — student management, a free link in bio, a free setlist creator and an electronic press kit, all built specifically for musicians rather than repurposed general-purpose tools.";
+
 export const metadata: Metadata = {
-  title: "Trenodo — making life simpler and more efficient for musicians",
-  description:
-    "Making life simpler and more efficient for musicians. Trenodo is a toolbox for teaching, releasing and gigging — Tutor keeps lessons in one place today, and Link in Bio gives you one page for everything you point people at.",
+  title: "Trenodo — The Musician Tool Box for Teaching, Promotion & Gigging",
+  description: PAGE_DESCRIPTION,
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Trenodo — The Musician Tool Box",
+    description: PAGE_DESCRIPTION,
+    url: "/",
+    siteName: "Trenodo",
+    type: "website",
+  },
+};
+
+/**
+ * The one place both the visible FAQ and its schema.org markup are written,
+ * so they can't drift apart — Google's FAQ rich result (and any AI answer
+ * engine reading the JSON-LD) has to match what a visitor actually sees.
+ */
+const FAQS = [
+  {
+    q: "What is Trenodo?",
+    a: "A musician tool box — Tutor for teaching, Link in Bio and Press Kit for promotion, and Setlist for gigs, all in one account instead of four different apps that don't talk to each other.",
+  },
+  {
+    q: "Is Trenodo a promotion tool for musicians?",
+    a: "Partly. Link in Bio and Press Kit are built specifically to help you promote a release — one page to point people at, and an electronic press kit ready to send a promoter or blog. Tutor and Setlist handle the teaching and gigging side instead.",
+  },
+  {
+    q: "Which of Trenodo's tools are free?",
+    a: "Link in Bio and Setlist are free, forever — nothing to pay to get started with either one.",
+  },
+  {
+    q: "Do I need an invite to join?",
+    a: "Right now, yes — Trenodo's still small and growing carefully. Join the waitlist and you'll hear back with an invite, or when it opens up for everyone.",
+  },
+  {
+    q: "Do my students need their own account?",
+    a: "No — a student signs into their own portal with just their phone number and a PIN you read out once. No app, no password to forget.",
+  },
+] as const;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      name: "Trenodo",
+      url: "https://trenodo.com",
+      description: PAGE_DESCRIPTION,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Any (web-based)",
+      audience: { "@type": "Audience", audienceType: "Musicians" },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: FAQS.map((faq) => ({
+        "@type": "Question",
+        name: faq.q,
+        acceptedAnswer: { "@type": "Answer", text: faq.a },
+      })),
+    },
+  ],
 };
 
 // Reads the database (recent Spotlight pieces) and there's no cache in front
@@ -30,37 +94,43 @@ function Hero() {
     <section className="relative isolate overflow-hidden pt-20 pb-24 sm:pt-28 sm:pb-32">
       <div className="brand-wash" />
       <div className={container}>
-        <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium text-muted shadow-soft">
-            <span aria-hidden>🎵</span>
-            Built for musicians
-          </span>
+        <div className="grid items-center gap-16 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium text-muted shadow-soft">
+              <span aria-hidden>🎵</span>
+              The Musician Tool Box
+            </span>
 
-          <h1 className="mt-7 text-5xl font-semibold leading-[1.05] tracking-tight text-balance sm:text-6xl">
-            Making life{" "}
-            <span className="text-brand-600">simpler and more efficient</span>{" "}
-            for musicians.
-          </h1>
+            <h1 className="mt-7 text-5xl font-semibold leading-[1.05] tracking-tight text-balance sm:text-6xl">
+              Making life{" "}
+              <span className="text-brand-600">simpler and more efficient</span>{" "}
+              for musicians.
+            </h1>
 
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
-            While music is a passion, it is also a dream to make a living
-            off. Being a musician means handling many things — and while we
-            might be a small contribution, we aim to make your life a
-            little easier.
-          </p>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
+              While music is a passion, it is also a dream to make a living
+              off. Being a musician means handling many things — and while
+              we might be a small contribution, we aim to make your life a
+              little easier.
+            </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-3.5">
-            <Link href="/account/signup" className={`${button} ${buttonLarge}`}>
-              Create your account
-            </Link>
-            <Link href="/login" className={`${buttonGhost} ${buttonLarge}`}>
-              I&rsquo;m a student
-            </Link>
+            <div className="mt-10 flex flex-wrap items-center gap-3.5">
+              <Link href="/account/signup" className={`${button} ${buttonLarge}`}>
+                Create your account
+              </Link>
+              <Link href="/login" className={`${buttonGhost} ${buttonLarge}`}>
+                I&rsquo;m a student
+              </Link>
+            </div>
+
+            <p className="mt-6 text-sm text-muted">
+              Free while it&rsquo;s young. Students never create an account.
+            </p>
           </div>
 
-          <p className="mt-6 text-sm text-muted">
-            Free while it&rsquo;s young. Students never create an account.
-          </p>
+          <div className="flex justify-center lg:justify-end">
+            <DashboardMockup />
+          </div>
         </div>
       </div>
     </section>
@@ -240,6 +310,34 @@ function Spotlight({
   );
 }
 
+function Faq() {
+  return (
+    <section className="border-y border-line/70 bg-surface-muted/40 py-24 sm:py-32">
+      <div className={containerNarrow}>
+        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-600">
+          Questions
+        </p>
+        <h2 className="mt-3 text-4xl font-semibold tracking-tight text-balance">
+          Before you ask
+        </h2>
+
+        <dl className="mt-12 space-y-9">
+          {FAQS.map((faq) => (
+            <div key={faq.q}>
+              <dt className="text-lg font-semibold tracking-tight text-balance">
+                {faq.q}
+              </dt>
+              <dd className="mt-2 text-[15px] leading-relaxed text-muted text-pretty">
+                {faq.a}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
 function ClosingCta() {
   return (
     <section className={`${containerNarrow} py-24 sm:py-32`}>
@@ -271,12 +369,19 @@ export default async function LandingPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        // Static, hand-written content only — never user input — so this is
+        // safe without further escaping.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <SiteHeader />
       <main className="flex-1">
         <Hero />
         <Mission />
         <Tools />
         <Spotlight articles={spotlights} />
+        <Faq />
         <ClosingCta />
       </main>
       <SiteFooter />
