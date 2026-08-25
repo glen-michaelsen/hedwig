@@ -9,6 +9,7 @@ import {
   container,
   containerNarrow,
 } from "../_components/ui";
+import { BioMockup } from "./_components/bio-mockup";
 
 export const metadata: Metadata = {
   title: "Link in Bio — Trenodo",
@@ -90,35 +91,42 @@ function Hero() {
     <section className="relative isolate overflow-hidden pt-20 pb-20 sm:pt-28 sm:pb-24">
       <div className="brand-wash" />
       <div className={container}>
-        <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium text-muted shadow-soft">
-            <span aria-hidden>🔗</span>
-            Link in Bio
-          </span>
+        <div className="grid items-center gap-16 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium text-muted shadow-soft">
+              <span aria-hidden>🔗</span>
+              Link in Bio
+            </span>
 
-          <h1 className="mt-7 text-4xl font-semibold leading-[1.1] tracking-tight text-balance sm:text-5xl">
-            One page for everything you point people at.
-          </h1>
+            <h1 className="mt-7 text-4xl font-semibold leading-[1.1] tracking-tight text-balance sm:text-5xl">
+              One page for everything you point people at.
+            </h1>
 
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
-            I got tired of a link-in-bio tool built for everyone that fit a
-            musician awkwardly — a track link that looked like a t-shirt link,
-            no way to route a student toward my portal. So this one is built
-            for musicians specifically, and it&rsquo;s the second thing I made.
-          </p>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
+              I got tired of a link-in-bio tool built for everyone that fit a
+              musician awkwardly — a track link that looked like a t-shirt
+              link, no way to route a student toward my portal. So this one is
+              built for musicians specifically, and it&rsquo;s the second
+              thing I made.
+            </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-3.5">
-            <Link href="/account/signup" className={`${button} ${buttonLarge}`}>
-              Claim your page
-            </Link>
-            <Link href="/" className={`${buttonGhost} ${buttonLarge}`}>
-              Back to Trenodo
-            </Link>
+            <div className="mt-10 flex flex-wrap items-center gap-3.5">
+              <Link href="/account/signup" className={`${button} ${buttonLarge}`}>
+                Claim your page
+              </Link>
+              <Link href="/" className={`${buttonGhost} ${buttonLarge}`}>
+                Back to Trenodo
+              </Link>
+            </div>
+
+            <p className="mt-6 text-sm text-muted">
+              Your page lives at trenodo.com/@yourhandle.
+            </p>
           </div>
 
-          <p className="mt-6 text-sm text-muted">
-            Your page lives at trenodo.com/@yourhandle.
-          </p>
+          <div className="flex justify-center lg:justify-end">
+            <BioMockup />
+          </div>
         </div>
       </div>
     </section>
