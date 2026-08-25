@@ -19,7 +19,7 @@ import { resolveTheme, themeVars } from "@/lib/bio/theme";
  */
 
 const SAMPLE_PAGE = {
-  title: "Nordlys",
+  title: "Glen",
   tagline: "Producer & vocalist — new EP out now",
   avatarKey: null,
   accentColor: null as string | null,
@@ -95,10 +95,15 @@ export function BioMockup() {
 
           <div
             style={{ ...themeVars(theme) }}
-            className="pointer-events-none h-full w-full overflow-hidden bg-[var(--bio-bg)] font-[family-name:var(--bio-font)] text-[var(--bio-fg)] transition-colors duration-500"
+            className="pointer-events-none flex h-full w-full items-start justify-center overflow-hidden bg-[var(--bio-bg)] font-[family-name:var(--bio-font)] text-[var(--bio-fg)] transition-colors duration-500"
           >
+            {/* `flex justify-center` centers this before the scale is
+                applied — scaling around the box's own midpoint only lines
+                up with the frame's center if the box was centered to begin
+                with, and a fixed-width block laid out on its own just
+                left-aligns and drags everything right of true center. */}
             <div
-              className="origin-top"
+              className="shrink-0 origin-top"
               style={{ width: NATIVE_WIDTH, transform: `scale(${SCALE})` }}
             >
               <div className="px-6 pt-14 pb-16">
