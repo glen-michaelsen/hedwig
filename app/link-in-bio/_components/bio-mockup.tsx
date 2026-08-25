@@ -78,8 +78,11 @@ const NATIVE_WIDTH = 340;
 const SCALE = 0.62;
 
 export function BioMockup() {
+  // Starts on a light theme — a dark one sits right against the phone's
+  // own black bezel and reads as one flat block. Midnight's still one of
+  // the swatches below, just not what loads first.
   const [presetId, setPresetId] = useState<(typeof SWATCHES)[number]["id"]>(
-    "midnight",
+    "sand",
   );
 
   const theme = resolveTheme({ ...SAMPLE_PAGE, themePreset: presetId });
