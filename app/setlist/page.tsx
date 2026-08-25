@@ -9,11 +9,72 @@ import {
   container,
   containerNarrow,
 } from "../_components/ui";
+import { SetlistMockup } from "./_components/setlist-mockup";
+
+const PAGE_DESCRIPTION =
+  "Create a setlist online, free — drag songs into sets, track target minutes as you build, and take a printed sheet on stage instead of squinting at your phone.";
 
 export const metadata: Metadata = {
-  title: "Setlist — Trenodo",
-  description:
-    "Build your sets by dragging songs in, keep an eye on target minutes as you go, and walk on stage with a printed sheet instead of a phone screen.",
+  title: "Free Setlist Creator for Musicians — Trenodo",
+  description: PAGE_DESCRIPTION,
+  alternates: {
+    canonical: "/setlist",
+  },
+  openGraph: {
+    title: "Free Setlist Creator for Musicians",
+    description: PAGE_DESCRIPTION,
+    url: "/setlist",
+    siteName: "Trenodo",
+    type: "website",
+  },
+};
+
+/**
+ * The one place both the visible FAQ and its schema.org markup are written,
+ * so they can't drift apart — Google's FAQ rich result (and any AI answer
+ * engine reading the JSON-LD) has to match what a visitor actually sees.
+ */
+const FAQS = [
+  {
+    q: "Is Trenodo's setlist creator really free?",
+    a: "Yes — free, forever, same as Link in Bio. It's not a trial that runs out.",
+  },
+  {
+    q: "How do I create a setlist online with Trenodo?",
+    a: "Add the gig, add a set with a target length, and drag songs in — the running time updates as you go, so you know if a set's short or running long before soundcheck.",
+  },
+  {
+    q: "Can I reuse a setlist from a past gig?",
+    a: "Yes — duplicate a whole gig or just one set within it, then adjust from there. Most nights look like the last one.",
+  },
+  {
+    q: "Do I need my phone on stage?",
+    a: "No — print the sheet: big type, no chrome, built to read at arm's length in the dark. Or pull it up on your phone at soundcheck if you'd rather.",
+  },
+] as const;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      name: "Trenodo Setlist",
+      url: "https://trenodo.com/setlist",
+      description: PAGE_DESCRIPTION,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Any (web-based)",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      audience: { "@type": "Audience", audienceType: "Musicians" },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: FAQS.map((faq) => ({
+        "@type": "Question",
+        name: faq.q,
+        acceptedAnswer: { "@type": "Answer", text: faq.a },
+      })),
+    },
+  ],
 };
 
 /* --------------------------------- icons --------------------------------- */
@@ -92,30 +153,40 @@ function Hero() {
     <section className="relative isolate overflow-hidden pt-20 pb-20 sm:pt-28 sm:pb-24">
       <div className="brand-wash" />
       <div className={container}>
-        <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium text-muted shadow-soft">
-            <span aria-hidden>🎤</span>
-            Setlist
-          </span>
+        <div className="grid items-center gap-16 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium text-muted shadow-soft">
+              <span aria-hidden>🎤</span>
+              Free Setlist Creator
+            </span>
 
-          <h1 className="mt-7 text-4xl font-semibold leading-[1.1] tracking-tight text-balance sm:text-5xl">
-            Build the sets, hit the minutes, walk on stage ready.
-          </h1>
+            <h1 className="mt-7 text-4xl font-semibold leading-[1.1] tracking-tight text-balance sm:text-5xl">
+              Build the sets, hit the minutes, walk on stage ready.
+            </h1>
 
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
-            One gig, however many sets it needs. Drag songs where they go,
-            watch each set head toward its target length, and take a
-            printed sheet on stage instead of squinting at a phone between
-            songs.
-          </p>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
+              One gig, however many sets it needs. Drag songs where they go,
+              watch each set head toward its target length, and take a
+              printed sheet on stage instead of squinting at a phone between
+              songs.
+            </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-3.5">
-            <Link href="/account/signup" className={`${button} ${buttonLarge}`}>
-              Create account
-            </Link>
-            <Link href="/" className={`${buttonGhost} ${buttonLarge}`}>
-              Back to Trenodo
-            </Link>
+            <div className="mt-10 flex flex-wrap items-center gap-3.5">
+              <Link href="/account/signup" className={`${button} ${buttonLarge}`}>
+                Create account
+              </Link>
+              <Link href="/" className={`${buttonGhost} ${buttonLarge}`}>
+                Back to Trenodo
+              </Link>
+            </div>
+
+            <p className="mt-6 text-sm text-muted">
+              Free, forever — create your first setlist in a few minutes.
+            </p>
+          </div>
+
+          <div className="flex justify-center lg:justify-end">
+            <SetlistMockup />
           </div>
         </div>
       </div>
@@ -239,6 +310,34 @@ function Steps() {
   );
 }
 
+function Faq() {
+  return (
+    <section className="border-y border-line/70 bg-surface-muted/40 py-24 sm:py-32">
+      <div className={containerNarrow}>
+        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-600">
+          Questions
+        </p>
+        <h2 className="mt-3 text-4xl font-semibold tracking-tight text-balance">
+          Before you ask
+        </h2>
+
+        <dl className="mt-12 space-y-9">
+          {FAQS.map((faq) => (
+            <div key={faq.q}>
+              <dt className="text-lg font-semibold tracking-tight text-balance">
+                {faq.q}
+              </dt>
+              <dd className="mt-2 text-[15px] leading-relaxed text-muted text-pretty">
+                {faq.a}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
 function ClosingCta() {
   return (
     <section className={`${containerNarrow} py-24 sm:py-32`}>
@@ -267,11 +366,18 @@ function ClosingCta() {
 export default function SetlistLandingPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        // Static, hand-written content only — never user input — so this is
+        // safe without further escaping.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <SiteHeader />
       <main className="flex-1">
         <Hero />
         <Features />
         <Steps />
+        <Faq />
         <ClosingCta />
       </main>
       <SiteFooter />

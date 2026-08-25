@@ -9,11 +9,71 @@ import {
   container,
   containerNarrow,
 } from "../_components/ui";
+import { TutorMockup } from "./_components/tutor-mockup";
+
+const PAGE_DESCRIPTION =
+  "Student management built for private music tutors — a library of teaching material, a lesson note for every session, and a portal each student opens with just their phone number and a PIN.";
 
 export const metadata: Metadata = {
-  title: "Tutor — Trenodo",
-  description:
-    "Tutor keeps your teaching in one place: sheet music, chord links and practice videos in one library, a lesson note for every session, and a portal your students open with their phone number and a PIN.",
+  title: "Student Management for Music Tutors — Trenodo",
+  description: PAGE_DESCRIPTION,
+  alternates: {
+    canonical: "/tutoring",
+  },
+  openGraph: {
+    title: "Student Management for Music Tutors",
+    description: PAGE_DESCRIPTION,
+    url: "/tutoring",
+    siteName: "Trenodo",
+    type: "website",
+  },
+};
+
+/**
+ * The one place both the visible FAQ and its schema.org markup are written,
+ * so they can't drift apart — Google's FAQ rich result (and any AI answer
+ * engine reading the JSON-LD) has to match what a visitor actually sees.
+ */
+const FAQS = [
+  {
+    q: "What is a student management tool for music tutors?",
+    a: "Software that keeps your teaching organised in one place — who you teach, what you've covered with each of them, and the material you use, instead of scattered notebooks, texts and files.",
+  },
+  {
+    q: "Do my students need to download an app or create an account?",
+    a: "No — each student signs into their own portal with just their phone number and a 4-digit PIN you read out once. No app, no password to forget.",
+  },
+  {
+    q: "Can I keep some notes private?",
+    a: "Yes — every lesson note has a section only you see, separate from what gets shared with the student.",
+  },
+  {
+    q: "Is it built for one instrument or teaching style?",
+    a: "No — it's instrument-agnostic. Sheet music, chord links, practice videos, whatever your students need, tagged and searchable in your own library.",
+  },
+] as const;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      name: "Trenodo Tutor",
+      url: "https://trenodo.com/tutoring",
+      description: PAGE_DESCRIPTION,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Any (web-based)",
+      audience: { "@type": "Audience", audienceType: "Music tutors" },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: FAQS.map((faq) => ({
+        "@type": "Question",
+        name: faq.q,
+        acceptedAnswer: { "@type": "Answer", text: faq.a },
+      })),
+    },
+  ],
 };
 
 /* --------------------------------- icons --------------------------------- */
@@ -89,29 +149,35 @@ function Hero() {
     <section className="relative isolate overflow-hidden pt-20 pb-20 sm:pt-28 sm:pb-24">
       <div className="brand-wash" />
       <div className={container}>
-        <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium text-muted shadow-soft">
-            <span aria-hidden>🎓</span>
-            Tutor
-          </span>
+        <div className="grid items-center gap-16 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium text-muted shadow-soft">
+              <span aria-hidden>🎓</span>
+              Student Management
+            </span>
 
-          <h1 className="mt-7 text-4xl font-semibold leading-[1.1] tracking-tight text-balance sm:text-5xl">
-            Organising and making every session more efficient.
-          </h1>
+            <h1 className="mt-7 text-4xl font-semibold leading-[1.1] tracking-tight text-balance sm:text-5xl">
+              Organising and making every session more efficient.
+            </h1>
 
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
-            You get a clean overview of everything you teach with, ready to
-            share the moment you write up a lesson note. A few minutes after
-            each session is all it takes to make a real difference.
-          </p>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
+              You get a clean overview of everything you teach with, ready to
+              share the moment you write up a lesson note. A few minutes
+              after each session is all it takes to make a real difference.
+            </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-3.5">
-            <Link href="/account/signup" className={`${button} ${buttonLarge}`}>
-              Create account
-            </Link>
-            <Link href="/login" className={`${buttonGhost} ${buttonLarge}`}>
-              Student
-            </Link>
+            <div className="mt-10 flex flex-wrap items-center gap-3.5">
+              <Link href="/account/signup" className={`${button} ${buttonLarge}`}>
+                Create account
+              </Link>
+              <Link href="/login" className={`${buttonGhost} ${buttonLarge}`}>
+                Student
+              </Link>
+            </div>
+          </div>
+
+          <div className="flex justify-center lg:justify-end">
+            <TutorMockup />
           </div>
         </div>
       </div>
@@ -235,6 +301,34 @@ function Steps() {
   );
 }
 
+function Faq() {
+  return (
+    <section className="border-y border-line/70 bg-surface-muted/40 py-24 sm:py-32">
+      <div className={containerNarrow}>
+        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-600">
+          Questions
+        </p>
+        <h2 className="mt-3 text-4xl font-semibold tracking-tight text-balance">
+          Before you ask
+        </h2>
+
+        <dl className="mt-12 space-y-9">
+          {FAQS.map((faq) => (
+            <div key={faq.q}>
+              <dt className="text-lg font-semibold tracking-tight text-balance">
+                {faq.q}
+              </dt>
+              <dd className="mt-2 text-[15px] leading-relaxed text-muted text-pretty">
+                {faq.a}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
 function ClosingCta() {
   return (
     <section className={`${containerNarrow} py-24 sm:py-32`}>
@@ -263,11 +357,18 @@ function ClosingCta() {
 export default function TutoringPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        // Static, hand-written content only — never user input — so this is
+        // safe without further escaping.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <SiteHeader />
       <main className="flex-1">
         <Hero />
         <Features />
         <Steps />
+        <Faq />
         <ClosingCta />
       </main>
       <SiteFooter />

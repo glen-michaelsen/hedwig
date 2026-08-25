@@ -9,11 +9,71 @@ import {
   container,
   containerNarrow,
 } from "../_components/ui";
+import { PressKitMockup } from "./_components/press-kit-mockup";
+
+const PAGE_DESCRIPTION =
+  "Create an electronic press kit (EPK) for every release — singles, EPs and albums — with cover art, photos, masters and the one-sheet a promoter or blog actually asks for, all in one place.";
 
 export const metadata: Metadata = {
-  title: "Press Kit — Trenodo",
-  description:
-    "Cover art, press photos, masters and the paperwork — organised by release, so 'send me your press kit' doesn't mean digging through old folders and old emails.",
+  title: "Electronic Press Kit (EPK) for Musicians — Trenodo",
+  description: PAGE_DESCRIPTION,
+  alternates: {
+    canonical: "/press-kit",
+  },
+  openGraph: {
+    title: "Electronic Press Kit (EPK) for Musicians",
+    description: PAGE_DESCRIPTION,
+    url: "/press-kit",
+    siteName: "Trenodo",
+    type: "website",
+  },
+};
+
+/**
+ * The one place both the visible FAQ and its schema.org markup are written,
+ * so they can't drift apart — Google's FAQ rich result (and any AI answer
+ * engine reading the JSON-LD) has to match what a visitor actually sees.
+ */
+const FAQS = [
+  {
+    q: "What is an electronic press kit (EPK)?",
+    a: "A one-stop page with everything a promoter, blog or radio station needs to cover your release — cover art, photos, the masters, and the bio and one-sheet that explain what it is. Trenodo builds one for every release as you add files to it.",
+  },
+  {
+    q: "Do singles, EPs and albums all get their own press kit?",
+    a: "Yes — each release gets its own kit, organised separately. A blog covering your new single doesn't wade through photos from an album you put out two years ago.",
+  },
+  {
+    q: "What should be in a press kit for a music release?",
+    a: "At minimum: cover art at full resolution, a handful of press photos, the masters (not demos), and a short bio or one-sheet. Trenodo keeps all four together by release, at the sizes they were uploaded at.",
+  },
+  {
+    q: "Can I control who sees it?",
+    a: "Yes — a press kit is only public once you publish it, and you can flip it back to private any time without losing anything on it.",
+  },
+] as const;
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebApplication",
+      name: "Trenodo Press Kit",
+      url: "https://trenodo.com/press-kit",
+      description: PAGE_DESCRIPTION,
+      applicationCategory: "BusinessApplication",
+      operatingSystem: "Any (web-based)",
+      audience: { "@type": "Audience", audienceType: "Musicians" },
+    },
+    {
+      "@type": "FAQPage",
+      mainEntity: FAQS.map((faq) => ({
+        "@type": "Question",
+        name: faq.q,
+        acceptedAnswer: { "@type": "Answer", text: faq.a },
+      })),
+    },
+  ],
 };
 
 /* --------------------------------- icons --------------------------------- */
@@ -90,32 +150,38 @@ function Hero() {
     <section className="relative isolate overflow-hidden pt-20 pb-20 sm:pt-28 sm:pb-24">
       <div className="brand-wash" />
       <div className={container}>
-        <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium text-muted shadow-soft">
-            <span aria-hidden>📸</span>
-            Press Kit
-          </span>
+        <div className="grid items-center gap-16 lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-1.5 text-xs font-medium text-muted shadow-soft">
+              <span aria-hidden>📸</span>
+              Electronic Press Kit
+            </span>
 
-          <h1 className="mt-7 text-4xl font-semibold leading-[1.1] tracking-tight text-balance sm:text-5xl">
-            Stop hunting through old folders when someone asks for your
-            press kit.
-          </h1>
+            <h1 className="mt-7 text-4xl font-semibold leading-[1.1] tracking-tight text-balance sm:text-5xl">
+              Stop hunting through old folders when someone asks for your
+              press kit.
+            </h1>
 
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
-            Every release drags along a cover, a stack of photos, the
-            masters, a bio, a lyric sheet — usually scattered across drives
-            and old email threads. This keeps all of it in one place,
-            organised by release, so &ldquo;send me your press kit&rdquo;
-            doesn&rsquo;t turn into an afternoon of digging.
-          </p>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
+              Every release drags along a cover, a stack of photos, the
+              masters, a bio, a lyric sheet — usually scattered across
+              drives and old email threads. This keeps all of it in one
+              place, organised by release, so &ldquo;send me your press
+              kit&rdquo; doesn&rsquo;t turn into an afternoon of digging.
+            </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-3.5">
-            <Link href="/account/signup" className={`${button} ${buttonLarge}`}>
-              Create account
-            </Link>
-            <Link href="/" className={`${buttonGhost} ${buttonLarge}`}>
-              Back to Trenodo
-            </Link>
+            <div className="mt-10 flex flex-wrap items-center gap-3.5">
+              <Link href="/account/signup" className={`${button} ${buttonLarge}`}>
+                Create account
+              </Link>
+              <Link href="/" className={`${buttonGhost} ${buttonLarge}`}>
+                Back to Trenodo
+              </Link>
+            </div>
+          </div>
+
+          <div className="flex justify-center lg:justify-end">
+            <PressKitMockup />
           </div>
         </div>
       </div>
@@ -239,6 +305,34 @@ function Steps() {
   );
 }
 
+function Faq() {
+  return (
+    <section className="border-y border-line/70 bg-surface-muted/40 py-24 sm:py-32">
+      <div className={containerNarrow}>
+        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-600">
+          Questions
+        </p>
+        <h2 className="mt-3 text-4xl font-semibold tracking-tight text-balance">
+          Before you ask
+        </h2>
+
+        <dl className="mt-12 space-y-9">
+          {FAQS.map((faq) => (
+            <div key={faq.q}>
+              <dt className="text-lg font-semibold tracking-tight text-balance">
+                {faq.q}
+              </dt>
+              <dd className="mt-2 text-[15px] leading-relaxed text-muted text-pretty">
+                {faq.a}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </section>
+  );
+}
+
 function ClosingCta() {
   return (
     <section className={`${containerNarrow} py-24 sm:py-32`}>
@@ -267,11 +361,18 @@ function ClosingCta() {
 export default function PressKitPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        // Static, hand-written content only — never user input — so this is
+        // safe without further escaping.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <SiteHeader />
       <main className="flex-1">
         <Hero />
         <Features />
         <Steps />
+        <Faq />
         <ClosingCta />
       </main>
       <SiteFooter />
