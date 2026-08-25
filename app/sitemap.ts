@@ -25,10 +25,11 @@ const PAGES: {
   { path: "/account/login", priority: 0.3, changeFrequency: "yearly" },
 ];
 
-// Rebuilds against the live Spotlight list at most once an hour — new
-// articles show up on a normal schedule without making this a fully
-// dynamic route.
-export const revalidate = 3600;
+// Reads the database, and Cloudflare's build step has no D1 access (only
+// requests do) — a prerendered/ISR copy would either fail the build outright
+// or freeze on whatever was published at build time. Same reasoning as the
+// other D1-backed pages in this app.
+export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
