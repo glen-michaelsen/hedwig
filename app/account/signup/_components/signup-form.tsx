@@ -66,6 +66,7 @@ export function SignupForm({
             id="email"
             name="email"
             type="email"
+            autoComplete="username"
             defaultValue={email}
             readOnly
           />
