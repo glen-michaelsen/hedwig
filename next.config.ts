@@ -22,16 +22,19 @@ const nextConfig: NextConfig = {
       // Secure, so the browser never attaches it to an insecure request —
       // making every signed-in page look logged out until a fresh login.
       // `x-forwarded-proto` reflects what the client actually connected
-      // with, set by Cloudflare on every request.
+      // with, set by Cloudflare on every request. `has[].value` is matched
+      // as a regex, not an exact string — plain "http" also matches
+      // "https" as a substring, which redirect-loops every request. Anchor
+      // it.
       {
         source: "/",
-        has: [{ type: "header", key: "x-forwarded-proto", value: "http" }],
+        has: [{ type: "header", key: "x-forwarded-proto", value: "^http$" }],
         destination: "https://trenodo.com/",
         permanent: true,
       },
       {
         source: "/:path+",
-        has: [{ type: "header", key: "x-forwarded-proto", value: "http" }],
+        has: [{ type: "header", key: "x-forwarded-proto", value: "^http$" }],
         destination: "https://trenodo.com/:path+",
         permanent: true,
       },
