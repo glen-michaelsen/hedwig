@@ -15,6 +15,26 @@ const nextConfig: NextConfig = {
    */
   async redirects() {
     return [
+      // Cloudflare doesn't force this at the edge, so a stale bookmark, a
+      // home-screen icon added before HTTPS was set up, or a typed address
+      // reaches the Worker over plain http and gets served directly rather
+      // than upgraded. That silently drops the session cookie — it's
+      // Secure, so the browser never attaches it to an insecure request —
+      // making every signed-in page look logged out until a fresh login.
+      // `x-forwarded-proto` reflects what the client actually connected
+      // with, set by Cloudflare on every request.
+      {
+        source: "/",
+        has: [{ type: "header", key: "x-forwarded-proto", value: "http" }],
+        destination: "https://trenodo.com/",
+        permanent: true,
+      },
+      {
+        source: "/:path+",
+        has: [{ type: "header", key: "x-forwarded-proto", value: "http" }],
+        destination: "https://trenodo.com/:path+",
+        permanent: true,
+      },
       // One canonical origin. Better Auth's CSRF check is tied to APP_URL,
       // so signing in on www would fail rather than just look untidy.
       // The root needs its own rule — an empty `:path*` is not interpolated
