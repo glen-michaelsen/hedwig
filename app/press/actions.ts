@@ -8,6 +8,16 @@ import * as dal from "@/lib/dal/press";
 import * as stats from "@/lib/dal/kit-stats";
 import { fetchLinkMeta } from "@/lib/links";
 import { deletePressObject } from "@/lib/press/images";
+import {
+  GENRES,
+  GENRE_MAX,
+  MOODS,
+  MOOD_MAX,
+  LANGUAGES,
+  LABEL_STATUSES,
+  COUNTRIES,
+  type TaxonomyOption,
+} from "@/lib/press/taxonomy";
 
 export type ReleaseFormState = { error?: string };
 
@@ -16,6 +26,34 @@ const KINDS = ["single", "ep", "album"] as const;
 function nullable(value: FormDataEntryValue | null): string | null {
   const text = String(value ?? "").trim();
   return text.length > 0 ? text : null;
+}
+
+/**
+ * Discovery tags are all optional metadata — an invalid or tampered value
+ * (someone editing the form's DOM, an old value from a shrunk vocabulary)
+ * just gets dropped rather than blocking the save.
+ */
+function parseMultiTag(
+  formData: FormData,
+  field: string,
+  options: readonly TaxonomyOption[],
+  max: number,
+): string | null {
+  const values = formData
+    .getAll(field)
+    .map(String)
+    .filter((v) => options.some((o) => o.value === v));
+  const unique = [...new Set(values)].slice(0, max);
+  return unique.length > 0 ? JSON.stringify(unique) : null;
+}
+
+function parseSingle(
+  formData: FormData,
+  field: string,
+  options: readonly TaxonomyOption[],
+): string | null {
+  const value = nullable(formData.get(field));
+  return value && options.some((o) => o.value === value) ? value : null;
 }
 
 /**
@@ -62,6 +100,12 @@ function readRelease(
       url,
       releaseDate,
       notes: nullable(formData.get("notes")),
+      genre: parseMultiTag(formData, "genre", GENRES, GENRE_MAX),
+      mood: parseMultiTag(formData, "mood", MOODS, MOOD_MAX),
+      country: parseSingle(formData, "country", COUNTRIES),
+      city: nullable(formData.get("city")),
+      language: parseSingle(formData, "language", LANGUAGES),
+      labelStatus: parseSingle(formData, "labelStatus", LABEL_STATUSES),
     },
   };
 }

@@ -69,6 +69,14 @@ export type ReleaseInput = {
   url: string | null;
   releaseDate: string | null;
   notes: string | null;
+  /** JSON-encoded array of slugs — see lib/press/taxonomy.ts. */
+  genre: string | null;
+  /** JSON-encoded array of slugs — see lib/press/taxonomy.ts. */
+  mood: string | null;
+  country: string | null;
+  city: string | null;
+  language: string | null;
+  labelStatus: string | null;
 };
 
 /**
@@ -235,12 +243,39 @@ export async function getRelease(accountId: string, releaseId: string) {
       published: pressRelease.published,
       artistId: pressRelease.artistId,
       artistName: artist.name,
+      genre: pressRelease.genre,
+      mood: pressRelease.mood,
+      country: pressRelease.country,
+      city: pressRelease.city,
+      language: pressRelease.language,
+      labelStatus: pressRelease.labelStatus,
     })
     .from(pressRelease)
     .innerJoin(artist, eq(artist.id, pressRelease.artistId))
     .where(
       and(eq(pressRelease.id, releaseId), eq(pressRelease.accountId, accountId)),
     )
+    .limit(1);
+
+  return row ?? null;
+}
+
+/**
+ * Country/city/label status rarely change release to release for the same
+ * artist, so a new release starts prefilled from whatever was entered last
+ * — genre and mood stay empty since those genuinely vary per release.
+ */
+export async function getLatestReleaseTagsForArtist(artistId: string) {
+  const db = await getDb();
+  const [row] = await db
+    .select({
+      country: pressRelease.country,
+      city: pressRelease.city,
+      labelStatus: pressRelease.labelStatus,
+    })
+    .from(pressRelease)
+    .where(eq(pressRelease.artistId, artistId))
+    .orderBy(desc(pressRelease.createdAt))
     .limit(1);
 
   return row ?? null;

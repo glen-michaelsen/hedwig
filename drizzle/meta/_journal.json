@@ -127,6 +127,13 @@
       "when": 1787606093292,
       "tag": "0017_silky_lady_ursula",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "6",
+      "when": 1788004881555,
+      "tag": "0018_fancy_human_robot",
+      "breakpoints": true
     }
   ]
 }

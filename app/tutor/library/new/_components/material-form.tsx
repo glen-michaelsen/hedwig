@@ -143,7 +143,7 @@ export function MaterialForm({ allTags }: { allTags: string[] }) {
           <input className={input} id="description" name="description" />
         </div>
 
-        <TagPicker allTags={allTags} />
+        <TagPicker options={allTags.map((t) => ({ value: t, label: t }))} />
 
         {state.error && <ErrorText>{state.error}</ErrorText>}
 

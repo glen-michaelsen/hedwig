@@ -111,7 +111,10 @@ export function EditMaterialForm({
           </div>
         )}
 
-        <TagPicker allTags={allTags} defaultSelected={selectedTags} />
+        <TagPicker
+          options={allTags.map((t) => ({ value: t, label: t }))}
+          defaultSelected={selectedTags}
+        />
 
         {state.error && <ErrorText>{state.error}</ErrorText>}
 

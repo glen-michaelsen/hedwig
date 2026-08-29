@@ -472,6 +472,18 @@ export const pressRelease = sqliteTable(
      *  timezones have no business shifting it by a day. */
     releaseDate: text("release_date"),
     notes: text("notes"),
+    /**
+     * Self-tagged by the artist, for future SEO/discovery hub pages. Genre
+     * and mood hold a JSON array of slugs (a small, curated vocabulary —
+     * see lib/press/taxonomy.ts — not the free-tag pattern the Tutor
+     * library uses, so a junction table would be more than this needs).
+     */
+    genre: text("genre"),
+    country: text("country"),
+    language: text("language"),
+    city: text("city"),
+    labelStatus: text("label_status"),
+    mood: text("mood"),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
       .default(sql`(unixepoch())`),

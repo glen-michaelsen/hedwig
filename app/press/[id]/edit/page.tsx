@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { requireAccount } from "@/lib/auth";
 import { getRelease, listArtists } from "@/lib/dal/press";
 import { Card, PageHeader, buttonQuiet } from "@/app/_components/ui";
+import { parseTagList } from "@/lib/press/taxonomy";
 import { updateReleaseAction } from "../../actions";
 import { ReleaseForm } from "../../_components/release-form";
 import { DeleteReleaseButton } from "./_components/delete-release-button";
@@ -55,6 +56,12 @@ export default async function EditReleasePage({
             url: release.url,
             releaseDate: release.releaseDate,
             notes: release.notes,
+            genre: parseTagList(release.genre),
+            mood: parseTagList(release.mood),
+            country: release.country,
+            city: release.city,
+            language: release.language,
+            labelStatus: release.labelStatus,
           }}
           submitLabel="Save changes"
         />
