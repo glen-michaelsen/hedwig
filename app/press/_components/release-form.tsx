@@ -166,6 +166,39 @@ export function ReleaseForm({
       </div>
 
       <div>
+        <label className={label} htmlFor="url">
+          Link{" "}
+          <span className="font-normal normal-case tracking-normal text-faint">
+            (optional)
+          </span>
+        </label>
+        <input
+          className={input}
+          id="url"
+          name="url"
+          type="url"
+          placeholder="https://lnk.to/…"
+          defaultValue={defaults?.url ?? ""}
+        />
+      </div>
+
+      <div>
+        <label className={label} htmlFor="notes">
+          Notes{" "}
+          <span className="font-normal normal-case tracking-normal text-faint">
+            (optional)
+          </span>
+        </label>
+        <textarea
+          className={`${input} min-h-24 resize-y`}
+          id="notes"
+          name="notes"
+          placeholder="Anything press should know"
+          defaultValue={defaults?.notes ?? ""}
+        />
+      </div>
+
+      <div className="border-y border-line py-6">
         <SectionTitle hint="Self-tagged, so releases can be found by genre, mood and market later.">
           Help people find this
         </SectionTitle>
@@ -287,39 +320,6 @@ export function ReleaseForm({
             </div>
           </div>
         </div>
-      </div>
-
-      <div>
-        <label className={label} htmlFor="url">
-          Link{" "}
-          <span className="font-normal normal-case tracking-normal text-faint">
-            (optional)
-          </span>
-        </label>
-        <input
-          className={input}
-          id="url"
-          name="url"
-          type="url"
-          placeholder="https://lnk.to/…"
-          defaultValue={defaults?.url ?? ""}
-        />
-      </div>
-
-      <div>
-        <label className={label} htmlFor="notes">
-          Notes{" "}
-          <span className="font-normal normal-case tracking-normal text-faint">
-            (optional)
-          </span>
-        </label>
-        <textarea
-          className={`${input} min-h-24 resize-y`}
-          id="notes"
-          name="notes"
-          placeholder="Anything press should know"
-          defaultValue={defaults?.notes ?? ""}
-        />
       </div>
 
       {state.error && <ErrorText>{state.error}</ErrorText>}
