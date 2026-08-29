@@ -205,6 +205,7 @@ export function ReleaseForm({
 
         <div className="space-y-5">
           <TagPicker
+            id="genre"
             name="genre"
             heading="Genre"
             options={[...GENRES]}
@@ -214,6 +215,7 @@ export function ReleaseForm({
           />
 
           <TagPicker
+            id="mood"
             name="mood"
             heading="Mood / vibe"
             options={[...MOODS]}

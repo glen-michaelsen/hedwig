@@ -3,17 +3,10 @@ import { notFound } from "next/navigation";
 import { requireAccount } from "@/lib/auth";
 import { daysAgoIso } from "@/lib/clock";
 import { getEnv } from "@/lib/db";
-import { CopyLink } from "../_components/copy-link";
-import { toggleReleasePublishedAction } from "../actions";
 import { getRelease, listAssets, type ReleaseAssetRow } from "@/lib/dal/press";
 import { ASSET_RULES, formatBytes, type AssetKind } from "@/lib/press/assets";
-import {
-  Card,
-  PageHeader,
-  actionPill,
-  button,
-  buttonGhost,
-} from "@/app/_components/ui";
+import { parseTagList } from "@/lib/press/taxonomy";
+import { Card, PageHeader, actionPill, buttonGhost } from "@/app/_components/ui";
 import { TrackPlayer } from "@/app/_components/track-player";
 import {
   getKitDaily,
@@ -23,10 +16,11 @@ import {
 } from "@/lib/dal/kit-stats";
 import { CoverageSection } from "./_components/coverage";
 import { KitStatsPanel } from "./_components/kit-stats-panel";
+import { PublishStatusMenu } from "./_components/publish-status-menu";
+import { SpotlightChecklist } from "./_components/spotlight-checklist";
 import { displayName } from "@/lib/press/naming";
 import { DeleteAssetButton } from "./_components/delete-asset-button";
 import { RenameAssetButton } from "./_components/rename-asset-button";
-import { SubmitButton } from "@/app/_components/submit-button";
 import { CreditEditor, PhotoCard } from "./_components/photo-card";
 import { Uploader } from "./_components/uploader";
 
@@ -45,18 +39,20 @@ function formatDate(value: string | null) {
 const deletePill = `${actionPill} hover:border-rose-500/40 hover:bg-rose-500/10 hover:text-rose-700`;
 
 function Section({
+  id,
   title,
   releaseId,
   kind,
   children,
 }: {
+  id?: string;
   title: string;
   releaseId: string;
   kind: AssetKind;
   children: React.ReactNode;
 }) {
   return (
-    <section className="mt-10">
+    <section id={id} className="mt-10 scroll-mt-6">
       <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
         {title}
       </h2>
@@ -194,58 +190,26 @@ export default async function ReleasePage({
             <Link className={buttonGhost} href={`/press/${id}/edit`}>
               Edit details
             </Link>
-            <form action={toggleReleasePublishedAction}>
-              <input type="hidden" name="releaseId" value={id} />
-              <input
-                type="hidden"
-                name="published"
-                value={release.published ? "0" : "1"}
-              />
-              <SubmitButton
-                className={release.published ? buttonGhost : button}
-                pendingLabel={release.published ? "Unpublishing…" : "Publishing…"}
-              >
-                {release.published ? "Unpublish" : "Publish"}
-              </SubmitButton>
-            </form>
+            <PublishStatusMenu
+              releaseId={id}
+              published={release.published}
+              shareUrl={shareUrl ?? ""}
+            />
           </div>
         }
       />
 
-      <Card className={release.published ? "" : "border-dashed"}>
-        {release.published && shareUrl ? (
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="min-w-0">
-              <p className="text-xs font-semibold uppercase tracking-[0.1em] text-emerald-700 dark:text-emerald-300">
-                Public
-              </p>
-              <p className="mt-1.5 truncate text-sm text-muted">{shareUrl}</p>
-            </div>
-            <div className="flex shrink-0 items-center gap-2">
-              <CopyLink url={shareUrl} />
-              <a
-                href={`/kit/${release.slug}`}
-                target="_blank"
-                rel="noreferrer"
-                className={actionPill}
-              >
-                Open
-              </a>
-            </div>
-          </div>
-        ) : (
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="min-w-0">
-              <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
-                Not shared
-              </p>
-              <p className="mt-1.5 text-sm text-muted">
-                Publish to get a public link.
-              </p>
-            </div>
-          </div>
-        )}
-      </Card>
+      <SpotlightChecklist
+        releaseId={id}
+        hasCover={Boolean(cover)}
+        photoCount={photos.length}
+        url={release.url}
+        genre={parseTagList(release.genre)}
+        mood={parseTagList(release.mood)}
+        country={release.country}
+        language={release.language}
+        labelStatus={release.labelStatus}
+      />
 
       {release.notes && (
         <Card className="mt-6">
@@ -280,7 +244,7 @@ export default async function ReleasePage({
         </Card>
       </section>
 
-      <Section title={ASSET_RULES.cover.plural} releaseId={id} kind="cover">
+      <Section id="cover" title={ASSET_RULES.cover.plural} releaseId={id} kind="cover">
         {cover ? (
           <div className="flex flex-wrap items-center gap-5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -325,7 +289,7 @@ export default async function ReleasePage({
         )}
       </Section>
 
-      <Section title={ASSET_RULES.photo.plural} releaseId={id} kind="photo">
+      <Section id="photos" title={ASSET_RULES.photo.plural} releaseId={id} kind="photo">
         {photos.length === 0 ? (
           <p className="text-sm text-muted">No press photos yet.</p>
         ) : (

@@ -16,6 +16,7 @@ export type TagOption = { value: string; label: string };
  * reads them with formData.getAll(name).
  */
 export function TagPicker({
+  id,
   name = "tags",
   heading = "Tags",
   options,
@@ -23,6 +24,7 @@ export function TagPicker({
   allowCustom = true,
   max,
 }: {
+  id?: string;
   name?: string;
   heading?: string;
   options: TagOption[];
@@ -78,7 +80,7 @@ export function TagPicker({
   }
 
   return (
-    <div>
+    <div id={id}>
       <p className={label}>
         {heading}
         {max !== undefined && (
