@@ -25,7 +25,11 @@ export function BrowserFrame({
   return (
     <div
       className="rise-in overflow-hidden rounded-2xl border border-black/10 bg-neutral-900 shadow-float"
-      style={{ width: frameWidth }}
+      // `maxWidth: 100%` is load-bearing: a fixed `width` alone is wider
+      // than a phone viewport for every desktop-style mockup on this site,
+      // which drags the whole page wider than the screen rather than just
+      // this frame — the classic body-scrolls-sideways bug.
+      style={{ width: frameWidth, maxWidth: "100%" }}
     >
       <div className="flex items-center gap-3 px-4 py-3">
         <div className="flex shrink-0 gap-1.5">

@@ -34,7 +34,9 @@ export function PhoneFrame({
   return (
     <div
       className="rise-in relative mx-auto rounded-[2.75rem] bg-neutral-900 p-2.5 shadow-float"
-      style={{ width: frameWidth }}
+      // See BrowserFrame — a fixed width with no ceiling is wider than the
+      // viewport on some phones once combined with the page's own padding.
+      style={{ width: frameWidth, maxWidth: "100%" }}
     >
       <div
         className="relative overflow-hidden rounded-[2.25rem]"
