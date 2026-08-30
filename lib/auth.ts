@@ -72,9 +72,39 @@ export type Account = {
   studioName?: string | null;
 };
 
+/**
+ * Nothing in the D1/session path below has a timeout of its own — a stalled
+ * binding call (rare, but seen in production) would otherwise hang until
+ * the platform force-kills the request, which reads as "the app is stuck"
+ * on every page, since this runs on every signed-in render. Failing fast
+ * here surfaces a normal error page instead — recoverable with a reload,
+ * not an indefinite spinner.
+ */
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(
+      () => reject(new Error(`Session check timed out after ${ms}ms`)),
+      ms,
+    );
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(timer);
+        reject(error);
+      },
+    );
+  });
+}
+
 export async function getAccount(): Promise<Account | null> {
   const auth = await getAuth();
-  const result = await auth.api.getSession({ headers: await headers() });
+  const result = await withTimeout(
+    auth.api.getSession({ headers: await headers() }),
+    8000,
+  );
   if (!result?.user) return null;
   const { id, name, email } = result.user;
   return {
