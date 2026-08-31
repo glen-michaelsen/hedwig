@@ -2,7 +2,15 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/auth";
 import { listWaitlist } from "@/lib/dal/waitlist";
 import { WAITLIST_FEATURES } from "@/lib/waitlist";
-import { Empty, PageHeader, Panel, PanelList, focusable } from "@/app/_components/ui";
+import {
+  Empty,
+  PageHeader,
+  Panel,
+  PanelList,
+  actionPill,
+  focusable,
+} from "@/app/_components/ui";
+import { InviteMusicianButton } from "../_components/invite-musician-button";
 
 // Same reasoning as the Musicians page itself — nothing revalidates this
 // path when someone joins the waitlist, so it has to read fresh every visit.
@@ -74,9 +82,16 @@ export default async function WaitlistPage() {
                       )}
                     </p>
                   </div>
-                  <p className="shrink-0 text-xs text-faint">
-                    Joined {formatDate(row.createdAt)}
-                  </p>
+                  <div className="flex shrink-0 items-start gap-3">
+                    <p className="text-xs text-faint">
+                      Joined {formatDate(row.createdAt)}
+                    </p>
+                    <InviteMusicianButton
+                      defaultEmail={row.email}
+                      triggerLabel="Invite"
+                      triggerClassName={actionPill}
+                    />
+                  </div>
                 </div>
 
                 <div className="mt-3 flex flex-wrap gap-2">

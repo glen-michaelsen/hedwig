@@ -19,8 +19,20 @@ import {
  * nothing to fall back on. The form and the "here's your invite" result
  * share one modal: closing either one resets it, so reopening always
  * starts from a blank email field.
+ *
+ * `defaultEmail` is what lets a waitlist row invite straight to that
+ * person without retyping their address — everything else about the flow
+ * is identical either way.
  */
-export function InviteMusicianButton() {
+export function InviteMusicianButton({
+  defaultEmail,
+  triggerLabel = "Invite a musician",
+  triggerClassName = button,
+}: {
+  defaultEmail?: string;
+  triggerLabel?: string;
+  triggerClassName?: string;
+} = {}) {
   const [open, setOpen] = useState(false);
   const [state, action, pending] = useActionState<InviteFormState, FormData>(
     createInviteAction,
@@ -33,8 +45,12 @@ export function InviteMusicianButton() {
 
   return (
     <>
-      <button type="button" className={button} onClick={() => setOpen(true)}>
-        Invite a musician
+      <button
+        type="button"
+        className={triggerClassName}
+        onClick={() => setOpen(true)}
+      >
+        {triggerLabel}
       </button>
 
       <Modal open={open} onClose={close} title="Invite a musician">
@@ -77,6 +93,7 @@ export function InviteMusicianButton() {
                   name="email"
                   type="email"
                   autoComplete="off"
+                  defaultValue={defaultEmail}
                   autoFocus
                   required
                 />
