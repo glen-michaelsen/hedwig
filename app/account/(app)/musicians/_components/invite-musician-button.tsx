@@ -13,10 +13,12 @@ import {
 } from "@/app/_components/ui";
 
 /**
- * There's no transactional email yet (see lib/auth.ts), so this can't send
- * the invite itself — it hands back a link to copy and send by hand. The
- * form and the "here's your link" result share one modal: closing either
- * one resets it, so reopening always starts from a blank email field.
+ * The invite email is sent server-side the moment the invite is created
+ * (see actions.ts) — this just reports what happened and keeps the link
+ * around to copy, since a failed send shouldn't leave the admin with
+ * nothing to fall back on. The form and the "here's your invite" result
+ * share one modal: closing either one resets it, so reopening always
+ * starts from a blank email field.
  */
 export function InviteMusicianButton() {
   const [open, setOpen] = useState(false);
@@ -40,9 +42,21 @@ export function InviteMusicianButton() {
           {state.link ? (
             <div className="space-y-5">
               <p className="text-sm leading-relaxed text-muted">
-                Invited <span className="font-medium text-foreground">{state.email}</span>.
-                Send them this link — it signs them straight into a signup
-                form addressed to that email.
+                {state.emailSent ? (
+                  <>
+                    Emailed{" "}
+                    <span className="font-medium text-foreground">{state.email}</span>{" "}
+                    their invite. Signs them straight into a signup form
+                    addressed to that email.
+                  </>
+                ) : (
+                  <>
+                    Invited{" "}
+                    <span className="font-medium text-foreground">{state.email}</span>,
+                    but the email didn&rsquo;t go out — send them this link
+                    yourself.
+                  </>
+                )}
               </p>
               <div className="flex items-center gap-2 rounded-2xl border border-line bg-surface-muted px-4 py-3">
                 <span className="min-w-0 flex-1 truncate text-sm">

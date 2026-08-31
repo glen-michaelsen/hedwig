@@ -4,12 +4,14 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { requireAdmin } from "@/lib/auth";
 import { getEnv } from "@/lib/db";
+import { sendInviteEmail } from "@/lib/email";
 import { createInvite, revokeInvite } from "@/lib/dal/musicians";
 
 export type InviteFormState = {
   error?: string;
   link?: string;
   email?: string;
+  emailSent?: boolean;
 };
 
 const emailSchema = z.object({ email: z.email("Enter a valid email address").trim() });
@@ -29,10 +31,14 @@ export async function createInviteAction(
   revalidatePath("/account/musicians");
 
   const { APP_URL } = await getEnv();
-  return {
-    link: `${APP_URL}/account/signup?invite=${id}`,
-    email: parsed.data.email,
-  };
+  const link = `${APP_URL}/account/signup?invite=${id}`;
+
+  // The invite exists and its link already works the moment this returns —
+  // a failed send just falls back to the copy-link in the modal, it never
+  // blocks the invite itself.
+  const emailSent = await sendInviteEmail(parsed.data.email, link);
+
+  return { link, email: parsed.data.email, emailSent };
 }
 
 export async function revokeInviteAction(formData: FormData) {

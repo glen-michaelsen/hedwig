@@ -58,6 +58,7 @@
 	// Secrets (set with `npx wrangler secret put <NAME>`, and in .dev.vars locally):
 	//   BETTER_AUTH_SECRET     — signs tutor sessions
 	//   STUDENT_SESSION_SECRET — signs student portal cookies
+	//   RESEND_API_KEY         — sends transactional email (invites)
 	,
 	/**
 	 * Preview — deployed from the `dev` branch as a separate Worker

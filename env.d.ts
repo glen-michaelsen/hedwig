@@ -13,6 +13,8 @@ declare global {
     BETTER_AUTH_SECRET: string;
     /** Secret. Signs the student portal cookie. */
     STUDENT_SESSION_SECRET: string;
+    /** Secret. Sends transactional email (invites) via Resend. */
+    RESEND_API_KEY: string;
   }
 }
 
