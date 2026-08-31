@@ -1,6 +1,6 @@
 import "server-only";
-import { and, desc, eq, gt } from "drizzle-orm";
-import { waitlist } from "@/db/schema";
+import { and, desc, eq, gt, isNull, sql } from "drizzle-orm";
+import { user, waitlist } from "@/db/schema";
 import { hashIp, newId } from "@/lib/crypto";
 import { getDb } from "@/lib/db";
 import { WAITLIST_FEATURES, type WaitlistFeature } from "@/lib/waitlist";
@@ -69,11 +69,27 @@ function parseFeatures(raw: string): WaitlistFeature[] {
   }
 }
 
+/**
+ * Once someone with this email actually has an account — invited or
+ * otherwise — they're not waiting anymore. The join is the only place
+ * that has to know that; the summary widget and the admin list both
+ * read through this, so both drop them automatically.
+ */
 export async function listWaitlist() {
   const db = await getDb();
   const rows = await db
-    .select()
+    .select({
+      id: waitlist.id,
+      name: waitlist.name,
+      email: waitlist.email,
+      phone: waitlist.phone,
+      features: waitlist.features,
+      ipHash: waitlist.ipHash,
+      createdAt: waitlist.createdAt,
+    })
     .from(waitlist)
+    .leftJoin(user, sql`lower(${user.email}) = lower(${waitlist.email})`)
+    .where(isNull(user.id))
     .orderBy(desc(waitlist.createdAt))
     .limit(500);
 
