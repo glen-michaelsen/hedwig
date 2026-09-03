@@ -9,8 +9,11 @@ import {
 import { SubmitButton } from "@/app/_components/submit-button";
 import { requireAdmin } from "@/lib/auth";
 import { getSpotlight, listPhotosForRelease } from "@/lib/dal/spotlight";
+import { buildSpotlightCaption } from "@/lib/press/spotlight-caption";
+import { MAX_RATING } from "@/lib/spotlight/slug";
 import { togglePublishedAction, updateSpotlightAction } from "../actions";
 import { SpotlightForm } from "../_components/spotlight-form";
+import { CopyCaptionButton } from "./_components/copy-caption-button";
 import { DeleteSpotlightButton } from "./_components/delete-spotlight-button";
 
 const KIND_LABELS = { single: "Single", ep: "EP", album: "Album" } as const;
@@ -34,6 +37,16 @@ export default async function EditSpotlightPage({
   if (!article) notFound();
 
   const photos = await listPhotosForRelease(article.releaseId);
+
+  const caption = buildSpotlightCaption({
+    artistName: article.artistName,
+    releaseTitle: article.releaseTitle,
+    releaseKind: article.releaseKind,
+    headline: article.headline,
+    rating: article.rating,
+    maxRating: MAX_RATING,
+    body: article.body,
+  });
 
   return (
     <>
@@ -59,6 +72,7 @@ export default async function EditSpotlightPage({
             >
               Instagram image
             </Link>
+            <CopyCaptionButton caption={caption} />
             <form action={togglePublishedAction}>
               <input type="hidden" name="spotlightId" value={article.id} />
               <input
