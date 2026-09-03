@@ -52,6 +52,13 @@ export default async function EditSpotlightPage({
             >
               {article.published ? "View live" : "Preview"}
             </Link>
+            <Link
+              className={buttonGhost}
+              href={`/account/spotlight/${article.id}/image`}
+              target="_blank"
+            >
+              Instagram image
+            </Link>
             <form action={togglePublishedAction}>
               <input type="hidden" name="spotlightId" value={article.id} />
               <input
