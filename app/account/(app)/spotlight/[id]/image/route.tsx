@@ -3,45 +3,23 @@ import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { getAnySpotlightImage, getSpotlight } from "@/lib/dal/spotlight";
 import { resolveOgImageDataUrl } from "@/lib/press/og-image";
+import {
+  buildSpotlightImageJsx,
+  SPOTLIGHT_IMAGE_HEIGHT,
+  SPOTLIGHT_IMAGE_WIDTH,
+} from "@/lib/press/spotlight-image";
 import { MAX_RATING } from "@/lib/spotlight/slug";
-
-const WIDTH = 1080;
-const HEIGHT = 1350;
-
-/** Same path HeartShape draws (app/_components/hearts.tsx) — Satori renders
- *  only the JSX handed straight to ImageResponse, not React components, so
- *  the shape is copied in rather than imported. */
-const HEART_PATH =
-  "M12 20.4s-7.6-4.6-7.6-9.7a4.3 4.3 0 0 1 7.6-2.8 4.3 4.3 0 0 1 7.6 2.8c0 5.1-7.6 9.7-7.6 9.7Z";
-
-/**
- * A CSS linear-gradient rendered flat instead of fading — Satori's gradient
- * support is unreliable enough in practice that it's not worth the risk
- * (confirmed: it didn't render at all on a real preview deploy). Stacked
- * flat-opacity bands, shortest-and-darkest on top of tallest-and-faintest,
- * approximate the same fade using nothing but solid backgrounds — which
- * Satori unquestionably supports, since the cover art's shadow and the
- * photo itself already rely on it.
- */
-const GRADIENT_BANDS = [
-  { heightPct: 60, opacity: 0.15 },
-  { heightPct: 45, opacity: 0.25 },
-  { heightPct: 30, opacity: 0.4 },
-  { heightPct: 18, opacity: 0.55 },
-  { heightPct: 8, opacity: 0.75 },
-];
-
-function headlineFontSize(headline: string) {
-  if (headline.length <= 40) return 64;
-  if (headline.length <= 70) return 52;
-  return 42;
-}
 
 /**
  * The Instagram-post share image for one article: header photo, gradient,
  * cover art, headline and rating. Regenerated on every request — this is a
  * low-traffic admin tool, not public, so the article changing under a
  * cached copy isn't a real concern worth the extra invalidation logic.
+ *
+ * The actual layout lives in lib/press/spotlight-image.tsx — this route
+ * only resolves the data (article + images) and hands it over, so a local
+ * preview (scripts/preview-spotlight-image.ts) exercises the exact same
+ * rendering code.
  */
 export async function GET(
   _request: Request,
@@ -62,7 +40,7 @@ export async function GET(
 
   const [headerUrl, coverUrl] = await Promise.all([
     header
-      ? resolveOgImageDataUrl(header.r2Key, header.contentType, WIDTH)
+      ? resolveOgImageDataUrl(header.r2Key, header.contentType, SPOTLIGHT_IMAGE_WIDTH)
       : null,
     cover
       ? resolveOgImageDataUrl(cover.r2Key, cover.contentType, 360)
@@ -70,121 +48,15 @@ export async function GET(
   ]);
 
   return new ImageResponse(
-    (
-      <div
-        style={{
-          width: WIDTH,
-          height: HEIGHT,
-          display: "flex",
-          position: "relative",
-          background: "#221c17",
-        }}
-      >
-        {headerUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={headerUrl}
-            alt=""
-            width={WIDTH}
-            height={HEIGHT}
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: WIDTH,
-              height: HEIGHT,
-              objectFit: "cover",
-              objectPosition: `${article.headerFocusX}% ${article.headerFocusY}%`,
-            }}
-          />
-        )}
-
-        {GRADIENT_BANDS.map((band) => (
-          <div
-            key={band.heightPct}
-            style={{
-              position: "absolute",
-              left: 0,
-              right: 0,
-              bottom: 0,
-              display: "flex",
-              height: (HEIGHT * band.heightPct) / 100,
-              background: `rgba(0,0,0,${band.opacity})`,
-            }}
-          />
-        ))}
-
-        <div
-          style={{
-            position: "absolute",
-            left: 64,
-            right: 64,
-            bottom: 72,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          {coverUrl && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={coverUrl}
-              alt=""
-              width={200}
-              height={200}
-              style={{
-                width: 200,
-                height: 200,
-                objectFit: "cover",
-                borderRadius: 24,
-                boxShadow: "0 24px 48px rgba(0,0,0,0.35)",
-                marginBottom: 32,
-              }}
-            />
-          )}
-
-          <div
-            style={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "center",
-              fontSize: headlineFontSize(article.headline),
-              fontWeight: 700,
-              lineHeight: 1.15,
-              color: "#ffffff",
-              textShadow: "0 2px 16px rgba(0,0,0,0.5)",
-              textAlign: "center",
-            }}
-          >
-            {article.headline}
-          </div>
-
-          <div style={{ display: "flex", gap: 8, marginTop: 24 }}>
-            {Array.from({ length: MAX_RATING }, (_, index) => (
-              <svg
-                key={index}
-                width={36}
-                height={36}
-                viewBox="0 0 24 24"
-                style={{
-                  color:
-                    index < article.rating
-                      ? "#ffffff"
-                      : "rgba(255,255,255,0.55)",
-                }}
-              >
-                <path
-                  d={HEART_PATH}
-                  fill={index < article.rating ? "currentColor" : "none"}
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                  strokeLinejoin="round"
-                />
-              </svg>
-            ))}
-          </div>
-        </div>
-      </div>
-    ),
-    { width: WIDTH, height: HEIGHT },
+    buildSpotlightImageJsx({
+      headerUrl,
+      coverUrl,
+      headline: article.headline,
+      rating: article.rating,
+      maxRating: MAX_RATING,
+      headerFocusX: article.headerFocusX,
+      headerFocusY: article.headerFocusY,
+    }),
+    { width: SPOTLIGHT_IMAGE_WIDTH, height: SPOTLIGHT_IMAGE_HEIGHT },
   );
 }
