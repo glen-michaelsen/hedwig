@@ -128,35 +128,53 @@ export async function lookupLinkTitleAction(
   return (await fetchLinkMeta(url.trim())).title;
 }
 
-export type NewMaterialState = { error?: string };
+export type CreatedMaterial = {
+  id: string;
+  title: string;
+  description: string | null;
+  kind: "pdf" | "link" | "video";
+};
 
-export async function createMaterialAction(
-  _prev: NewMaterialState,
+export type NewMaterialState = { error?: string; material?: CreatedMaterial };
+
+/**
+ * The actual creation logic, shared by the library's own "add material"
+ * page and the inline "create material" modal on a lesson note — they
+ * differ only in what happens after: one redirects to the library, the
+ * other hands the new material back to attach it without leaving the note.
+ */
+async function createMaterialCore(
+  tutorId: string,
   formData: FormData,
-): Promise<NewMaterialState> {
-  const tutor = await requireAccount();
+): Promise<
+  | { ok: true; material: CreatedMaterial }
+  | { ok: false; error: string }
+> {
   const kind = String(formData.get("kind"));
   const tags = formData.getAll("tags").map(String);
   const description = nullable(formData.get("description"));
   let title = String(formData.get("title") ?? "").trim();
   let materialId: string;
+  let finalKind: CreatedMaterial["kind"];
 
   if (kind === "pdf") {
     const file = formData.get("file");
     if (!(file instanceof File) || file.size === 0) {
-      return { error: "Choose a PDF to upload" };
+      return { ok: false, error: "Choose a PDF to upload" };
     }
     if (file.type && file.type !== "application/pdf") {
-      return { error: "Only PDFs can be uploaded" };
+      return { ok: false, error: "Only PDFs can be uploaded" };
     }
     if (file.size > MAX_PDF_BYTES) {
-      return { error: "That PDF is larger than 20 MB" };
+      return { ok: false, error: "That PDF is larger than 20 MB" };
     }
 
-    const { key, size } = await putPdf(tutor.id, file);
-    materialId = await dal.createMaterial(tutor.id, {
+    const { key, size } = await putPdf(tutorId, file);
+    title = title || file.name.replace(/\.pdf$/i, "");
+    finalKind = "pdf";
+    materialId = await dal.createMaterial(tutorId, {
       kind: "pdf",
-      title: title || file.name.replace(/\.pdf$/i, ""),
+      title,
       description,
       r2Key: key,
       sizeBytes: size,
@@ -164,7 +182,7 @@ export async function createMaterialAction(
   } else if (kind === "link" || kind === "video") {
     const url = String(formData.get("url") ?? "").trim();
     if (!z.url().safeParse(url).success) {
-      return { error: "Enter a full URL, including https://" };
+      return { ok: false, error: "Enter a full URL, including https://" };
     }
 
     const provider = detectProvider(url);
@@ -173,20 +191,52 @@ export async function createMaterialAction(
       title = (await fetchLinkMeta(url)).title ?? url;
     }
 
-    materialId = await dal.createMaterial(tutor.id, {
-      kind: kind === "video" || provider ? "video" : "link",
+    finalKind = kind === "video" || provider ? "video" : "link";
+    materialId = await dal.createMaterial(tutorId, {
+      kind: finalKind,
       title,
       description,
       url,
       embedProvider: provider,
     });
   } else {
-    return { error: "Pick a material type" };
+    return { ok: false, error: "Pick a material type" };
   }
 
-  await dal.setMaterialTags(tutor.id, materialId, tags);
+  await dal.setMaterialTags(tutorId, materialId, tags);
+  return {
+    ok: true,
+    material: { id: materialId, title, description, kind: finalKind },
+  };
+}
+
+export async function createMaterialAction(
+  _prev: NewMaterialState,
+  formData: FormData,
+): Promise<NewMaterialState> {
+  const tutor = await requireAccount();
+  const result = await createMaterialCore(tutor.id, formData);
+  if (!result.ok) return { error: result.error };
+
   revalidatePath("/tutor/library");
   redirect("/tutor/library");
+}
+
+/**
+ * Same creation as createMaterialAction, but for the "create material"
+ * modal on a lesson note — returns the new material instead of redirecting,
+ * so it can be attached to the note being written without leaving the page.
+ */
+export async function createMaterialInlineAction(
+  _prev: NewMaterialState,
+  formData: FormData,
+): Promise<NewMaterialState> {
+  const tutor = await requireAccount();
+  const result = await createMaterialCore(tutor.id, formData);
+  if (!result.ok) return { error: result.error };
+
+  revalidatePath("/tutor/library");
+  return { material: result.material };
 }
 
 export type EditMaterialState = { error?: string };

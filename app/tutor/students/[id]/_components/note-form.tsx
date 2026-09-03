@@ -8,11 +8,13 @@ import {
 export function NoteForm({
   studentId,
   materials,
+  allTags,
   note,
   defaultDate,
 }: {
   studentId: string;
   materials: MaterialOption[];
+  allTags: string[];
   /** Used when creating: today, or the day picked in the calendar. */
   defaultDate?: string;
   note?: {
@@ -75,12 +77,11 @@ export function NoteForm({
           />
         </div>
 
-        {materials.length > 0 && (
-          <MaterialAttachField
-            materials={materials}
-            initialAttachedIds={note?.materialIds ?? []}
-          />
-        )}
+        <MaterialAttachField
+          materials={materials}
+          allTags={allTags}
+          initialAttachedIds={note?.materialIds ?? []}
+        />
       </div>
 
       <div className="rounded-4xl border border-amber-500/30 bg-amber-500/[0.05] p-7 sm:p-8">

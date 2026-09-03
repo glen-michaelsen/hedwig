@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { KindBadge, input, label } from "@/app/_components/ui";
+import { CreateMaterialModal } from "./create-material-modal";
+import { KindBadge, buttonQuiet, input, label } from "@/app/_components/ui";
 
 export type MaterialOption = {
   id: string;
@@ -19,19 +20,26 @@ const RECENT_COUNT = 3;
  */
 export function MaterialAttachField({
   materials,
+  allTags,
   initialAttachedIds,
 }: {
   /** Already ordered most-recent-first, per `listMaterials`. */
   materials: MaterialOption[];
+  allTags: string[];
   initialAttachedIds: string[];
 }) {
+  // Seeded from the prop, then grown locally when a material is created
+  // right here — the server list was already fetched by the time that
+  // happens, so this is the only place that needs to know about it.
+  const [allMaterials, setAllMaterials] = useState(materials);
   const [attachedIds, setAttachedIds] = useState(initialAttachedIds);
   const [query, setQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
+  const [createOpen, setCreateOpen] = useState(false);
 
   const attachedSet = new Set(attachedIds);
-  const attached = materials.filter((m) => attachedSet.has(m.id));
-  const available = materials.filter((m) => !attachedSet.has(m.id));
+  const attached = allMaterials.filter((m) => attachedSet.has(m.id));
+  const available = allMaterials.filter((m) => !attachedSet.has(m.id));
 
   const needle = query.trim().toLowerCase();
   const results = needle
@@ -105,54 +113,75 @@ export function MaterialAttachField({
         )}
       </div>
 
-      {available.length > 0 && (
-        <div>
+      <div>
+        <div className="flex items-center justify-between gap-3">
           <p className={label}>Add material</p>
-
-          <input
-            className={input}
-            type="text"
-            role="combobox"
-            aria-expanded={shown.length > 0}
-            aria-controls="material-search-results"
-            placeholder="Search your library"
-            value={query}
-            onChange={(event) => {
-              setQuery(event.target.value);
-              setActiveIndex(0);
-            }}
-            onKeyDown={onSearchKeyDown}
-          />
-
-          <ul
-            id="material-search-results"
-            role="listbox"
-            className="mt-2 divide-y divide-line overflow-hidden rounded-2xl border border-line"
+          <button
+            type="button"
+            onClick={() => setCreateOpen(true)}
+            className={`${buttonQuiet} px-3.5 py-1.5 text-xs`}
           >
-            {shown.length === 0 ? (
-              <li className="px-4 py-3 text-sm text-muted">
-                Nothing matches that.
-              </li>
-            ) : (
-              shown.map((m, i) => (
-                <li key={m.id} role="option" aria-selected={i === activeIndex}>
-                  <button
-                    type="button"
-                    onClick={() => attach(m.id)}
-                    onMouseEnter={() => setActiveIndex(i)}
-                    className={`flex w-full items-center gap-2.5 px-4 py-3 text-left text-sm transition-colors ${
-                      i === activeIndex ? "bg-brand-500/8" : "hover:bg-surface-muted"
-                    }`}
-                  >
-                    <KindBadge kind={m.kind} />
-                    <span className="min-w-0 flex-1 truncate">{m.title}</span>
-                  </button>
-                </li>
-              ))
-            )}
-          </ul>
+            Create material
+          </button>
         </div>
-      )}
+
+        {available.length > 0 && (
+          <>
+            <input
+              className={`${input} mt-3`}
+              type="text"
+              role="combobox"
+              aria-expanded={shown.length > 0}
+              aria-controls="material-search-results"
+              placeholder="Search your library"
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setActiveIndex(0);
+              }}
+              onKeyDown={onSearchKeyDown}
+            />
+
+            <ul
+              id="material-search-results"
+              role="listbox"
+              className="mt-2 divide-y divide-line overflow-hidden rounded-2xl border border-line"
+            >
+              {shown.length === 0 ? (
+                <li className="px-4 py-3 text-sm text-muted">
+                  Nothing matches that.
+                </li>
+              ) : (
+                shown.map((m, i) => (
+                  <li key={m.id} role="option" aria-selected={i === activeIndex}>
+                    <button
+                      type="button"
+                      onClick={() => attach(m.id)}
+                      onMouseEnter={() => setActiveIndex(i)}
+                      className={`flex w-full items-center gap-2.5 px-4 py-3 text-left text-sm transition-colors ${
+                        i === activeIndex ? "bg-brand-500/8" : "hover:bg-surface-muted"
+                      }`}
+                    >
+                      <KindBadge kind={m.kind} />
+                      <span className="min-w-0 flex-1 truncate">{m.title}</span>
+                    </button>
+                  </li>
+                ))
+              )}
+            </ul>
+          </>
+        )}
+      </div>
+
+      <CreateMaterialModal
+        open={createOpen}
+        onClose={() => setCreateOpen(false)}
+        allTags={allTags}
+        onCreated={(material) => {
+          setAllMaterials((current) => [material, ...current]);
+          attach(material.id);
+        }}
+      />
     </div>
   );
 }

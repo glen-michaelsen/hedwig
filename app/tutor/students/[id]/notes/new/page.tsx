@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { requireAccount } from "@/lib/auth";
 import { todayIso } from "@/lib/clock";
-import { getStudent, listMaterials } from "@/lib/dal/tutor";
+import { getStudent, listMaterials, listTags } from "@/lib/dal/tutor";
 import { PageHeader } from "@/app/_components/ui";
 import { NoteForm } from "../../_components/note-form";
 
@@ -30,8 +30,9 @@ export default async function NewNotePage({
   const student = await getStudent(tutor.id, id);
   if (!student) notFound();
 
-  const [materials, today] = await Promise.all([
+  const [materials, tags, today] = await Promise.all([
     listMaterials(tutor.id),
+    listTags(tutor.id),
     todayIso(),
   ]);
 
@@ -44,6 +45,7 @@ export default async function NewNotePage({
       <NoteForm
         studentId={id}
         materials={materials}
+        allTags={tags.map((t) => t.name)}
         defaultDate={validDate(date) ? date : today}
       />
     </>

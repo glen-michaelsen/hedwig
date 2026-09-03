@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { requireAccount } from "@/lib/auth";
-import { getNote, getStudent, listMaterials } from "@/lib/dal/tutor";
+import { getNote, getStudent, listMaterials, listTags } from "@/lib/dal/tutor";
 import { PageHeader } from "@/app/_components/ui";
 import { deleteNoteAction } from "../../../../actions";
 import { NoteForm } from "../../_components/note-form";
@@ -30,7 +30,10 @@ export default async function EditNotePage({
   ]);
   if (!student || !note || note.studentId !== id) notFound();
 
-  const materials = await listMaterials(tutor.id);
+  const [materials, tags] = await Promise.all([
+    listMaterials(tutor.id),
+    listTags(tutor.id),
+  ]);
 
   return (
     <>
@@ -39,6 +42,7 @@ export default async function EditNotePage({
       <NoteForm
         studentId={id}
         materials={materials}
+        allTags={tags.map((t) => t.name)}
         note={{
           id: note.id,
           date: note.date,
