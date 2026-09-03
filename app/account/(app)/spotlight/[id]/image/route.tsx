@@ -14,6 +14,23 @@ const HEIGHT = 1350;
 const HEART_PATH =
   "M12 20.4s-7.6-4.6-7.6-9.7a4.3 4.3 0 0 1 7.6-2.8 4.3 4.3 0 0 1 7.6 2.8c0 5.1-7.6 9.7-7.6 9.7Z";
 
+/**
+ * A CSS linear-gradient rendered flat instead of fading — Satori's gradient
+ * support is unreliable enough in practice that it's not worth the risk
+ * (confirmed: it didn't render at all on a real preview deploy). Stacked
+ * flat-opacity bands, shortest-and-darkest on top of tallest-and-faintest,
+ * approximate the same fade using nothing but solid backgrounds — which
+ * Satori unquestionably supports, since the cover art's shadow and the
+ * photo itself already rely on it.
+ */
+const GRADIENT_BANDS = [
+  { heightPct: 60, opacity: 0.15 },
+  { heightPct: 45, opacity: 0.25 },
+  { heightPct: 30, opacity: 0.4 },
+  { heightPct: 18, opacity: 0.55 },
+  { heightPct: 8, opacity: 0.75 },
+];
+
 function headlineFontSize(headline: string) {
   if (headline.length <= 40) return 64;
   if (headline.length <= 70) return 52;
@@ -81,20 +98,20 @@ export async function GET(
           />
         )}
 
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            // Stronger and multi-stop rather than one flat fade — the cover
-            // art, headline and hearts all sit in the bottom third, and a
-            // bright, high-key photo (lots of white/sky) needs real
-            // contrast right there for white text and hearts to read,
-            // not just a light wash.
-            background:
-              "linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 22%, rgba(0,0,0,0.25) 42%, rgba(0,0,0,0) 60%)",
-          }}
-        />
+        {GRADIENT_BANDS.map((band) => (
+          <div
+            key={band.heightPct}
+            style={{
+              position: "absolute",
+              left: 0,
+              right: 0,
+              bottom: 0,
+              display: "flex",
+              height: (HEIGHT * band.heightPct) / 100,
+              background: `rgba(0,0,0,${band.opacity})`,
+            }}
+          />
+        ))}
 
         <div
           style={{
@@ -104,6 +121,7 @@ export async function GET(
             bottom: 72,
             display: "flex",
             flexDirection: "column",
+            alignItems: "center",
           }}
         >
           {coverUrl && (
@@ -127,11 +145,14 @@ export async function GET(
           <div
             style={{
               display: "flex",
+              width: "100%",
+              justifyContent: "center",
               fontSize: headlineFontSize(article.headline),
               fontWeight: 700,
               lineHeight: 1.15,
               color: "#ffffff",
               textShadow: "0 2px 16px rgba(0,0,0,0.5)",
+              textAlign: "center",
             }}
           >
             {article.headline}
