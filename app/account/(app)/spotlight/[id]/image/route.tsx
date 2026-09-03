@@ -86,8 +86,13 @@ export async function GET(
             position: "absolute",
             inset: 0,
             display: "flex",
+            // Stronger and multi-stop rather than one flat fade — the cover
+            // art, headline and hearts all sit in the bottom third, and a
+            // bright, high-key photo (lots of white/sky) needs real
+            // contrast right there for white text and hearts to read,
+            // not just a light wash.
             background:
-              "linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 50%)",
+              "linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 22%, rgba(0,0,0,0.25) 42%, rgba(0,0,0,0) 60%)",
           }}
         />
 
