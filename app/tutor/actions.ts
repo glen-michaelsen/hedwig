@@ -96,7 +96,12 @@ export async function issueNewPinAction(
   const tutor = await requireAccount();
   const studentId = String(formData.get("studentId"));
 
-  const result = await dal.issueNewPin(tutor.id, studentId);
+  const pin = String(formData.get("pin") ?? "").trim();
+  if (pin && !/^\d{4}$/.test(pin)) {
+    return { error: "PIN must be 4 digits" };
+  }
+
+  const result = await dal.issueNewPin(tutor.id, studentId, pin || undefined);
   if (!result) return { error: "Student not found" };
 
   revalidatePath(`/tutor/students/${studentId}`);

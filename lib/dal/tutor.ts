@@ -159,8 +159,15 @@ export async function updateStudent(
   }
 }
 
-/** Issues a fresh PIN and logs every existing device out. */
-export async function issueNewPin(tutorId: string, studentId: string) {
+/**
+ * Issues a fresh PIN and logs every existing device out. Pass `pin` to set
+ * one the tutor chose instead of a random one.
+ */
+export async function issueNewPin(
+  tutorId: string,
+  studentId: string,
+  pin: string = newPin(),
+) {
   const db = await getDb();
   const owned = await db
     .select({ id: student.id })
@@ -169,7 +176,6 @@ export async function issueNewPin(tutorId: string, studentId: string) {
     .get();
   if (!owned) return null;
 
-  const pin = newPin();
   await db
     .update(access)
     .set({
