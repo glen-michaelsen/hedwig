@@ -18,7 +18,9 @@ const HOURLY_LIMIT = 5;
 
 export async function joinWaitlist(
   input: NewWaitlistEntry,
-): Promise<{ ok: true } | { ok: false; reason: "rate-limited" }> {
+): Promise<
+  { ok: true; isNew: boolean } | { ok: false; reason: "rate-limited" }
+> {
   const db = await getDb();
   const ipHash = input.ip ? await hashIp(input.ip) : null;
 
@@ -32,6 +34,14 @@ export async function joinWaitlist(
 
     if (recent.length >= HOURLY_LIMIT) return { ok: false, reason: "rate-limited" };
   }
+
+  // Checked before the upsert so a resubmission (e.g. to add a feature)
+  // doesn't read back as "new" — the admin notification is for first joins.
+  const [existing] = await db
+    .select({ id: waitlist.id })
+    .from(waitlist)
+    .where(eq(waitlist.email, input.email))
+    .limit(1);
 
   await db
     .insert(waitlist)
@@ -55,7 +65,7 @@ export async function joinWaitlist(
       },
     });
 
-  return { ok: true };
+  return { ok: true, isNew: !existing };
 }
 
 /* --------------------------------- admin -------------------------------- */

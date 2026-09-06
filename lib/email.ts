@@ -99,3 +99,92 @@ export async function sendInviteEmail(
 
   return !error;
 }
+
+/* ----------------------------- admin notices ----------------------------- */
+
+// `name` comes straight from the public waitlist/signup forms — unescaped,
+// it's an HTML-injection vector into the admin's own mail client.
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function adminEmailHtml(heading: string, bodyHtml: string): string {
+  return `<!doctype html>
+<html>
+  <body style="margin:0;padding:0;background:${COLOR.bg};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${COLOR.bg};padding:40px 16px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background:${COLOR.card};border:1px solid ${COLOR.border};border-radius:24px;">
+            <tr>
+              <td style="padding:40px 36px;">
+                <p style="margin:0 0 28px;font-size:13px;font-weight:700;letter-spacing:0.14em;color:${COLOR.accent};text-transform:uppercase;">
+                  Trenodo
+                </p>
+                <h1 style="margin:0 0 16px;font-size:22px;line-height:1.3;font-weight:700;color:${COLOR.ink};">
+                  ${heading}
+                </h1>
+                ${bodyHtml}
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>`;
+}
+
+/**
+ * Best-effort, same as sendInviteEmail — nothing about the waitlist join or
+ * invite acceptance itself depends on this succeeding.
+ */
+async function sendAdminEmail(
+  subject: string,
+  bodyHtml: string,
+  bodyText: string,
+): Promise<boolean> {
+  const { RESEND_API_KEY, ADMIN_EMAIL } = await getEnv();
+  if (!RESEND_API_KEY || !ADMIN_EMAIL) return false;
+
+  const resend = new Resend(RESEND_API_KEY);
+
+  const { error } = await resend.emails.send({
+    from: FROM,
+    to: ADMIN_EMAIL,
+    subject,
+    html: adminEmailHtml(subject, bodyHtml),
+    text: [subject, "", bodyText].join("\n"),
+  });
+
+  return !error;
+}
+
+export async function sendWaitlistAdminEmail(
+  name: string,
+  email: string,
+  phone: string | null,
+): Promise<boolean> {
+  const detail = phone ? `${email} · ${phone}` : email;
+  return sendAdminEmail(
+    "New waitlist signup",
+    `<p style="margin:0;font-size:16px;line-height:1.6;color:${COLOR.ink};"><strong>${escapeHtml(name)}</strong> — ${escapeHtml(detail)}</p>`,
+    `${name} — ${detail}`,
+  );
+}
+
+export async function sendInviteAcceptedAdminEmail(
+  name: string,
+  email: string,
+): Promise<boolean> {
+  return sendAdminEmail(
+    "Invite accepted",
+    `<p style="margin:0;font-size:16px;line-height:1.6;color:${COLOR.ink};"><strong>${escapeHtml(name)}</strong> — ${escapeHtml(email)} just accepted their invite.</p>`,
+    `${name} — ${email} just accepted their invite.`,
+  );
+}

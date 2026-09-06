@@ -8,6 +8,7 @@ import { z } from "zod";
 import { getAuth } from "@/lib/auth";
 import { acceptInvite, getOpenInvite } from "@/lib/dal/musicians";
 import { joinWaitlist } from "@/lib/dal/waitlist";
+import { sendInviteAcceptedAdminEmail, sendWaitlistAdminEmail } from "@/lib/email";
 import { isWaitlistFeature, type WaitlistFeature } from "@/lib/waitlist";
 
 export type AuthFormState = { error?: string };
@@ -69,6 +70,9 @@ export async function signUpAction(
     throw error;
   }
 
+  // Best-effort — the account is already created, this is just a heads-up.
+  await sendInviteAcceptedAdminEmail(parsed.data.name, parsed.data.email);
+
   redirect("/account");
 }
 
@@ -119,6 +123,14 @@ export async function joinWaitlistAction(
 
   if (!result.ok) {
     return { error: "That's a lot of attempts at once — try again in a bit." };
+  }
+
+  if (result.isNew) {
+    await sendWaitlistAdminEmail(
+      parsed.data.name,
+      parsed.data.email,
+      parsed.data.phone || null,
+    );
   }
 
   return { done: true };
