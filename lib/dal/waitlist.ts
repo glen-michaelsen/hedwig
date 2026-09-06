@@ -1,6 +1,6 @@
 import "server-only";
 import { and, desc, eq, gt, isNull, sql } from "drizzle-orm";
-import { user, waitlist } from "@/db/schema";
+import { invite, user, waitlist } from "@/db/schema";
 import { hashIp, newId } from "@/lib/crypto";
 import { getDb } from "@/lib/db";
 import { WAITLIST_FEATURES, type WaitlistFeature } from "@/lib/waitlist";
@@ -70,10 +70,12 @@ function parseFeatures(raw: string): WaitlistFeature[] {
 }
 
 /**
- * Once someone with this email actually has an account — invited or
- * otherwise — they're not waiting anymore. The join is the only place
- * that has to know that; the summary widget and the admin list both
- * read through this, so both drop them automatically.
+ * Once someone with this email has an account, or has an open invite
+ * waiting on them, they're not "waiting" anymore — they belong on the
+ * Musicians page instead. This is the only place that has to know that;
+ * the summary widget and the admin list both read through it, so both
+ * drop such entries automatically. A revoked invite doesn't count: that
+ * puts them back on the waitlist until someone invites them again.
  */
 export async function listWaitlist() {
   const db = await getDb();
@@ -89,7 +91,16 @@ export async function listWaitlist() {
     })
     .from(waitlist)
     .leftJoin(user, sql`lower(${user.email}) = lower(${waitlist.email})`)
-    .where(isNull(user.id))
+    .where(
+      and(
+        isNull(user.id),
+        sql`not exists (
+          select 1 from ${invite}
+          where lower(${invite.email}) = lower(${waitlist.email})
+            and ${invite.revokedAt} is null
+        )`,
+      ),
+    )
     .orderBy(desc(waitlist.createdAt))
     .limit(500);
 
