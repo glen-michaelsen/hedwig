@@ -584,6 +584,11 @@ export const spotlight = sqliteTable(
       .notNull()
       .default(false),
     publishedAt: integer("published_at", { mode: "timestamp" }),
+    /**
+     * Lets someone without an account see the piece before it's public —
+     * generated once, on first request, not at creation. Null until then.
+     */
+    previewToken: text("preview_token"),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
       .default(sql`(unixepoch())`),
@@ -594,6 +599,7 @@ export const spotlight = sqliteTable(
   (t) => [
     uniqueIndex("spotlight_slug_idx").on(t.slug),
     index("spotlight_published_idx").on(t.published, t.publishedAt),
+    uniqueIndex("spotlight_preview_token_idx").on(t.previewToken),
   ],
 );
 

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
+import { getEnv } from "@/lib/db";
 import * as dal from "@/lib/dal/spotlight";
 import { isValidRating } from "@/lib/spotlight/slug";
 
@@ -110,6 +111,23 @@ export async function togglePublishedAction(formData: FormData) {
   revalidatePath("/account/spotlight");
   revalidatePath(`/account/spotlight/${id}`);
   revalidatePath("/spotlight");
+}
+
+/** Called directly from a client onClick, not a <form> — same pattern as
+ *  lookupLinkTitleAction in the Tutor material form. */
+export async function getPreviewLinkAction(
+  spotlightId: string,
+): Promise<{ link: string } | { error: string }> {
+  await requireAdmin();
+
+  const article = await dal.getSpotlight(spotlightId);
+  if (!article) return { error: "That article no longer exists" };
+
+  const token = await dal.ensurePreviewToken(spotlightId);
+  if (!token) return { error: "That article no longer exists" };
+
+  const { APP_URL } = await getEnv();
+  return { link: `${APP_URL}/spotlight/${article.slug}?preview=${token}` };
 }
 
 export async function deleteSpotlightAction(formData: FormData) {

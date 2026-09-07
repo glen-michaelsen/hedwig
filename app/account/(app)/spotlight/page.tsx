@@ -9,14 +9,21 @@ import {
   focusable,
 } from "@/app/_components/ui";
 import { requireAdmin } from "@/lib/auth";
+import { todayIso } from "@/lib/clock";
 import { listSpotlights } from "@/lib/dal/spotlight";
+import { computeSpotlightStatus } from "@/lib/spotlight/slug";
+import { SpotlightStatusBadge } from "./_components/status-badge";
 
 export const metadata = { title: "Spotlight" };
 
 export default async function AdminSpotlightPage() {
   await requireAdmin("/account/spotlight");
-  const articles = await listSpotlights();
-  const live = articles.filter((article) => article.published).length;
+  const [articles, today] = await Promise.all([listSpotlights(), todayIso()]);
+  const live = articles.filter(
+    (article) =>
+      computeSpotlightStatus(article.published, article.releaseDate, today) ===
+      "published",
+  ).length;
 
   return (
     <>
@@ -39,7 +46,13 @@ export default async function AdminSpotlightPage() {
       ) : (
         <Panel>
           <PanelList>
-            {articles.map((article) => (
+            {articles.map((article) => {
+              const status = computeSpotlightStatus(
+                article.published,
+                article.releaseDate,
+                today,
+              );
+              return (
               <li key={article.id}>
                 <Link
                   href={`/account/spotlight/${article.id}`}
@@ -70,18 +83,11 @@ export default async function AdminSpotlightPage() {
                     </span>
                   </div>
 
-                  <span
-                    className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] ${
-                      article.published
-                        ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
-                        : "bg-surface-muted text-muted"
-                    }`}
-                  >
-                    {article.published ? "Published" : "Draft"}
-                  </span>
+                  <SpotlightStatusBadge status={status} />
                 </Link>
               </li>
-            ))}
+              );
+            })}
           </PanelList>
         </Panel>
       )}

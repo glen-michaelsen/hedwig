@@ -15,6 +15,7 @@ import { getAccount, isAdmin } from "@/lib/auth";
 import { todayIso } from "@/lib/clock";
 import {
   getPublishedSpotlight,
+  getSpotlightByPreviewToken,
   getSpotlightBySlugForAdmin,
   listRelatedSpotlights,
 } from "@/lib/dal/spotlight";
@@ -37,25 +38,39 @@ function formatDate(value: string | null) {
 /**
  * Published for everyone; drafts for the admin only, so "Preview" in the
  * editor opens the real page at its real URL instead of an approximation.
+ * A third way in, for someone with a shared preview link but no account —
+ * the whole point of that link is showing something not public yet, so it
+ * isn't gated on release date or published status at all.
  */
-async function findArticle(slug: string) {
+async function findArticle(slug: string, previewToken?: string) {
   const published = await getPublishedSpotlight(slug);
-  if (published) return { article: published, isDraft: false };
+  if (published) return { article: published, mode: "published" as const };
 
   const account = await getAccount();
   if (account && (await isAdmin(account))) {
     const draft = await getSpotlightBySlugForAdmin(slug);
-    if (draft) return { article: draft, isDraft: true };
+    if (draft) return { article: draft, mode: "admin-draft" as const };
+  }
+
+  if (previewToken) {
+    const preview = await getSpotlightByPreviewToken(slug, previewToken);
+    if (preview) return { article: preview, mode: "shared-preview" as const };
   }
 
   return null;
 }
 
+function previewTokenFrom(value: string | string[] | undefined) {
+  return typeof value === "string" ? value : undefined;
+}
+
 export async function generateMetadata({
   params,
+  searchParams,
 }: PageProps<"/spotlight/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const found = await findArticle(slug);
+  const { preview } = await searchParams;
+  const found = await findArticle(slug, previewTokenFrom(preview));
   if (!found) return { title: "Not found — Trenodo" };
 
   const { article } = found;
@@ -82,13 +97,28 @@ export async function generateMetadata({
 
 export default async function SpotlightArticlePage({
   params,
+  searchParams,
 }: PageProps<"/spotlight/[slug]">) {
   const { slug } = await params;
+  const { preview } = await searchParams;
 
-  const found = await findArticle(slug);
+  const found = await findArticle(slug, previewTokenFrom(preview));
   if (!found) notFound();
 
-  const { article, isDraft } = found;
+  const { article, mode } = found;
+  const isDraft = mode !== "published";
+  const previewToken = previewTokenFrom(preview);
+
+  // A shared-preview visitor has no session at all, so the image route
+  // needs the same token passed along to resolve their header/cover.
+  function imageUrl(assetId: string, size: "md" | "lg") {
+    const params = new URLSearchParams({ size });
+    if (mode === "shared-preview" && previewToken) {
+      params.set("preview", previewToken);
+    }
+    return `/spotlight/image/${assetId}?${params}`;
+  }
+
   const hero = article.headerAssetId ?? article.coverAssetId;
   // Only a chosen header is framed by hand; a cover standing in for one is
   // square and has nothing to crop away.
@@ -171,9 +201,14 @@ export default async function SpotlightArticlePage({
       <SiteHeader />
 
       <main className="flex-1 pb-24">
-        {isDraft && (
+        {mode === "admin-draft" && (
           <div className="bg-amber-500/15 py-3 text-center text-sm text-amber-800 dark:text-amber-200">
             Draft — only you can see this.
+          </div>
+        )}
+        {mode === "shared-preview" && (
+          <div className="bg-amber-500/15 py-3 text-center text-sm text-amber-800 dark:text-amber-200">
+            Preview link — not public yet.
           </div>
         )}
 
@@ -191,7 +226,7 @@ export default async function SpotlightArticlePage({
             {hero && (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={`/spotlight/image/${hero}?size=md`}
+                src={imageUrl(hero, "md")}
                 alt=""
                 style={{ objectPosition: heroPosition }}
                 className="h-full w-full object-cover"
@@ -210,7 +245,7 @@ export default async function SpotlightArticlePage({
             <div className="relative z-10 flex justify-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`/spotlight/image/${article.coverAssetId}?size=md`}
+                src={imageUrl(article.coverAssetId, "md")}
                 alt={`${article.releaseTitle} cover`}
                 className="-mt-24 h-44 w-44 rounded-3xl object-cover shadow-float ring-1 ring-white/15"
               />
@@ -237,7 +272,7 @@ export default async function SpotlightArticlePage({
             {hero && (
               // eslint-disable-next-line @next/next/no-img-element
               <img
-                src={`/spotlight/image/${hero}?size=lg`}
+                src={imageUrl(hero, "lg")}
                 alt=""
                 style={{ objectPosition: heroPosition }}
                 className="h-full w-full object-cover"
@@ -259,7 +294,7 @@ export default async function SpotlightArticlePage({
                   {article.coverAssetId && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
-                      src={`/spotlight/image/${article.coverAssetId}?size=md`}
+                      src={imageUrl(article.coverAssetId, "md")}
                       alt={`${article.releaseTitle} cover`}
                       className="h-64 w-64 shrink-0 translate-y-[20%] rounded-3xl object-cover shadow-float ring-1 ring-white/15"
                     />

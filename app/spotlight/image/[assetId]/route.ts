@@ -2,6 +2,7 @@ import { getAccount, isAdmin } from "@/lib/auth";
 import {
   getAnySpotlightImage,
   getPublicSpotlightImage,
+  getSpotlightImageByPreviewToken,
 } from "@/lib/dal/spotlight";
 import { getImageVariant } from "@/lib/press/images";
 import { isImageVariant, isResizableImage } from "@/lib/press/variants";
@@ -24,6 +25,7 @@ export async function GET(
   { params }: RouteContext<"/spotlight/image/[assetId]">,
 ) {
   const { assetId } = await params;
+  const url = new URL(request.url);
 
   let image = await getPublicSpotlightImage(assetId);
 
@@ -34,9 +36,18 @@ export async function GET(
     }
   }
 
+  // A shared-preview visitor has no session at all — their copy of the
+  // page passes the same token back for exactly this reason.
+  if (!image) {
+    const preview = url.searchParams.get("preview");
+    if (preview) {
+      image = await getSpotlightImageByPreviewToken(assetId, preview);
+    }
+  }
+
   if (!image) return new Response("Not found", { status: 404 });
 
-  const size = new URL(request.url).searchParams.get("size");
+  const size = url.searchParams.get("size");
 
   if (isResizableImage(image.contentType)) {
     const variant = await getImageVariant(

@@ -8,12 +8,15 @@ import {
 } from "@/app/_components/ui";
 import { SubmitButton } from "@/app/_components/submit-button";
 import { requireAdmin } from "@/lib/auth";
+import { todayIso } from "@/lib/clock";
 import { getSpotlight, listPhotosForRelease } from "@/lib/dal/spotlight";
 import { buildSpotlightCaption } from "@/lib/press/spotlight-caption";
-import { MAX_RATING } from "@/lib/spotlight/slug";
+import { MAX_RATING, computeSpotlightStatus } from "@/lib/spotlight/slug";
 import { togglePublishedAction, updateSpotlightAction } from "../actions";
 import { SpotlightForm } from "../_components/spotlight-form";
+import { SpotlightStatusBadge } from "../_components/status-badge";
 import { CopyCaptionButton } from "./_components/copy-caption-button";
+import { CopyPreviewLinkButton } from "./_components/copy-preview-link-button";
 import { DeleteSpotlightButton } from "./_components/delete-spotlight-button";
 
 const KIND_LABELS = { single: "Single", ep: "EP", album: "Album" } as const;
@@ -37,6 +40,13 @@ export default async function EditSpotlightPage({
   if (!article) notFound();
 
   const photos = await listPhotosForRelease(article.releaseId);
+  const today = await todayIso();
+  const status = computeSpotlightStatus(
+    article.published,
+    article.releaseDate,
+    today,
+  );
+  const isFutureRelease = article.releaseDate !== null && article.releaseDate > today;
 
   const caption = buildSpotlightCaption({
     artistName: article.artistName,
@@ -51,7 +61,12 @@ export default async function EditSpotlightPage({
   return (
     <>
       <PageHeader
-        title={article.headline}
+        title={
+          <span className="inline-flex items-center gap-2.5">
+            {article.headline}
+            <SpotlightStatusBadge status={status} />
+          </span>
+        }
         subtitle={`${article.artistName} — ${article.releaseTitle} · ${KIND_LABELS[article.releaseKind]}`}
         action={
           <div className="flex flex-wrap items-center gap-2.5">
@@ -63,7 +78,7 @@ export default async function EditSpotlightPage({
               href={`/spotlight/${article.slug}`}
               target="_blank"
             >
-              {article.published ? "View live" : "Preview"}
+              {status === "published" ? "View live" : "Preview"}
             </Link>
             <Link
               className={buttonGhost}
@@ -73,6 +88,7 @@ export default async function EditSpotlightPage({
               Instagram image
             </Link>
             <CopyCaptionButton caption={caption} />
+            <CopyPreviewLinkButton spotlightId={article.id} />
             <form action={togglePublishedAction}>
               <input type="hidden" name="spotlightId" value={article.id} />
               <input
@@ -86,9 +102,19 @@ export default async function EditSpotlightPage({
                     ? buttonGhost
                     : "inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-5 py-2.5 text-sm font-medium text-white shadow-brand transition-all hover:bg-brand-500"
                 }
-                pendingLabel={article.published ? "Unpublishing…" : "Publishing…"}
+                pendingLabel={
+                  article.published
+                    ? "Unpublishing…"
+                    : isFutureRelease
+                      ? "Planning…"
+                      : "Publishing…"
+                }
               >
-                {article.published ? "Unpublish" : "Publish"}
+                {article.published
+                  ? "Unpublish"
+                  : isFutureRelease
+                    ? "Plan"
+                    : "Publish"}
               </SubmitButton>
             </form>
           </div>

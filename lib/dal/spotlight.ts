@@ -1,5 +1,5 @@
 import "server-only";
-import { and, asc, desc, eq, ne, sql } from "drizzle-orm";
+import { and, asc, desc, eq, isNull, lte, ne, or, sql } from "drizzle-orm";
 import {
   artist,
   pressRelease,
@@ -7,6 +7,7 @@ import {
   spotlight,
   spotlightSkip,
 } from "@/db/schema";
+import { todayIso } from "@/lib/clock";
 import { newId } from "@/lib/crypto";
 import { getDb } from "@/lib/db";
 import { slugify } from "@/lib/spotlight/slug";
@@ -238,6 +239,21 @@ export async function deleteSpotlight(id: string) {
 
 /* ------------------------------- public --------------------------------- */
 
+/**
+ * `published` says an admin approved this to go out — it doesn't say the
+ * release has actually happened yet. A future release date holds an
+ * article back regardless of that flag; this is the one place that rule
+ * lives, so every public query stays in sync automatically (the sitemap
+ * included, since it reads through listPublishedSpotlights).
+ */
+async function isPubliclyVisible() {
+  const today = await todayIso();
+  return and(
+    eq(spotlight.published, true),
+    or(isNull(pressRelease.releaseDate), lte(pressRelease.releaseDate, today)),
+  );
+}
+
 export async function listPublishedSpotlights() {
   const db = await getDb();
   return db
@@ -245,7 +261,7 @@ export async function listPublishedSpotlights() {
     .from(spotlight)
     .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
     .innerJoin(artist, eq(artist.id, pressRelease.artistId))
-    .where(eq(spotlight.published, true))
+    .where(await isPubliclyVisible())
     // By the record's release date, not by when the piece was written: the
     // page reads as a run of new music. Undated releases fall to the end
     // instead of the top, where a missing date would look like today.
@@ -265,7 +281,7 @@ export async function listRelatedSpotlights(excludeId: string, limit = 3) {
     .from(spotlight)
     .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
     .innerJoin(artist, eq(artist.id, pressRelease.artistId))
-    .where(and(eq(spotlight.published, true), ne(spotlight.id, excludeId)))
+    .where(and(await isPubliclyVisible(), ne(spotlight.id, excludeId)))
     .orderBy(desc(spotlight.publishedAt), desc(spotlight.createdAt))
     .limit(limit);
 }
@@ -277,7 +293,7 @@ export async function getPublishedSpotlight(slug: string) {
     .from(spotlight)
     .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
     .innerJoin(artist, eq(artist.id, pressRelease.artistId))
-    .where(and(eq(spotlight.slug, slug), eq(spotlight.published, true)))
+    .where(and(eq(spotlight.slug, slug), await isPubliclyVisible()))
     .limit(1);
 
   return row ?? null;
@@ -301,6 +317,50 @@ export async function getSpotlightBySlugForAdmin(slug: string) {
 }
 
 /**
+ * By slug and a matching preview token — for a musician with a shared link
+ * but no account. Deliberately not gated on `published` at all: showing
+ * something not public yet is the entire point of this link.
+ */
+export async function getSpotlightByPreviewToken(slug: string, token: string) {
+  const db = await getDb();
+  const [row] = await db
+    .select(articleColumns)
+    .from(spotlight)
+    .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
+    .innerJoin(artist, eq(artist.id, pressRelease.artistId))
+    .where(and(eq(spotlight.slug, slug), eq(spotlight.previewToken, token)))
+    .limit(1);
+
+  return row ?? null;
+}
+
+/**
+ * Generated once, on first request, not at creation — an article nobody
+ * ever previews externally never needs one. Stable after that: the same
+ * link keeps working even once the article goes properly live (it just
+ * resolves through the normal public path by then).
+ */
+export async function ensurePreviewToken(id: string): Promise<string | null> {
+  const db = await getDb();
+  const [existing] = await db
+    .select({ previewToken: spotlight.previewToken })
+    .from(spotlight)
+    .where(eq(spotlight.id, id))
+    .limit(1);
+
+  if (!existing) return null;
+  if (existing.previewToken) return existing.previewToken;
+
+  const token = newId();
+  await db
+    .update(spotlight)
+    .set({ previewToken: token })
+    .where(eq(spotlight.id, id));
+
+  return token;
+}
+
+/**
  * Resolves an image for the public article route.
  *
  * A press kit is private, so this deliberately answers for exactly two
@@ -319,7 +379,8 @@ export async function getPublicSpotlightImage(assetId: string) {
     })
     .from(releaseAsset)
     .innerJoin(spotlight, eq(spotlight.releaseId, releaseAsset.releaseId))
-    .where(and(eq(releaseAsset.id, assetId), eq(spotlight.published, true)))
+    .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
+    .where(and(eq(releaseAsset.id, assetId), await isPubliclyVisible()))
     .limit(1);
 
   if (!row) return null;
@@ -341,6 +402,33 @@ export async function getAnySpotlightImage(assetId: string) {
     .limit(1);
 
   return row ?? null;
+}
+
+/** Same idea as getSpotlightByPreviewToken, for the header/cover image
+ *  request that page's <img> tags make — not gated on published either. */
+export async function getSpotlightImageByPreviewToken(
+  assetId: string,
+  token: string,
+) {
+  const db = await getDb();
+  const [row] = await db
+    .select({
+      r2Key: releaseAsset.r2Key,
+      contentType: releaseAsset.contentType,
+      kind: releaseAsset.kind,
+      headerAssetId: spotlight.headerAssetId,
+    })
+    .from(releaseAsset)
+    .innerJoin(spotlight, eq(spotlight.releaseId, releaseAsset.releaseId))
+    .where(
+      and(eq(releaseAsset.id, assetId), eq(spotlight.previewToken, token)),
+    )
+    .limit(1);
+
+  if (!row) return null;
+  if (row.kind !== "cover" && row.headerAssetId !== assetId) return null;
+
+  return { r2Key: row.r2Key, contentType: row.contentType };
 }
 
 export type SpotlightRow = Awaited<ReturnType<typeof listSpotlights>>[number];
