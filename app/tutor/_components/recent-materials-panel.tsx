@@ -10,16 +10,55 @@ import {
   Panel,
   PanelList,
   SectionTitle,
-  buttonGhost,
-  buttonQuiet,
+  focusable,
   panelRow,
 } from "@/app/_components/ui";
+
+function ArrowIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-4 w-4"
+      aria-hidden
+    >
+      <path d="M5 12h14M13 6l6 6-6 6" />
+    </svg>
+  );
+}
+
+function PlusIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="h-4 w-4"
+      aria-hidden
+    >
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
 
 /**
  * The dashboard's own material widget — five most recent, with the same
  * create flow as the lesson note's inline modal. New materials are
  * prepended locally rather than waiting on a round trip, same pattern as
  * MaterialAttachField.
+ *
+ * Header actions are icon-only circles (same shape as the calendar's
+ * prev/next in LessonNotes) rather than labelled pills — this row sits
+ * beside "Students" and "Recent lessons", whose headers carry no action at
+ * all, so a couple of small circles keep all three titles the same height
+ * instead of the widest one pushing its own table down.
  */
 export function RecentMaterialsPanel({
   materials,
@@ -36,15 +75,22 @@ export function RecentMaterialsPanel({
       <SectionTitle
         action={
           <div className="flex shrink-0 items-center gap-2">
-            <Link href="/tutor/library" className={buttonQuiet}>
-              See all
+            <Link
+              href="/tutor/library"
+              aria-label="See all material"
+              title="See all material"
+              className={`grid h-9 w-9 place-items-center rounded-full border border-line text-muted transition-colors hover:border-line-strong hover:text-foreground ${focusable}`}
+            >
+              <ArrowIcon />
             </Link>
             <button
               type="button"
               onClick={() => setCreateOpen(true)}
-              className={buttonGhost}
+              aria-label="Add material"
+              title="Add material"
+              className={`grid h-9 w-9 place-items-center rounded-full bg-brand-600 text-white transition-colors hover:bg-brand-500 ${focusable}`}
             >
-              Add material
+              <PlusIcon />
             </button>
           </div>
         }
