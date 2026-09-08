@@ -229,8 +229,9 @@ export async function createMaterialAction(
 
 /**
  * Same creation as createMaterialAction, but for the "create material"
- * modal on a lesson note — returns the new material instead of redirecting,
- * so it can be attached to the note being written without leaving the page.
+ * modal — used from a lesson note (to attach without leaving the page) and
+ * from the dashboard's material widget. Returns the new material instead of
+ * redirecting, so the caller decides what happens next.
  */
 export async function createMaterialInlineAction(
   _prev: NewMaterialState,
@@ -241,6 +242,7 @@ export async function createMaterialInlineAction(
   if (!result.ok) return { error: result.error };
 
   revalidatePath("/tutor/library");
+  revalidatePath("/tutor");
   return { material: result.material };
 }
 

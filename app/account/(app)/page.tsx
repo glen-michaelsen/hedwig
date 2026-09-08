@@ -76,7 +76,7 @@ export const metadata = { title: "Home" };
 
 export default async function AccountHomePage() {
   const account = await requireAccount("/account");
-  const [{ studentCount, materialCount }, bioPage, releases, gigs, today] =
+  const [{ students, materialCount }, bioPage, releases, gigs, today] =
     await Promise.all([
       getDashboard(account.id),
       getPageForAccount(account.id),
@@ -84,6 +84,7 @@ export default async function AccountHomePage() {
       listGigs(account.id),
       todayIso(),
     ]);
+  const studentCount = students.length;
   const upcomingGigCount = gigs.filter(
     (gig) => gig.date === null || gig.date >= today,
   ).length;

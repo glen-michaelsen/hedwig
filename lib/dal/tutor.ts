@@ -611,34 +611,61 @@ export async function deleteNote(tutorId: string, noteId: string) {
 
 export async function getDashboard(tutorId: string) {
   const db = await getDb();
-  const [students, materials, recentNotes] = await Promise.all([
-    db
-      .select({ count: sql<number>`count(*)` })
-      .from(student)
-      .where(eq(student.tutorId, tutorId))
-      .get(),
-    db
-      .select({ count: sql<number>`count(*)` })
-      .from(material)
-      .where(eq(material.tutorId, tutorId))
-      .get(),
-    db
-      .select({
-        id: lessonNote.id,
-        date: lessonNote.date,
-        studentId: lessonNote.studentId,
-        studentName: student.name,
-      })
-      .from(lessonNote)
-      .innerJoin(student, eq(student.id, lessonNote.studentId))
-      .where(eq(lessonNote.tutorId, tutorId))
-      .orderBy(desc(lessonNote.date))
-      .limit(8),
-  ]);
+  const [students, materialCountRow, recentMaterials, recentNotes] =
+    await Promise.all([
+      db
+        .select({
+          id: student.id,
+          name: student.name,
+          instrument: student.instrument,
+          level: student.level,
+          active: student.active,
+          // Correlated rather than a join: a student with no lessons yet
+          // should still get a row, just without this link.
+          latestNoteId: sql<string | null>`(
+            select id from lesson_note
+            where lesson_note.student_id = student.id
+            order by date desc
+            limit 1
+          )`,
+        })
+        .from(student)
+        .where(eq(student.tutorId, tutorId))
+        .orderBy(student.name),
+      db
+        .select({ count: sql<number>`count(*)` })
+        .from(material)
+        .where(eq(material.tutorId, tutorId))
+        .get(),
+      db
+        .select({
+          id: material.id,
+          title: material.title,
+          description: material.description,
+          kind: material.kind,
+        })
+        .from(material)
+        .where(eq(material.tutorId, tutorId))
+        .orderBy(desc(material.createdAt))
+        .limit(5),
+      db
+        .select({
+          id: lessonNote.id,
+          date: lessonNote.date,
+          studentId: lessonNote.studentId,
+          studentName: student.name,
+        })
+        .from(lessonNote)
+        .innerJoin(student, eq(student.id, lessonNote.studentId))
+        .where(eq(lessonNote.tutorId, tutorId))
+        .orderBy(desc(lessonNote.date))
+        .limit(8),
+    ]);
 
   return {
-    studentCount: students?.count ?? 0,
-    materialCount: materials?.count ?? 0,
+    students,
+    materialCount: materialCountRow?.count ?? 0,
+    recentMaterials,
     recentNotes,
   };
 }

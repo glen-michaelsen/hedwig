@@ -121,16 +121,21 @@ export function PageHeader({
 export function SectionTitle({
   children,
   hint,
+  action,
 }: {
   children: ReactNode;
   hint?: ReactNode;
+  action?: ReactNode;
 }) {
   return (
-    <div className="mb-4">
-      <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
-        {children}
-      </h2>
-      {hint && <p className="mt-1.5 text-sm text-muted">{hint}</p>}
+    <div className={`mb-4 ${action ? "flex items-start justify-between gap-4" : ""}`}>
+      <div>
+        <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
+          {children}
+        </h2>
+        {hint && <p className="mt-1.5 text-sm text-muted">{hint}</p>}
+      </div>
+      {action}
     </div>
   );
 }

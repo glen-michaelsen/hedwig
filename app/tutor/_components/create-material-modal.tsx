@@ -6,35 +6,38 @@ import {
   createMaterialInlineAction,
   type CreatedMaterial,
   type NewMaterialState,
-} from "../../../actions";
-import { MaterialFormFields } from "../../../_components/material-form-fields";
+} from "../actions";
+import { MaterialFormFields } from "./material-form-fields";
 import { Modal } from "@/app/_components/modal";
 import { ErrorText, button } from "@/app/_components/ui";
 
 /**
- * Creates a material without leaving the lesson note — the alternative is
- * navigating to /tutor/library/new and losing whatever's half-written in
- * the note form. Modal fully unmounts on close (Modal itself returns null
- * when closed), so every open starts from a fresh useActionState({}) —
- * no stale state to guard against between one material and the next.
+ * Creates a material without navigating away — from the lesson note (where
+ * the alternative is losing whatever's half-written in the note form) and
+ * from the dashboard's material widget. Modal fully unmounts on close
+ * (Modal itself returns null when closed), so every open starts from a
+ * fresh useActionState({}) — no stale state to guard against between one
+ * material and the next.
  *
- * Portalled to document.body rather than rendered in place: this sits
- * inside the note's own <form>, and a <form> nested inside another <form>
- * is invalid HTML that browsers handle unpredictably (same reasoning as
- * DropdownMenu elsewhere in this app). Guarded by `open` — which only ever
- * becomes true from a client click — so document.body is never touched
- * during server rendering.
+ * Portalled to document.body rather than rendered in place: the lesson note
+ * caller sits inside its own <form>, and a <form> nested inside another
+ * <form> is invalid HTML that browsers handle unpredictably (same reasoning
+ * as DropdownMenu elsewhere in this app). Guarded by `open` — which only
+ * ever becomes true from a client click — so document.body is never
+ * touched during server rendering.
  */
 export function CreateMaterialModal({
   open,
   onClose,
   allTags,
   onCreated,
+  submitLabel = "Create & attach",
 }: {
   open: boolean;
   onClose: () => void;
   allTags: string[];
   onCreated: (material: CreatedMaterial) => void;
+  submitLabel?: string;
 }) {
   const [state, action, pending] = useActionState<NewMaterialState, FormData>(
     createMaterialInlineAction,
@@ -61,7 +64,7 @@ export function CreateMaterialModal({
         {state.error && <ErrorText>{state.error}</ErrorText>}
 
         <button className={button} disabled={pending}>
-          {pending ? "Creating…" : "Create & attach"}
+          {pending ? "Creating…" : submitLabel}
         </button>
       </form>
     </Modal>,

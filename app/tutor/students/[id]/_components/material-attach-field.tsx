@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CreateMaterialModal } from "./create-material-modal";
+import { CreateMaterialModal } from "../../../_components/create-material-modal";
 import { KindBadge, buttonQuiet, input, label } from "@/app/_components/ui";
 
 export type MaterialOption = {
