@@ -16,6 +16,16 @@ import { SpotlightStatusBadge } from "./_components/status-badge";
 
 export const metadata = { title: "Spotlight" };
 
+function formatDate(value: string | null) {
+  if (!value) return null;
+  const [year, month, day] = value.split("-").map(Number);
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(year, month - 1, day));
+}
+
 export default async function AdminSpotlightPage() {
   await requireAdmin("/account/spotlight");
   const [articles, today] = await Promise.all([listSpotlights(), todayIso()]);
@@ -83,7 +93,12 @@ export default async function AdminSpotlightPage() {
                     </span>
                   </div>
 
-                  <SpotlightStatusBadge status={status} />
+                  <div className="flex shrink-0 flex-col items-end gap-1.5">
+                    <SpotlightStatusBadge status={status} />
+                    <span className="text-xs text-muted">
+                      {formatDate(article.releaseDate) ?? "No date"}
+                    </span>
+                  </div>
                 </Link>
               </li>
               );

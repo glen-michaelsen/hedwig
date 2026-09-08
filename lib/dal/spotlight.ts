@@ -132,7 +132,13 @@ export async function listSpotlights() {
     .from(spotlight)
     .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
     .innerJoin(artist, eq(artist.id, pressRelease.artistId))
-    .orderBy(desc(spotlight.createdAt));
+    // By release date, undated last, same as the public listing — Planned
+    // articles (future dates) surface above older published ones.
+    .orderBy(
+      sql`${pressRelease.releaseDate} is null`,
+      desc(pressRelease.releaseDate),
+      desc(spotlight.createdAt),
+    );
 }
 
 export async function getSpotlight(id: string) {
