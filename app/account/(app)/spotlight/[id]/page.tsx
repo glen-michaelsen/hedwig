@@ -1,23 +1,15 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  Card,
-  PageHeader,
-  buttonGhost,
-  buttonQuiet,
-} from "@/app/_components/ui";
-import { SubmitButton } from "@/app/_components/submit-button";
+import { Card, PageHeader } from "@/app/_components/ui";
 import { requireAdmin } from "@/lib/auth";
 import { todayIso } from "@/lib/clock";
 import { getSpotlight, listPhotosForRelease } from "@/lib/dal/spotlight";
 import { buildSpotlightCaption } from "@/lib/press/spotlight-caption";
 import { MAX_RATING, computeSpotlightStatus } from "@/lib/spotlight/slug";
-import { togglePublishedAction, updateSpotlightAction } from "../actions";
+import { updateSpotlightAction } from "../actions";
 import { SpotlightForm } from "../_components/spotlight-form";
-import { SpotlightStatusBadge } from "../_components/status-badge";
-import { CopyCaptionButton } from "./_components/copy-caption-button";
-import { CopyPreviewLinkButton } from "./_components/copy-preview-link-button";
 import { DeleteSpotlightButton } from "./_components/delete-spotlight-button";
+import { SocialMenu } from "./_components/social-menu";
+import { SpotlightStatusMenu } from "./_components/spotlight-status-menu";
 
 const KIND_LABELS = { single: "Single", ep: "EP", album: "Album" } as const;
 
@@ -61,62 +53,18 @@ export default async function EditSpotlightPage({
   return (
     <>
       <PageHeader
-        title={
-          <span className="inline-flex items-center gap-2.5">
-            {article.headline}
-            <SpotlightStatusBadge status={status} />
-          </span>
-        }
+        title={article.headline}
         subtitle={`${article.artistName} — ${article.releaseTitle} · ${KIND_LABELS[article.releaseKind]}`}
         action={
           <div className="flex flex-wrap items-center gap-2.5">
-            <Link className={buttonQuiet} href="/account/spotlight">
-              All articles
-            </Link>
-            <Link
-              className={buttonGhost}
-              href={`/spotlight/${article.slug}`}
-              target="_blank"
-            >
-              {status === "published" ? "View live" : "Preview"}
-            </Link>
-            <Link
-              className={buttonGhost}
-              href={`/account/spotlight/${article.id}/image`}
-              target="_blank"
-            >
-              Instagram image
-            </Link>
-            <CopyCaptionButton caption={caption} />
-            <CopyPreviewLinkButton spotlightId={article.id} />
-            <form action={togglePublishedAction}>
-              <input type="hidden" name="spotlightId" value={article.id} />
-              <input
-                type="hidden"
-                name="published"
-                value={article.published ? "0" : "1"}
-              />
-              <SubmitButton
-                className={
-                  article.published
-                    ? buttonGhost
-                    : "inline-flex items-center justify-center gap-2 rounded-full bg-brand-600 px-5 py-2.5 text-sm font-medium text-white shadow-brand transition-all hover:bg-brand-500"
-                }
-                pendingLabel={
-                  article.published
-                    ? "Unpublishing…"
-                    : isFutureRelease
-                      ? "Planning…"
-                      : "Publishing…"
-                }
-              >
-                {article.published
-                  ? "Unpublish"
-                  : isFutureRelease
-                    ? "Plan"
-                    : "Publish"}
-              </SubmitButton>
-            </form>
+            <SocialMenu spotlightId={article.id} caption={caption} />
+            <SpotlightStatusMenu
+              spotlightId={article.id}
+              status={status}
+              published={article.published}
+              isFutureRelease={isFutureRelease}
+              previewUrl={`/spotlight/${article.slug}`}
+            />
           </div>
         }
       />
