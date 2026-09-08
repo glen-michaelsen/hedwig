@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { todayIso } from "@/lib/clock";
 import { getNoteForStudent } from "@/lib/dal/student";
+import { formatRelativeDate } from "@/lib/dates";
 import { getStudentSession } from "@/lib/student-session";
 import { MaterialList } from "@/app/s/_components/material-list";
 import { SectionTitle, focusable } from "@/app/_components/ui";
@@ -10,7 +12,10 @@ export default async function NotePage({ params }: PageProps<"/s/note/[id]">) {
   const student = await getStudentSession();
   if (!student) redirect("/login");
 
-  const note = await getNoteForStudent(student.id, id);
+  const [note, today] = await Promise.all([
+    getNoteForStudent(student.id, id),
+    todayIso(),
+  ]);
   if (!note) notFound();
 
   return (
@@ -23,7 +28,7 @@ export default async function NotePage({ params }: PageProps<"/s/note/[id]">) {
       </Link>
 
       <h1 className="mt-5 mb-10 text-3xl font-semibold tracking-tight tabular-nums">
-        {note.date}
+        {formatRelativeDate(note.date, today)}
       </h1>
 
       <div className="space-y-10">

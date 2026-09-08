@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { todayIso } from "@/lib/clock";
 import { getFeed } from "@/lib/dal/student";
+import { formatRelativeDate } from "@/lib/dates";
 import { getStudentSession } from "@/lib/student-session";
 import { Empty, PageHeader } from "@/app/_components/ui";
 
@@ -8,7 +10,7 @@ export default async function FeedPage() {
   const student = await getStudentSession();
   if (!student) redirect("/login");
 
-  const notes = await getFeed(student.id);
+  const [notes, today] = await Promise.all([getFeed(student.id), todayIso()]);
 
   return (
     <>
@@ -32,7 +34,7 @@ export default async function FeedPage() {
                 className="block rounded-4xl border border-line bg-surface p-7 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift sm:p-8"
               >
                 <p className="text-xs font-semibold uppercase tracking-[0.1em] tabular-nums text-brand-600 dark:text-brand-400">
-                  {note.date}
+                  {formatRelativeDate(note.date, today)}
                 </p>
 
                 {note.summaryShared && (

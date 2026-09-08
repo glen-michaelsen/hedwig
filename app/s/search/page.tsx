@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { todayIso } from "@/lib/clock";
 import { getFeed, getStudentLibrary } from "@/lib/dal/student";
 import { getStudentSession } from "@/lib/student-session";
 import { PageHeader } from "@/app/_components/ui";
@@ -8,9 +9,10 @@ export default async function SearchPage() {
   const student = await getStudentSession();
   if (!student) redirect("/login");
 
-  const [notes, { onShelf, fromLessons }] = await Promise.all([
+  const [notes, { onShelf, fromLessons }, today] = await Promise.all([
     getFeed(student.id),
     getStudentLibrary(student.id),
+    todayIso(),
   ]);
 
   return (
@@ -19,7 +21,12 @@ export default async function SearchPage() {
         title="Search"
         subtitle="Find a lesson or a piece of material."
       />
-      <StudentSearch notes={notes} onShelf={onShelf} fromLessons={fromLessons} />
+      <StudentSearch
+        notes={notes}
+        onShelf={onShelf}
+        fromLessons={fromLessons}
+        today={today}
+      />
     </>
   );
 }

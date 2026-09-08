@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { StudentFeedNote, StudentLibraryItem } from "@/lib/dal/student";
+import { formatRelativeDate } from "@/lib/dates";
 import { Empty, SectionTitle, input } from "@/app/_components/ui";
 import { MaterialList } from "./material-list";
 
@@ -35,10 +36,12 @@ export function StudentSearch({
   notes,
   onShelf,
   fromLessons,
+  today,
 }: {
   notes: StudentFeedNote[];
   onShelf: StudentLibraryItem[];
   fromLessons: StudentLibraryItem[];
+  today: string;
 }) {
   const [query, setQuery] = useState("");
   const materials = useMemo(
@@ -103,7 +106,7 @@ export function StudentSearch({
                       className="block min-w-0 rounded-2xl border border-line bg-surface px-4 py-3.5 shadow-soft transition-all hover:-translate-y-px hover:shadow-lift"
                     >
                       <p className="text-xs font-semibold uppercase tracking-[0.1em] tabular-nums text-brand-600 dark:text-brand-400">
-                        {note.date}
+                        {formatRelativeDate(note.date, today)}
                       </p>
                       {note.summaryShared && (
                         <p className="mt-1 line-clamp-1 text-sm text-muted">

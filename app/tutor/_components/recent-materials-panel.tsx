@@ -23,7 +23,7 @@ function ArrowIcon() {
       strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="h-4 w-4"
+      className="h-3.5 w-3.5"
       aria-hidden
     >
       <path d="M5 12h14M13 6l6 6-6 6" />
@@ -40,7 +40,7 @@ function PlusIcon() {
       strokeWidth={1.8}
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="h-4 w-4"
+      className="h-3.5 w-3.5"
       aria-hidden
     >
       <path d="M12 5v14M5 12h14" />
@@ -54,11 +54,10 @@ function PlusIcon() {
  * prepended locally rather than waiting on a round trip, same pattern as
  * MaterialAttachField.
  *
- * Header actions are icon-only circles (same shape as the calendar's
- * prev/next in LessonNotes) rather than labelled pills — this row sits
- * beside "Students" and "Recent lessons", whose headers carry no action at
- * all, so a couple of small circles keep all three titles the same height
- * instead of the widest one pushing its own table down.
+ * The header stays bare text, same as "Students" and "Recent lessons"
+ * beside it — actions live in a footer bar under the table instead, so
+ * this section's own list starts at the same line as its neighbours
+ * rather than being pushed down by whatever the header happens to carry.
  */
 export function RecentMaterialsPanel({
   materials,
@@ -70,36 +69,37 @@ export function RecentMaterialsPanel({
   const [items, setItems] = useState(materials);
   const [createOpen, setCreateOpen] = useState(false);
 
+  const footer = (
+    <>
+      <button
+        type="button"
+        onClick={() => setCreateOpen(true)}
+        className={`inline-flex items-center gap-1.5 text-sm font-medium text-brand-700 transition-colors hover:text-brand-600 dark:text-brand-300 ${focusable}`}
+      >
+        <PlusIcon />
+        Add material
+      </button>
+      <Link
+        href="/tutor/library"
+        className={`inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-foreground ${focusable}`}
+      >
+        See all
+        <ArrowIcon />
+      </Link>
+    </>
+  );
+
   return (
     <section>
-      <SectionTitle
-        action={
-          <div className="flex shrink-0 items-center gap-2">
-            <Link
-              href="/tutor/library"
-              aria-label="See all material"
-              title="See all material"
-              className={`grid h-9 w-9 place-items-center rounded-full border border-line text-muted transition-colors hover:border-line-strong hover:text-foreground ${focusable}`}
-            >
-              <ArrowIcon />
-            </Link>
-            <button
-              type="button"
-              onClick={() => setCreateOpen(true)}
-              aria-label="Add material"
-              title="Add material"
-              className={`grid h-9 w-9 place-items-center rounded-full bg-brand-600 text-white transition-colors hover:bg-brand-500 ${focusable}`}
-            >
-              <PlusIcon />
-            </button>
-          </div>
-        }
-      >
-        Material
-      </SectionTitle>
+      <SectionTitle>Material</SectionTitle>
 
       {items.length === 0 ? (
-        <Empty>Nothing in your library yet.</Empty>
+        <>
+          <Empty>Nothing in your library yet.</Empty>
+          <div className="mt-3 flex items-center justify-between rounded-2xl border border-line bg-surface-muted px-6 py-3">
+            {footer}
+          </div>
+        </>
       ) : (
         <Panel>
           <PanelList>
@@ -114,6 +114,9 @@ export function RecentMaterialsPanel({
               </li>
             ))}
           </PanelList>
+          <div className="flex items-center justify-between border-t border-line bg-surface-muted px-6 py-3">
+            {footer}
+          </div>
         </Panel>
       )}
 
