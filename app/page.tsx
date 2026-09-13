@@ -50,10 +50,6 @@ const FAQS = [
     a: "Link in Bio and Setlist are free, forever — nothing to pay to get started with either one.",
   },
   {
-    q: "Do I need an invite to join?",
-    a: "Right now, yes — Trenodo's still small and growing carefully. Join the waitlist and you'll hear back with an invite, or when it opens up for everyone.",
-  },
-  {
     q: "Do my students need their own account?",
     a: "No — a student signs into their own portal with just their phone number and a PIN you read out once. No app, no password to forget.",
   },

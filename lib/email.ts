@@ -17,7 +17,35 @@ const COLOR = {
   accent: "#825abe",
 };
 
+const INVITE_FEATURES: { title: string; body: string }[] = [
+  {
+    title: "Tutor",
+    body: "Your students, your library, and a lesson note for every session.",
+  },
+  {
+    title: "Link in Bio",
+    body: "One page for everything you point people at — your music, your dates, your links.",
+  },
+  {
+    title: "Press Kit",
+    body: "Photos, tracks, lyrics and the story, in a page you can send to a promoter.",
+  },
+  {
+    title: "Setlist",
+    body: "Drag songs into sets, and print a sheet for the stage.",
+  },
+];
+
 function inviteEmailHtml(email: string, link: string): string {
+  const features = INVITE_FEATURES.map(
+    (f) => `<tr>
+                  <td style="padding:14px 0;border-top:1px solid ${COLOR.border};">
+                    <p style="margin:0 0 4px;font-size:15px;font-weight:600;color:${COLOR.ink};">${f.title}</p>
+                    <p style="margin:0;font-size:14px;line-height:1.5;color:${COLOR.muted};">${f.body}</p>
+                  </td>
+                </tr>`,
+  ).join("");
+
   return `<!doctype html>
 <html>
   <body style="margin:0;padding:0;background:${COLOR.bg};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
@@ -31,22 +59,25 @@ function inviteEmailHtml(email: string, link: string): string {
                   Trenodo
                 </p>
                 <h1 style="margin:0 0 16px;font-size:28px;line-height:1.2;font-weight:700;color:${COLOR.ink};">
-                  Yes, you&rsquo;re in!
+                  A toolbox built for musicians
                 </h1>
-                <p style="margin:0 0 28px;font-size:16px;line-height:1.6;color:${COLOR.ink};">
-                  Your Trenodo account is ready to set up — teaching, press kits, link in bio and setlists, all in one place.
+                <p style="margin:0 0 20px;font-size:16px;line-height:1.6;color:${COLOR.ink};">
+                  Someone thought you'd like Trenodo — teaching, promotion and gigging, all in one account instead of four different apps.
                 </p>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
+                  ${features}
+                </table>
                 <table role="presentation" cellpadding="0" cellspacing="0">
                   <tr>
                     <td style="border-radius:999px;background:${COLOR.accent};">
                       <a href="${link}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:600;color:#ffffff;text-decoration:none;border-radius:999px;">
-                        Set up your account
+                        Create your account
                       </a>
                     </td>
                   </tr>
                 </table>
                 <p style="margin:28px 0 0;font-size:13px;line-height:1.6;color:${COLOR.muted};">
-                  Heads up — this link&rsquo;s just for ${email} and works for the next 14 days.
+                  We've filled in your email (${email}) on the form — change it if you'd rather use a different one.
                 </p>
               </td>
             </tr>
@@ -63,22 +94,24 @@ function inviteEmailHtml(email: string, link: string): string {
 
 function inviteEmailText(email: string, link: string): string {
   return [
-    "Yes, you're in!",
+    "A toolbox built for musicians",
     "",
-    "Your Trenodo account is ready to set up — teaching, press kits, link in bio and setlists, all in one place.",
+    "Someone thought you'd like Trenodo — teaching, promotion and gigging, all in one account instead of four different apps.",
     "",
-    "Set up your account:",
+    ...INVITE_FEATURES.flatMap((f) => [`${f.title} — ${f.body}`]),
+    "",
+    "Create your account:",
     link,
     "",
-    `Heads up — this link's just for ${email} and works for the next 14 days.`,
+    `We've filled in your email (${email}) on the form — change it if you'd rather use a different one.`,
   ].join("\n");
 }
 
 /**
  * Best-effort by design: an invite is already created and its link already
  * works the moment this is called, so a Resend outage shouldn't block the
- * admin from inviting someone — it should just fall back to the copy-link
- * they already have. Callers get a plain boolean, not a thrown error.
+ * admin from sending it — it should just fall back to the copy-link they
+ * already have. Callers get a plain boolean, not a thrown error.
  */
 export async function sendInviteEmail(
   email: string,
@@ -92,7 +125,7 @@ export async function sendInviteEmail(
   const { error } = await resend.emails.send({
     from: FROM,
     to: email,
-    subject: "Yes, you're in!",
+    subject: "A toolbox built for musicians",
     html: inviteEmailHtml(email, link),
     text: inviteEmailText(email, link),
   });
@@ -102,8 +135,8 @@ export async function sendInviteEmail(
 
 /* ----------------------------- admin notices ----------------------------- */
 
-// `name` comes straight from the public waitlist/signup forms — unescaped,
-// it's an HTML-injection vector into the admin's own mail client.
+// `name` comes straight from the public signup form — unescaped, it's an
+// HTML-injection vector into the admin's own mail client.
 function escapeHtml(value: string): string {
   return value
     .replaceAll("&", "&amp;")
@@ -141,8 +174,8 @@ function adminEmailHtml(heading: string, bodyHtml: string): string {
 }
 
 /**
- * Best-effort, same as sendInviteEmail — nothing about the waitlist join or
- * invite acceptance itself depends on this succeeding.
+ * Best-effort, same as sendInviteEmail — nothing about the signup itself
+ * depends on this succeeding.
  */
 async function sendAdminEmail(
   subject: string,
@@ -165,26 +198,19 @@ async function sendAdminEmail(
   return !error;
 }
 
-export async function sendWaitlistAdminEmail(
+/**
+ * The only heads-up an admin gets that someone new signed up, now that
+ * signup is public — fired for every account, invited or not.
+ */
+export async function sendNewSignupAdminEmail(
   name: string,
   email: string,
-  phone: string | null,
+  invited: boolean,
 ): Promise<boolean> {
-  const detail = phone ? `${email} · ${phone}` : email;
+  const detail = invited ? `${email} (you invited them)` : email;
   return sendAdminEmail(
-    "New waitlist signup",
+    "New signup",
     `<p style="margin:0;font-size:16px;line-height:1.6;color:${COLOR.ink};"><strong>${escapeHtml(name)}</strong> — ${escapeHtml(detail)}</p>`,
     `${name} — ${detail}`,
-  );
-}
-
-export async function sendInviteAcceptedAdminEmail(
-  name: string,
-  email: string,
-): Promise<boolean> {
-  return sendAdminEmail(
-    "Invite accepted",
-    `<p style="margin:0;font-size:16px;line-height:1.6;color:${COLOR.ink};"><strong>${escapeHtml(name)}</strong> — ${escapeHtml(email)} just accepted their invite.</p>`,
-    `${name} — ${email} just accepted their invite.`,
   );
 }

@@ -19,20 +19,8 @@ import {
  * nothing to fall back on. The form and the "here's your invite" result
  * share one modal: closing either one resets it, so reopening always
  * starts from a blank email field.
- *
- * `defaultEmail` is what lets a waitlist row invite straight to that
- * person without retyping their address — everything else about the flow
- * is identical either way.
  */
-export function InviteMusicianButton({
-  defaultEmail,
-  triggerLabel = "Invite a musician",
-  triggerClassName = button,
-}: {
-  defaultEmail?: string;
-  triggerLabel?: string;
-  triggerClassName?: string;
-} = {}) {
+export function InviteMusicianButton() {
   const [open, setOpen] = useState(false);
   const [state, action, pending] = useActionState<InviteFormState, FormData>(
     createInviteAction,
@@ -45,12 +33,8 @@ export function InviteMusicianButton({
 
   return (
     <>
-      <button
-        type="button"
-        className={triggerClassName}
-        onClick={() => setOpen(true)}
-      >
-        {triggerLabel}
+      <button type="button" className={button} onClick={() => setOpen(true)}>
+        Invite a musician
       </button>
 
       <Modal open={open} onClose={close} title="Invite a musician">
@@ -62,8 +46,8 @@ export function InviteMusicianButton({
                   <>
                     Emailed{" "}
                     <span className="font-medium text-foreground">{state.email}</span>{" "}
-                    their invite. Signs them straight into a signup form
-                    addressed to that email.
+                    a pitch for Trenodo, with their email already filled in
+                    on the signup form.
                   </>
                 ) : (
                   <>
@@ -93,13 +77,12 @@ export function InviteMusicianButton({
                   name="email"
                   type="email"
                   autoComplete="off"
-                  defaultValue={defaultEmail}
                   autoFocus
                   required
                 />
                 <p className="mt-2 text-xs text-faint">
-                  The link only works for this address, and expires in 14
-                  days.
+                  Prefills their email if they use this link — not required,
+                  they can sign up any way.
                 </p>
               </div>
 

@@ -9,14 +9,13 @@ import {
   TutorIcon,
 } from "@/app/_components/nav-icons";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
-import { containerNarrow } from "@/app/_components/ui";
+import { container } from "@/app/_components/ui";
 import { SignupForm } from "./_components/signup-form";
-import { WaitlistForm } from "./_components/waitlist-form";
 
 export const metadata: Metadata = {
-  title: "Join Trenodo",
+  title: "Create your account — Trenodo",
   description:
-    "Trenodo is invite-only right now — join the waitlist for an invite, or a heads-up when it opens up.",
+    "Create your free Trenodo account — Tutor, Link in Bio, Press Kit and Setlists, all in one place.",
 };
 
 const FEATURE_CARDS = [
@@ -49,74 +48,47 @@ export default async function SignupPage({
   // a second account.
   if (await getAccount()) redirect("/account");
 
+  // A personal invite link prefills the email as a courtesy — it's never
+  // required. A stale id (used, revoked, expired, or just wrong) simply
+  // means the form starts blank instead of erroring.
   const { invite: inviteId } = await searchParams;
   const invite =
     typeof inviteId === "string" ? await getOpenInvite(inviteId) : null;
-
-  // A real invite gets the plain, narrow signup form — the same shell the
-  // login page uses. Everyone else lands on the waitlist instead, which is
-  // the actual public-facing page now, so it gets the full treatment.
-  if (invite) {
-    return (
-      <>
-        <SiteHeader />
-        <main className="relative isolate flex flex-1 items-center justify-center overflow-hidden py-16 sm:py-24">
-          <div className="brand-wash" />
-          <div className={`${containerNarrow} max-w-md`}>
-            <SignupForm invite={invite.id} email={invite.email} />
-          </div>
-        </main>
-        <SiteFooter />
-      </>
-    );
-  }
 
   return (
     <>
       <SiteHeader />
 
-      <main className="flex-1 py-16 sm:py-20">
-        <div className={containerNarrow}>
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand-600 dark:text-brand-300">
-            Invite only
-          </p>
-          <h1 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-            Trenodo isn&rsquo;t open signup — yet.
-          </h1>
-          <p className="mt-4 max-w-xl text-base leading-relaxed text-muted text-pretty">
-            Accounts start from an invite while the toolbox gets built out
-            with a smaller group first. Join the waitlist and you&rsquo;ll
-            hear from us — either with an invite, or the moment it opens up
-            for everyone.
-          </p>
+      <main className="relative isolate flex-1 overflow-hidden py-16 sm:py-24">
+        <div className="brand-wash" />
+        <div className={container}>
+          <div className="grid items-start gap-14 lg:grid-cols-[minmax(0,26rem)_1fr]">
+            <SignupForm invite={invite?.id ?? ""} email={invite?.email ?? ""} />
 
-          <div className="mt-10">
-            <WaitlistForm />
+            <section>
+              <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
+                What&rsquo;s included
+              </h2>
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                {FEATURE_CARDS.map(({ Icon, title, body }) => (
+                  <div
+                    key={title}
+                    className="rounded-4xl border border-line bg-surface p-6 shadow-soft"
+                  >
+                    <span className="grid h-10 w-10 place-items-center rounded-2xl bg-brand-500/12 text-brand-600">
+                      <Icon className="h-5 w-5" />
+                    </span>
+                    <h3 className="mt-4 text-sm font-semibold tracking-tight">
+                      {title}
+                    </h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted text-pretty">
+                      {body}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
           </div>
-
-          <section className="mt-16">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
-              What you&rsquo;d be waiting for
-            </h2>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              {FEATURE_CARDS.map(({ Icon, title, body }) => (
-                <div
-                  key={title}
-                  className="rounded-4xl border border-line bg-surface p-6 shadow-soft"
-                >
-                  <span className="grid h-10 w-10 place-items-center rounded-2xl bg-brand-500/12 text-brand-600">
-                    <Icon className="h-5 w-5" />
-                  </span>
-                  <h3 className="mt-4 text-sm font-semibold tracking-tight">
-                    {title}
-                  </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted text-pretty">
-                    {body}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
         </div>
       </main>
 

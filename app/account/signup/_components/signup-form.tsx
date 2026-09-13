@@ -26,10 +26,10 @@ export function SignupForm({
   return (
     <Card raised>
       <h1 className="text-2xl font-semibold tracking-tight">
-        Create your studio
+        Create your account
       </h1>
       <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">
-        Students never need an account — you give them a PIN.
+        Tutor, Link in Bio, Press Kit and Setlists — all in one place.
       </p>
 
       <form action={action} className="mt-8 space-y-5">
@@ -62,17 +62,14 @@ export function SignupForm({
             Email
           </label>
           <input
-            className={`${input} cursor-not-allowed text-muted`}
+            className={input}
             id="email"
             name="email"
             type="email"
             autoComplete="username"
             defaultValue={email}
-            readOnly
+            required
           />
-          <p className="mt-2 text-xs text-faint">
-            Your invite was sent to this address.
-          </p>
         </div>
 
         <div>

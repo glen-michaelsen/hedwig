@@ -48,9 +48,10 @@ export async function listInvites(invitedBy: string) {
 export type InviteRow = Awaited<ReturnType<typeof listInvites>>[number];
 
 /**
- * The signup gate. A valid invite is unrevoked, unaccepted and unexpired —
- * every other state, including "no row with this id", returns the same
- * null, so a guessed signup link learns nothing about what it guessed.
+ * Resolves a personal invite link, if it's still live — used only to
+ * prefill the signup form's email and to note that the link was used.
+ * Signing up never depends on this: a stale id (already accepted, revoked,
+ * expired, or just wrong) simply means the form starts blank instead.
  */
 export async function getOpenInvite(id: string) {
   const db = await getDb();

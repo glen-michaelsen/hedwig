@@ -73,10 +73,12 @@ export const verification = sqliteTable("verification", {
 /* ------------------------------------------------------------------ *
  * Invites
  *
- * Signup is admin-only: an account can only be created against a live
- * invite. The invite's own id is the token in the signup link — one
+ * Signup is open to anyone — this is just a personal nudge: the admin
+ * emails someone a pitch, and the link prefills their email on the
+ * signup form. The invite's own id is the token in that link — one
  * fewer column, and nothing else ever needs to reference an invite by a
- * separate public value.
+ * separate public value. `acceptedAt`/`acceptedUserId` are a courtesy
+ * note ("this landed"), not a gate — signing up never depends on them.
  * ------------------------------------------------------------------ */
 
 export const invite = sqliteTable(
@@ -826,31 +828,6 @@ export const ideaVote = sqliteTable(
   ],
 );
 
-/* ------------------------------------------------------------------ *
- * Waitlist
- *
- * Public, no account needed — the counterpart to invite-only signup.
- * `email` is unique so re-submitting (say, to add a feature) updates the
- * existing row instead of piling up duplicates.
- * ------------------------------------------------------------------ */
-
-export const waitlist = sqliteTable(
-  "waitlist",
-  {
-    id: text("id").primaryKey(),
-    name: text("name").notNull(),
-    email: text("email").notNull().unique(),
-    phone: text("phone"),
-    /** JSON array of WaitlistFeature keys — see lib/waitlist.ts. */
-    features: text("features").notNull(),
-    /** Same rate-limiting scheme as `idea` — see lib/dal/waitlist.ts. */
-    ipHash: text("ip_hash"),
-    createdAt: integer("created_at", { mode: "timestamp" })
-      .notNull()
-      .default(sql`(unixepoch())`),
-  },
-  (t) => [index("waitlist_ip_idx").on(t.ipHash, t.createdAt)],
-);
 
 export type Idea = typeof idea.$inferSelect;
 

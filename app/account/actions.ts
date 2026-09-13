@@ -7,9 +7,7 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getAuth } from "@/lib/auth";
 import { acceptInvite, getOpenInvite } from "@/lib/dal/musicians";
-import { joinWaitlist } from "@/lib/dal/waitlist";
-import { sendInviteAcceptedAdminEmail, sendWaitlistAdminEmail } from "@/lib/email";
-import { isWaitlistFeature, type WaitlistFeature } from "@/lib/waitlist";
+import { sendNewSignupAdminEmail } from "@/lib/email";
 
 export type AuthFormState = { error?: string };
 
@@ -21,22 +19,16 @@ const signUpSchema = z.object({
 });
 
 /**
- * Accounts are admin-only, by invite — see lib/dal/musicians.ts. The form
- * always carries the invite id it was loaded with; a submission without
- * one, or with one that's since expired or been used, can't create an
- * account at all. The email is locked to the invite's own on the client,
- * but re-checked here since the client can't be trusted to enforce that.
+ * Signup is open to anyone. `invite` is optional and purely cosmetic: if
+ * it's present, resolves to a still-open invite, and its email matches
+ * what was actually submitted, the invite gets marked accepted as a
+ * courtesy note for the admin — it never blocks or changes account
+ * creation itself.
  */
 export async function signUpAction(
   _prev: AuthFormState,
   formData: FormData,
 ): Promise<AuthFormState> {
-  const inviteId = String(formData.get("invite") ?? "");
-  const invite = inviteId ? await getOpenInvite(inviteId) : null;
-  if (!invite) {
-    return { error: "That invite link isn't valid any more." };
-  }
-
   const parsed = signUpSchema.safeParse({
     name: formData.get("name"),
     studioName: formData.get("studioName"),
@@ -47,11 +39,8 @@ export async function signUpAction(
     return { error: parsed.error.issues[0]?.message ?? "Check the form" };
   }
 
-  if (parsed.data.email.toLowerCase() !== invite.email.toLowerCase()) {
-    return { error: "This invite was sent to a different email address." };
-  }
-
   const auth = await getAuth();
+  let userId: string;
   try {
     const result = await auth.api.signUpEmail({
       body: {
@@ -62,7 +51,7 @@ export async function signUpAction(
       },
       headers: await headers(),
     });
-    await acceptInvite(invite.id, result.user.id);
+    userId = result.user.id;
   } catch (error) {
     if (error instanceof APIError) {
       return { error: error.body?.message ?? "Could not create the account" };
@@ -70,70 +59,17 @@ export async function signUpAction(
     throw error;
   }
 
-  // Best-effort — the account is already created, this is just a heads-up.
-  await sendInviteAcceptedAdminEmail(parsed.data.name, parsed.data.email);
+  // Best-effort from here — the account already exists either way.
+  const inviteId = String(formData.get("invite") ?? "");
+  const invite = inviteId ? await getOpenInvite(inviteId) : null;
+  const invited =
+    invite !== null &&
+    invite.email.toLowerCase() === parsed.data.email.toLowerCase();
+  if (invited) await acceptInvite(invite.id, userId);
+
+  await sendNewSignupAdminEmail(parsed.data.name, parsed.data.email, invited);
 
   redirect("/account");
-}
-
-export type WaitlistFormState = { error?: string; done?: boolean };
-
-const waitlistSchema = z.object({
-  name: z.string().min(1, "Your name is required").trim(),
-  email: z.email("Enter a valid email address").trim(),
-  phone: z.string().trim().optional(),
-});
-
-export async function joinWaitlistAction(
-  _prev: WaitlistFormState,
-  formData: FormData,
-): Promise<WaitlistFormState> {
-  // Honeypot: a field no human sees, so anything in it came from a bot. It
-  // gets the same success screen as everyone else — telling a script it was
-  // caught only teaches it to stop filling the field in.
-  if (String(formData.get("website") ?? "").trim()) return { done: true };
-
-  const parsed = waitlistSchema.safeParse({
-    name: formData.get("name"),
-    email: formData.get("email"),
-    phone: formData.get("phone"),
-  });
-  if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message ?? "Check the form" };
-  }
-
-  const features = formData
-    .getAll("features")
-    .map(String)
-    .filter(isWaitlistFeature) as WaitlistFeature[];
-  if (features.length === 0) {
-    return { error: "Pick at least one thing you're interested in" };
-  }
-
-  // Cloudflare sets this on every request; it's absent only in local dev.
-  const ip = (await headers()).get("cf-connecting-ip");
-
-  const result = await joinWaitlist({
-    name: parsed.data.name,
-    email: parsed.data.email,
-    phone: parsed.data.phone || null,
-    features,
-    ip,
-  });
-
-  if (!result.ok) {
-    return { error: "That's a lot of attempts at once — try again in a bit." };
-  }
-
-  if (result.isNew) {
-    await sendWaitlistAdminEmail(
-      parsed.data.name,
-      parsed.data.email,
-      parsed.data.phone || null,
-    );
-  }
-
-  return { done: true };
 }
 
 export async function signInAction(

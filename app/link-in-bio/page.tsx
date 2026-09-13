@@ -44,10 +44,6 @@ const FAQS = [
     a: "It's built around what musicians actually share — a release, a player, tour dates — instead of a generic grid of buttons. A track link looks like a track link, not a t-shirt link.",
   },
   {
-    q: "Do I need an invite to sign up?",
-    a: "Right now, yes — Trenodo's still small and growing carefully. Join the waitlist and you'll hear back with an invite, or when it opens up for everyone.",
-  },
-  {
     q: "Can I pick my own handle, and change it later?",
     a: "Yes. Your page lives at trenodo.com/@yourhandle, and if you change it, the old one keeps redirecting — handy since printed QR codes and old bio links outlive handle changes.",
   },
