@@ -57,12 +57,15 @@ export const OPEN_CHORDS: ChordShape[] = [
     fingers: [null, 2, 3, null, null, null],
   },
   {
+    // The "easy F" — four strings, with the index finger barring only the
+    // bottom two, rather than the full six-string barre. Far more forgiving
+    // for a beginner's fretting hand, and sounds nearly identical strummed.
     name: "F major",
     shortName: "F",
     slug: "f-major",
-    frets: [1, 3, 3, 2, 1, 1],
-    fingers: [1, 3, 4, 2, 1, 1],
-    barre: { fret: 1, fromString: 0, toString: 5 },
+    frets: [null, null, 3, 2, 1, 1],
+    fingers: [null, null, 3, 2, 1, 1],
+    barre: { fret: 1, fromString: 4, toString: 5 },
   },
   {
     name: "G major",

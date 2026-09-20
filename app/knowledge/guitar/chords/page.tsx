@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ChordFigure } from "../../_components/chord-figure";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
+import { ZoomableImage } from "../../_components/zoomable-image";
 import { focusable } from "@/app/_components/ui";
 import { BARRE_CHORDS, OPEN_CHORDS } from "@/lib/chord-diagrams/guitar-chords";
 
@@ -146,13 +147,12 @@ export default function GuitarChordsPage() {
                 covering all of them at once.
               </li>
             </ul>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <ZoomableImage
               src="/images/knowledge/guitar/finger-numbers.svg"
               alt="Fretting-hand finger numbers: 1 index, 2 middle, 3 ring, 4 pinky, T thumb"
               width={240}
               height={260}
-              loading="lazy"
+              title="Fretting-hand finger numbers"
               className="mx-auto w-full max-w-40 sm:mx-0 sm:w-40 sm:shrink-0"
             />
           </div>

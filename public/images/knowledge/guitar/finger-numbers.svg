@@ -2,8 +2,8 @@
   <title>Fretting-hand finger numbers</title>
   <rect x="0" y="0" width="240" height="260" rx="16" fill="#ffffff" />
 
-  <!-- thumb -->
-  <rect x="24" y="150" width="46" height="24" rx="12" fill="#efe9dd" stroke="#c7bda8" stroke-width="1.5" transform="rotate(-32 30 168)" />
+  <!-- thumb: pivot sits inside the palm, so rotation keeps the base tucked under it -->
+  <rect x="25" y="178" width="50" height="24" rx="12" fill="#efe9dd" stroke="#c7bda8" stroke-width="1.5" transform="rotate(35 75 190)" />
 
   <!-- palm -->
   <rect x="58" y="142" width="112" height="94" rx="32" fill="#efe9dd" stroke="#c7bda8" stroke-width="1.5" />
@@ -15,8 +15,8 @@
   <rect x="144" y="86" width="20" height="60" rx="10" fill="#efe9dd" stroke="#c7bda8" stroke-width="1.5" />
 
   <!-- labels -->
-  <circle cx="20" cy="198" r="13" fill="#825abe" />
-  <text x="20" y="202.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#ffffff">T</text>
+  <circle cx="30" cy="158" r="13" fill="#825abe" />
+  <text x="30" y="162.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#ffffff">T</text>
 
   <circle cx="77" cy="64" r="13" fill="#825abe" />
   <text x="77" y="68.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="600" fill="#ffffff">1</text>
