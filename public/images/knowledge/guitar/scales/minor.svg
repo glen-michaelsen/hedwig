@@ -1,32 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 272 224" width="272" height="224" role="img" aria-label="C minor scale guitar scale diagram">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 222 224" width="222" height="224" role="img" aria-label="C minor scale guitar scale diagram">
   <title>C minor scale guitar scale diagram</title>
-  <rect x="0" y="0" width="272" height="224" rx="16" fill="#ffffff" />
-  <line x1="30" y1="30" x2="238" y2="30" stroke="#c7bda8" stroke-width="1.5" />
-  <line x1="30" y1="62" x2="238" y2="62" stroke="#c7bda8" stroke-width="1.5" />
-  <line x1="30" y1="94" x2="238" y2="94" stroke="#c7bda8" stroke-width="1.5" />
-  <line x1="30" y1="126" x2="238" y2="126" stroke="#c7bda8" stroke-width="1.5" />
-  <line x1="30" y1="158" x2="238" y2="158" stroke="#c7bda8" stroke-width="1.5" />
-  <line x1="30" y1="190" x2="238" y2="190" stroke="#c7bda8" stroke-width="1.5" />
-  <line x1="30" y1="30" x2="30" y2="190" stroke="#3d372c" stroke-width="4" />
-  <line x1="82" y1="30" x2="82" y2="190" stroke="#c7bda8" stroke-width="1.5" />
-  <line x1="134" y1="30" x2="134" y2="190" stroke="#c7bda8" stroke-width="1.5" />
-  <line x1="186" y1="30" x2="186" y2="190" stroke="#c7bda8" stroke-width="1.5" />
-  <line x1="238" y1="30" x2="238" y2="190" stroke="#c7bda8" stroke-width="1.5" />
-  <circle cx="82" cy="30" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
-  <circle cx="186" cy="30" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
-  <circle cx="238" cy="30" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
-  <circle cx="82" cy="62" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
-  <circle cx="186" cy="62" r="11" fill="#825abe" />
-  <circle cx="30" cy="94" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
-  <circle cx="82" cy="94" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
-  <circle cx="186" cy="94" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
-  <circle cx="30" cy="126" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
-  <circle cx="82" cy="126" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
-  <circle cx="186" cy="126" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
-  <circle cx="82" cy="158" r="11" fill="#825abe" />
-  <circle cx="186" cy="158" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
-  <circle cx="238" cy="158" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
-  <circle cx="82" cy="190" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
-  <circle cx="186" cy="190" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
-  <circle cx="238" cy="190" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
+  <rect x="0" y="0" width="222" height="224" rx="16" fill="#ffffff" />
+  <line x1="42" y1="30" x2="198" y2="30" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="42" y1="62" x2="198" y2="62" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="42" y1="94" x2="198" y2="94" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="42" y1="126" x2="198" y2="126" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="42" y1="158" x2="198" y2="158" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="42" y1="190" x2="198" y2="190" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="42" y1="30" x2="42" y2="190" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="94" y1="30" x2="94" y2="190" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="146" y1="30" x2="146" y2="190" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="198" y1="30" x2="198" y2="190" stroke="#c7bda8" stroke-width="1.5" />
+  <text x="26" y="35" text-anchor="end" font-family="system-ui, sans-serif" font-size="13" fill="#6b6153">8fr</text>
+  <circle cx="42" cy="30" r="11" fill="#825abe" />
+  <circle cx="146" cy="30" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
+  <circle cx="198" cy="30" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
+  <circle cx="42" cy="62" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
+  <circle cx="146" cy="62" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
+  <circle cx="198" cy="62" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
+  <circle cx="42" cy="94" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
+  <circle cx="146" cy="94" r="11" fill="#825abe" />
+  <circle cx="42" cy="126" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
+  <circle cx="146" cy="126" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
+  <circle cx="42" cy="158" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
+  <circle cx="94" cy="158" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
+  <circle cx="198" cy="158" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
+  <circle cx="42" cy="190" r="11" fill="#825abe" />
+  <circle cx="146" cy="190" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
+  <circle cx="198" cy="190" r="8" fill="#efe9dd" stroke="#825abe" stroke-width="1.5" />
 </svg>

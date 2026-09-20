@@ -15,8 +15,17 @@ export type ScaleShape = {
   intervals: number[];
   /** Root note as a pitch class: C=0, C#=1 … B=11. */
   root: number;
-  /** Inclusive fret window to draw. Defaults to open position, frets 0-4. */
-  fretRange?: { start: number; end: number };
+  /**
+   * Semitones from the root used only to position the diagram's window on
+   * the low E string — not the note that gets highlighted as the root.
+   * Defaults to 0 (the box starts right on the root). Major pentatonic is
+   * the one exception worth knowing about: its cleanest single-position
+   * box is the same shape as its relative minor pentatonic's box 1, which
+   * starts 3 semitones below the major root, not on it.
+   */
+  boxAnchorOffset?: number;
+  /** How many fret columns the diagram spans. Defaults to 4. */
+  fretWidth?: number;
 };
 
 /** Standard tuning, low string to high, as pitch classes (C=0): E A D G B E. */
