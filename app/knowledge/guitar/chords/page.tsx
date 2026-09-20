@@ -1,7 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import { ChordFigure } from "../../_components/chord-figure";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 import { focusable } from "@/app/_components/ui";
+import { BARRE_CHORDS, OPEN_CHORDS } from "@/lib/chord-diagrams/guitar-chords";
 
 const PAGE_DESCRIPTION =
   "Open chords, barre chords, and how to read a chord diagram — the reference every beginner guitarist keeps coming back to.";
@@ -42,6 +44,10 @@ const structuredData = {
       headline: "Guitar Chords for Beginners: Open Chords, Barre Chords and Diagrams",
       description: PAGE_DESCRIPTION,
       author: { "@type": "Organization", name: "Trenodo" },
+      image: [...OPEN_CHORDS, ...BARRE_CHORDS].map(
+        (chord) =>
+          `https://trenodo.com/images/knowledge/guitar/chords/${chord.slug}.svg`,
+      ),
     },
     {
       "@type": "FAQPage",
@@ -72,16 +78,18 @@ export default function GuitarChordsPage() {
             Open chords (sometimes called Spanish or standard chords) use at
             least one string ringing open, unfretted. They&rsquo;re the easiest
             chords to physically play, and between them cover an enormous
-            share of popular music. The essential set:
+            share of popular music.
           </p>
-          <ul className="list-disc columns-2 space-y-2 pl-5 sm:columns-3">
-            <li>A major, A minor</li>
-            <li>C major</li>
-            <li>D major, D minor</li>
-            <li>E major, E minor</li>
-            <li>F major</li>
-            <li>G major</li>
-          </ul>
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+            {OPEN_CHORDS.map((chord) => (
+              <ChordFigure
+                key={chord.slug}
+                slug={chord.slug}
+                name={chord.name}
+                shortName={chord.shortName}
+              />
+            ))}
+          </div>
           <p>
             New to these three specifically?{" "}
             <Link
@@ -102,28 +110,52 @@ export default function GuitarChordsPage() {
             chord by a half-tone (a semitone); moving it down lowers it the
             same amount. That&rsquo;s what makes barre chords so useful — one
             shape, moved around, gives you every chord of that type in every
-            key. Common starting points: B minor, B major, F# major, F#
-            minor, and a barre version of D major.
+            key.
           </p>
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
+            {BARRE_CHORDS.map((chord) => (
+              <ChordFigure
+                key={chord.slug}
+                slug={chord.slug}
+                name={chord.name}
+                shortName={chord.shortName}
+              />
+            ))}
+          </div>
         </GuideSection>
 
         <GuideSection title="Reading a chord diagram">
-          <ul className="list-disc space-y-3 pl-5">
-            <li>
-              <strong className="text-foreground">Numbers</strong> mark which
-              finger goes where: 1 is index, 2 is middle, 3 is ring, 4 is
-              pinky, and T is a thumb wrapped over the top for the low E
-              string.
-            </li>
-            <li>
-              <strong className="text-foreground">An &ldquo;x&rdquo; above a string</strong>{" "}
-              means don&rsquo;t play that string at all for this chord.
-            </li>
-            <li>
-              <strong className="text-foreground">An open circle</strong>{" "}
-              means play that string without fretting it.
-            </li>
-          </ul>
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
+            <ul className="list-disc space-y-3 pl-5 sm:flex-1">
+              <li>
+                <strong className="text-foreground">Numbers</strong> mark
+                which finger goes where: 1 is index, 2 is middle, 3 is ring,
+                and 4 is pinky.
+              </li>
+              <li>
+                <strong className="text-foreground">An &ldquo;x&rdquo; above a string</strong>{" "}
+                means don&rsquo;t play that string at all for this chord.
+              </li>
+              <li>
+                <strong className="text-foreground">An open circle</strong>{" "}
+                means play that string without fretting it.
+              </li>
+              <li>
+                <strong className="text-foreground">A rounded bar</strong>{" "}
+                across several strings is a barre — one finger laid flat,
+                covering all of them at once.
+              </li>
+            </ul>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/images/knowledge/guitar/finger-numbers.svg"
+              alt="Fretting-hand finger numbers: 1 index, 2 middle, 3 ring, 4 pinky, T thumb"
+              width={240}
+              height={260}
+              loading="lazy"
+              className="mx-auto w-full max-w-40 sm:mx-0 sm:w-40 sm:shrink-0"
+            />
+          </div>
         </GuideSection>
 
         <GuideSection title="How to actually get faster">
