@@ -26,3 +26,18 @@ export const loginItems: NavItem[] = [
   { href: "/login", label: "Student" },
   { href: "/account/login", label: "Musician" },
 ];
+
+/**
+ * The footer's Knowledge column — the instrument tracks by name, since
+ * that's what a musician searches for, plus one escape hatch to the rest
+ * of the hub (theory, recording, performing, promoting, teaching) rather
+ * than listing every pillar here.
+ */
+export const knowledgeItems: NavItem[] = [
+  { href: "/knowledge/guitar", label: "Guitar" },
+  { href: "/knowledge/piano", label: "Piano" },
+  { href: "/knowledge/drums", label: "Drums" },
+  { href: "/knowledge/bass", label: "Bass" },
+  { href: "/knowledge/vocals", label: "Vocals" },
+  { href: "/knowledge", label: "All guides" },
+];

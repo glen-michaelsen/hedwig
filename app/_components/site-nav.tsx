@@ -130,6 +130,16 @@ export function DesktopNav() {
     <nav className="hidden items-center gap-1 md:flex">
       <Dropdown label="Features" items={featureItems} />
       <Link
+        href="/knowledge"
+        className={`${triggerBase} ${
+          pathname.startsWith("/knowledge")
+            ? "bg-linear-to-br from-brand-500 to-brand-700 text-white shadow-brand"
+            : "text-muted hover:bg-surface-muted hover:text-foreground"
+        }`}
+      >
+        Knowledge
+      </Link>
+      <Link
         href="/spotlight"
         className={`${triggerBase} ${
           pathname.startsWith("/spotlight")
@@ -229,6 +239,13 @@ export function MobileNav() {
             className="fixed inset-x-0 top-18 bottom-0 z-50 overflow-y-auto bg-surface px-6 py-6"
           >
             <MobileSection title="Features" items={featureItems} />
+
+            <Link
+              href="/knowledge"
+              className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
+            >
+              Knowledge
+            </Link>
 
             <Link
               href="/spotlight"

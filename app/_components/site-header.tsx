@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { NavItem } from "./nav-items";
-import { featureItems, loginItems } from "./nav-items";
+import { featureItems, knowledgeItems, loginItems } from "./nav-items";
 import { DesktopNav, MobileNav } from "./site-nav";
 import { Wordmark, container, focusable } from "./ui";
 
@@ -62,8 +62,9 @@ export function SiteFooter() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-10 sm:gap-16">
+          <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 sm:gap-16">
             <FooterColumn title="Features" items={featureItems} />
+            <FooterColumn title="Knowledge" items={knowledgeItems} />
             <FooterColumn title="Log in" items={loginItems} />
           </div>
         </div>
