@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
+import { ScaleFigure } from "../../_components/scale-figure";
+import { GUITAR_SCALES } from "@/lib/scale-diagrams/guitar-scales";
 
 const PAGE_DESCRIPTION =
   "The four scales every guitarist learns first — major, minor, and their pentatonic versions — and which chords each one is built to play over.";
@@ -40,6 +42,10 @@ const structuredData = {
       headline: "Guitar Scales for Beginners: Major, Minor and Pentatonic",
       description: PAGE_DESCRIPTION,
       author: { "@type": "Organization", name: "Trenodo" },
+      image: GUITAR_SCALES.map(
+        (scale) =>
+          `https://trenodo.com/images/knowledge/guitar/scales/${scale.slug}.svg`,
+      ),
     },
     {
       "@type": "FAQPage",
@@ -63,8 +69,17 @@ export default function GuitarScalesPage() {
         category="Guitar"
         categoryHref="/knowledge/guitar"
         title="Guitar Scales for Beginners"
-        intro="A scale is a set fretboard pattern — learn the shape once, and you can slide it up or down to play it in any key. These four cover most of what a beginner needs."
+        intro="A scale is a set fretboard pattern — learn the shape once, and you can slide it up or down to play it in any key. These four cover most of what a beginner needs, all shown here rooted on C."
       >
+        <GuideSection title="Reading a scale diagram">
+          <p>
+            Each diagram is the fretboard in open position, nut on the left.
+            The solid dot is the root note (C, in every diagram here) — the
+            note the scale is named after and the one a solo usually resolves
+            back to. The outlined dots are the rest of the scale.
+          </p>
+        </GuideSection>
+
         <GuideSection title="Major scale">
           <p>
             The major scale is built for major chords — it&rsquo;s the natural
@@ -73,6 +88,11 @@ export default function GuitarScalesPage() {
             whole, whole, half) is the same shape wherever you play it on the
             neck, just shifted up or down to change key.
           </p>
+          <ScaleFigure
+            slug="major"
+            name={GUITAR_SCALES[0].name}
+            shortName={GUITAR_SCALES[0].shortName}
+          />
         </GuideSection>
 
         <GuideSection title="Minor scale">
@@ -83,6 +103,11 @@ export default function GuitarScalesPage() {
             more melancholy character — which is exactly why it&rsquo;s the go-to
             choice over a minor-key progression.
           </p>
+          <ScaleFigure
+            slug="minor"
+            name={GUITAR_SCALES[1].name}
+            shortName={GUITAR_SCALES[1].shortName}
+          />
         </GuideSection>
 
         <GuideSection title="Major pentatonic">
@@ -93,6 +118,11 @@ export default function GuitarScalesPage() {
             major chord, so cutting them gives you a scale that&rsquo;s almost
             impossible to solo badly with.
           </p>
+          <ScaleFigure
+            slug="major-pentatonic"
+            name={GUITAR_SCALES[2].name}
+            shortName={GUITAR_SCALES[2].shortName}
+          />
         </GuideSection>
 
         <GuideSection title="Minor pentatonic">
@@ -102,6 +132,11 @@ export default function GuitarScalesPage() {
             blues guitar soloing — a small, forgiving set of five notes that
             works over almost any minor or blues progression.
           </p>
+          <ScaleFigure
+            slug="minor-pentatonic"
+            name={GUITAR_SCALES[3].name}
+            shortName={GUITAR_SCALES[3].shortName}
+          />
         </GuideSection>
 
         <GuideFaq items={FAQS} />
