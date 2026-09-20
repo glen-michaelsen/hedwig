@@ -19,6 +19,50 @@ const PAGES: {
   { path: "/press-kit", priority: 0.9, changeFrequency: "monthly" },
   { path: "/tutoring", priority: 0.9, changeFrequency: "monthly" },
   { path: "/setlist", priority: 0.8, changeFrequency: "monthly" },
+  // Knowledge guide pages are added here once they have real content —
+  // the placeholder pillars stay out (and noindex'd) until they do.
+  { path: "/knowledge", priority: 0.7, changeFrequency: "weekly" },
+  { path: "/knowledge/guitar", priority: 0.7, changeFrequency: "monthly" },
+  {
+    path: "/knowledge/guitar/getting-started",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/guitar/chords",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/guitar/scales",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/guitar/reading-tabs",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/guitar/tuning",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/guitar/transposing",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/guitar/changing-strings",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/guitar/anatomy",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
   { path: "/spotlight", priority: 0.6, changeFrequency: "weekly" },
   { path: "/ideas", priority: 0.5, changeFrequency: "weekly" },
   { path: "/account/signup", priority: 0.7, changeFrequency: "monthly" },

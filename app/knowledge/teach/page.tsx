@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Teaching Guides — Trenodo Knowledge",
   description:
     "Taking your playing online and turning it into lessons other musicians can book. Coming soon.",
+  robots: { index: false, follow: true },
 };
 
 export default function TeachKnowledgePage() {

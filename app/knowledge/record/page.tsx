@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Recording Guides — Trenodo Knowledge",
   description:
     "Setting up a home studio, choosing software, and getting a take you're happy to send. Coming soon.",
+  robots: { index: false, follow: true },
 };
 
 export default function RecordKnowledgePage() {

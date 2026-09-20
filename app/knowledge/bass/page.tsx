@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Bass Guitar Guides — Trenodo Knowledge",
   description:
     "Get to know the instrument, then build up your scales and technique. Coming soon.",
+  robots: { index: false, follow: true },
 };
 
 export default function BassKnowledgePage() {

@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Music Theory Guides — Trenodo Knowledge",
   description:
     "Scales, chord notation, the circle of fifths and the rest of the vocabulary every instrument draws on. Coming soon.",
+  robots: { index: false, follow: true },
 };
 
 export default function TheoryKnowledgePage() {
