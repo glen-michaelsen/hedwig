@@ -10,7 +10,10 @@
  */
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { ALL_GUITAR_CHORDS } from "../lib/chord-diagrams/guitar-chords";
+import {
+  ALL_GUITAR_CHORDS,
+  CAPO_TRANSPOSE_EXAMPLE,
+} from "../lib/chord-diagrams/guitar-chords";
 import { renderChordSvg } from "../lib/chord-diagrams/render";
 import { GUITAR_SCALES } from "../lib/scale-diagrams/guitar-scales";
 import { renderScaleSvg } from "../lib/scale-diagrams/render";
@@ -20,7 +23,8 @@ const GUITAR_DIR = path.join(process.cwd(), "public/images/knowledge/guitar");
 async function main() {
   const chordDir = path.join(GUITAR_DIR, "chords");
   await mkdir(chordDir, { recursive: true });
-  for (const chord of ALL_GUITAR_CHORDS) {
+  const allChords = [...ALL_GUITAR_CHORDS, ...CAPO_TRANSPOSE_EXAMPLE];
+  for (const chord of allChords) {
     const outPath = path.join(chordDir, `${chord.slug}.svg`);
     await writeFile(outPath, renderChordSvg(chord), "utf8");
     console.log(`wrote ${path.relative(process.cwd(), outPath)}`);
@@ -35,7 +39,7 @@ async function main() {
   }
 
   console.log(
-    `\n${ALL_GUITAR_CHORDS.length} chord diagrams, ${GUITAR_SCALES.length} scale diagrams generated.`,
+    `\n${allChords.length} chord diagrams, ${GUITAR_SCALES.length} scale diagrams generated.`,
   );
 }
 

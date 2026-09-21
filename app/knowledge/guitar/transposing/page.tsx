@@ -1,5 +1,21 @@
 import type { Metadata } from "next";
+import { ChordFigure } from "../../_components/chord-figure";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
+import {
+  BARRE_CHORDS,
+  CAPO_TRANSPOSE_EXAMPLE,
+  OPEN_CHORDS,
+} from "@/lib/chord-diagrams/guitar-chords";
+
+const findChord = (slug: string) =>
+  [...OPEN_CHORDS, ...BARRE_CHORDS].find((c) => c.slug === slug)!;
+
+const ORIGINAL_SHAPES = ["c-major", "a-minor", "f-major", "g-major"].map(
+  findChord,
+);
+const REAL_SHAPES = ["d-major", "b-minor", "g-major", "a-major"].map(
+  findChord,
+);
 
 const PAGE_DESCRIPTION =
   "How to transpose a song to a different key on guitar — the fast way with a capo, and the manual way without one.";
@@ -40,6 +56,14 @@ const structuredData = {
       headline: "How to Transpose Guitar Chords (With or Without a Capo)",
       description: PAGE_DESCRIPTION,
       author: { "@type": "Organization", name: "Trenodo" },
+      image: [
+        ...ORIGINAL_SHAPES,
+        ...CAPO_TRANSPOSE_EXAMPLE,
+        ...REAL_SHAPES,
+      ].map(
+        (chord) =>
+          `https://trenodo.com/images/knowledge/guitar/chords/${chord.slug}.svg`,
+      ),
     },
     {
       "@type": "FAQPage",
@@ -69,10 +93,37 @@ export default function GuitarTransposingPage() {
           <p>
             Clamp a capo on the fretboard and play the exact same chord
             shapes you already know — the capo does the transposing for you.
-            A song in C major (chords C, Am, G, F) played with a capo on the
+            A song in C major (chords C, Am, F, G) played with a capo on the
             2nd fret sounds in D major: those same shapes now ring out as D,
-            Bm, A and G. Move the capo to the 3rd fret instead and the same
-            shapes sound a half-tone higher again.
+            Bm, G and A.
+          </p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {ORIGINAL_SHAPES.map((chord) => (
+              <ChordFigure
+                key={chord.slug}
+                slug={chord.slug}
+                name={chord.name}
+                shortName={chord.shortName}
+              />
+            ))}
+          </div>
+          <p>
+            Put the capo on the 2nd fret and play those same four shapes,
+            and this is what actually sounds:
+          </p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {CAPO_TRANSPOSE_EXAMPLE.map((chord) => (
+              <ChordFigure
+                key={chord.slug}
+                slug={chord.slug}
+                name={chord.name}
+                shortName={chord.shortName}
+              />
+            ))}
+          </div>
+          <p>
+            Move the capo to the 3rd fret instead and the same four shapes
+            sound a half-tone higher again.
           </p>
         </GuideSection>
 
@@ -80,12 +131,22 @@ export default function GuitarTransposingPage() {
           <p>
             Work out the new chord names directly and play them as their own
             shapes. Raising that same C, Am, F, G progression by one whole
-            tone (without a capo) gives you D, Bm, G and A — the same chords
-            a capo on the 2nd fret would have given you, just played as
-            their actual shapes instead of borrowed ones. A tone scale (or
-            the circle of fifths) is the standard reference for working out
+            tone (without a capo) gives you these — the same chords a capo
+            on the 2nd fret would have given you, just played as their
+            actual shapes instead of borrowed ones. A tone scale (or the
+            circle of fifths) is the standard reference for working out
             which chord a given shift lands on.
           </p>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {REAL_SHAPES.map((chord) => (
+              <ChordFigure
+                key={chord.slug}
+                slug={chord.slug}
+                name={chord.name}
+                shortName={chord.shortName}
+              />
+            ))}
+          </div>
         </GuideSection>
 
         <GuideSection title="Which one should you use?">

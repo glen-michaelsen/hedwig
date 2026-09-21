@@ -1,3 +1,4 @@
+import { applyCapo } from "./capo";
 import type { ChordShape } from "./types";
 
 /**
@@ -130,3 +131,32 @@ export const BARRE_CHORDS: ChordShape[] = [
 ];
 
 export const ALL_GUITAR_CHORDS = [...OPEN_CHORDS, ...BARRE_CHORDS];
+
+const findOpenChord = (slug: string) => OPEN_CHORDS.find((c) => c.slug === slug)!;
+
+/**
+ * The Transposing guide's worked example: capo the 2nd fret and play the
+ * exact same C, Am, F and G shapes — they sound as D, Bm, G and A.
+ */
+export const CAPO_TRANSPOSE_EXAMPLE: ChordShape[] = [
+  applyCapo(findOpenChord("c-major"), 2, {
+    name: "D major (C shape, capo 2)",
+    shortName: "D",
+    slug: "c-major-capo-2",
+  }),
+  applyCapo(findOpenChord("a-minor"), 2, {
+    name: "B minor (Am shape, capo 2)",
+    shortName: "Bm",
+    slug: "a-minor-capo-2",
+  }),
+  applyCapo(findOpenChord("f-major"), 2, {
+    name: "G major (F shape, capo 2)",
+    shortName: "G",
+    slug: "f-major-capo-2",
+  }),
+  applyCapo(findOpenChord("g-major"), 2, {
+    name: "A major (G shape, capo 2)",
+    shortName: "A",
+    slug: "g-major-capo-2",
+  }),
+];

@@ -26,8 +26,12 @@ export type ChordShape = {
    * neck sets this to wherever its lowest fretted note actually is.
    */
   baseFret?: number;
-  /** A single finger laid across multiple strings at one fret. */
-  barre?: { fret: number; fromString: number; toString: number };
+  /**
+   * A single finger laid across multiple strings at one fret — or, with
+   * `label` set, a capo (visually the same full-width bar, just clamped
+   * there by a capo rather than a finger).
+   */
+  barre?: { fret: number; fromString: number; toString: number; label?: string };
 };
 
 /** How many strings the shape assumes — 6 for guitar, 4 for bass or ukulele. */

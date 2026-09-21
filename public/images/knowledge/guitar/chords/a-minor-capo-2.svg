@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 210" width="200" height="210" role="img" aria-label="B minor (Am shape, capo 2) chord diagram">
+  <title>B minor (Am shape, capo 2) chord diagram</title>
+  <rect x="0" y="0" width="200" height="210" rx="16" fill="#ffffff" />
+  <line x1="34" y1="50" x2="34" y2="186" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="62.4" y1="50" x2="62.4" y2="186" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="90.8" y1="50" x2="90.8" y2="186" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="119.2" y1="50" x2="119.2" y2="186" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="147.6" y1="50" x2="147.6" y2="186" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="176" y1="50" x2="176" y2="186" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="34" y1="50" x2="176" y2="50" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="34" y1="84" x2="176" y2="84" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="34" y1="118" x2="176" y2="118" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="34" y1="152" x2="176" y2="152" stroke="#c7bda8" stroke-width="1.5" />
+  <line x1="34" y1="186" x2="176" y2="186" stroke="#c7bda8" stroke-width="1.5" />
+  <path d="M29 29 L39 39 M39 29 L29 39" stroke="#6b6153" stroke-width="1.8" stroke-linecap="round" />
+  <rect x="22" y="55" width="166" height="24" rx="12" fill="#825abe" />
+  <text x="105" y="70.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" letter-spacing="0.5" fill="#ffffff">CAPO</text>
+  <circle cx="90.8" cy="135" r="12" fill="#825abe" />
+  <text x="90.8" y="139.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ffffff">2</text>
+  <circle cx="119.2" cy="135" r="12" fill="#825abe" />
+  <text x="119.2" y="139.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ffffff">3</text>
+  <circle cx="147.6" cy="101" r="12" fill="#825abe" />
+  <text x="147.6" y="105.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ffffff">1</text>
+</svg>

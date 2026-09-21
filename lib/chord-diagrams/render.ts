@@ -79,14 +79,17 @@ export function renderChordSvg(chord: ChordShape): string {
     );
   }
 
-  // A fret-number label when the diagram doesn't start at the nut.
-  if (baseFret > 1) {
+  // A fret-number label when the diagram doesn't start at the nut — unless
+  // the barre already carries its own label (a capo), which says the same
+  // thing.
+  if (baseFret > 1 && !chord.barre?.label) {
     parts.push(
       `<text x="${GRID_LEFT - 10}" y="${GRID_TOP + FRET_HEIGHT / 2 + 4}" text-anchor="end" font-family="system-ui, sans-serif" font-size="13" fill="${COLOR.label}">${baseFret}fr</text>`,
     );
   }
 
-  // Open/muted markers above the nut.
+  // Open/muted markers above the nut. A string ringing open behind a capo
+  // (baseFret > 1) needs no marker at all — the capo bar already says so.
   for (let i = 0; i < stringCount; i++) {
     const fret = chord.frets[i];
     const x = stringX(i, stringCount);
@@ -95,22 +98,28 @@ export function renderChordSvg(chord: ChordShape): string {
       parts.push(
         `<path d="M${x - 5} ${y - 5} L${x + 5} ${y + 5} M${x + 5} ${y - 5} L${x - 5} ${y + 5}" stroke="${COLOR.marker}" stroke-width="1.8" stroke-linecap="round" />`,
       );
-    } else if (fret === 0) {
+    } else if (fret === 0 && baseFret === 1) {
       parts.push(
         `<circle cx="${x}" cy="${y}" r="5.5" fill="none" stroke="${COLOR.marker}" stroke-width="1.8" />`,
       );
     }
   }
 
-  // The barre bar, drawn under the finger dots so they read as sitting on top of it.
+  // The barre bar, drawn under the finger dots so they read as sitting on
+  // top of it — a capo is drawn exactly the same way, just labelled.
   if (chord.barre) {
-    const { fret, fromString, toString } = chord.barre;
+    const { fret, fromString, toString, label } = chord.barre;
     const y = fretCenterY(fret, baseFret);
     const x1 = stringX(fromString, stringCount);
     const x2 = stringX(toString, stringCount);
     parts.push(
       `<rect x="${x1 - DOT_RADIUS}" y="${y - DOT_RADIUS}" width="${x2 - x1 + DOT_RADIUS * 2}" height="${DOT_RADIUS * 2}" rx="${DOT_RADIUS}" fill="${COLOR.dot}" />`,
     );
+    if (label) {
+      parts.push(
+        `<text x="${(x1 + x2) / 2}" y="${y + 3.5}" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" font-weight="700" letter-spacing="0.5" fill="${COLOR.dotText}">${escapeXml(label)}</text>`,
+      );
+    }
   }
 
   // Fretted notes.
