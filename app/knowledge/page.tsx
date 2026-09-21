@@ -30,7 +30,7 @@ const INSTRUMENTS = [
   {
     href: "/knowledge/piano",
     title: "Piano",
-    body: "Chords, scales and the fundamentals — a companion to piano lessons.",
+    body: "Keyboard layout and every major and minor chord — a companion to piano lessons.",
   },
   {
     href: "/knowledge/drums",

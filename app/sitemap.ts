@@ -63,6 +63,17 @@ const PAGES: {
     priority: 0.6,
     changeFrequency: "monthly",
   },
+  { path: "/knowledge/piano", priority: 0.7, changeFrequency: "monthly" },
+  {
+    path: "/knowledge/piano/anatomy",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/piano/chords",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
   { path: "/spotlight", priority: 0.6, changeFrequency: "weekly" },
   { path: "/ideas", priority: 0.5, changeFrequency: "weekly" },
   { path: "/account/signup", priority: 0.7, changeFrequency: "monthly" },

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 182" width="512" height="182" role="img" aria-label="A major piano chord diagram">
+  <title>A major piano chord diagram</title>
+  <rect x="0" y="0" width="512" height="182" rx="16" fill="#ffffff" />
+  <rect x="16" y="16" width="40" height="150" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="56" y="16" width="40" height="150" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="96" y="16" width="40" height="150" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="136" y="16" width="40" height="150" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="176" y="16" width="40" height="150" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="216" y="16" width="40" height="150" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="256" y="16" width="40" height="150" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="296" y="16" width="40" height="150" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="336" y="16" width="40" height="150" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="376" y="16" width="40" height="150" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="416" y="16" width="40" height="150" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="456" y="16" width="40" height="150" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="44" y="16" width="24" height="92" rx="3" fill="#3d372c" />
+  <rect x="84" y="16" width="24" height="92" rx="3" fill="#3d372c" />
+  <rect x="164" y="16" width="24" height="92" rx="3" fill="#3d372c" />
+  <rect x="204" y="16" width="24" height="92" rx="3" fill="#3d372c" />
+  <rect x="244" y="16" width="24" height="92" rx="3" fill="#3d372c" />
+  <rect x="324" y="16" width="24" height="92" rx="3" fill="#3d372c" />
+  <rect x="364" y="16" width="24" height="92" rx="3" fill="#3d372c" />
+  <rect x="444" y="16" width="24" height="92" rx="3" fill="#3d372c" />
+  <circle cx="236" cy="134" r="14" fill="#825abe" />
+  <text x="236" y="139" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ffffff">A</text>
+  <circle cx="336" cy="82" r="14" fill="#825abe" />
+  <text x="336" y="87" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ffffff">C#</text>
+  <circle cx="396" cy="134" r="14" fill="#825abe" />
+  <text x="396" y="139" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#ffffff">E</text>
+</svg>
