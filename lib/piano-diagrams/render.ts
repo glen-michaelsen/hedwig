@@ -7,11 +7,14 @@ import type { PianoChordShape, PianoNote } from "./types";
  * so the whole Knowledge section reads as one family regardless of
  * instrument.
  *
- * The keyboard is a fixed range (C4 to G5, an octave and a fifth) — wide
+ * The keyboard is a fixed range (C4 to F5, an octave and a fourth) — wide
  * enough that every one of the 12 major and 12 minor triads (root always
  * in octave 4, third and fifth built up from it) fits in root position
  * without needing a different window per chord, the same "one consistent
- * canvas" approach as the guitar chord grid.
+ * canvas" approach as the guitar chord grid. The frame then crops halfway
+ * into the next white key, so the highest black key (F#5, needed by B
+ * major/minor) reads as "the keyboard keeps going" rather than a lone
+ * black key stranded with empty space after it.
  */
 const COLOR = {
   background: "#ffffff",
@@ -29,7 +32,7 @@ const BLACK_KEY_HEIGHT = 92;
 const MARGIN = 16;
 const DOT_RADIUS = 14;
 
-/** The white keys shown, left to right — C4 through G5. */
+/** The white keys shown, left to right — C4 through F5. */
 const WHITE_KEYS: PianoNote[] = [
   { name: "C", octave: 4 },
   { name: "D", octave: 4 },
@@ -42,7 +45,6 @@ const WHITE_KEYS: PianoNote[] = [
   { name: "D", octave: 5 },
   { name: "E", octave: 5 },
   { name: "F", octave: 5 },
-  { name: "G", octave: 5 },
 ];
 
 /** Each black key sits on the boundary right after this white key's index — there's never one between E/F or B/C. */
@@ -57,7 +59,11 @@ const BLACK_KEYS: (PianoNote & { afterIndex: number })[] = [
   { name: "F#", octave: 5, afterIndex: 10 },
 ];
 
-const WIDTH = MARGIN * 2 + WHITE_KEYS.length * WHITE_KEY_WIDTH;
+/** How much of one more white key to show, cropped, past the last full one. */
+const CROPPED_KEY_WIDTH = WHITE_KEY_WIDTH / 2;
+
+const WIDTH =
+  MARGIN * 2 + WHITE_KEYS.length * WHITE_KEY_WIDTH + CROPPED_KEY_WIDTH;
 const HEIGHT = MARGIN * 2 + WHITE_KEY_HEIGHT;
 
 function round(value: number) {
@@ -91,6 +97,15 @@ export function renderPianoChordSvg(chord: PianoChordShape): string {
       `<rect x="${x}" y="${MARGIN}" width="${WHITE_KEY_WIDTH}" height="${WHITE_KEY_HEIGHT}" fill="${COLOR.whiteKey}" stroke="${COLOR.keyStroke}" stroke-width="1.5" rx="4" />`,
     );
   });
+
+  // A sliver of one more white key, cropped by the frame at half-width —
+  // reads as "the keyboard keeps going" rather than ending cleanly right
+  // where the last black key (F#5) would otherwise look stranded, with
+  // empty space after it and nothing to its right.
+  const croppedKeyX = MARGIN + WHITE_KEYS.length * WHITE_KEY_WIDTH;
+  parts.push(
+    `<rect x="${croppedKeyX}" y="${MARGIN}" width="${CROPPED_KEY_WIDTH}" height="${WHITE_KEY_HEIGHT}" fill="${COLOR.whiteKey}" stroke="${COLOR.keyStroke}" stroke-width="1.5" rx="4" />`,
+  );
 
   // Black keys, drawn on top of the white-key seams they sit across.
   for (const key of BLACK_KEYS) {

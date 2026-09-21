@@ -108,7 +108,7 @@ export default function PianoAnatomyPage() {
             <ZoomableImage
               src="/images/knowledge/piano/reference/find-c.svg"
               alt="Piano keyboard with C marked as the white key to the left of the two-black-key group"
-              width={512}
+              width={492}
               height={182}
               title="Finding C on the keyboard"
               className="mx-auto w-full max-w-xs sm:mx-0 sm:max-w-xs sm:shrink-0"

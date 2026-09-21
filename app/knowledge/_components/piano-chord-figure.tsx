@@ -19,7 +19,7 @@ export function PianoChordFigure({
       <ZoomableImage
         src={`/images/knowledge/piano/chords/${slug}.svg`}
         alt={`${name} piano chord diagram`}
-        width={512}
+        width={492}
         height={182}
         title={name}
         className="mx-auto"
