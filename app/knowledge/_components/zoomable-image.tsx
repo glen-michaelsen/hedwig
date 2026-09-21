@@ -54,7 +54,7 @@ export function ZoomableImage({
             alt={alt}
             width={width}
             height={height}
-            className="h-auto w-full max-w-xs"
+            className="h-auto w-full"
           />
         </div>
       </Modal>
