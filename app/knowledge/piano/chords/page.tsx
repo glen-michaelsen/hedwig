@@ -107,7 +107,7 @@ export default function PianoChordsPage() {
             A major chord is generally described as sounding &ldquo;happy&rdquo; —
             it&rsquo;s the default sound of most pop, folk and children&rsquo;s music.
           </p>
-          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {PIANO_MAJOR_CHORDS.map((chord) => (
               <PianoChordFigure
                 key={chord.slug}
@@ -125,7 +125,7 @@ export default function PianoChordsPage() {
             melancholic sound — the same shape, the same root, just a
             semitone difference in the third.
           </p>
-          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {PIANO_MINOR_CHORDS.map((chord) => (
               <PianoChordFigure
                 key={chord.slug}
