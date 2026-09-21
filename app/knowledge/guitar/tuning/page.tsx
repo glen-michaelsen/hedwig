@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GuitarTuner } from "../../_components/guitar-tuner";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
@@ -49,6 +50,15 @@ const structuredData = {
         acceptedAnswer: { "@type": "Answer", text: faq.a },
       })),
     },
+    {
+      "@type": "SoftwareApplication",
+      name: "Trenodo Guitar Tuner",
+      applicationCategory: "MultimediaApplication",
+      operatingSystem: "Any (web-based)",
+      offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+      description:
+        "A free browser-based chromatic guitar tuner using your microphone — no app or account required.",
+    },
   ],
 };
 
@@ -63,8 +73,10 @@ export default function GuitarTuningPage() {
         category="Guitar"
         categoryHref="/knowledge/guitar"
         title="How to Tune a Guitar: String Names and the Best Tuners"
-        intro="Tuning is simple once you know the target pitches. Here's what each string should sound like, and the easiest tools for getting there."
+        intro="Tuning is simple once you know the target pitches. Try the tuner below with your own microphone, or read on for what each string should sound like and the other tools that get you there."
       >
+        <GuitarTuner />
+
         <GuideSection title="Standard tuning">
           <p>
             From the thickest string to the thinnest, a guitar in standard
@@ -100,8 +112,9 @@ export default function GuitarTuningPage() {
         <GuideSection title="Tuning online">
           <p>
             Plenty of free, browser-based tuners work off nothing more than
-            your computer&rsquo;s built-in microphone — handy if you&rsquo;re practising
-            at a desk and don&rsquo;t have a phone or clip-on tuner to hand.
+            your computer&rsquo;s built-in microphone — the one at the top of this
+            page among them. Handy whenever you&rsquo;re practising at a desk and
+            don&rsquo;t have a phone or clip-on tuner within reach.
           </p>
         </GuideSection>
 
