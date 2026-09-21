@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
+import { TabExample } from "../../_components/tab-example";
 
 const PAGE_DESCRIPTION =
   "How to read guitar tablature — the six lines, the numbers, and what h, p, b, / and ~ mean when you see them in a tab.";
@@ -72,6 +73,7 @@ export default function GuitarReadingTabsPage() {
             (high E) — the layout mirrors looking down at your guitar while
             you play it.
           </p>
+          <TabExample highlight="letters" />
         </GuideSection>
 
         <GuideSection title="The numbers">
@@ -81,6 +83,7 @@ export default function GuitarReadingTabsPage() {
             fret and pluck it. Numbers stacked on top of each other are
             played together, as a chord.
           </p>
+          <TabExample highlight="numbers" />
         </GuideSection>
 
         <GuideSection title="The technique symbols">
@@ -96,16 +99,17 @@ export default function GuitarReadingTabsPage() {
               then lift that finger to sound the lower fret.
             </li>
             <li>
-              <strong className="text-foreground">Bend (b)</strong> —{" "}
-              <code>11b13</code>: strike the 11th fret, then bend the string
-              up until it sounds like the 13th fret. A trailing{" "}
+              <strong className="text-foreground">Bend (b) and release (r)</strong>{" "}
+              — <code>11b13</code>: strike the 11th fret, then bend the
+              string up until it sounds like the 13th fret. A trailing{" "}
               <code>r</code> (<code>11b13r</code>) means bend back down to
-              release.
+              release, back to the 11th fret.
             </li>
             <li>
-              <strong className="text-foreground">Slide (/)</strong> —{" "}
-              <code>11/9</code>: strike the 11th fret, then slide the same
-              finger down to the 9th fret while the note keeps ringing.
+              <strong className="text-foreground">Slide (/ or \)</strong> —{" "}
+              <code>11/13</code> slides up to the 13th fret, <code>13\11</code>{" "}
+              slides down to the 11th — same finger, same string, sliding
+              while the note keeps ringing.
             </li>
             <li>
               <strong className="text-foreground">Vibrato (~)</strong> —{" "}
@@ -113,6 +117,10 @@ export default function GuitarReadingTabsPage() {
               slightly to add vibrato without changing the pitch.
             </li>
           </ul>
+          <p>
+            All five, in one riff:
+          </p>
+          <TabExample highlight="techniques" />
         </GuideSection>
 
         <GuideSection title="Reading it in practice">
