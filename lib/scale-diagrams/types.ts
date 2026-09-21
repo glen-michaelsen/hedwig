@@ -1,8 +1,11 @@
 /**
- * A scale, described by its interval formula and a root — not by hand-drawn
- * dot positions. The diagram is derived from real note math (see render.ts),
- * so a new root or a new scale formula never needs new fret data, only a
- * new entry here.
+ * A scale, as one playable position on the fretboard. `dots` is the exact
+ * pattern to draw — curated the same way a chord shape is, not derived
+ * from "every occurrence of every scale tone" (which for a 7-note scale
+ * produces a dense scatter nobody actually practices as a shape).
+ * `intervals`/`root` are kept alongside it as the scale's real theory —
+ * not used by the renderer, but there for whatever uses this data next
+ * (a different position, a different root, a detection tool).
  */
 export type ScaleShape = {
   /** Full name, e.g. "Major scale". */
@@ -15,17 +18,10 @@ export type ScaleShape = {
   intervals: number[];
   /** Root note as a pitch class: C=0, C#=1 … B=11. */
   root: number;
-  /**
-   * Semitones from the root used only to position the diagram's window on
-   * the low E string — not the note that gets highlighted as the root.
-   * Defaults to 0 (the box starts right on the root). Major pentatonic is
-   * the one exception worth knowing about: its cleanest single-position
-   * box is the same shape as its relative minor pentatonic's box 1, which
-   * starts 3 semitones below the major root, not on it.
-   */
-  boxAnchorOffset?: number;
-  /** How many fret columns the diagram spans. Defaults to 4. */
-  fretWidth?: number;
+  /** One array per string (low E to high E, 6 total) — the exact frets to mark. An empty array means no dots on that string. */
+  dots: number[][];
+  /** How many fret columns to draw, starting from the nut. Defaults to the highest marked fret plus a few empty columns. */
+  fretCount?: number;
 };
 
 /** Standard tuning, low string to high, as pitch classes (C=0): E A D G B E. */

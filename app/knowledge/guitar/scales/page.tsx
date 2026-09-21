@@ -73,14 +73,10 @@ export default function GuitarScalesPage() {
       >
         <GuideSection title="Reading a scale diagram">
           <p>
-            Each diagram shows one position — a few frets, all six strings —
-            rather than every place a note repeats on the neck, since that&rsquo;s
-            what you&rsquo;d actually practice as a shape. A number like
-            &ldquo;8fr&rdquo; on the left names the fret the box starts at when it
-            isn&rsquo;t at the nut. The solid dot is the root note (C, in every
-            diagram here) — the note the scale is named after and the one a
-            solo usually resolves back to. The outlined dots are the rest of
-            the scale.
+            Each diagram is the fretboard from the nut, showing one compact
+            position across the A, D and G strings — rather than every place
+            a note repeats further up the neck, since that&rsquo;s what you&rsquo;d
+            actually practice as a shape.
           </p>
         </GuideSection>
 

@@ -1,42 +1,34 @@
-import { STANDARD_TUNING, type ScaleShape } from "./types";
+import type { ScaleShape } from "./types";
 
 /**
  * Renders a ScaleShape to a standalone SVG string, same reasoning as
  * lib/chord-diagrams/render.ts: no CSS variables, hand-matched hex colors,
- * a self-contained file that works wherever it's opened.
+ * a self-contained file that works wherever it's opened. Same visual
+ * language as the chord diagrams too — a thick nut, brand-purple dots —
+ * so the two diagram types read as one family.
  *
- * This draws one practiced position, not every occurrence of every scale
- * tone on the neck — a diatonic scale repeats constantly, and marking
- * every repeat produces a dense scatter nobody actually plays from. The
- * window is instead anchored on the low E string (at the scale's root, or
- * at `boxAnchorOffset` semitones from it) and kept to a few frets, which is
- * what a "position" or "box" pattern actually means on a fretboard.
+ * The grid always starts at the real nut (fret 0), same as looking at the
+ * guitar itself, and extends a little past the highest marked fret so the
+ * pattern doesn't feel cropped tight against the edge.
  */
 const COLOR = {
   background: "#ffffff",
   grid: "#c7bda8",
-  root: "#825abe",
-  tone: "#efe9dd",
-  toneStroke: "#825abe",
-  label: "#6b6153",
+  nut: "#3d372c",
+  dot: "#825abe",
 };
 
 const STRING_COUNT = 6;
+const GRID_LEFT = 30;
 const GRID_TOP = 30;
-const FRET_WIDTH = 52;
+const FRET_WIDTH = 46;
 const STRING_GAP = 32;
 const GRID_BOTTOM = GRID_TOP + (STRING_COUNT - 1) * STRING_GAP;
-const DOT_RADIUS = 11;
-const TONE_RADIUS = 8;
-/** Room for a "5fr" label to the left of the grid, when the box isn't at the nut. */
-const LABEL_WIDTH = 32;
+const DOT_RADIUS = 12;
+const TRAILING_FRETS = 3;
 
 function round(value: number) {
   return Math.round(value * 100) / 100;
-}
-
-function pitchClass(value: number) {
-  return ((value % 12) + 12) % 12;
 }
 
 function stringY(index: number) {
@@ -51,23 +43,21 @@ function escapeXml(value: string): string {
     .replaceAll('"', "&quot;");
 }
 
-/** The lowest fret on the low E string where the given pitch class falls. */
-function findStartFret(targetPitchClass: number): number {
-  return pitchClass(targetPitchClass - STANDARD_TUNING[0]);
-}
-
 export function renderScaleSvg(scale: ScaleShape): string {
-  const fretWidth = scale.fretWidth ?? 4;
-  const anchorPitch = pitchClass(scale.root + (scale.boxAnchorOffset ?? 0));
-  const startFret = findStartFret(anchorPitch);
-  const endFret = startFret + fretWidth - 1;
+  const highestFret = Math.max(0, ...scale.dots.flat());
+  const endFret = scale.fretCount
+    ? scale.fretCount - 1
+    : highestFret + TRAILING_FRETS;
 
   const name = escapeXml(scale.name);
-  const gridLeft = 10 + (startFret > 0 ? LABEL_WIDTH : 0);
-  const fretX = (fret: number) => round(gridLeft + (fret - startFret) * FRET_WIDTH);
+  // The position of fret wire N (N=0 is the nut).
+  const fretX = (fret: number) => round(GRID_LEFT + fret * FRET_WIDTH);
+  // A note at fret N is played in the space between wire N-1 and wire N,
+  // not on the wire itself — same as pressing a real string down.
+  const dotX = (fret: number) => round(fretX(fret) - FRET_WIDTH / 2);
   const gridRight = fretX(endFret);
   const width = gridRight + 24;
-  const height = GRID_BOTTOM + 34;
+  const height = GRID_BOTTOM + 24;
   const parts: string[] = [];
 
   parts.push(
@@ -78,44 +68,25 @@ export function renderScaleSvg(scale: ScaleShape): string {
   for (let i = 0; i < STRING_COUNT; i++) {
     const y = stringY(i);
     parts.push(
-      `<line x1="${gridLeft}" y1="${y}" x2="${gridRight}" y2="${y}" stroke="${COLOR.grid}" stroke-width="1.5" />`,
+      `<line x1="${GRID_LEFT}" y1="${y}" x2="${gridRight}" y2="${y}" stroke="${COLOR.grid}" stroke-width="1.5" />`,
     );
   }
 
-  // Frets.
-  for (let fret = startFret; fret <= endFret; fret++) {
+  // Frets, starting at the real nut — drawn thicker, exactly like the chord diagrams.
+  for (let fret = 0; fret <= endFret; fret++) {
     const x = fretX(fret);
+    const isNut = fret === 0;
     parts.push(
-      `<line x1="${x}" y1="${GRID_TOP}" x2="${x}" y2="${GRID_BOTTOM}" stroke="${COLOR.grid}" stroke-width="1.5" />`,
+      `<line x1="${x}" y1="${GRID_TOP}" x2="${x}" y2="${GRID_BOTTOM}" stroke="${isNut ? COLOR.nut : COLOR.grid}" stroke-width="${isNut ? 4 : 1.5}" />`,
     );
   }
 
-  // A fret-number label, since a single-position box almost never starts at the nut.
-  if (startFret > 0) {
-    parts.push(
-      `<text x="${gridLeft - 16}" y="${GRID_TOP + 5}" text-anchor="end" font-family="system-ui, sans-serif" font-size="13" fill="${COLOR.label}">${startFret}fr</text>`,
-    );
-  }
-
-  // Notes — only within this one position, so the pattern is the one a
-  // player would actually practice, not every repeat of every scale tone.
+  // Notes — the curated position, exactly as given.
   for (let i = 0; i < STRING_COUNT; i++) {
-    const openPitch = STANDARD_TUNING[i];
-    for (let fret = startFret; fret <= endFret; fret++) {
-      const relative = pitchClass(openPitch + fret - scale.root);
-      if (!scale.intervals.includes(relative)) continue;
-
-      const x = fretX(fret);
-      const y = stringY(i);
-      if (relative === 0) {
-        parts.push(
-          `<circle cx="${x}" cy="${y}" r="${DOT_RADIUS}" fill="${COLOR.root}" />`,
-        );
-      } else {
-        parts.push(
-          `<circle cx="${x}" cy="${y}" r="${TONE_RADIUS}" fill="${COLOR.tone}" stroke="${COLOR.toneStroke}" stroke-width="1.5" />`,
-        );
-      }
+    const y = stringY(i);
+    for (const fret of scale.dots[i] ?? []) {
+      const x = dotX(fret);
+      parts.push(`<circle cx="${x}" cy="${y}" r="${DOT_RADIUS}" fill="${COLOR.dot}" />`);
     }
   }
 

@@ -4,9 +4,9 @@ const C = 0;
 
 /**
  * The four scales covered on the Guitar Scales guide, all rooted on C —
- * matching what's described in the guide's text. The dot pattern for each
- * is computed from the interval formula, not hand-placed, so a different
- * root or a fifth scale is just a new entry here.
+ * matching what's described in the guide's text. Each `dots` pattern is
+ * confirmed against a reference: a compact 3-string (A, D, G) position,
+ * same shape family as Major — low E, B and high E stay empty throughout.
  */
 export const GUITAR_SCALES: ScaleShape[] = [
   {
@@ -15,6 +15,7 @@ export const GUITAR_SCALES: ScaleShape[] = [
     slug: "major",
     root: C,
     intervals: [0, 2, 4, 5, 7, 9, 11],
+    dots: [[], [3, 5], [2, 3, 5], [2, 4, 5], [], []],
   },
   {
     name: "C minor scale",
@@ -22,6 +23,7 @@ export const GUITAR_SCALES: ScaleShape[] = [
     slug: "minor",
     root: C,
     intervals: [0, 2, 3, 5, 7, 8, 10],
+    dots: [[], [3, 5, 6], [3, 5, 6], [3, 5], [], []],
   },
   {
     name: "C major pentatonic scale",
@@ -29,11 +31,7 @@ export const GUITAR_SCALES: ScaleShape[] = [
     slug: "major-pentatonic",
     root: C,
     intervals: [0, 2, 4, 7, 9],
-    // Major pentatonic shares its five notes with the relative minor
-    // pentatonic a minor third (3 semitones) below — anchoring the box
-    // there reproduces that same well-known, clean shape instead of a
-    // sparser, less standard one rooted directly on C.
-    boxAnchorOffset: -3,
+    dots: [[], [3, 5], [2, 5], [2, 5], [], []],
   },
   {
     name: "C minor pentatonic scale",
@@ -41,5 +39,6 @@ export const GUITAR_SCALES: ScaleShape[] = [
     slug: "minor-pentatonic",
     root: C,
     intervals: [0, 3, 5, 7, 10],
+    dots: [[], [3, 6], [3, 5], [3, 5], [], []],
   },
 ];
