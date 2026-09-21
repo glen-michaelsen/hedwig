@@ -87,6 +87,12 @@ export function GuideSection({
   );
 }
 
+/**
+ * Native <details>/<summary> rather than a React-state accordion — the
+ * disclosure behaviour, keyboard support and screen-reader semantics all
+ * come from the browser for free, and every guide page stays a plain
+ * server component with no client JS shipped just to fold a question shut.
+ */
 export function GuideFaq({
   items,
 }: {
@@ -97,14 +103,35 @@ export function GuideFaq({
       <h2 className="text-2xl font-semibold tracking-tight">
         Frequently asked questions
       </h2>
-      <div className="mt-6 space-y-6">
+      <div className="mt-6 space-y-3">
         {items.map((item) => (
-          <div key={item.q}>
-            <h3 className="text-base font-semibold">{item.q}</h3>
-            <p className="mt-1.5 text-base leading-relaxed text-muted text-pretty">
+          <details
+            key={item.q}
+            className="group rounded-2xl border border-line open:bg-surface-muted/60"
+          >
+            <summary
+              className={`flex list-none items-center justify-between gap-4 px-5 py-4 text-base font-semibold [&::-webkit-details-marker]:hidden ${focusable} cursor-pointer rounded-2xl`}
+            >
+              {item.q}
+              <svg
+                viewBox="0 0 12 12"
+                aria-hidden="true"
+                className="h-3 w-3 shrink-0 text-muted transition-transform group-open:rotate-180"
+              >
+                <path
+                  d="M2.5 4.5 6 8l3.5-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </summary>
+            <p className="px-5 pb-4 text-base leading-relaxed text-muted text-pretty">
               {item.a}
             </p>
-          </div>
+          </details>
         ))}
       </div>
     </section>
