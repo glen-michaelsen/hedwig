@@ -26,31 +26,38 @@ const INSTRUMENTS = [
     href: "/knowledge/guitar",
     title: "Guitar",
     body: "Your first chord through your first song, plus a chord, scale and tuning reference.",
+    image: "/images/knowledge/instruments/guitar.jpg",
   },
   {
     href: "/knowledge/piano",
     title: "Piano",
     body: "Keyboard layout and every major and minor chord — a companion to piano lessons.",
+    image: "/images/knowledge/instruments/piano.jpg",
   },
   {
     href: "/knowledge/drums",
     title: "Drums",
     body: "Kit anatomy, stick technique and the rhythms every drummer starts with.",
+    image: "/images/knowledge/instruments/drum.jpg",
   },
   {
     href: "/knowledge/bass",
     title: "Bass",
     body: "Get to know the instrument, then build up your scales and technique.",
+    image: "/images/knowledge/instruments/bass.jpg",
   },
   {
     href: "/knowledge/vocals",
     title: "Vocals",
     body: "Breath support, vocal registers and effects once the basics are solid.",
+    image: "/images/knowledge/instruments/vocal.jpg",
   },
   {
     href: "/knowledge/theory",
     title: "Music Theory",
     body: "The shared vocabulary every instrument draws on — scales, notation, the circle of fifths.",
+    // No photo yet — falls back to the plain card below.
+    image: null,
   },
 ] as const;
 
@@ -91,6 +98,49 @@ function Card({ href, title, body }: { href: string; title: string; body: string
   );
 }
 
+/**
+ * A photo-backed instrument card — the photo desaturated and tinted in
+ * brand purple (a duotone) rather than shown raw, so a stock-feeling photo
+ * reads as part of Trenodo's own palette instead of a generic product
+ * shot. `alt=""`: the photo is decorative here, the title already names
+ * the instrument.
+ */
+function PhotoCard({
+  href,
+  title,
+  body,
+  image,
+}: {
+  href: string;
+  title: string;
+  body: string;
+  image: string;
+}) {
+  return (
+    <Link
+      href={href}
+      className="group relative block overflow-hidden rounded-4xl shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift"
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={image}
+        alt=""
+        className="aspect-4/3 w-full object-cover grayscale contrast-[1.08] brightness-95 transition-transform duration-300 group-hover:scale-105"
+      />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-600/60 to-brand-900/85 mix-blend-multiply" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-black/5 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 p-6">
+        <h3 className="text-lg font-bold tracking-tight text-white">
+          {title}
+        </h3>
+        <p className="mt-1 text-sm leading-relaxed text-white/85 text-pretty">
+          {body}
+        </p>
+      </div>
+    </Link>
+  );
+}
+
 export default function KnowledgeIndexPage() {
   return (
     <>
@@ -113,9 +163,13 @@ export default function KnowledgeIndexPage() {
               Learn an instrument
             </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {INSTRUMENTS.map((item) => (
-                <Card key={item.href} {...item} />
-              ))}
+              {INSTRUMENTS.map((item) =>
+                item.image ? (
+                  <PhotoCard key={item.href} {...item} image={item.image} />
+                ) : (
+                  <Card key={item.href} {...item} />
+                ),
+              )}
             </div>
           </section>
 
