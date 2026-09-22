@@ -62,6 +62,11 @@ const INSTRUMENTS = [
 
 const JOURNEY = [
   {
+    href: "/knowledge/songwriting",
+    title: "Songwriting",
+    body: "Finding a subject, structuring a song, and turning a draft into a finished lyric.",
+  },
+  {
     href: "/knowledge/record",
     title: "Recording",
     body: "Setting up a home studio, choosing software, and getting a take you're happy to send.",
@@ -172,7 +177,7 @@ export default function KnowledgeIndexPage() {
             <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
               The rest of the journey
             </h2>
-            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {JOURNEY.map((item) => (
                 <Card key={item.href} {...item} />
               ))}

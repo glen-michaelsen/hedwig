@@ -138,6 +138,47 @@ const PAGES: {
     priority: 0.6,
     changeFrequency: "monthly",
   },
+  { path: "/knowledge/songwriting", priority: 0.7, changeFrequency: "monthly" },
+  {
+    path: "/knowledge/songwriting/finding-your-subject",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/songwriting/anatomy-of-a-song",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/songwriting/methods",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/songwriting/metaphors",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/songwriting/rhyme-patterns",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/songwriting/refining-your-lyrics",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/songwriting/titles-and-hooks",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
+  {
+    path: "/knowledge/songwriting/common-mistakes",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
   { path: "/knowledge/record", priority: 0.7, changeFrequency: "monthly" },
   {
     path: "/knowledge/record/studio-setup",
