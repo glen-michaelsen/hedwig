@@ -56,8 +56,7 @@ const INSTRUMENTS = [
     href: "/knowledge/theory",
     title: "Music Theory",
     body: "The shared vocabulary every instrument draws on — scales, notation, the circle of fifths.",
-    // No photo yet — falls back to the plain card below.
-    image: null,
+    image: "/images/knowledge/instruments/theory.jpg",
   },
 ] as const;
 
@@ -163,13 +162,9 @@ export default function KnowledgeIndexPage() {
               Learn an instrument
             </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {INSTRUMENTS.map((item) =>
-                item.image ? (
-                  <PhotoCard key={item.href} {...item} image={item.image} />
-                ) : (
-                  <Card key={item.href} {...item} />
-                ),
-              )}
+              {INSTRUMENTS.map((item) => (
+                <PhotoCard key={item.href} {...item} />
+              ))}
             </div>
           </section>
 
