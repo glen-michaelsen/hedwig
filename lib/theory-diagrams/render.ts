@@ -84,16 +84,15 @@ export function renderCircleOfFifthsSvg(segments: CircleOfFifthsSegment[]): stri
     const dirX = Math.cos(angleRad);
     const dirY = Math.sin(angleRad);
 
-    // Tick mark straddling the ring, perpendicular to the radius.
+    // Tick mark straddling the ring, radial (pointing straight out from
+    // center, like a clock face's hour marks) rather than tangential.
     const onRing = pointAt(RADIUS, angleDeg);
-    const perpX = -dirY;
-    const perpY = dirX;
-    const tickX1 = round(onRing.x - perpX * TICK_HALF_LENGTH);
-    const tickY1 = round(onRing.y - perpY * TICK_HALF_LENGTH);
-    const tickX2 = round(onRing.x + perpX * TICK_HALF_LENGTH);
-    const tickY2 = round(onRing.y + perpY * TICK_HALF_LENGTH);
+    const tickX1 = round(onRing.x - dirX * TICK_HALF_LENGTH);
+    const tickY1 = round(onRing.y - dirY * TICK_HALF_LENGTH);
+    const tickX2 = round(onRing.x + dirX * TICK_HALF_LENGTH);
+    const tickY2 = round(onRing.y + dirY * TICK_HALF_LENGTH);
     parts.push(
-      `<line x1="${tickX1}" y1="${tickY1}" x2="${tickX2}" y2="${tickY2}" stroke="${COLOR.tick}" stroke-width="3.5" stroke-linecap="round" />`,
+      `<line x1="${tickX1}" y1="${tickY1}" x2="${tickX2}" y2="${tickY2}" stroke="${COLOR.tick}" stroke-width="3" stroke-linecap="round" />`,
     );
 
     const majorCenter = pointAt(RADIUS + MAJOR_OFFSET, angleDeg);

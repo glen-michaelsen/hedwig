@@ -2,42 +2,42 @@
   <title>The circle of fifths</title>
   <rect x="0" y="0" width="380" height="400" rx="16" fill="#ffffff" />
   <circle cx="190" cy="178" r="128" fill="none" stroke="#825abe" stroke-width="2.5" />
-  <line x1="175" y1="50" x2="205" y2="50" stroke="#825abe" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="190" y1="65" x2="190" y2="35" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
   <text x="190" y="14" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">C</text>
   <text x="190" y="82" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Am</text>
-  <line x1="241.01" y1="59.65" x2="266.99" y2="74.65" stroke="#825abe" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="246.5" y1="80.14" x2="261.5" y2="54.16" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
   <text x="272" y="35.97" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">G</text>
   <text x="238" y="94.86" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Em</text>
-  <line x1="293.35" y1="101.01" x2="308.35" y2="126.99" stroke="#825abe" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="287.86" y1="121.5" x2="313.84" y2="106.5" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
   <text x="332.03" y="96" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">D</text>
   <text x="273.14" y="130" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Bm</text>
-  <line x1="318" y1="163" x2="318" y2="193" stroke="#825abe" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="303" y1="178" x2="333" y2="178" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
   <text x="354" y="178" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">A</text>
   <text x="286" y="178" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">F#m</text>
-  <line x1="308.35" y1="229.01" x2="293.35" y2="254.99" stroke="#825abe" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="287.86" y1="234.5" x2="313.84" y2="249.5" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
   <text x="332.03" y="260" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">E</text>
   <text x="273.14" y="226" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">C#m</text>
-  <line x1="266.99" y1="281.35" x2="241.01" y2="296.35" stroke="#825abe" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="246.5" y1="275.86" x2="261.5" y2="301.84" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
   <text x="272" y="320.03" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">B</text>
   <text x="238" y="261.14" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">G#m</text>
-  <line x1="205" y1="306" x2="175" y2="306" stroke="#825abe" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="190" y1="291" x2="190" y2="321" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
   <text x="190" y="334" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">F#</text>
   <text x="190" y="350" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Gb</text>
   <text x="190" y="266" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">D#m</text>
   <text x="190" y="282" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Ebm</text>
-  <line x1="138.99" y1="296.35" x2="113.01" y2="281.35" stroke="#825abe" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="133.5" y1="275.86" x2="118.5" y2="301.84" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
   <text x="108" y="320.03" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Db</text>
   <text x="142" y="261.14" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Bbm</text>
-  <line x1="86.65" y1="254.99" x2="71.65" y2="229.01" stroke="#825abe" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="92.14" y1="234.5" x2="66.16" y2="249.5" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
   <text x="47.97" y="260" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Ab</text>
   <text x="106.86" y="226" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Fm</text>
-  <line x1="62" y1="193" x2="62" y2="163" stroke="#825abe" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="77" y1="178" x2="47" y2="178" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
   <text x="26" y="178" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Eb</text>
   <text x="94" y="178" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Cm</text>
-  <line x1="71.65" y1="126.99" x2="86.65" y2="101.01" stroke="#825abe" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="92.14" y1="121.5" x2="66.16" y2="106.5" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
   <text x="47.97" y="96" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Bb</text>
   <text x="106.86" y="130" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Gm</text>
-  <line x1="113.01" y1="74.65" x2="138.99" y2="59.65" stroke="#825abe" stroke-width="3.5" stroke-linecap="round" />
+  <line x1="133.5" y1="80.14" x2="118.5" y2="54.16" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
   <text x="108" y="35.97" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">F</text>
   <text x="142" y="94.86" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Dm</text>
 </svg>
