@@ -67,14 +67,14 @@ export default function CircleOfFifthsPage() {
         title="The Circle of Fifths Explained: Tonic, Dominant and Subdominant"
         intro="The circle of fifths is a harmonization tool — a wheel of every major chord on the outer ring and every minor chord on the inner ring, arranged so that neighboring chords are closely related."
       >
-        <div className="flex justify-center">
+        <div className="rounded-4xl border border-line bg-surface p-8 shadow-lift">
           <ZoomableImage
             src="/images/knowledge/theory/circle-of-fifths.svg"
             alt="The circle of fifths, with major chords outside the ring and their relative minors inside"
-            width={380}
-            height={400}
+            width={400}
+            height={392}
             title="The circle of fifths"
-            className="w-full max-w-sm"
+            className="mx-auto w-full"
           />
         </div>
 

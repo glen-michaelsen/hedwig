@@ -20,10 +20,7 @@ const COLOR = {
   minor: "#6b6153",
 };
 
-const WIDTH = 380;
-const HEIGHT = 400;
-const CENTER_X = 190;
-const CENTER_Y = 178;
+const MARGIN = 20;
 const RADIUS = 128;
 const TICK_HALF_LENGTH = 15;
 const MAJOR_OFFSET = 36;
@@ -31,6 +28,22 @@ const MINOR_OFFSET = 32;
 const MAJOR_FONT_SIZE = 16;
 const MINOR_FONT_SIZE = 14;
 const STACK_GAP = 16;
+
+// The canvas is derived from the content, not hand-picked, so the margin
+// comes out equal on all four sides by construction — the top label is a
+// single line, but the bottom one (F#/Gb) stacks two, which would eat into
+// the bottom margin if the canvas were just a fixed square around the ring.
+const HALF_LABEL_HEIGHT = MAJOR_FONT_SIZE * 0.5;
+const HALF_LABEL_WIDTH = 16;
+const LABEL_RADIUS = RADIUS + MAJOR_OFFSET;
+const TOP_EXTENT = LABEL_RADIUS + HALF_LABEL_HEIGHT;
+const BOTTOM_EXTENT = LABEL_RADIUS + STACK_GAP / 2 + HALF_LABEL_HEIGHT;
+const SIDE_EXTENT = LABEL_RADIUS + HALF_LABEL_WIDTH;
+
+const CENTER_X = MARGIN + SIDE_EXTENT;
+const CENTER_Y = MARGIN + TOP_EXTENT;
+const WIDTH = CENTER_X + SIDE_EXTENT + MARGIN;
+const HEIGHT = CENTER_Y + BOTTOM_EXTENT + MARGIN;
 
 function round(value: number) {
   return Math.round(value * 100) / 100;

@@ -1,43 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 400" width="380" height="400" role="img" aria-label="The circle of fifths">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 392" width="400" height="392" role="img" aria-label="The circle of fifths">
   <title>The circle of fifths</title>
-  <rect x="0" y="0" width="380" height="400" rx="16" fill="#ffffff" />
-  <circle cx="190" cy="178" r="128" fill="none" stroke="#825abe" stroke-width="2.5" />
-  <line x1="190" y1="65" x2="190" y2="35" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
-  <text x="190" y="14" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">C</text>
-  <text x="190" y="82" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Am</text>
-  <line x1="246.5" y1="80.14" x2="261.5" y2="54.16" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
-  <text x="272" y="35.97" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">G</text>
-  <text x="238" y="94.86" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Em</text>
-  <line x1="287.86" y1="121.5" x2="313.84" y2="106.5" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
-  <text x="332.03" y="96" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">D</text>
-  <text x="273.14" y="130" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Bm</text>
-  <line x1="303" y1="178" x2="333" y2="178" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
-  <text x="354" y="178" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">A</text>
-  <text x="286" y="178" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">F#m</text>
-  <line x1="287.86" y1="234.5" x2="313.84" y2="249.5" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
-  <text x="332.03" y="260" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">E</text>
-  <text x="273.14" y="226" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">C#m</text>
-  <line x1="246.5" y1="275.86" x2="261.5" y2="301.84" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
-  <text x="272" y="320.03" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">B</text>
-  <text x="238" y="261.14" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">G#m</text>
-  <line x1="190" y1="291" x2="190" y2="321" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
-  <text x="190" y="334" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">F#</text>
-  <text x="190" y="350" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Gb</text>
-  <text x="190" y="266" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">D#m</text>
-  <text x="190" y="282" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Ebm</text>
-  <line x1="133.5" y1="275.86" x2="118.5" y2="301.84" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
-  <text x="108" y="320.03" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Db</text>
-  <text x="142" y="261.14" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Bbm</text>
-  <line x1="92.14" y1="234.5" x2="66.16" y2="249.5" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
-  <text x="47.97" y="260" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Ab</text>
-  <text x="106.86" y="226" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Fm</text>
-  <line x1="77" y1="178" x2="47" y2="178" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
-  <text x="26" y="178" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Eb</text>
-  <text x="94" y="178" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Cm</text>
-  <line x1="92.14" y1="121.5" x2="66.16" y2="106.5" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
-  <text x="47.97" y="96" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Bb</text>
-  <text x="106.86" y="130" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Gm</text>
-  <line x1="133.5" y1="80.14" x2="118.5" y2="54.16" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
-  <text x="108" y="35.97" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">F</text>
-  <text x="142" y="94.86" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Dm</text>
+  <rect x="0" y="0" width="400" height="392" rx="16" fill="#ffffff" />
+  <circle cx="200" cy="192" r="128" fill="none" stroke="#825abe" stroke-width="2.5" />
+  <line x1="200" y1="79" x2="200" y2="49" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
+  <text x="200" y="28" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">C</text>
+  <text x="200" y="96" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Am</text>
+  <line x1="256.5" y1="94.14" x2="271.5" y2="68.16" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
+  <text x="282" y="49.97" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">G</text>
+  <text x="248" y="108.86" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Em</text>
+  <line x1="297.86" y1="135.5" x2="323.84" y2="120.5" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
+  <text x="342.03" y="110" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">D</text>
+  <text x="283.14" y="144" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Bm</text>
+  <line x1="313" y1="192" x2="343" y2="192" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
+  <text x="364" y="192" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">A</text>
+  <text x="296" y="192" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">F#m</text>
+  <line x1="297.86" y1="248.5" x2="323.84" y2="263.5" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
+  <text x="342.03" y="274" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">E</text>
+  <text x="283.14" y="240" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">C#m</text>
+  <line x1="256.5" y1="289.86" x2="271.5" y2="315.84" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
+  <text x="282" y="334.03" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">B</text>
+  <text x="248" y="275.14" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">G#m</text>
+  <line x1="200" y1="305" x2="200" y2="335" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
+  <text x="200" y="348" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">F#</text>
+  <text x="200" y="364" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Gb</text>
+  <text x="200" y="280" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">D#m</text>
+  <text x="200" y="296" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Ebm</text>
+  <line x1="143.5" y1="289.86" x2="128.5" y2="315.84" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
+  <text x="118" y="334.03" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Db</text>
+  <text x="152" y="275.14" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Bbm</text>
+  <line x1="102.14" y1="248.5" x2="76.16" y2="263.5" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
+  <text x="57.97" y="274" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Ab</text>
+  <text x="116.86" y="240" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Fm</text>
+  <line x1="87" y1="192" x2="57" y2="192" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
+  <text x="36" y="192" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Eb</text>
+  <text x="104" y="192" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Cm</text>
+  <line x1="102.14" y1="135.5" x2="76.16" y2="120.5" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
+  <text x="57.97" y="110" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">Bb</text>
+  <text x="116.86" y="144" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Gm</text>
+  <line x1="143.5" y1="94.14" x2="128.5" y2="68.16" stroke="#825abe" stroke-width="3" stroke-linecap="round" />
+  <text x="118" y="49.97" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#3d372c">F</text>
+  <text x="152" y="108.86" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="500" fill="#6b6153">Dm</text>
 </svg>
