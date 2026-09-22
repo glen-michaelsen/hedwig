@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
+import { ZoomableImage } from "../../_components/zoomable-image";
 
 const PAGE_DESCRIPTION =
   "Tonic, dominant and subdominant — the circle of fifths and how it shows you which chords naturally belong together in a key.";
@@ -40,6 +41,7 @@ const structuredData = {
       headline: "The Circle of Fifths Explained: Tonic, Dominant and Subdominant",
       description: PAGE_DESCRIPTION,
       author: { "@type": "Organization", name: "Trenodo" },
+      image: ["https://trenodo.com/images/knowledge/theory/circle-of-fifths.svg"],
     },
     {
       "@type": "FAQPage",
@@ -65,6 +67,17 @@ export default function CircleOfFifthsPage() {
         title="The Circle of Fifths Explained: Tonic, Dominant and Subdominant"
         intro="The circle of fifths is a harmonization tool — a wheel of every major chord on the outer ring and every minor chord on the inner ring, arranged so that neighboring chords are closely related."
       >
+        <div className="flex justify-center">
+          <ZoomableImage
+            src="/images/knowledge/theory/circle-of-fifths.svg"
+            alt="The circle of fifths, with major chords outside the ring and their relative minors inside"
+            width={380}
+            height={400}
+            title="The circle of fifths"
+            className="w-full max-w-sm"
+          />
+        </div>
+
         <GuideSection title="Tonic, dominant, subdominant">
           <ul className="list-disc space-y-3 pl-5">
             <li>

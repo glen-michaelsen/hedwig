@@ -20,6 +20,8 @@ import { renderScaleSvg } from "../lib/scale-diagrams/render";
 import { ALL_PIANO_CHORDS } from "../lib/piano-diagrams/piano-chords";
 import { PIANO_REFERENCE_DIAGRAMS } from "../lib/piano-diagrams/piano-reference";
 import { renderPianoChordSvg } from "../lib/piano-diagrams/render";
+import { CIRCLE_OF_FIFTHS } from "../lib/theory-diagrams/circle-of-fifths";
+import { renderCircleOfFifthsSvg } from "../lib/theory-diagrams/render";
 
 const KNOWLEDGE_DIR = path.join(process.cwd(), "public/images/knowledge");
 
@@ -58,6 +60,12 @@ async function main() {
     PIANO_REFERENCE_DIAGRAMS,
     renderPianoChordSvg,
   );
+
+  const theoryDir = path.join(KNOWLEDGE_DIR, "theory");
+  await mkdir(theoryDir, { recursive: true });
+  const circleOfFifthsPath = path.join(theoryDir, "circle-of-fifths.svg");
+  await writeFile(circleOfFifthsPath, renderCircleOfFifthsSvg(CIRCLE_OF_FIFTHS), "utf8");
+  console.log(`wrote ${path.relative(process.cwd(), circleOfFifthsPath)}`);
 
   console.log(
     `\n${guitarChords.length} guitar chord diagrams, ${GUITAR_SCALES.length} guitar scale diagrams, ${ALL_PIANO_CHORDS.length} piano chord diagrams generated.`,
