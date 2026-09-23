@@ -54,7 +54,7 @@ export function RhymeExample({ lines }: { lines: readonly RhymeLine[] }) {
                   onClick={() =>
                     setActive((current) => (current === line.letter ? null : line.letter))
                   }
-                  className={`rounded-md px-1 -mx-1 font-semibold transition-colors ${focusable} ${
+                  className={`rounded-md px-1 -mr-1 font-semibold transition-colors ${focusable} ${
                     lit ? "bg-brand-500/15 text-brand-700" : "text-foreground"
                   }`}
                 >
