@@ -14,6 +14,10 @@ import {
 import { featureItems, loginItems, type NavItem } from "./nav-items";
 import { button, focusable } from "./ui";
 
+// Icons only from lg up: between md and lg the nav already fills the row,
+// and 5 icons more would push it past the edge of the header.
+const navIcon = "hidden h-4 w-4 lg:block";
+
 const triggerBase = `inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 text-sm font-medium transition-colors ${focusable}`;
 
 /**
@@ -138,7 +142,7 @@ export function DesktopNav() {
 
   return (
     <nav className="hidden items-center gap-1 md:flex">
-      <Dropdown label="Features" icon={<FeaturesIcon />} items={featureItems} />
+      <Dropdown label="Features" icon={<FeaturesIcon className={navIcon} />} items={featureItems} />
       <Link
         href="/knowledge"
         className={`${triggerBase} ${
@@ -147,7 +151,7 @@ export function DesktopNav() {
             : "text-muted hover:bg-surface-muted hover:text-foreground"
         }`}
       >
-        <KnowledgeIcon />
+        <KnowledgeIcon className={navIcon} />
         Knowledge
       </Link>
       <Link
@@ -158,7 +162,7 @@ export function DesktopNav() {
             : "text-muted hover:bg-surface-muted hover:text-foreground"
         }`}
       >
-        <SpotlightIcon />
+        <SpotlightIcon className={navIcon} />
         Spotlight
       </Link>
       <Link
@@ -169,11 +173,11 @@ export function DesktopNav() {
             : "text-muted hover:bg-surface-muted hover:text-foreground"
         }`}
       >
-        <IdeasIcon />
+        <IdeasIcon className={navIcon} />
         Ideas
       </Link>
       <span className="mx-2 h-6 w-px bg-line" aria-hidden="true" />
-      <Dropdown label="Log in" icon={<LoginIcon />} items={loginItems} align="right" />
+      <Dropdown label="Log in" icon={<LoginIcon className={navIcon} />} items={loginItems} align="right" />
     </nav>
   );
 }
