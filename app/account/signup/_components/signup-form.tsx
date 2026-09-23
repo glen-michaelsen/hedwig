@@ -91,7 +91,7 @@ export function SignupForm({
         {state.error && <ErrorText>{state.error}</ErrorText>}
 
         <button className={`${button} w-full py-3.5 text-base`} disabled={pending}>
-          {pending ? "Creating…" : "Create studio"}
+          {pending ? "Creating…" : "Create account"}
         </button>
       </form>
 
