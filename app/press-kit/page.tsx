@@ -275,8 +275,8 @@ function Steps() {
 
   return (
     <StepsSection title="Set up once, per release" steps={steps}>
-        Add the release, drop the files in when they&rsquo;re ready, and it&rsquo;s
-        there when someone asks. Always ready to press send. 🙂
+      Add the release, drop the files in when they&rsquo;re ready, and it&rsquo;s
+      there when someone asks. Always ready to press send. 🙂
     </StepsSection>
   );
 }

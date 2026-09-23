@@ -271,8 +271,8 @@ function Steps() {
 
   return (
     <StepsSection title="Three minutes after the lesson" steps={steps}>
-        The whole way, from a student who never used it before to a
-        student practicing the right thing.
+      The whole way, from a student who never used it before to a
+      student practicing the right thing.
     </StepsSection>
   );
 }

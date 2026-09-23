@@ -280,8 +280,8 @@ function Steps() {
 
   return (
     <StepsSection title="From a blank gig to a printed sheet" steps={steps}>
-        The whole way, from booking the gig to walking on stage with the
-        order ready.
+      The whole way, from booking the gig to walking on stage with the
+      order ready.
     </StepsSection>
   );
 }

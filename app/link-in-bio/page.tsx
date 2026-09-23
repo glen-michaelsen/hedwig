@@ -278,8 +278,8 @@ function Steps() {
 
   return (
     <StepsSection title="Live in a few minutes" steps={steps}>
-        No draft to remember to publish. When your page is live, your
-        changes go out right away.
+      No draft to remember to publish. When your page is live, your
+      changes go out right away.
     </StepsSection>
   );
 }
