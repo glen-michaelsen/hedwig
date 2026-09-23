@@ -230,7 +230,7 @@ export async function saveBlockAction(
           ? "Add some text for this block."
           : kind === "release"
             ? "Choose a release for this block."
-            : "Check the link — it needs to be a full URL including https://",
+            : "Check the link. It needs to be a full URL, with https:// in front.",
     };
   }
 
@@ -319,7 +319,7 @@ export async function saveSocialsAction(
     if (!url) continue;
     const parsed = socialSchema.safeParse({ platform, url });
     if (!parsed.success) {
-      return { error: `Check the ${platform} link — it needs a full URL.` };
+      return { error: `Check the ${platform} link. It needs to be a full URL.` };
     }
     socials.push(parsed.data);
   }

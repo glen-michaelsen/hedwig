@@ -12,10 +12,10 @@ import {
 import { BioMockup } from "./_components/bio-mockup";
 
 const PAGE_DESCRIPTION =
-  "A free link in bio page for musicians — your music, tour dates and links in one place. Blocks and themes built for artists, not just anyone.";
+  "A free link in bio page for musicians. Your music, tour dates and links in one place. Blocks and themes made for artists, not for everyone.";
 
 export const metadata: Metadata = {
-  title: "Free Link in Bio for Musicians — Trenodo",
+  title: "Free Link in Bio for Musicians | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: {
     canonical: "/link-in-bio",
@@ -37,19 +37,19 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "Is Trenodo's Link in Bio really free?",
-    a: "Yes — free, forever. It's how musicians find the rest of Trenodo, not a trial that runs out.",
+    a: "Yes. Free, forever. It's how musicians find the rest of Trenodo. Not a trial that runs out.",
   },
   {
-    q: "How is it different from Linktree or other link-in-bio tools?",
-    a: "It's built around what musicians actually share — a release, a player, tour dates — instead of a generic grid of buttons. A track link looks like a track link, not a t-shirt link.",
+    q: "How is it different from Linktree and other link in bio tools?",
+    a: "It is built around what musicians actually share: a release, a player, tour dates. Not a generic grid of buttons. A track link looks like a track link, not like a t-shirt link.",
   },
   {
     q: "Can I pick my own handle, and change it later?",
-    a: "Yes. Your page lives at trenodo.com/@yourhandle, and if you change it, the old one keeps redirecting — handy since printed QR codes and old bio links outlive handle changes.",
+    a: "Yes. Your page lives at trenodo.com/@yourhandle. If you change it, the old one keeps sending people to your page. Handy, because printed QR codes and old bio links live longer than a handle.",
   },
   {
     q: "Do I need to be a musician to use it?",
-    a: "It's built specifically for musicians — the release, player and video blocks assume that's what you're sharing. If that's not you, a general-purpose link-in-bio tool will probably fit better.",
+    a: "It is made for musicians. The release, player and video blocks expect that is what you share. If that is not you, a general link in bio tool will probably fit you better.",
   },
 ] as const;
 
@@ -163,11 +163,10 @@ function Hero() {
             </h1>
 
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
-              I got tired of a link-in-bio tool built for everyone that fit a
-              musician awkwardly — a track link that looked like a t-shirt
-              link, no way to route a student toward my portal. So this one is
-              built for musicians specifically, and it&rsquo;s the second
-              thing I made.
+              I got tired of link in bio tools made for everyone. They never
+              really fit a musician. A track link looked like a t-shirt link.
+              And there was no way to send a student to my portal. So I made
+              one for musicians. It was the second tool I built. 🔗
             </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-3.5">
@@ -180,7 +179,7 @@ function Hero() {
             </div>
 
             <p className="mt-6 text-sm text-muted">
-              Free, forever — your page lives at trenodo.com/@yourhandle.
+              Free, forever. Your page lives at trenodo.com/@yourhandle.
             </p>
           </div>
 
@@ -197,23 +196,23 @@ function Features() {
   const features = [
     {
       icon: icons.link,
-      title: "Blocks that actually fit a set",
-      body: "Links, short text, a music player and video — reorder them however you like, and hide one without deleting it.",
+      title: "Blocks that actually fit a musician",
+      body: "Links, short text, a music player and video. Put them in any order you like, and hide a block without deleting it.",
     },
     {
       icon: icons.palette,
-      title: "Presets, or your own colours",
-      body: "Start from a designed theme, or pick your own accent and background. If the contrast won't read, the page tells you before your audience finds out.",
+      title: "Ready themes, or your own colours",
+      body: "Start from a ready made theme, or pick your own colours. If the text is hard to read, we tell you. Before your fans find out.",
     },
     {
       icon: icons.chart,
       title: "The numbers that matter",
-      body: "Views over time and clicks per block, so you can see what people actually tap — not a wall of vanity metrics.",
+      body: "Views over time and clicks per block. See what people actually tap on. No wall of numbers that only look nice.",
     },
     {
       icon: icons.shield,
-      title: "No app chrome, no distractions",
-      body: "The public page is just your page — no Trenodo header or navigation pulling focus from what you're sharing.",
+      title: "No clutter, no distractions",
+      body: "Your public page is just your page. No Trenodo header or menu that takes focus away from what you share.",
     },
   ];
 
@@ -225,11 +224,11 @@ function Features() {
             What&rsquo;s on the page
           </p>
           <h2 className="mt-3 text-4xl font-semibold tracking-tight text-balance">
-            Built for one link in a bio, not a landing page
+            Made for the link in your bio. Not a whole website.
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-muted text-pretty">
-            A handful of blocks, chosen and themed with musicians in mind —
-            not a generic grid you have to fight into shape.
+            A handful of blocks, picked and designed with musicians in mind.
+            Not a generic grid you have to fight with.
           </p>
         </div>
 
@@ -261,17 +260,17 @@ function Steps() {
     {
       n: "01",
       title: "Claim your handle",
-      body: "Pick trenodo.com/@yourhandle. Change your mind later and the old one keeps redirecting — printed QR codes outlive handle changes.",
+      body: "Pick trenodo.com/@yourhandle. Change your mind later, and the old one still leads to your page. Printed QR codes live longer than handles.",
     },
     {
       n: "02",
       title: "Add your blocks",
-      body: "A link to your latest release, a player, a video, a line of text. Drag them into the order you want people to see.",
+      body: "A link to your latest release, a player, a video, a line of text. Drag them into the order you want.",
     },
     {
       n: "03",
       title: "Publish",
-      body: "Flip it live and put the link everywhere you already are — Instagram, a poster, a setlist card at the merch table.",
+      body: "Turn it on, and put the link everywhere you already are. Instagram, a poster, a card at the merch table.",
     },
   ];
 
@@ -282,8 +281,8 @@ function Steps() {
           Live in a few minutes
         </h2>
         <p className="mt-5 text-lg leading-relaxed text-muted text-pretty">
-          No draft to remember to publish — edits to a live page go out
-          straight away.
+          No draft to remember to publish. When your page is live, your
+          changes go out right away.
         </p>
       </div>
 
@@ -347,7 +346,7 @@ function ClosingCta() {
         </h2>
         <p className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-muted text-pretty">
           Claim your handle and add your first block. It takes about as long
-          as this page did to read.
+          as reading this page. ⏱️
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-3.5">
           <Link href="/account/signup" className={`${button} ${buttonLarge}`}>

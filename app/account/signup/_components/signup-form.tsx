@@ -29,7 +29,7 @@ export function SignupForm({
         Create your account
       </h1>
       <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">
-        Tutor, Link in Bio, Press Kit and Setlists — all in one place.
+        Tutor, Link in Bio, Press Kit and Setlists. All in one place. 🎵
       </p>
 
       <form action={action} className="mt-8 space-y-5">

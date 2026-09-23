@@ -73,8 +73,8 @@ export default async function EditReleasePage({
         </h2>
         <Card className="mt-4">
           <p className="text-sm leading-relaxed text-muted text-pretty">
-            Deleting this release removes every file attached to it — cover,
-            photos, audio and documents — from storage as well.
+            Deleting this release also deletes every file on it. Cover,
+            photos, audio and documents. They are removed from storage too.
           </p>
           <div className="mt-5">
             <DeleteReleaseButton releaseId={release.id} title={release.title} />

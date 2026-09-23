@@ -37,8 +37,8 @@ export function DeleteReleaseButton({
       >
         <div className="space-y-5 px-6 py-6 sm:px-7">
           <p className="text-sm leading-relaxed">
-            Every file attached to this release goes with it — the cover, the
-            press photos, the audio and the documents.
+            Every file on this release is deleted too. The cover, the press
+            photos, the audio and the documents.
           </p>
           <p className="text-sm leading-relaxed text-muted">
             Make sure your masters exist somewhere else first. This

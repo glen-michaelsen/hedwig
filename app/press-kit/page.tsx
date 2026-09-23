@@ -12,10 +12,10 @@ import {
 import { PressKitMockup } from "./_components/press-kit-mockup";
 
 const PAGE_DESCRIPTION =
-  "Create an electronic press kit (EPK) for every release — singles, EPs and albums — with cover art, photos, masters and the one-sheet a promoter or blog actually asks for, all in one place.";
+  "Make an electronic press kit (EPK) for every release. Singles, EPs and albums, with cover art, photos, masters and the one sheet a promoter or blog asks for. All in one place.";
 
 export const metadata: Metadata = {
-  title: "Electronic Press Kit (EPK) for Musicians — Trenodo",
+  title: "Electronic Press Kit (EPK) for Musicians | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: {
     canonical: "/press-kit",
@@ -37,19 +37,19 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "What is an electronic press kit (EPK)?",
-    a: "A one-stop page with everything a promoter, blog or radio station needs to cover your release — cover art, photos, the masters, and the bio and one-sheet that explain what it is. Trenodo builds one for every release as you add files to it.",
+    a: "One page with everything a promoter, blog or radio station needs to write about your release. Cover art, photos, the masters, a bio and a one sheet. Trenodo builds one for each release, as you add the files.",
   },
   {
     q: "Do singles, EPs and albums all get their own press kit?",
-    a: "Yes — each release gets its own kit, organised separately. A blog covering your new single doesn't wade through photos from an album you put out two years ago.",
+    a: "Yes. Each release gets its own kit. A blog writing about your new single doesn't have to dig through photos from an album you released two years ago.",
   },
   {
     q: "What should be in a press kit for a music release?",
-    a: "At minimum: cover art at full resolution, a handful of press photos, the masters (not demos), and a short bio or one-sheet. Trenodo keeps all four together by release, at the sizes they were uploaded at.",
+    a: "At least: cover art in full size, a few press photos, the masters (not demos) and a short bio or one sheet. Trenodo keeps all four together per release, in the size you uploaded them.",
   },
   {
     q: "Can I control who sees it?",
-    a: "Yes — a press kit is only public once you publish it, and you can flip it back to private any time without losing anything on it.",
+    a: "Yes. A press kit only goes public when you publish it. And you can make it private again at any time, without losing anything.",
   },
 ] as const;
 
@@ -163,11 +163,11 @@ function Hero() {
             </h1>
 
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
-              Every release drags along a cover, a stack of photos, the
-              masters, a bio, a lyric sheet — usually scattered across
-              drives and old email threads. This keeps all of it in one
-              place, organised by release, so &ldquo;send me your press
-              kit&rdquo; doesn&rsquo;t turn into an afternoon of digging.
+              Every release comes with a cover, a pile of photos, the
+              masters, a bio and a lyric sheet. Usually spread over old
+              drives and email threads. Press Kit keeps it all in one place,
+              sorted by release. So &ldquo;send me your press kit&rdquo; doesn&rsquo;t
+              turn into an afternoon of digging. 📸
             </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-3.5">
@@ -194,22 +194,22 @@ function Features() {
     {
       icon: icons.cover,
       title: "Cover art, at full size",
-      body: "3000×3000 in, ready for a store listing or a blog post — no re-exporting from an old design file to find out it shrank.",
+      body: "3000×3000, ready for a store or a blog post. No more exporting from an old design file, only to find out it got smaller.",
     },
     {
       icon: icons.photo,
       title: "Press photos, full resolution",
-      body: "A magazine can shrink a photo, it can't grow one. Whatever size you upload is the size that stays there.",
+      body: "A magazine can make a photo smaller, but never bigger. The size you upload is the size that stays.",
     },
     {
       icon: icons.track,
       title: "Masters, not demos",
-      body: "MP3, WAV or FLAC, uploaded in chunks so a lossless master doesn't time out halfway through.",
+      body: "MP3, WAV or FLAC. Uploaded in small pieces, so a big lossless master doesn't stop halfway.",
     },
     {
       icon: icons.document,
-      title: "Bio, lyrics, one-sheet",
-      body: "The paperwork that goes with the music, sitting right next to it instead of in a separate folder you have to remember.",
+      title: "Bio, lyrics, one sheet",
+      body: "The paperwork that belongs to the music, right next to it. Not in a separate folder you have to remember.",
     },
   ];
 
@@ -221,11 +221,11 @@ function Features() {
             Inside Press Kit
           </p>
           <h2 className="mt-3 text-4xl font-semibold tracking-tight text-balance">
-            Organised the way people actually ask for it
+            Sorted the way people ask for it
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-muted text-pretty">
-            By release, not one big pile — the way a booker or a blog
-            actually asks for it.
+            By release, not in one big pile. Exactly the way a booker or a
+            blog asks for it.
           </p>
         </div>
 
@@ -257,17 +257,17 @@ function Steps() {
     {
       n: "01",
       title: "Add the release",
-      body: "Title, artist, kind — single, EP or album — and a release date if you've got one.",
+      body: "Title, artist, type (single, EP or album) and a release date, if you have one.",
     },
     {
       n: "02",
       title: "Drop the files in",
-      body: "Cover, photos, tracks, documents. Upload as they're ready — nothing has to arrive all at once.",
+      body: "Cover, photos, tracks, documents. Upload them when they are ready. Nothing has to come all at once.",
     },
     {
       n: "03",
-      title: "Send what's asked for",
-      body: "Download exactly what a promoter or a blog needs, at the size they actually need it.",
+      title: "Send what they ask for",
+      body: "Download exactly what a promoter or a blog needs, in the size they need.",
     },
   ];
 
@@ -278,8 +278,8 @@ function Steps() {
           Set up once, per release
         </h2>
         <p className="mt-5 text-lg leading-relaxed text-muted text-pretty">
-          Add the release, drop files in as they&rsquo;re ready, and it&rsquo;s
-          there whenever someone asks.
+          Add the release, drop the files in when they&rsquo;re ready, and it&rsquo;s
+          there when someone asks. Always ready to press send. 🙂
         </p>
       </div>
 

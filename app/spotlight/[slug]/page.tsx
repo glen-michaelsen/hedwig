@@ -71,12 +71,12 @@ export async function generateMetadata({
   const { slug } = await params;
   const { preview } = await searchParams;
   const found = await findArticle(slug, previewTokenFrom(preview));
-  if (!found) return { title: "Not found — Trenodo" };
+  if (!found) return { title: "Not found | Trenodo" };
 
   const { article } = found;
-  const description = `${article.artistName} — ${article.releaseTitle}`;
+  const description = `${article.releaseTitle} by ${article.artistName}`;
   return {
-    title: `${article.headline} — Trenodo Spotlight`,
+    title: `${article.headline} | Trenodo Spotlight`,
     description,
     alternates: {
       canonical: `/spotlight/${article.slug}`,
@@ -203,12 +203,12 @@ export default async function SpotlightArticlePage({
       <main className="flex-1 pb-24">
         {mode === "admin-draft" && (
           <div className="bg-amber-500/15 py-3 text-center text-sm text-amber-800 dark:text-amber-200">
-            Draft — only you can see this.
+            Draft. Only you can see this.
           </div>
         )}
         {mode === "shared-preview" && (
           <div className="bg-amber-500/15 py-3 text-center text-sm text-amber-800 dark:text-amber-200">
-            Preview link — not public yet.
+            Preview link. Not public yet.
           </div>
         )}
 

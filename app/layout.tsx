@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://trenodo.com"),
   title: "Trenodo",
   description:
-    "Tools for working musicians — teaching, links and press, in one account.",
+    "Tools for working musicians. Teaching, links and press, in one account.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

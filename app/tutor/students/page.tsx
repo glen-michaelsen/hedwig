@@ -24,7 +24,7 @@ export default async function StudentsPage() {
     <>
       <PageHeader
         title="Students"
-        subtitle="Each student signs in with their phone number and a PIN — no email, no account."
+        subtitle="Each student signs in with their phone number and a PIN. No email, no account."
         action={<NewStudentModal />}
       />
 

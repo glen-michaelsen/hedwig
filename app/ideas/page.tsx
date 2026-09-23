@@ -11,7 +11,7 @@ import { IdeaForm } from "./_components/idea-form";
 import { LikeButton } from "./_components/like-button";
 
 export const metadata: Metadata = {
-  title: "Ideas — Trenodo",
+  title: "Ideas | Trenodo",
   description:
     "Tell us what Trenodo should build next, and see what's already on the way.",
 };
@@ -62,7 +62,7 @@ function IdeaRow({ idea, voted }: { idea: PublishedIdea; voted: boolean }) {
             {idea.detail}
           </p>
         )}
-        {idea.name && <p className="mt-2 text-xs text-faint">— {idea.name}</p>}
+        {idea.name && <p className="mt-2 text-xs text-faint">From {idea.name}</p>}
       </div>
 
       <div className="shrink-0 pt-0.5">
@@ -95,9 +95,9 @@ export default async function IdeasPage() {
             Ideas
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-muted text-pretty">
-            Trenodo is built for working musicians, which means the people using
-            it know best what it&apos;s missing. Tell us what you need — the ideas we
-            take on end up on this page.
+            Trenodo is made for working musicians. So the people who use it
+            know best what is missing. Tell us what you need. The ideas we
+            work on end up on this page. 💡
           </p>
 
           <div className="mt-10">
@@ -109,13 +109,13 @@ export default async function IdeasPage() {
               What others have asked for
             </h2>
             <p className="mt-1.5 text-sm text-muted">
-              Vote for the ones you want — it helps decide what gets built
+              Vote for the ones you want. It helps us decide what to build
               first.
             </p>
 
             {ideas.length === 0 ? (
               <p className="mt-4 rounded-4xl border border-dashed border-line px-6 py-14 text-center text-sm text-muted">
-                Nothing published yet — yours could be the first.
+                Nothing here yet. Yours could be the first!
               </p>
             ) : (
               <Panel className="mt-4">

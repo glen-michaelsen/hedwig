@@ -39,8 +39,8 @@ export function DeleteIdeaButton({
           <p className="text-sm leading-relaxed text-muted">
             This removes it for good. If it&rsquo;s a real idea you simply
             won&rsquo;t build, mark it{" "}
-            <span className="text-foreground">Not for now</span> instead — that
-            keeps the record of someone having asked.
+            <span className="text-foreground">Not for now</span> instead. Then
+            you keep the record that someone asked for it.
           </p>
 
           <div className="flex flex-wrap items-center gap-3">

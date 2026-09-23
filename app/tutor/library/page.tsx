@@ -44,7 +44,7 @@ export default async function LibraryPage({
     <>
       <PageHeader
         title="Library"
-        subtitle="PDFs, chord and theory links, and videos — tagged, not foldered."
+        subtitle="PDFs, chord and theory links, and videos. Sorted with tags, not folders."
         action={
           <Link className={button} href="/tutor/library/new">
             Add material

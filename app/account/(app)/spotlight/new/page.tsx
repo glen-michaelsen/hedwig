@@ -207,7 +207,7 @@ export default async function NewSpotlightPage({
     return (
       <PageHeader
         title="Already written"
-        subtitle={`${chosen.artistName} — ${chosen.title} has a Spotlight already.`}
+        subtitle={`${chosen.title} by ${chosen.artistName} already has a Spotlight.`}
         action={
           <Link
             className={buttonQuiet}

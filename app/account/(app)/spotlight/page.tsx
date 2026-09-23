@@ -86,7 +86,7 @@ export default async function AdminSpotlightPage() {
                       {article.headline}
                     </p>
                     <p className="mt-0.5 truncate text-xs text-muted">
-                      {article.artistName} — {article.releaseTitle}
+                      {article.releaseTitle} by {article.artistName}
                     </p>
                     <span className="mt-1.5 inline-flex">
                       <Hearts rating={article.rating} className="h-3.5 w-3.5" />

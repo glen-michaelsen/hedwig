@@ -54,7 +54,7 @@ export default async function EditSpotlightPage({
     <>
       <PageHeader
         title={article.headline}
-        subtitle={`${article.artistName} — ${article.releaseTitle} · ${KIND_LABELS[article.releaseKind]}`}
+        subtitle={`${article.releaseTitle} by ${article.artistName} · ${KIND_LABELS[article.releaseKind]}`}
         action={
           <div className="flex flex-wrap items-center gap-2.5">
             <SocialMenu spotlightId={article.id} caption={caption} />
@@ -94,7 +94,7 @@ export default async function EditSpotlightPage({
         <Card className="mt-4">
           <p className="text-sm leading-relaxed text-muted text-pretty">
             Deleting the article leaves the release and its press kit exactly
-            as they are — only the writing goes.
+            as they are. Only the text is removed.
           </p>
           <div className="mt-5">
             <DeleteSpotlightButton

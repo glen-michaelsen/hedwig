@@ -87,7 +87,7 @@ export function NoteForm({
       <div className="rounded-4xl border border-amber-500/30 bg-amber-500/[0.05] p-7 sm:p-8">
         <label className={label} htmlFor="notesPrivate">
           <span className="text-amber-700 dark:text-amber-300">
-            Private notes — never shown to the student
+            Private notes. Never shown to the student 🔒
           </span>
         </label>
         <textarea

@@ -60,7 +60,7 @@ export async function chooseStudentAction(
   const studentId = String(formData.get("studentId") ?? "");
 
   const ok = await chooseStudent(token, studentId);
-  if (!ok) return { error: "That took too long — please sign in again." };
+  if (!ok) return { error: "That took too long. Please sign in again." };
 
   redirect("/s");
 }

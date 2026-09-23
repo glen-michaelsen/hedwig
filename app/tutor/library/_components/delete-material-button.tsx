@@ -60,8 +60,8 @@ export function DeleteMaterialButton({
                 too.
               </p>
               <p className="text-sm leading-relaxed text-muted">
-                The lesson notes themselves stay exactly as they are — they
-                just lose this attachment. Students will no longer see it.
+                The lesson notes stay exactly as they are. They just lose
+                this attachment. Students will no longer see it.
               </p>
             </>
           ) : (

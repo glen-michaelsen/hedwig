@@ -30,7 +30,7 @@ export default async function BioEditorPage() {
       <>
         <PageHeader
           title="Link in Bio"
-          subtitle="One page for everything you point people at — your music, your links, your lessons."
+          subtitle="One page for everything you want people to find. Your music, your links, your lessons."
         />
         <ClaimHandle defaultTitle={account.studioName || account.name} />
       </>
@@ -96,7 +96,7 @@ export default async function BioEditorPage() {
 
       {!page.published && (
         <p className="mb-10 rounded-3xl bg-amber-500/10 px-5 py-4 text-sm text-amber-700">
-          This page isn&rsquo;t published yet — only you can see it. Publish
+          This page isn&rsquo;t published yet. Only you can see it. Publish it
           when you&rsquo;re happy with it.
         </p>
       )}

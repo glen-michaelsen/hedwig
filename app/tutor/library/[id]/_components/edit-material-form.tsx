@@ -43,7 +43,7 @@ export function EditMaterialForm({
         <div className="flex items-center gap-3">
           <KindBadge kind={material.kind} />
           <span className="text-xs text-faint">
-            The type can&rsquo;t be changed — delete and re-add to switch it.
+            The type can&rsquo;t be changed. Delete it and add it again to switch.
           </span>
         </div>
 
@@ -92,7 +92,7 @@ export function EditMaterialForm({
               {material.sizeBytes
                 ? ` (${Math.round(material.sizeBytes / 1024)} KB)`
                 : ""}
-              . Anything already shared keeps working — the link stays the same.
+              . Anything you already shared keeps working. The link stays the same.
             </p>
           </div>
         ) : (

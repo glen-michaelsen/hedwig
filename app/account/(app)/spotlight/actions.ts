@@ -22,12 +22,12 @@ function readForm(
   const headline = String(formData.get("headline") ?? "").trim();
   if (headline.length < 3) return { ok: false, error: "Give it a headline" };
   if (headline.length > 160) {
-    return { ok: false, error: "That headline is too long for a URL — keep it under 160 characters" };
+    return { ok: false, error: "That headline is too long for a URL. Keep it under 160 characters" };
   }
 
   const body = String(formData.get("body") ?? "").trim();
   if (body.length < 20) {
-    return { ok: false, error: "The article is empty — write a few lines" };
+    return { ok: false, error: "The article is empty. Write a few lines" };
   }
 
   const rating = Number(formData.get("rating"));

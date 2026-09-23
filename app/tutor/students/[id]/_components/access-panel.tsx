@@ -37,8 +37,8 @@ function IssuePinForm({
     return (
       <div className="px-6 py-6 sm:px-7">
         <p className="text-sm leading-relaxed text-muted text-pretty">
-          Give them this PIN now — it&rsquo;s hashed and can&rsquo;t be shown
-          again. Every signed-in device has been logged out.
+          Give them this PIN now. It&rsquo;s stored safely and can&rsquo;t be
+          shown again. Every signed in device has been logged out.
         </p>
         <div className="mt-6 rounded-3xl bg-brand-500/10 p-6">
           <p className={label}>New PIN</p>
@@ -74,7 +74,7 @@ function IssuePinForm({
           required
         />
         <p className="mt-2 text-xs text-faint">
-          Prefilled with a random PIN — edit it if you&rsquo;d rather set one
+          We filled in a random PIN. Change it if you want to pick one
           yourself.
         </p>
       </div>
@@ -120,7 +120,7 @@ export function AccessPanel({
       <div className="flex flex-wrap items-start justify-between gap-6">
         <div className="min-w-0">
           <p className={label}>Signs in with</p>
-          <p className="font-mono text-xl">{phone ?? "—"}</p>
+          <p className="font-mono text-xl">{phone ?? "Not set"}</p>
 
           <p className="mt-3 max-w-sm text-xs leading-relaxed text-faint">
             The PIN is stored hashed and can&rsquo;t be looked up. Issue a new
@@ -129,8 +129,8 @@ export function AccessPanel({
 
           {siblings.length > 0 && (
             <p className="mt-3 max-w-sm text-xs leading-relaxed text-faint">
-              Shared with {siblings.map((s) => s.name).join(", ")} — the PIN is
-              what tells them apart at sign-in.
+              Shared with {siblings.map((s) => s.name).join(", ")}. The PIN is
+              what tells them apart when they sign in.
             </p>
           )}
 
@@ -151,7 +151,7 @@ export function AccessPanel({
         open={open}
         onClose={close}
         title="Issue a new PIN"
-        description="Set it, or keep the random one — saving logs out every signed-in device."
+        description="Pick one, or keep the random one. Saving logs out every signed in device."
       >
         <IssuePinForm key={formKey} studentId={studentId} onDone={close} />
       </Modal>

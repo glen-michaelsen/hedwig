@@ -25,7 +25,7 @@ export function isPublicKey(key: string) {
 
 export async function putPublicImage(accountId: string, file: File) {
   if (!ALLOWED_TYPES.has(file.type)) {
-    throw new Error("Images only — JPEG, PNG, WebP or AVIF.");
+    throw new Error("Images only. JPEG, PNG, WebP or AVIF.");
   }
   if (file.size > MAX_IMAGE_BYTES) {
     throw new Error("That image is larger than 5 MB.");

@@ -31,7 +31,7 @@ export function ClaimHandle({ defaultTitle }: { defaultTitle: string }) {
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">
         This is the address you&rsquo;ll put in your bio. You can change it
-        later — the old one keeps working.
+        later. The old one keeps working.
       </p>
 
       <form onSubmit={onSubmit} className="mt-7 space-y-5">

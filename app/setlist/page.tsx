@@ -12,10 +12,10 @@ import {
 import { SetlistMockup } from "./_components/setlist-mockup";
 
 const PAGE_DESCRIPTION =
-  "Create a setlist online, free — drag songs into sets, track target minutes as you build, and take a printed sheet on stage instead of squinting at your phone.";
+  "Make a setlist online, for free. Drag songs into sets, keep an eye on the minutes, and take a printed sheet on stage. No more squinting at your phone.";
 
 export const metadata: Metadata = {
-  title: "Free Setlist Creator for Musicians — Trenodo",
+  title: "Free Setlist Creator for Musicians | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: {
     canonical: "/setlist",
@@ -37,19 +37,19 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "Is Trenodo's setlist creator really free?",
-    a: "Yes — free, forever, same as Link in Bio. It's not a trial that runs out.",
+    a: "Yes. Free, forever, just like Link in Bio. Not a trial that runs out.",
   },
   {
-    q: "How do I create a setlist online with Trenodo?",
-    a: "Add the gig, add a set with a target length, and drag songs in — the running time updates as you go, so you know if a set's short or running long before soundcheck.",
+    q: "How do I make a setlist online with Trenodo?",
+    a: "Add the gig. Add a set with a target length. Then drag songs in. The total time updates as you go, so you know if a set is too short or too long before soundcheck.",
   },
   {
     q: "Can I reuse a setlist from a past gig?",
-    a: "Yes — duplicate a whole gig or just one set within it, then adjust from there. Most nights look like the last one.",
+    a: "Yes. Copy a whole gig, or just one set, and adjust from there. Most nights look a lot like the last one.",
   },
   {
     q: "Do I need my phone on stage?",
-    a: "No — print the sheet: big type, no chrome, built to read at arm's length in the dark. Or pull it up on your phone at soundcheck if you'd rather.",
+    a: "No. Print the sheet. Big letters, nothing else on it, easy to read at arm's length in the dark. Or open it on your phone at soundcheck, if you like that better.",
   },
 ] as const;
 
@@ -165,10 +165,10 @@ function Hero() {
             </h1>
 
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
-              One gig, however many sets it needs. Drag songs where they go,
-              watch each set head toward its target length, and take a
-              printed sheet on stage instead of squinting at a phone between
-              songs.
+              One gig, as many sets as it needs. Drag the songs where they
+              belong. See each set grow towards its target length. And take a
+              printed sheet on stage, instead of squinting at a phone between
+              songs. Set for success. 🎤
             </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-3.5">
@@ -181,7 +181,7 @@ function Hero() {
             </div>
 
             <p className="mt-6 text-sm text-muted">
-              Free, forever — create your first setlist in a few minutes.
+              Free, forever. Make your first setlist in a few minutes.
             </p>
           </div>
 
@@ -199,22 +199,22 @@ function Features() {
     {
       icon: icons.drag,
       title: "Drag songs into place",
-      body: "Move a song between sets or reorder it within one — the arrangement saves as you go, no separate save step to remember.",
+      body: "Move a song to another set, or change the order in one. It saves as you go. No save button to remember.",
     },
     {
       icon: icons.clock,
       title: "Target minutes per set",
-      body: "Give a set a length to aim for and watch it as you build — under, over, or right where the venue wants it.",
+      body: "Give each set a length to aim for, and watch it while you build. Too short, too long, or exactly what the venue wants.",
     },
     {
       icon: icons.copy,
-      title: "Duplicate a gig or a set",
-      body: "Most nights look like the last one. Start from a copy of a past gig, or of a set within it, and adjust from there.",
+      title: "Copy a gig or a set",
+      body: "Most nights look like the last one. Start from a copy of an old gig, or one of its sets, and adjust from there.",
     },
     {
       icon: icons.print,
       title: "A print view for the stage",
-      body: "Big type, no chrome, black on white — built for arm's length in the dark, not for a dashboard.",
+      body: "Big letters, black on white, nothing else. Made to read at arm's length in the dark.",
     },
   ];
 
@@ -226,11 +226,11 @@ function Features() {
             Inside Setlist
           </p>
           <h2 className="mt-3 text-4xl font-semibold tracking-tight text-balance">
-            Built around how a gig actually comes together
+            Made for how a gig really comes together
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-muted text-pretty">
-            Not a shared document that drifts out of order. The set is the
-            unit of work, so that&rsquo;s what the tool is shaped around.
+            Not a shared document that slowly gets messy. You think in sets,
+            so the tool is built around sets.
           </p>
         </div>
 
@@ -262,17 +262,17 @@ function Steps() {
     {
       n: "01",
       title: "Add the gig",
-      body: "Name, date and location if you've got them — a gig can sit undated as a plan until it's booked.",
+      body: "Name, date and place, if you have them. A gig can wait without a date, as a plan, until it is booked.",
     },
     {
       n: "02",
       title: "Build the sets",
-      body: "Add a set, give it a target length, and drag songs in from wherever they end up making sense.",
+      body: "Add a set, give it a target length, and drag the songs in where they make sense.",
     },
     {
       n: "03",
       title: "Take it on stage",
-      body: "Print the sheet or pull it up on your phone at soundcheck — either way, the running order is settled before you walk out.",
+      body: "Print the sheet, or open it on your phone at soundcheck. Either way, the order is ready before you walk on.",
     },
   ];
 
@@ -283,8 +283,8 @@ function Steps() {
           From a blank gig to a printed sheet
         </h2>
         <p className="mt-5 text-lg leading-relaxed text-muted text-pretty">
-          The whole loop, from booking the gig to walking out with the
-          running order settled.
+          The whole way, from booking the gig to walking on stage with the
+          order ready.
         </p>
       </div>
 
@@ -347,8 +347,8 @@ function ClosingCta() {
           Set up your musician account
         </h2>
         <p className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-muted text-pretty">
-          Add your next gig, build the first set, and see it come together.
-          It takes about five minutes.
+          Add your next gig, build the first set, and watch it come
+          together. It takes about five minutes.
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-3.5">
           <Link href="/account/signup" className={`${button} ${buttonLarge}`}>

@@ -33,10 +33,10 @@ export async function generateMetadata({
 }: PageProps<"/kit/[slug]">): Promise<Metadata> {
   const { slug } = await params;
   const release = await getPublicRelease(slug);
-  if (!release) return { title: "Not found — Trenodo" };
+  if (!release) return { title: "Not found | Trenodo" };
 
   return {
-    title: `${release.artistName} — ${release.title} | Press kit`,
+    title: `${release.title} by ${release.artistName} | Press kit`,
     description: `Press material for ${release.title} by ${release.artistName}.`,
   };
 }

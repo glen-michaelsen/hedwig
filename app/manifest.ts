@@ -12,7 +12,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Trenodo",
     short_name: "Trenodo",
     description:
-      "Making life simpler and more efficient for musicians — teaching, links and press, in one account.",
+      "Making life simpler and more efficient for musicians. Teaching, links and press, in one account.",
     start_url: "/",
     display: "standalone",
     background_color: "#fdfaf6",

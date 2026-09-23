@@ -44,7 +44,7 @@ export function SocialMenu({
       <button
         ref={triggerRef}
         type="button"
-        aria-label="Social — image and caption"
+        aria-label="Social: image and caption"
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
         className={`group inline-flex items-center gap-1.5 ${buttonGhost}`}

@@ -30,7 +30,7 @@ export function parseDuration(value: string): number | null {
 
 /** 225 → "3:45". */
 export function formatDuration(seconds: number | null): string {
-  if (seconds === null || !Number.isFinite(seconds)) return "—";
+  if (seconds === null || !Number.isFinite(seconds)) return "";
   const whole = Math.max(0, Math.round(seconds));
   const minutes = Math.floor(whole / 60);
   return `${minutes}:${String(whole % 60).padStart(2, "0")}`;

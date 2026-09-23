@@ -115,7 +115,7 @@ export function MaterialFormFields({ allTags }: { allTags: string[] }) {
           Title{" "}
           {looking && (
             <span className="font-normal normal-case tracking-normal text-faint">
-              — reading the page…
+              Reading the page…
             </span>
           )}
         </label>

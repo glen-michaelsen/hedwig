@@ -199,7 +199,7 @@ export function SpotlightForm({
           required
         />
         <p className="mt-2 text-xs text-faint">
-          Plain text — a blank line starts a new paragraph.
+          Plain text. An empty line starts a new paragraph.
         </p>
       </div>
 

@@ -20,15 +20,15 @@ const COLOR = {
 const INVITE_FEATURES: { title: string; body: string }[] = [
   {
     title: "Tutor",
-    body: "Your students, your library, and a lesson note for every session.",
+    body: "Your students, your library and a note for every lesson.",
   },
   {
     title: "Link in Bio",
-    body: "One page for everything you point people at — your music, your dates, your links.",
+    body: "One page for everything you want people to find. Your music, your dates, your links.",
   },
   {
     title: "Press Kit",
-    body: "Photos, tracks, lyrics and the story, in a page you can send to a promoter.",
+    body: "Photos, tracks, lyrics and your story, on one page you can send to a promoter.",
   },
   {
     title: "Setlist",
@@ -59,10 +59,10 @@ function inviteEmailHtml(email: string, link: string): string {
                   Trenodo
                 </p>
                 <h1 style="margin:0 0 16px;font-size:28px;line-height:1.2;font-weight:700;color:${COLOR.ink};">
-                  A toolbox built for musicians
+                  A tool box made for musicians 🎵
                 </h1>
                 <p style="margin:0 0 20px;font-size:16px;line-height:1.6;color:${COLOR.ink};">
-                  Someone thought you'd like Trenodo — teaching, promotion and gigging, all in one account instead of four different apps.
+                  Someone thought you would like Trenodo. Teaching, promotion and gigs, all in one account. Instead of four apps that don't talk to each other.
                 </p>
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 28px;">
                   ${features}
@@ -77,7 +77,7 @@ function inviteEmailHtml(email: string, link: string): string {
                   </tr>
                 </table>
                 <p style="margin:28px 0 0;font-size:13px;line-height:1.6;color:${COLOR.muted};">
-                  We've filled in your email (${email}) on the form — change it if you'd rather use a different one.
+                  We already filled in your email (${email}) on the form. Change it if you want to use another one.
                 </p>
               </td>
             </tr>
@@ -94,16 +94,16 @@ function inviteEmailHtml(email: string, link: string): string {
 
 function inviteEmailText(email: string, link: string): string {
   return [
-    "A toolbox built for musicians",
+    "A tool box made for musicians",
     "",
-    "Someone thought you'd like Trenodo — teaching, promotion and gigging, all in one account instead of four different apps.",
+    "Someone thought you would like Trenodo. Teaching, promotion and gigs, all in one account. Instead of four apps that don't talk to each other.",
     "",
-    ...INVITE_FEATURES.flatMap((f) => [`${f.title} — ${f.body}`]),
+    ...INVITE_FEATURES.flatMap((f) => [`${f.title}: ${f.body}`]),
     "",
     "Create your account:",
     link,
     "",
-    `We've filled in your email (${email}) on the form — change it if you'd rather use a different one.`,
+    `We already filled in your email (${email}) on the form. Change it if you want to use another one.`,
   ].join("\n");
 }
 
@@ -125,7 +125,7 @@ export async function sendInviteEmail(
   const { error } = await resend.emails.send({
     from: FROM,
     to: email,
-    subject: "A toolbox built for musicians",
+    subject: "A tool box made for musicians 🎵",
     html: inviteEmailHtml(email, link),
     text: inviteEmailText(email, link),
   });
@@ -210,7 +210,7 @@ export async function sendNewSignupAdminEmail(
   const detail = invited ? `${email} (you invited them)` : email;
   return sendAdminEmail(
     "New signup",
-    `<p style="margin:0;font-size:16px;line-height:1.6;color:${COLOR.ink};"><strong>${escapeHtml(name)}</strong> — ${escapeHtml(detail)}</p>`,
-    `${name} — ${detail}`,
+    `<p style="margin:0;font-size:16px;line-height:1.6;color:${COLOR.ink};"><strong>${escapeHtml(name)}</strong>, ${escapeHtml(detail)}</p>`,
+    `${name}, ${detail}`,
   );
 }

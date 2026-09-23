@@ -106,7 +106,7 @@ export default async function AccountHomePage() {
           </span>
           <h2 className="mt-6 text-lg font-semibold tracking-tight">Tutor</h2>
           <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">
-            Your students, your library, and a lesson note for every session.
+            Your students, your library and a note for every lesson.
           </p>
           <p className="mt-5 text-sm tabular-nums text-faint">
             {studentCount} {studentCount === 1 ? "student" : "students"} ·{" "}
@@ -125,8 +125,8 @@ export default async function AccountHomePage() {
             Link in Bio
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">
-            One page for everything you point people at — your music, your
-            links, your lessons.
+            One page for everything you want people to find. Your music,
+            your links, your lessons.
           </p>
           <p className="mt-5 text-sm text-faint">
             {bioPage
@@ -148,7 +148,7 @@ export default async function AccountHomePage() {
             Press Kit
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">
-            Cover art, photos, masters and the paperwork — organised by
+            Cover art, photos, masters and the paperwork. Sorted by
             release, ready to send.
           </p>
           <p className="mt-5 text-sm tabular-nums text-faint">
@@ -169,7 +169,7 @@ export default async function AccountHomePage() {
             Setlists
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">
-            A gig, its sets, and what you&apos;re playing in each.
+            A gig, its sets, and the songs you play in each one.
           </p>
           <p className="mt-5 text-sm tabular-nums text-faint">
             {gigs.length === 0

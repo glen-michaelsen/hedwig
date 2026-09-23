@@ -21,7 +21,7 @@ import { resolveTheme, themeVars } from "@/lib/bio/theme";
 
 const SAMPLE_PAGE = {
   title: "Glen",
-  tagline: "Producer & vocalist — new EP out now",
+  tagline: "Producer & vocalist. New EP out now",
   avatarKey: null,
   accentColor: null as string | null,
   backgroundKind: "preset" as const,
@@ -51,13 +51,13 @@ const SAMPLE_BLOCKS: ParsedBlock[] = [
     id: "b3",
     kind: "link",
     visible: true,
-    config: { label: "Copenhagen — Vega", url: "#", description: "Sept 14" },
+    config: { label: "Copenhagen, Vega", url: "#", description: "Sept 14" },
   },
   {
     id: "b4",
     kind: "link",
     visible: true,
-    config: { label: "Aarhus — Voxhall", url: "#", description: "Sept 21" },
+    config: { label: "Aarhus, Voxhall", url: "#", description: "Sept 21" },
   },
   { id: "b5", kind: "text", visible: true, config: { variant: "divider", value: null } },
   {

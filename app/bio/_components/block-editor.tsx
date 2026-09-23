@@ -484,7 +484,7 @@ function BlockModal({
               Title{" "}
               {lookingUpTitle && (
                 <span className="font-normal normal-case tracking-normal text-faint">
-                  — reading the page…
+                  Reading the page…
                 </span>
               )}
             </label>
@@ -497,8 +497,8 @@ function BlockModal({
               placeholder="Filled in from the link"
             />
             <p className="mt-2 text-xs text-faint">
-              Only shown to you here, to keep track of what you&rsquo;ve added
-              — fans just see the video.
+              Only you see this, so you can keep track of what you added.
+              Your fans just see the video.
             </p>
           </div>
         )}

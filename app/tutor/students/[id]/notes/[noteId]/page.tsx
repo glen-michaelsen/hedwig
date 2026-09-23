@@ -15,7 +15,7 @@ export async function generateMetadata({
     getNote(tutor.id, noteId),
   ]);
   if (!student || !note || note.studentId !== id) return { title: "Lesson note" };
-  return { title: `${student.name} — ${note.date}` };
+  return { title: `${student.name}, ${note.date}` };
 }
 
 export default async function EditNotePage({
@@ -37,7 +37,7 @@ export default async function EditNotePage({
 
   return (
     <>
-      <PageHeader title={`${student.name} — ${note.date}`} />
+      <PageHeader title={`${student.name}, ${note.date}`} />
 
       <NoteForm
         studentId={id}

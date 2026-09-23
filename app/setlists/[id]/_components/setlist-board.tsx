@@ -344,7 +344,7 @@ function SetColumn({
 
         {set.songs.length === 0 && (
           <p className="px-3 py-4 text-xs text-faint">
-            Empty — add a song, or drag one here.
+            Empty. Add a song, or drag one here.
           </p>
         )}
       </div>

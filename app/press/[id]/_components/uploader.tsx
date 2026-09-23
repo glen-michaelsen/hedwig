@@ -61,7 +61,7 @@ export function Uploader({
   async function uploadOne(file: File, fileIndex: number, fileCount: number) {
     if (file.size > rule.maxBytes) {
       throw new Error(
-        `${file.name} is ${formatBytes(file.size)} — the limit is ${formatBytes(rule.maxBytes)}.`,
+        `${file.name} is ${formatBytes(file.size)}. The limit is ${formatBytes(rule.maxBytes)}.`,
       );
     }
     if (!isAllowedFile(kind, file.type, file.name)) {

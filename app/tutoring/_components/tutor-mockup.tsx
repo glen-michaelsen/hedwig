@@ -26,7 +26,7 @@ const NOTES: NoteSummary[] = [
   {
     id: "n3",
     date: "2026-08-11",
-    summaryShared: "Recording technique — mic placement, gain staging",
+    summaryShared: "Recording technique: mic placement and gain staging",
     hasHomework: true,
     materialCount: 0,
   },

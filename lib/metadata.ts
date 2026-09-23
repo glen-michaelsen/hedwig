@@ -9,6 +9,6 @@ import type { Metadata } from "next";
 export const dashboardMetadata: Metadata = {
   title: {
     default: "Trenodo",
-    template: "%s — Trenodo",
+    template: "%s | Trenodo",
   },
 };

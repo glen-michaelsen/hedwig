@@ -127,7 +127,7 @@ export default async function BioPublicPage({
 
       {isPreview && (
         <div className="sticky top-0 z-10 bg-amber-500 px-4 py-2 text-center text-sm font-medium text-white">
-          Preview — this page isn&rsquo;t published yet. Only you can see it.
+          Preview. This page isn&rsquo;t published yet. Only you can see it.
         </div>
       )}
 

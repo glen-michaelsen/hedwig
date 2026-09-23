@@ -12,10 +12,10 @@ import {
 import { TutorMockup } from "./_components/tutor-mockup";
 
 const PAGE_DESCRIPTION =
-  "Student management built for private music tutors — a library of teaching material, a lesson note for every session, and a portal each student opens with just their phone number and a PIN.";
+  "Student management made for private music teachers. A library for your teaching material, a note for every lesson, and a portal your students open with just their phone number and a PIN.";
 
 export const metadata: Metadata = {
-  title: "Student Management for Music Tutors — Trenodo",
+  title: "Student Management for Music Tutors | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: {
     canonical: "/tutoring",
@@ -37,19 +37,19 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "What is a student management tool for music tutors?",
-    a: "Software that keeps your teaching organised in one place — who you teach, what you've covered with each of them, and the material you use, instead of scattered notebooks, texts and files.",
+    a: "Software that keeps your teaching in order, in one place. Who you teach, what you did with each of them, and the material you use. Instead of notebooks, text messages and files everywhere.",
   },
   {
     q: "Do my students need to download an app or create an account?",
-    a: "No — each student signs into their own portal with just their phone number and a 4-digit PIN you read out once. No app, no password to forget.",
+    a: "No. Each student logs in to their own portal with just their phone number and a 4 digit PIN you give them once. No app, and no password to forget.",
   },
   {
     q: "Can I keep some notes private?",
-    a: "Yes — every lesson note has a section only you see, separate from what gets shared with the student.",
+    a: "Yes. Every lesson note has a part only you can see. It is kept apart from what you share with the student.",
   },
   {
-    q: "Is it built for one instrument or teaching style?",
-    a: "No — it's instrument-agnostic. Sheet music, chord links, practice videos, whatever your students need, tagged and searchable in your own library.",
+    q: "Is it made for one instrument or one way of teaching?",
+    a: "No. It works for any instrument. Sheet music, chord links, practice videos, whatever your students need. Tagged and easy to search in your own library.",
   },
 ] as const;
 
@@ -157,13 +157,13 @@ function Hero() {
             </span>
 
             <h1 className="mt-7 text-4xl font-semibold leading-[1.1] tracking-tight text-balance sm:text-5xl">
-              Organising and making every session more efficient.
+              More order, and more out of every lesson.
             </h1>
 
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
-              You get a clean overview of everything you teach with, ready to
-              share the moment you write up a lesson note. A few minutes
-              after each session is all it takes to make a real difference.
+              You get a clear overview of everything you teach with. Ready to
+              share the moment you write a lesson note. A few minutes after
+              each lesson is all it takes to make a real difference. 🎓
             </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-3.5">
@@ -190,22 +190,22 @@ function Features() {
     {
       icon: icons.library,
       title: "Your own library",
-      body: "Sheet music, chord links and practice videos, all tagged and easy to find — right when you need it mid-lesson.",
+      body: "Sheet music, chord links and practice videos. All tagged and easy to find, right when you need them in a lesson.",
     },
     {
       icon: icons.note,
       title: "Lesson notes",
-      body: "Write what you covered, set the homework, attach the material. Your student sees it all in one place — nothing extra to send.",
+      body: "Write what you did, give the homework and add the material. Your student sees it all in one place. Nothing extra to send.",
     },
     {
       icon: icons.lock,
       title: "Private notes",
-      body: "Keep a section on every lesson note just for yourself, for the things you'd rather not put in front of the student.",
+      body: "Every lesson note has a part just for you. For the things you don't want to share with the student.",
     },
     {
       icon: icons.shelf,
-      title: "Shelf for base material",
-      body: "Scales, theory, the piece they're working towards. Pin it once and it stays there, however many lessons go by.",
+      title: "A shelf for the basics",
+      body: "Scales, theory, the piece they are working towards. Pin it once, and it stays there. No matter how many lessons go by.",
     },
   ];
 
@@ -217,11 +217,11 @@ function Features() {
             Inside Tutor
           </p>
           <h2 className="mt-3 text-4xl font-semibold tracking-tight text-balance">
-            Built around how a lesson actually goes
+            Made for how a lesson really goes
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-muted text-pretty">
-            Not a file share with a music skin. The week is the unit of work, so
-            that&rsquo;s what the tool is shaped around.
+            Not a file sharing service dressed up as music. You teach week by
+            week, so the tool is built around the week.
           </p>
         </div>
 
@@ -253,17 +253,17 @@ function Steps() {
     {
       n: "01",
       title: "Add your students",
-      body: "Name and phone number. Trenodo generates a PIN you read out once.",
+      body: "Name and phone number. Trenodo makes a PIN you give them once.",
     },
     {
       n: "02",
-      title: "Write up the lesson",
-      body: "What you covered, the homework, and tick the material you worked through.",
+      title: "Write the lesson note",
+      body: "What you did, the homework, and a tick next to the material you used.",
     },
     {
       n: "03",
-      title: "They practise",
-      body: "Phone number, PIN, and their week is on screen. With all the material at hand, they practise more — and better.",
+      title: "They practice",
+      body: "Phone number, PIN, and their week is on the screen. With all the material at hand, they practice more. And better.",
     },
   ];
 
@@ -274,8 +274,8 @@ function Steps() {
           Three minutes after the lesson
         </h2>
         <p className="mt-5 text-lg leading-relaxed text-muted text-pretty">
-          The whole loop, from a student who&rsquo;s never used it to a student
-          practising the right thing.
+          The whole way, from a student who never used it before to a
+          student practicing the right thing.
         </p>
       </div>
 
@@ -338,8 +338,8 @@ function ClosingCta() {
           Set up your musician account
         </h2>
         <p className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-muted text-pretty">
-          Add one student, write one lesson note, and see what they see. It takes
-          about five minutes.
+          Add one student, write one lesson note, and see what they see. It
+          takes about five minutes.
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-3.5">
           <Link href="/account/signup" className={`${button} ${buttonLarge}`}>

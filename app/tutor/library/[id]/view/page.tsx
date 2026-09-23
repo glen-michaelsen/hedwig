@@ -80,7 +80,7 @@ export default async function ViewMaterialPage({
       </div>
 
       <p className="mt-4 text-xs text-faint">
-        Not showing? Some browsers block embedded PDFs — use “Open in new tab”.
+        Not showing? Some browsers block PDFs on a page. Use “Open in new tab”.
       </p>
     </>
   );

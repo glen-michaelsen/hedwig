@@ -58,7 +58,7 @@ export function PublishStatusMenu({
       <button
         ref={triggerRef}
         type="button"
-        aria-label={published ? "Published — manage" : "Unpublished — manage"}
+        aria-label={published ? "Published. Manage" : "Unpublished. Manage"}
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
         // `group` + `aria-expanded` is what turns the chevron, no open

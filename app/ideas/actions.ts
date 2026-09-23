@@ -28,7 +28,7 @@ export async function submitIdeaAction(
 
   const title = String(formData.get("title") ?? "").trim();
   if (title.length < 4) {
-    return { error: "Give the idea a title — a few words is plenty." };
+    return { error: "Give your idea a title. A few words is plenty." };
   }
   if (title.length > 120) {
     return { error: "That title is a little long. Keep it under 120 characters." };
@@ -56,7 +56,7 @@ export async function submitIdeaAction(
 
   if (!result.ok) {
     return {
-      error: "That's a few ideas in a short time — try again in a little while.",
+      error: "That's a lot of ideas in a short time. Try again in a little while. 🙂",
     };
   }
 
@@ -81,7 +81,7 @@ export async function toggleVoteAction(ideaId: string): Promise<VoteState> {
       voted: false,
       error:
         result.reason === "rate-limited"
-          ? "That's a lot of votes at once — try again later."
+          ? "That's a lot of votes at once. Try again later."
           : "That idea isn't available.",
     };
   }

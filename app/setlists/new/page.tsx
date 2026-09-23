@@ -12,7 +12,7 @@ export default async function NewGigPage() {
     <>
       <PageHeader
         title="New gig"
-        subtitle="Name the night and how long you're playing — songs come next."
+        subtitle="Name the night and how long you're playing. Songs come next."
         action={
           <Link className={buttonQuiet} href="/setlists">
             Cancel

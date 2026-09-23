@@ -53,7 +53,7 @@ export function InviteMusicianButton() {
                   <>
                     Invited{" "}
                     <span className="font-medium text-foreground">{state.email}</span>,
-                    but the email didn&rsquo;t go out — send them this link
+                    but the email didn&rsquo;t go out. Send them this link
                     yourself.
                   </>
                 )}
@@ -81,8 +81,8 @@ export function InviteMusicianButton() {
                   required
                 />
                 <p className="mt-2 text-xs text-faint">
-                  Prefills their email if they use this link — not required,
-                  they can sign up any way.
+                  Fills in their email if they use this link. Not required.
+                  They can sign up any way they like.
                 </p>
               </div>
 

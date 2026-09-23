@@ -19,8 +19,8 @@ function NewStudentForm({ onDone }: { onDone: () => void }) {
     return (
       <div className="px-6 py-6 sm:px-7">
         <p className="text-sm leading-relaxed text-muted text-pretty">
-          Give them this PIN now — it&rsquo;s hashed and can&rsquo;t be shown
-          again. If it&rsquo;s lost, issue a new one from their page.
+          Give them this PIN now. It&rsquo;s stored safely and can&rsquo;t be
+          shown again. If they lose it, make a new one from their page.
         </p>
 
         <dl className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -63,7 +63,7 @@ function NewStudentForm({ onDone }: { onDone: () => void }) {
         </label>
         <PhoneInput id="phone" name="phone" required />
         <p className="mt-2 text-xs text-faint">
-          What they&rsquo;ll sign in with. Siblings can share a number — the
+          What they&rsquo;ll sign in with. Siblings can share a number. The
           PIN tells them apart.
         </p>
       </div>
@@ -134,7 +134,7 @@ export function NewStudentModal() {
         open={open}
         onClose={close}
         title="Add a student"
-        description="They'll sign in with a phone number and PIN — no email, no account."
+        description="They'll sign in with a phone number and a PIN. No email, no account."
       >
         <NewStudentForm key={formKey} onDone={close} />
       </Modal>

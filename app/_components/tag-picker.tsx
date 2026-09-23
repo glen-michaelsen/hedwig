@@ -72,7 +72,7 @@ export function TagPicker({
       );
       setNotice(null);
     } else {
-      setNotice(`"${normalised}" already exists — selected it for you.`);
+      setNotice(`"${normalised}" already exists. We selected it for you.`);
     }
 
     setSelected((current) => new Set(current).add(normalised));
@@ -119,7 +119,7 @@ export function TagPicker({
         </ul>
       ) : (
         <p className="mb-4 text-xs text-faint">
-          No tags yet — the first one you add starts your studio&rsquo;s list.
+          No tags yet. The first one you add starts your studio&rsquo;s list.
         </p>
       )}
 

@@ -37,7 +37,7 @@ export function buildSpotlightCaption({
       .filter(Boolean)[0] ?? "";
 
   return [
-    `${artistName} – ${releaseTitle} (${KIND_LABELS[releaseKind]})`,
+    `${releaseTitle} by ${artistName} (${KIND_LABELS[releaseKind]})`,
     "",
     `👉 ${headline}`,
     "",

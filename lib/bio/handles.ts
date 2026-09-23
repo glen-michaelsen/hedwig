@@ -76,7 +76,7 @@ export function checkHandle(input: string): HandleCheck {
     return {
       ok: false,
       error:
-        "Letters, numbers, dots, dashes and underscores — starting and ending with a letter or number.",
+        "Use letters, numbers, dots, dashes and underscores. Start and end with a letter or a number.",
     };
   }
   if (RESERVED_HANDLES.has(handle)) {

@@ -6,16 +6,16 @@ import { container, focusable } from "@/app/_components/ui";
 import { listPublishedSpotlights } from "@/lib/dal/spotlight";
 
 const PAGE_DESCRIPTION =
-  "New music, written up one release at a time — no algorithm, just one musician telling another musician's story.";
+  "New music, one release at a time. No algorithm. Just one musician telling another musician's story.";
 
 export const metadata: Metadata = {
-  title: "Spotlight — Trenodo",
+  title: "Spotlight | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: {
     canonical: "/spotlight",
   },
   openGraph: {
-    title: "Spotlight — Trenodo",
+    title: "Spotlight | Trenodo",
     description: PAGE_DESCRIPTION,
     url: "/spotlight",
     siteName: "Trenodo",

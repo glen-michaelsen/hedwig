@@ -187,8 +187,8 @@ export function AppearanceForm({
               accept="image/*"
             />
             <p className="mt-2 text-xs text-faint">
-              Text gets a dark scrim over photos automatically — there&rsquo;s
-              no way to know what a picture looks like.
+              Text on a photo automatically gets a dark shade behind it. We
+              can&rsquo;t know what your picture looks like.
             </p>
           </div>
         )}
@@ -215,8 +215,8 @@ export function AppearanceForm({
                 Show “Made with Trenodo” at the bottom
               </span>
               <span className="mt-1 block text-xs leading-relaxed text-muted">
-                It&rsquo;s how most people find us, and leaving it on genuinely
-                helps a small tool grow. But it&rsquo;s your page — turn it off
+                It&rsquo;s how most people find us, and leaving it on really
+                helps a small tool grow. ❤️ But it&rsquo;s your page. Turn it off
                 whenever you like, and nothing else changes.
               </span>
             </span>

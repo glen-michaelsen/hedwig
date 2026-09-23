@@ -24,7 +24,7 @@ export default async function NewReleasePage() {
     <>
       <PageHeader
         title="New release"
-        subtitle="The details first — cover, photos, tracks and documents come next."
+        subtitle="The details first. Cover, photos, tracks and documents come next."
         action={
           <Link className={buttonQuiet} href="/press">
             Cancel

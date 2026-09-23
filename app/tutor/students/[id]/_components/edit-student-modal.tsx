@@ -133,7 +133,7 @@ export function EditStudentModal({
               name="active"
               defaultChecked={student.active}
             />
-            Active — unchecking blocks their sign-in
+            Active. Untick to block their sign-in
           </label>
 
           {error && (

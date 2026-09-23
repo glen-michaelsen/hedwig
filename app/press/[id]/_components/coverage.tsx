@@ -160,7 +160,7 @@ export function CoverageSection({
           <input
             className={`${inputBase} w-full`}
             name="note"
-            placeholder="Note (optional) — e.g. 8/10, or which track they picked"
+            placeholder="Note (optional). For example 8/10, or which track they picked"
             maxLength={300}
           />
 

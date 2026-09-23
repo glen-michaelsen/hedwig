@@ -13,31 +13,31 @@ import { container } from "@/app/_components/ui";
 import { SignupForm } from "./_components/signup-form";
 
 export const metadata: Metadata = {
-  title: "Create your account — Trenodo",
+  title: "Create your account | Trenodo",
   description:
-    "Create your free Trenodo account — Tutor, Link in Bio, Press Kit and Setlists, all in one place.",
+    "Create your free Trenodo account. Tutor, Link in Bio, Press Kit and Setlists, all in one place.",
 };
 
 const FEATURE_CARDS = [
   {
     Icon: TutorIcon,
     title: "Tutor",
-    body: "Your students, your library, and a lesson note for every session.",
+    body: "Your students, your library and a note for every lesson.",
   },
   {
     Icon: LinkInBioIcon,
     title: "Link in Bio",
-    body: "One page for everything you point people at — your music, your links, your lessons.",
+    body: "One page for everything you want people to find. Your music, your links, your lessons.",
   },
   {
     Icon: PressKitIcon,
     title: "Press Kit",
-    body: "Cover art, photos, masters and the paperwork — organised by release, ready to send.",
+    body: "Cover art, photos, masters and the paperwork. Sorted by release, ready to send.",
   },
   {
     Icon: SetlistIcon,
     title: "Setlists",
-    body: "A gig, its sets, and what you're playing in each.",
+    body: "A gig, its sets, and the songs you play in each one.",
   },
 ] as const;
 

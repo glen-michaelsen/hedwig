@@ -14,16 +14,16 @@ import {
 import { listPublishedSpotlights } from "@/lib/dal/spotlight";
 
 const PAGE_DESCRIPTION =
-  "Trenodo is a musician tool box — student management, a free link in bio, a free setlist creator and an electronic press kit, all built specifically for musicians rather than repurposed general-purpose tools.";
+  "Trenodo is a tool box for musicians. Student management, a free link in bio, a free setlist maker and an electronic press kit. All made for musicians, not borrowed from somewhere else.";
 
 export const metadata: Metadata = {
-  title: "Trenodo — The Musician Tool Box for Teaching, Promotion & Gigging",
+  title: "Trenodo | The Musician Tool Box for Teaching, Promotion & Gigging",
   description: PAGE_DESCRIPTION,
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Trenodo — The Musician Tool Box",
+    title: "Trenodo | The Musician Tool Box",
     description: PAGE_DESCRIPTION,
     url: "/",
     siteName: "Trenodo",
@@ -39,19 +39,19 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "What is Trenodo?",
-    a: "A musician tool box — Tutor for teaching, Link in Bio and Press Kit for promotion, and Setlist for gigs, all in one account instead of four different apps that don't talk to each other.",
+    a: "A tool box for musicians. Tutor for teaching. Link in Bio and Press Kit for promotion. Setlist for gigs. All in one account, instead of four apps that don't talk to each other.",
   },
   {
     q: "Is Trenodo a promotion tool for musicians?",
-    a: "Partly. Link in Bio and Press Kit are built specifically to help you promote a release — one page to point people at, and an electronic press kit ready to send a promoter or blog. Tutor and Setlist handle the teaching and gigging side instead.",
+    a: "Partly. Link in Bio and Press Kit are made to help you promote a release. One page to send people to, and a press kit ready for a promoter or a blog. Tutor and Setlist take care of teaching and gigs.",
   },
   {
     q: "Which of Trenodo's tools are free?",
-    a: "Link in Bio and Setlist are free, forever — nothing to pay to get started with either one.",
+    a: "Link in Bio and Setlist are free. Forever. Nothing to pay to get started.",
   },
   {
     q: "Do my students need their own account?",
-    a: "No — a student signs into their own portal with just their phone number and a PIN you read out once. No app, no password to forget.",
+    a: "No. A student logs in to their own portal with just a phone number and a PIN you give them once. No app, and no password to forget.",
   },
 ] as const;
 
@@ -104,9 +104,9 @@ function Hero() {
             </h1>
 
             <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
-              While music is a passion, it is also a dream to make a living
-              off. Being a musician means handling many things — and while
-              we might be a small contribution, we aim to make your life a
+              Music is a passion. For many of us, it is also a dream to make
+              a living from it. Being a musician means handling a lot of
+              things. We are a small helper, but we want to make your life a
               little easier.
             </p>
 
@@ -120,7 +120,7 @@ function Hero() {
             </div>
 
             <p className="mt-6 text-sm text-muted">
-              Free while it&rsquo;s young. Students never create an account.
+              Free while it&rsquo;s young. Students never need an account.
             </p>
           </div>
 
@@ -145,22 +145,21 @@ function Mission() {
           🎹 Why I built this
         </p>
         <p className="mt-5 text-lg leading-relaxed text-muted text-pretty">
-          I&rsquo;m not a professional musician — just someone who has
-          taught, gigged and released a little music on the side, and felt
-          firsthand how much of that work has nothing to do with music at
-          all: keeping track of where every student is up to, remembering to
-          actually tell people when a new track is out, and cobbling
-          together a Linktree that doesn&rsquo;t point anywhere useful. Then
-          there&rsquo;s the rest of it — marketing, social media,
-          partnerships, booking — the parts of being a working musician that
-          never show up in the practice room.
+          I&rsquo;m not a professional musician. I have taught, played gigs and
+          released a little music on the side. And I felt how much of that
+          work has nothing to do with music. Keeping track of every
+          student. Remembering to tell people when a new track is out.
+          Putting together a Linktree that doesn&rsquo;t really lead anywhere.
+          And then there is all the rest: marketing, social media,
+          partnerships and booking. The parts of being a musician you never
+          see in the practice room.
         </p>
         <p className="mt-4 text-lg leading-relaxed text-muted text-pretty">
-          This isn&rsquo;t an attempt to build the biggest platform out
-          there — just the tools I wished I&rsquo;d had, built with real
-          respect for how much a working musician already carries. Tutor
-          came first, because teaching is where I felt it most. More has
-          followed since, at the same unhurried pace.
+          I&rsquo;m not trying to build the biggest platform out there. Just
+          the tools I wish I had, made with real respect for how much a
+          musician already carries. Tutor came first, because teaching is
+          where I felt it the most. More tools have followed, one step at a
+          time. 🙂
         </p>
       </div>
     </section>
@@ -179,25 +178,25 @@ function Tools() {
     {
       emoji: "🎓",
       name: "Tutor",
-      body: "Your students, your library, and a lesson note for every session — with a private half only you can read.",
+      body: "Your students, your library and a note for every lesson. With a private part only you can read.",
       href: "/tutoring",
     },
     {
       emoji: "🔗",
       name: "Link in Bio",
-      body: "One page for everything you point people at: your music, your dates, your links. Designed for musicians rather than everyone.",
+      body: "One page for everything you want people to find: your music, your dates, your links. Made for musicians, not for everyone.",
       href: "/link-in-bio",
     },
     {
       emoji: "📸",
       name: "Press Kit",
-      body: "Photos, tracks, lyrics and the story, in a page you can send to a promoter without attaching nine files.",
+      body: "Photos, tracks, lyrics and your story, on one page. Send it to a promoter without attaching nine files.",
       href: "/press-kit",
     },
     {
       emoji: "🎤",
       name: "Setlist",
-      body: "Drag songs into sets, watch each one head toward its target length, and print a sheet for the stage.",
+      body: "Drag songs into sets, see each set grow towards its target length, and print a sheet for the stage.",
       href: "/setlist",
     },
   ];
@@ -256,10 +255,10 @@ function Spotlight({
             So much great music isn&rsquo;t getting enough listens.
           </h2>
           <p className="mt-4 text-[15px] leading-relaxed text-muted text-pretty">
-            I write a short piece on a release I think deserves more ears —
-            no algorithm, just one musician telling another musician&rsquo;s
-            story. I can only cover a sliver of what&rsquo;s out there, but
-            I&rsquo;m trying to bring some of it to your playlist.
+            I write a short piece about a release I think deserves more
+            ears. No algorithm. Just one musician telling another
+            musician&rsquo;s story. I can only cover a small part of what&rsquo;s
+            out there. But I try to bring some of it to your playlist. 🎧
           </p>
         </div>
         <Link href="/spotlight" className={buttonGhost}>
@@ -343,9 +342,9 @@ function ClosingCta() {
           Create your free account today
         </h2>
         <p className="mx-auto mt-5 max-w-lg text-lg leading-relaxed text-muted text-pretty">
-          Teach, release and gig from one place — students and lesson
-          notes, a press kit to send out, a link in bio that points
-          somewhere useful. It takes about five minutes to get started.
+          Teach, release and play gigs from one place. Students and lesson
+          notes, a press kit to send out, and a link in bio that actually
+          leads somewhere. It takes about five minutes to get started.
         </p>
         <div className="mt-10 flex flex-wrap justify-center gap-3.5">
           <Link href="/account/signup" className={`${button} ${buttonLarge}`}>
