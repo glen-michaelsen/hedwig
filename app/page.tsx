@@ -12,6 +12,7 @@ import {
   focusable,
 } from "./_components/ui";
 import { listPublishedSpotlights } from "@/lib/dal/spotlight";
+import { FaqSection } from "@/app/_components/marketing/faq-section";
 
 const PAGE_DESCRIPTION =
   "Trenodo is a tool box for musicians. Student management, a free link in bio, a free setlist maker and an electronic press kit. All made for musicians, not borrowed from somewhere else.";
@@ -328,31 +329,7 @@ function Spotlight({
 }
 
 function Faq() {
-  return (
-    <section className="border-y border-line/70 bg-surface-muted/40 py-24 sm:py-32">
-      <div className={containerNarrow}>
-        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-600">
-          Questions
-        </p>
-        <h2 className="mt-3 text-4xl font-semibold tracking-tight text-balance">
-          Before you ask
-        </h2>
-
-        <dl className="mt-12 space-y-9">
-          {FAQS.map((faq) => (
-            <div key={faq.q}>
-              <dt className="text-lg font-semibold tracking-tight text-balance">
-                {faq.q}
-              </dt>
-              <dd className="mt-2 text-[15px] leading-relaxed text-muted text-pretty">
-                {faq.a}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-    </section>
-  );
+  return <FaqSection items={FAQS} />;
 }
 
 function ClosingCta() {

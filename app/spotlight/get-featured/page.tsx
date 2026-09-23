@@ -8,6 +8,7 @@ import {
   container,
   containerNarrow,
 } from "@/app/_components/ui";
+import { FaqSection } from "@/app/_components/marketing/faq-section";
 
 const PAGE_DESCRIPTION =
   "How to get your release featured in Trenodo Spotlight. Create a free account, build a press kit for your release, and we take it from there.";
@@ -209,28 +210,7 @@ export default function GetFeaturedPage() {
           </ul>
         </section>
 
-        <section className="border-y border-line/70 bg-surface-muted/40 py-24 sm:py-32">
-          <div className={containerNarrow}>
-            <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-600">
-              Questions
-            </p>
-            <h2 className="mt-3 text-4xl font-semibold tracking-tight text-balance">
-              Before you ask
-            </h2>
-            <dl className="mt-12 space-y-9">
-              {FAQS.map((faq) => (
-                <div key={faq.q}>
-                  <dt className="text-lg font-semibold tracking-tight text-balance">
-                    {faq.q}
-                  </dt>
-                  <dd className="mt-2 text-[15px] leading-relaxed text-muted text-pretty">
-                    {faq.a}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </section>
+        <FaqSection items={FAQS} />
 
         <section className={`${containerNarrow} py-24 sm:py-32`}>
           <div className="brand-wash-clip relative isolate overflow-hidden rounded-5xl border border-line bg-surface px-8 py-16 text-center shadow-float sm:px-16">

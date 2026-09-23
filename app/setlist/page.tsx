@@ -10,6 +10,7 @@ import {
   containerNarrow,
 } from "../_components/ui";
 import { SetlistMockup } from "./_components/setlist-mockup";
+import { FaqSection } from "@/app/_components/marketing/faq-section";
 
 const PAGE_DESCRIPTION =
   "Make a setlist online, for free. Drag songs into sets, keep an eye on the minutes, and take a printed sheet on stage. No more squinting at your phone.";
@@ -311,31 +312,7 @@ function Steps() {
 }
 
 function Faq() {
-  return (
-    <section className="border-y border-line/70 bg-surface-muted/40 py-24 sm:py-32">
-      <div className={containerNarrow}>
-        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-600">
-          Questions
-        </p>
-        <h2 className="mt-3 text-4xl font-semibold tracking-tight text-balance">
-          Before you ask
-        </h2>
-
-        <dl className="mt-12 space-y-9">
-          {FAQS.map((faq) => (
-            <div key={faq.q}>
-              <dt className="text-lg font-semibold tracking-tight text-balance">
-                {faq.q}
-              </dt>
-              <dd className="mt-2 text-[15px] leading-relaxed text-muted text-pretty">
-                {faq.a}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-    </section>
-  );
+  return <FaqSection items={FAQS} />;
 }
 
 function ClosingCta() {

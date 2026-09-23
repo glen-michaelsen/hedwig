@@ -10,6 +10,7 @@ import {
   containerNarrow,
 } from "../_components/ui";
 import { TutorMockup } from "./_components/tutor-mockup";
+import { FaqSection } from "@/app/_components/marketing/faq-section";
 
 const PAGE_DESCRIPTION =
   "Student management made for private music teachers. A library for your teaching material, a note for every lesson, and a portal your students open with just their phone number and a PIN.";
@@ -302,31 +303,7 @@ function Steps() {
 }
 
 function Faq() {
-  return (
-    <section className="border-y border-line/70 bg-surface-muted/40 py-24 sm:py-32">
-      <div className={containerNarrow}>
-        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-600">
-          Questions
-        </p>
-        <h2 className="mt-3 text-4xl font-semibold tracking-tight text-balance">
-          Before you ask
-        </h2>
-
-        <dl className="mt-12 space-y-9">
-          {FAQS.map((faq) => (
-            <div key={faq.q}>
-              <dt className="text-lg font-semibold tracking-tight text-balance">
-                {faq.q}
-              </dt>
-              <dd className="mt-2 text-[15px] leading-relaxed text-muted text-pretty">
-                {faq.a}
-              </dd>
-            </div>
-          ))}
-        </dl>
-      </div>
-    </section>
-  );
+  return <FaqSection items={FAQS} />;
 }
 
 function ClosingCta() {
