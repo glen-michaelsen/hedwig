@@ -133,10 +133,10 @@ function Hero() {
   );
 }
 
-/** Who's behind it, right before the why. Sits tight above Mission so the two read as one story. */
+/** Who's behind it, in a few lines, before the tools. */
 function AboutMe() {
   return (
-    <section className={`${containerNarrow} pb-6 sm:pb-8`}>
+    <section className={`${containerNarrow} pb-24 sm:pb-32`}>
       <div className="flex flex-col items-center gap-8 rounded-5xl border border-line bg-surface p-8 text-center shadow-soft sm:flex-row sm:items-center sm:gap-10 sm:p-12 sm:text-left">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
@@ -159,39 +159,6 @@ function AboutMe() {
             bring a little more harmony to the music industry. 🎶
           </p>
         </div>
-      </div>
-    </section>
-  );
-}
-
-/**
- * The frontpage's job, per the brief: talk about the mission first, features
- * second. First person and specific, not a generic "our story" block.
- */
-function Mission() {
-  return (
-    <section className={`${containerNarrow} pb-24 sm:pb-32`}>
-      <div className="relative isolate overflow-hidden rounded-5xl border border-line bg-surface p-8 shadow-soft sm:p-12">
-        <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-600">
-          🎹 Why I built this
-        </p>
-        <p className="mt-5 text-lg leading-relaxed text-muted text-pretty">
-          I&rsquo;m not a professional musician. I have taught, played gigs and
-          released a little music on the side. And I felt how much of that
-          work has nothing to do with music. Keeping track of every
-          student. Remembering to tell people when a new track is out.
-          Putting together a Linktree that doesn&rsquo;t really lead anywhere.
-          And then there is all the rest: marketing, social media,
-          partnerships and booking. The parts of being a musician you never
-          see in the practice room.
-        </p>
-        <p className="mt-4 text-lg leading-relaxed text-muted text-pretty">
-          I&rsquo;m not trying to build the biggest platform out there. Just
-          the tools I wish I had, made with real respect for how much a
-          musician already carries. Tutor came first, because teaching is
-          where I felt it the most. More tools have followed, one step at a
-          time. 🙂
-        </p>
       </div>
     </section>
   );
@@ -233,30 +200,54 @@ function Tools() {
   ];
 
   return (
-    <section className={`${container} pb-24 sm:pb-32`}>
-      <div className="grid gap-6 sm:grid-cols-2">
-        {tools.map((tool) => (
-          <Link
-            key={tool.name}
-            href={tool.href}
-            className="rounded-4xl border border-line bg-surface p-8 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift"
-          >
-            <div className="flex items-center gap-3">
-              <span aria-hidden className="text-xl">
-                {tool.emoji}
+    <section className="bg-linear-to-br from-brand-700 via-brand-800 to-brand-900 py-24 sm:py-32">
+      <div className={container}>
+        <div className="max-w-2xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-200">
+            🧰 The tools
+          </p>
+          <h2 className="mt-3 text-3xl font-semibold tracking-tight text-white text-balance sm:text-4xl">
+            Four tools. One account.
+          </h2>
+          <p className="mt-4 text-lg leading-relaxed text-white/75 text-pretty">
+            Use one, or use them all. They work together, so you don&rsquo;t
+            have to juggle four different apps.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-6 sm:grid-cols-2">
+          {tools.map((tool) => (
+            <Link
+              key={tool.name}
+              href={tool.href}
+              className={`group flex flex-col rounded-4xl bg-surface p-8 shadow-2xl shadow-black/35 transition-all hover:-translate-y-1 hover:shadow-black/50 ${focusable}`}
+            >
+              <div className="flex items-center gap-3">
+                <span
+                  aria-hidden
+                  className="grid h-11 w-11 place-items-center rounded-2xl bg-brand-500/12 text-xl"
+                >
+                  {tool.emoji}
+                </span>
+                <h3 className="text-lg font-semibold tracking-tight">
+                  {tool.name}
+                </h3>
+              </div>
+              <p className="mt-4 flex-1 text-[15px] leading-relaxed text-muted text-pretty">
+                {tool.body}
+              </p>
+              <span className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-brand-600 px-5 py-2.5 text-sm font-medium text-white shadow-brand transition-colors group-hover:bg-brand-500">
+                Explore {tool.name}
+                <span
+                  aria-hidden
+                  className="transition-transform group-hover:translate-x-0.5"
+                >
+                  →
+                </span>
               </span>
-              <h2 className="text-lg font-semibold tracking-tight">
-                {tool.name}
-              </h2>
-            </div>
-            <p className="mt-3 text-[15px] leading-relaxed text-muted text-pretty">
-              {tool.body}
-            </p>
-            <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-brand-600">
-              Learn more <span aria-hidden>→</span>
-            </span>
-          </Link>
-        ))}
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -276,7 +267,7 @@ function Spotlight({
   const recent = articles.slice(0, 3);
 
   return (
-    <section className={`${container} pb-24 sm:pb-32`}>
+    <section className={`${container} py-24 sm:py-32`}>
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div className="max-w-xl">
           <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-600">
@@ -405,7 +396,6 @@ export default async function LandingPage() {
       <main className="flex-1">
         <Hero />
         <AboutMe />
-        <Mission />
         <Tools />
         <Spotlight articles={spotlights} />
         <Faq />
