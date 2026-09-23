@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
+import { RhymeExample, type RhymeLine } from "../../_components/rhyme-example";
 import { focusable } from "@/app/_components/ui";
 
 const PAGE_DESCRIPTION =
@@ -19,22 +20,52 @@ export const metadata: Metadata = {
   },
 };
 
+const line = (before: string, word: string, letter: string): RhymeLine => ({
+  before,
+  word,
+  letter,
+});
+
 const PATTERNS = [
   {
     name: "AABB",
     body: "Lines rhyme in pairs. Line 1 with line 2, line 3 with line 4. The tightest and most satisfying pattern. But use it too much, and it starts to sound like a nursery rhyme.",
+    example: [
+      line("I found my old guitar", "today", "A"),
+      line("The strings were dusty, dull and", "gray", "A"),
+      line("I changed them slowly, one by", "one", "B"),
+      line("And played until the day was", "done", "B"),
+    ],
   },
   {
     name: "ABAB",
     body: "Every other line rhymes. Line 1 with line 3, line 2 with line 4. A classic for verses. It gives structure, but the rhymes land a bit less predictably than AABB.",
+    example: [
+      line("The stage lights fade to", "blue", "A"),
+      line("The crowd is holding", "still", "B"),
+      line("I sing this one for", "you", "A"),
+      line("I always have, I", "will", "B"),
+    ],
   },
   {
     name: "ABCB",
     body: "Only line 2 and line 4 rhyme. Lines 1 and 3 are free. The easiest pattern to write, and one of the most common in verses. It leaves room for the story, without a forced rhyme in every line.",
+    example: [
+      line("We drove all night to reach the", "town", "A"),
+      line("With old songs on the", "radio", "B"),
+      line("The van was cold, the road was", "long", "C"),
+      line("But we had one place to", "go", "B"),
+    ],
   },
   {
     name: "AAAA",
     body: "Every line rhymes with every other line. Rare over a whole song, but strong in short bursts. Great for building up tension towards a chorus.",
+    example: [
+      line("My heart beats with the", "drum", "A"),
+      line("I feel the bass line", "hum", "A"),
+      line("My fingers start to", "strum", "A"),
+      line("The best is yet to", "come", "A"),
+    ],
   },
 ] as const;
 
@@ -89,7 +120,8 @@ export default function RhymePatternsPage() {
         <GuideSection title="The classic patterns">
           <p>
             Each letter is one line. Lines with the same letter rhyme with
-            each other.
+            each other. Point at (or tap) a bold word, and you see which
+            words it rhymes with. 👆
           </p>
           <div className="space-y-4">
             {PATTERNS.map((pattern) => (
@@ -103,6 +135,7 @@ export default function RhymePatternsPage() {
                 <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">
                   {pattern.body}
                 </p>
+                <RhymeExample lines={pattern.example} />
               </div>
             ))}
           </div>
