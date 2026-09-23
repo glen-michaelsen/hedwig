@@ -9,10 +9,10 @@ import {
 } from "@/lib/piano-diagrams/piano-chords";
 
 const PAGE_DESCRIPTION =
-  "Every major and minor piano chord, with a diagram for each — plus what actually makes a chord major or minor, and how to practise changing between them.";
+  "Every major and minor piano chord, each with a diagram. Plus what makes a chord major or minor, and how to practice the changes.";
 
 export const metadata: Metadata = {
-  title: "Piano Chords for Beginners: All 12 Major and Minor Chords — Trenodo",
+  title: "Piano Chords for Beginners: All 12 Major and Minor Chords | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/piano/chords" },
   openGraph: {
@@ -27,15 +27,15 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "What makes a chord major or minor?",
-    a: "The gap between the first two notes. Stack a root, then the note four semitones above it, then the note seven semitones above the root, and you get a major chord. Use three semitones instead of four for that middle note and the same root and top note give you the minor chord instead — one key's difference, and the entire mood of the chord changes.",
+    a: "The distance between the first two notes. Start with a root. Add the note four half steps above it. Then add the note seven half steps above the root. That is a major chord. Use three half steps for the middle note instead of four, and you have the minor chord. One key of difference, and the whole mood changes.",
   },
   {
-    q: "Do I have to play a chord's notes in that exact order?",
-    a: "No — that's just the simplest way to first learn each shape. Once a chord is familiar, you can reorder its notes (an inversion) or spread them across two hands; it's still the same chord as long as all three notes are present.",
+    q: "Do I have to play the notes in that exact order?",
+    a: "No. It is just the easiest way to learn each chord. When a chord feels familiar, you can change the order of the notes (this is called an inversion), or split them between two hands. It is still the same chord, as long as all three notes are there.",
   },
   {
     q: "Which piano chords should I learn first?",
-    a: "C, G, A minor and F. All four use only white keys, they cover a huge share of popular songs between them, and moving between just C and G is enough to start playing simple two-chord songs immediately.",
+    a: "C, G, A minor and F. They only use white keys, and together they cover a huge number of popular songs. With just C and G, you can already play simple songs with two chords.",
   },
 ] as const;
 
@@ -74,38 +74,38 @@ export default function PianoChordsPage() {
         category="Piano"
         categoryHref="/knowledge/piano"
         title="Piano Chords for Beginners: All 12 Major and Minor Chords"
-        intro="A chord is at least three notes played together. Not new to the keyboard layout itself? Start with Piano Keyboard Layout — everything below assumes you can already find a given note."
+        intro="A chord is three or more notes played at the same time. This page assumes you can already find a note on the keyboard. If not, start with Piano Keyboard Layout first. 🎹"
       >
         <GuideSection title="What makes a chord major or minor">
           <p>
-            Every chord on this page is a triad — three notes: a root, a
-            third, and a fifth (named for how far each sits above the root).
-            The only thing that changes between a major and a minor version
-            of the same root is the third:
+            Every chord on this page is a triad. That means three notes: a
+            root, a third and a fifth. The names tell you how far above the
+            root each note sits. Between the major and the minor version of a
+            chord, only the third changes:
           </p>
           <ul className="list-disc space-y-3 pl-5">
             <li>
               <strong className="text-foreground">Major</strong> = root +
-              major third (4 semitones up) + perfect fifth (7 semitones up).
-              A bright, &ldquo;happy&rdquo; sound.
+              major third (4 half steps up) + fifth (7 half steps up). A
+              bright, &ldquo;happy&rdquo; sound.
             </li>
             <li>
               <strong className="text-foreground">Minor</strong> = root +
-              minor third (3 semitones up) + perfect fifth (7 semitones up).
-              A darker, more melancholic sound.
+              minor third (3 half steps up) + fifth (7 half steps up). A
+              darker, more melancholic sound.
             </li>
           </ul>
           <p>
-            Move that middle note by a single semitone and the entire
-            character of the chord flips — everything else about the shape
-            stays exactly the same.
+            Move the middle note just one half step, and the whole feeling of
+            the chord flips. Everything else stays the same. Small change, big
+            difference.
           </p>
         </GuideSection>
 
         <GuideSection title="Major chords">
           <p>
-            A major chord is generally described as sounding &ldquo;happy&rdquo; —
-            it&rsquo;s the default sound of most pop, folk and children&rsquo;s music.
+            Most people describe a major chord as &ldquo;happy.&rdquo; It is the
+            classic sound of pop, folk and children&rsquo;s songs. ☀️
           </p>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {PIANO_MAJOR_CHORDS.map((chord) => (
@@ -121,9 +121,9 @@ export default function PianoChordsPage() {
 
         <GuideSection title="Minor chords">
           <p>
-            A minor chord swaps that one middle note for a darker, more
-            melancholic sound — the same shape, the same root, just a
-            semitone difference in the third.
+            A minor chord changes that one middle note, and the sound gets
+            darker and more melancholic. Same root, same shape. Only one half
+            step of difference in the third.
           </p>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             {PIANO_MINOR_CHORDS.map((chord) => (
@@ -137,45 +137,41 @@ export default function PianoChordsPage() {
           </div>
         </GuideSection>
 
-        <GuideSection title="Reading a piano chord diagram">
+        <GuideSection title="How to read a piano chord diagram">
           <p>
-            Each dot marks a key to press, labelled with its note name — a
-            piano keyboard has no frets to describe &ldquo;where&rdquo; the way a
-            guitar diagram can, so the note name does that job instead. Not
-            sure how the white and black keys are laid out yet?{" "}
+            Each dot shows a key to press, with the name of the note on it. A
+            keyboard has no frets like a guitar, so the note name shows you
+            where to go. Not sure how the white and black keys work yet? Read{" "}
             <Link
               href="/knowledge/piano/anatomy"
               className={`font-medium text-brand-600 hover:underline dark:text-brand-400 ${focusable} rounded`}
             >
               Piano Keyboard Layout
             </Link>{" "}
-            covers that first.
+            first.
           </p>
         </GuideSection>
 
-        <GuideSection title="How to actually get faster">
+        <GuideSection title="How to get faster">
           <p>
-            Chords are easy to play one at a time — the real skill is
-            changing between them smoothly, and that only comes from
-            repetition.
+            One chord at a time is easy. The real skill is to change between
+            chords smoothly. And that only comes with repetition.
           </p>
           <ul className="list-disc space-y-3 pl-5">
             <li>
-              Pick two chords and change back and forth between them for five
-              minutes a day. Speed comes from doing this often, not from
-              doing it once for a long time.
+              Pick two chords, and change back and forth between them for five
+              minutes every day. Doing it often beats doing it for a long time
+              once in a while.
             </li>
             <li>
-              Add one new chord at a time to a song, rather than trying to
-              learn all of a song&rsquo;s chords at once. &ldquo;Tom Dooley&rdquo; needs only
-              two (A and D); &ldquo;Leaving on a Jet Plane&rdquo; adds a third (G) on top
-              of those same two.
+              Add one new chord at a time to a song. Don&rsquo;t try to learn all
+              the chords at once. &ldquo;Tom Dooley&rdquo; only needs two (A and D).
+              &ldquo;Leaving on a Jet Plane&rdquo; adds a third one (G) to the same two.
             </li>
             <li>
-              Start well below the song&rsquo;s actual tempo. Playing a change
-              cleanly and slowly builds the habit that speed later gets built
-              on top of — playing it fast and sloppy just practises the
-              mistake.
+              Start much slower than the song. A slow and clean change builds
+              the habit that speed grows from later. Fast and sloppy only
+              trains the mistake. 🐢
             </li>
           </ul>
         </GuideSection>

@@ -5,10 +5,10 @@ import { container, focusable } from "@/app/_components/ui";
 import { GuideCard } from "../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "Breath support, the four vocal registers, and the effects singers reach for once the basics are solid.";
+  "Breath support, the four vocal registers and the effects singers love to use, once the basics are in place.";
 
 export const metadata: Metadata = {
-  title: "Learn Singing: Guides for Beginners — Trenodo Knowledge",
+  title: "Learn Singing: Guides for Beginners | Trenodo Knowledge",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/vocals" },
   openGraph: {
@@ -24,17 +24,17 @@ const REFERENCE = [
   {
     href: "/knowledge/vocals/breath-support",
     title: "Breath Support",
-    body: "The abdominal engagement behind a strong, strain-free voice.",
+    body: "The work in your belly that gives you a strong voice without strain.",
   },
   {
     href: "/knowledge/vocals/vocal-registers",
     title: "Vocal Registers",
-    body: "Neutral, curbing, overdrive and belting — four tools, not four styles.",
+    body: "Neutral, curbing, overdrive and belting. Four tools, not four styles.",
   },
   {
     href: "/knowledge/vocals/vocal-effects",
     title: "Vocal Effects",
-    body: "Vibrato, distortion, air and growl — what each one does to a sound.",
+    body: "Vibrato, distortion, air and growl, and what each one does to your sound.",
   },
 ] as const;
 
@@ -52,7 +52,7 @@ export default function VocalsKnowledgePage() {
             Vocals
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-muted text-pretty">
-            {PAGE_DESCRIPTION}
+            {PAGE_DESCRIPTION} 🎤
           </p>
 
           <section className="mt-14">
@@ -67,8 +67,7 @@ export default function VocalsKnowledgePage() {
                 Getting Started with Singing
               </h2>
               <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted text-pretty">
-                Your voice is the instrument — how to get comfortable with it
-                before anything else.
+                Your voice is the instrument. Get comfortable with it first.
               </p>
             </Link>
           </section>

@@ -4,10 +4,10 @@ import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-lay
 import { focusable } from "@/app/_components/ui";
 
 const PAGE_DESCRIPTION =
-  "The mistakes that show up over and over in early drafts — forced rhymes, vague lyrics, mismatched mood, and burying a good hook.";
+  "The mistakes that show up again and again in early drafts. Forced rhymes, vague lyrics, the wrong mood and a hidden hook.";
 
 export const metadata: Metadata = {
-  title: "Common Songwriting Mistakes to Avoid — Trenodo",
+  title: "Common Songwriting Mistakes to Avoid | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/songwriting/common-mistakes" },
   openGraph: {
@@ -21,16 +21,16 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
-    q: "Are these mistakes, or just style choices some songs make on purpose?",
-    a: "Both, depending on intent. A mismatched mood used deliberately is irony; the same mismatch used by accident just reads as a song that doesn't know what it's trying to say. The difference is whether it's a choice or an oversight.",
+    q: "Are these mistakes, or just choices some songs make on purpose?",
+    a: "Both. It depends on the intention. A mood that doesn't match, used on purpose, is irony. The same mismatch by accident just sounds like a song that doesn't know what it wants to say. The difference is choice or oversight.",
   },
   {
-    q: "Which of these is the most common in early drafts?",
-    a: "Vague generalities, by far. It's the natural first-draft instinct to describe a feeling in general terms rather than a specific image, and it's usually the single highest-value thing to fix in revision.",
+    q: "Which of these is most common in early drafts?",
+    a: "Vague lines, by far. In a first draft it is natural to describe a feeling in general words, instead of a specific picture. And it is usually the most valuable thing to fix when you edit.",
   },
   {
-    q: "How do I catch these in my own writing?",
-    a: "Time and distance help more than anything — put a draft away for a day or two and come back to it. Problems that were invisible while you were inside the song are often obvious a day later.",
+    q: "How do I catch these in my own songs?",
+    a: "Time and distance help the most. Put the draft away for a day or two, and then come back. Problems you couldn't see while you were inside the song are often clear a day later.",
   },
 ] as const;
 
@@ -65,29 +65,29 @@ export default function CommonMistakesPage() {
         category="Songwriting"
         categoryHref="/knowledge/songwriting"
         title="Common Songwriting Mistakes to Avoid"
-        intro="The same handful of problems show up in early drafts again and again. Knowing what to look for makes them much easier to catch in your own writing."
+        intro="The same few problems show up in early drafts again and again. When you know what to look for, they are much easier to catch in your own songs. Don't worry, we have all made them. 😅"
       >
         <GuideSection title="Forcing a rhyme">
           <p>
-            Bending a word&rsquo;s natural meaning, grammar or pronunciation
-            just to land a rhyme is usually more noticeable than skipping
-            the rhyme entirely. See{" "}
+            Twisting the meaning, the grammar or the sound of a word just to
+            make it rhyme is easy to hear. Often more than no rhyme at all.
+            Read{" "}
             <Link
               href="/knowledge/songwriting/rhyme-patterns"
               className={`font-medium text-brand-600 hover:underline ${focusable} rounded`}
             >
               Rhyme Patterns
             </Link>{" "}
-            for why a near-rhyme is almost always the better trade.
+            to see why a near rhyme is almost always the better deal.
           </p>
         </GuideSection>
 
-        <GuideSection title="Staying vague instead of getting specific">
+        <GuideSection title="Being vague instead of specific">
           <p>
-            &ldquo;I miss you&rdquo; describes a feeling. &ldquo;Your coffee cup&rsquo;s still in
-            the sink&rdquo; puts a listener inside one. Vague lines are the most
-            common first-draft habit, and specificity is usually the
-            single most valuable thing to fix on a revision pass — see{" "}
+            &ldquo;I miss you&rdquo; describes a feeling. &ldquo;Your coffee cup is still in the
+            sink&rdquo; puts the listener right inside it. Vague lines are the most
+            common habit in a first draft. And being specific is usually the
+            most valuable fix when you edit. More in{" "}
             <Link
               href="/knowledge/songwriting/finding-your-subject"
               className={`font-medium text-brand-600 hover:underline ${focusable} rounded`}
@@ -98,44 +98,42 @@ export default function CommonMistakesPage() {
           </p>
         </GuideSection>
 
-        <GuideSection title="Mismatching mood and music">
+        <GuideSection title="The wrong mood for the music">
           <p>
-            A devastating lyric set to a bright, upbeat major-key melody
-            (or the reverse) can work brilliantly when it&rsquo;s a deliberate
-            choice — but far more often it just undercuts the song, leaving
-            a listener unsure which emotion to actually feel. If the
-            mismatch wasn&rsquo;t intentional, it&rsquo;s worth checking whether the
-            music is working with the lyric or against it.
+            A sad lyric on a happy, bright melody (or the other way around)
+            can work very well, if it is on purpose. But much more often it
+            just weakens the song. The listener doesn&rsquo;t know what to feel. If
+            the mismatch was not planned, check if the music works with the
+            lyric or against it.
           </p>
         </GuideSection>
 
-        <GuideSection title="Trying to fit in too many ideas">
+        <GuideSection title="Too many ideas in one song">
           <p>
-            A song usually only has room to develop one central idea, one
-            central metaphor, properly. Cramming in several competing ones
-            tends to leave a listener with none of them landing — see{" "}
+            A song usually only has room for one main idea, and one main
+            metaphor. Put in several ideas that compete, and often none of
+            them land. See{" "}
             <Link
               href="/knowledge/songwriting/metaphors"
               className={`font-medium text-brand-600 hover:underline ${focusable} rounded`}
             >
               Using Metaphors
             </Link>{" "}
-            on committing to a single image instead of stacking several.
+            on sticking to one picture, instead of stacking many.
           </p>
         </GuideSection>
 
-        <GuideSection title="Burying the hook">
+        <GuideSection title="Hiding the hook">
           <p>
-            If your strongest, most memorable line isn&rsquo;t placed somewhere
-            the song&rsquo;s repetition will reinforce it — typically the chorus
-            — a listener may never catch it at all. See{" "}
+            If your strongest line isn&rsquo;t placed where the song repeats it,
+            usually the chorus, the listener might never notice it. See{" "}
             <Link
               href="/knowledge/songwriting/titles-and-hooks"
               className={`font-medium text-brand-600 hover:underline ${focusable} rounded`}
             >
               Titles and Hooks
             </Link>{" "}
-            for where a hook actually needs to sit.
+            for where a hook should sit.
           </p>
         </GuideSection>
 

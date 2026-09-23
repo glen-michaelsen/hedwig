@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "What a verse, chorus, bridge, intro and outro each actually do — and the standard structure most pop songs are built from.";
+  "What the verse, chorus, bridge, intro and outro each do. And the classic structure most pop songs are built on.";
 
 export const metadata: Metadata = {
-  title: "Anatomy of a Song: Verse, Chorus, Bridge and Song Structure — Trenodo",
+  title: "Anatomy of a Song: Verse, Chorus, Bridge and Song Structure | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/songwriting/anatomy-of-a-song" },
   openGraph: {
@@ -20,38 +20,38 @@ export const metadata: Metadata = {
 const PARTS = [
   {
     name: "Intro",
-    body: "Sets the mood and tempo before any words arrive — often a stripped-down version of the chorus or verse instrumentation, giving the listener a moment to settle in.",
+    body: "Sets the mood and the tempo, before any words come in. Often a simpler version of the chorus or the verse. It gives the listener a moment to land.",
   },
   {
     name: "Verse",
-    body: "Moves the story forward. Each verse should introduce something new — a detail, a development, a shift in perspective — rather than repeating what the last one already said.",
+    body: "Moves the story forward. Every verse should bring something new: a detail, a change, a new angle. Don't repeat what the last verse already said.",
   },
   {
     name: "Chorus",
-    body: "The emotional core of the song, repeated with little or no change. This is usually where the title lives, and it's built to be the most memorable, most quotable part of the whole song.",
+    body: "The emotional core of the song. It repeats with little or no change. The title usually lives here. It is made to be the part everyone remembers and sings along to.",
   },
   {
     name: "Bridge",
-    body: "A deliberate break from the pattern — a new chord progression, a new melody, sometimes a shift in perspective or a turn in the story — that resets the listener's ear right before the final chorus lands harder for it.",
+    body: "A planned break from the pattern. New chords, a new melody, sometimes a new angle in the story. It resets the ear, so the last chorus hits even harder.",
   },
   {
     name: "Outro",
-    body: "Winds the song back down, mirroring the intro's job in reverse. Can fade the last chorus out, repeat a key line, or simply resolve the music to a stop.",
+    body: "Brings the song back down. Like the intro, but in reverse. It can fade out the last chorus, repeat a key line, or simply end the music.",
   },
 ] as const;
 
 const FAQS = [
   {
-    q: "Do I have to follow the standard structure exactly?",
-    a: "No — it's a starting template, not a rule. Plenty of great songs skip the bridge entirely, repeat a verse instead of writing a third one, or drop the intro altogether. Learn the standard shape first; it's much easier to break deliberately once you know what you're breaking.",
+    q: "Do I have to follow the classic structure exactly?",
+    a: "No. It is a template, not a rule. Many great songs skip the bridge, repeat a verse or have no intro at all. Learn the classic shape first. It is much easier to break a rule on purpose when you know it.",
   },
   {
-    q: "What's the difference between a verse and a chorus, structurally?",
-    a: "A verse changes its words each time it repeats (the melody usually stays similar); a chorus repeats both its words and its melody almost exactly every time. That repetition is exactly what makes the chorus the part listeners remember and sing along to.",
+    q: "What is the difference between a verse and a chorus?",
+    a: "A verse gets new words each time it comes back. The melody usually stays the same. A chorus repeats both the words and the melody almost exactly, every time. That repetition is why the chorus is the part people remember.",
   },
   {
     q: "Does every song need a bridge?",
-    a: "No. A bridge earns its place by giving the listener something genuinely new right when the song risks feeling repetitive — if the song is short or the chorus is strong enough to carry repetition on its own, skipping the bridge is a completely valid choice.",
+    a: "No. A bridge earns its place by giving something new, right when the song starts to feel repetitive. If the song is short, or the chorus is strong enough, it is fine to skip it.",
   },
 ] as const;
 
@@ -86,9 +86,9 @@ export default function AnatomyOfASongPage() {
         category="Songwriting"
         categoryHref="/knowledge/songwriting"
         title="Anatomy of a Song: Verse, Chorus, Bridge and Song Structure"
-        intro="Most pop songs are built from the same handful of parts, arranged in roughly the same order. Knowing what each part is actually for makes it much easier to know what a song you're stuck on is missing."
+        intro="Most pop songs are built from the same few parts, in more or less the same order. When you know what each part is for, it is much easier to see what your song is missing."
       >
-        <GuideSection title="The parts, and what each one does">
+        <GuideSection title="The parts, and what they do">
           <div className="space-y-4">
             {PARTS.map((part) => (
               <div
@@ -106,33 +106,30 @@ export default function AnatomyOfASongPage() {
           </div>
         </GuideSection>
 
-        <GuideSection title="A standard structure">
+        <GuideSection title="A classic structure">
           <p>
-            A common, reliable shape for a pop song puts those parts in this
+            A common and reliable shape for a pop song puts the parts in this
             order:
           </p>
           <p className="rounded-2xl border border-line bg-surface-muted/60 px-5 py-4 font-mono text-sm text-foreground">
-            Verse — Verse — Chorus — Verse — Verse — Chorus — Bridge —
-            Chorus — Chorus
+            Verse, Verse, Chorus, Verse, Verse, Chorus, Bridge, Chorus, Chorus
           </p>
           <p>
-            That&rsquo;s a template worth learning first precisely because it&rsquo;s
-            so common — a listener&rsquo;s ear already expects it, which is what
-            makes deviating from it (skipping a verse, repeating the bridge,
-            cutting straight to the chorus) land as a deliberate choice
-            rather than something that just feels off.
+            It is worth learning first, exactly because it is so common. The
+            listener&rsquo;s ear already expects it. That is also why it works when
+            you break it. Skip a verse, repeat the bridge or jump straight to
+            the chorus, and it feels like a choice. Not like a mistake. 🎶
           </p>
         </GuideSection>
 
-        <GuideSection title="A closing note on instrumentation">
+        <GuideSection title="A note on instruments">
           <p>
-            Which instruments carry each section is a genre and taste
-            decision more than a structural one. A minimalist pop song
-            might stay on a single guitar or piano the whole way through; a
-            rock song typically builds a fuller arrangement under the
-            chorus than the verse. Either way, instrumentation is usually
-            easier to decide once the song&rsquo;s structure and lyric are
-            already solid, not before.
+            Which instruments play in each part is more about style and taste
+            than structure. A simple pop song might use one guitar or one
+            piano all the way through. A rock song usually builds a bigger
+            sound in the chorus than in the verse. Either way, the
+            instruments are easier to decide when the structure and the lyric
+            are in place. Not before.
           </p>
         </GuideSection>
 

@@ -5,10 +5,10 @@ import { container, focusable } from "@/app/_components/ui";
 import { GuideCard } from "../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "The bass's job in a band, the parts of the instrument, and the three scales every bassist reaches for first.";
+  "What the bass does in a band, the parts of the instrument, and the three scales every bass player learns first.";
 
 export const metadata: Metadata = {
-  title: "Learn Bass Guitar: Guides for Beginners — Trenodo Knowledge",
+  title: "Learn Bass Guitar: Guides for Beginners | Trenodo Knowledge",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/bass" },
   openGraph: {
@@ -24,12 +24,12 @@ const REFERENCE = [
   {
     href: "/knowledge/bass/anatomy",
     title: "Bass Anatomy",
-    body: "Every part of the bass guitar, and what each one actually does.",
+    body: "Every part of the bass guitar, and what it actually does.",
   },
   {
     href: "/knowledge/bass/scales",
     title: "Scales",
-    body: "Major, minor, and minor pentatonic — the three shapes to learn first.",
+    body: "Major, minor and minor pentatonic. The three to learn first.",
   },
 ] as const;
 
@@ -47,7 +47,7 @@ export default function BassKnowledgePage() {
             Bass
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-muted text-pretty">
-            {PAGE_DESCRIPTION}
+            {PAGE_DESCRIPTION} The bass is the base of the band. 🎸
           </p>
 
           <section className="mt-14">
@@ -59,11 +59,11 @@ export default function BassKnowledgePage() {
                 Start here
               </p>
               <h2 className="mt-2 text-xl font-semibold tracking-tight">
-                What a Bassist Actually Does — And How to Start
+                What a Bass Player Actually Does, and How to Start
               </h2>
               <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted text-pretty">
-                The bass&rsquo;s real job in a band, and the two habits worth
-                building from day one.
+                The real job of the bass in a band. And the two habits to build
+                from day one.
               </p>
             </Link>
           </section>

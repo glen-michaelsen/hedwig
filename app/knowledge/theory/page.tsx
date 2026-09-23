@@ -4,10 +4,10 @@ import { container } from "@/app/_components/ui";
 import { GuideCard } from "../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "The shared vocabulary every instrument draws on — scales, the circle of fifths, chord notation, concert pitch and overtones.";
+  "The language all instruments share. Scales, the circle of fifths, chord symbols, concert pitch and overtones.";
 
 export const metadata: Metadata = {
-  title: "Music Theory Guides for Musicians — Trenodo Knowledge",
+  title: "Music Theory Guides for Musicians | Trenodo Knowledge",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/theory" },
   openGraph: {
@@ -28,22 +28,22 @@ const REFERENCE = [
   {
     href: "/knowledge/theory/circle-of-fifths",
     title: "The Circle of Fifths",
-    body: "Tonic, dominant and subdominant — how chords relate to a key.",
+    body: "Tonic, dominant and subdominant. How chords connect to a key.",
   },
   {
     href: "/knowledge/theory/chord-notation",
     title: "Chord Notation",
-    body: "How letter symbols like Cm7 and Dsus4 actually work.",
+    body: "How chord symbols like Cm7 and Dsus4 actually work.",
   },
   {
     href: "/knowledge/theory/concert-pitch",
     title: "Concert Pitch",
-    body: "Why A is tuned to 440 Hz, and what it means to play “in tune” with others.",
+    body: "Why A is tuned to 440 Hz, and what it means to be in tune with others.",
   },
   {
     href: "/knowledge/theory/overtones",
     title: "Overtones",
-    body: "Why a single note sounds full, and how to isolate one as a harmonic.",
+    body: "Why one note sounds full, and how to play a single overtone as a harmonic.",
   },
 ] as const;
 
@@ -61,7 +61,8 @@ export default function TheoryKnowledgePage() {
             Music Theory
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-muted text-pretty">
-            {PAGE_DESCRIPTION}
+            {PAGE_DESCRIPTION} Take note: it is much less scary than it
+            sounds. 🎵
           </p>
 
           <section className="mt-14">

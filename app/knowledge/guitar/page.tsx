@@ -5,10 +5,10 @@ import { container, focusable } from "@/app/_components/ui";
 import { GuideCard } from "../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "Learn guitar from scratch — a five-step beginner path plus a reference library for chords, scales, tuning, tabs, transposing and string changes.";
+  "Learn guitar from scratch. A five step path for beginners, plus guides to chords, scales, tuning, tabs, transposing and changing strings.";
 
 export const metadata: Metadata = {
-  title: "Learn Guitar: Guides for Beginners — Trenodo Knowledge",
+  title: "Learn Guitar: Guides for Beginners | Trenodo Knowledge",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/guitar" },
   openGraph: {
@@ -29,32 +29,32 @@ const REFERENCE = [
   {
     href: "/knowledge/guitar/scales",
     title: "Scales",
-    body: "Major, minor, and their pentatonic versions.",
+    body: "Major, minor and the two pentatonic scales.",
   },
   {
     href: "/knowledge/guitar/tuning",
     title: "Tuning",
-    body: "Standard tuning, string names, and the best tuner apps.",
+    body: "Standard tuning, the string names, and a tuner you can use right here.",
   },
   {
     href: "/knowledge/guitar/reading-tabs",
     title: "Reading Tabs",
-    body: "What the six lines, numbers and symbols in guitar tab mean.",
+    body: "What the six lines, the numbers and the symbols in a tab mean.",
   },
   {
     href: "/knowledge/guitar/transposing",
     title: "Transposing",
-    body: "Shift a song to a new key, with or without a capo.",
+    body: "Move a song to a new key. With a capo, or without.",
   },
   {
     href: "/knowledge/guitar/changing-strings",
     title: "Changing Strings",
-    body: "A full step-by-step, for acoustic, classical and electric.",
+    body: "Step by step, for acoustic, classical and electric guitars.",
   },
   {
     href: "/knowledge/guitar/anatomy",
     title: "Guitar Anatomy",
-    body: "Every part of the guitar, and what each one actually does.",
+    body: "Every part of the guitar, and what it actually does.",
   },
 ] as const;
 
@@ -72,7 +72,7 @@ export default function GuitarKnowledgePage() {
             Guitar
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-muted text-pretty">
-            {PAGE_DESCRIPTION}
+            {PAGE_DESCRIPTION} Don&rsquo;t fret, everyone starts somewhere. 🎸
           </p>
 
           <section className="mt-14">
@@ -84,11 +84,11 @@ export default function GuitarKnowledgePage() {
                 Start here
               </p>
               <h2 className="mt-2 text-xl font-semibold tracking-tight">
-                How to Learn Guitar: A Beginner&rsquo;s Path to Your First Song
+                How to Learn Guitar: From Zero to Your First Song
               </h2>
               <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted text-pretty">
-                Five steps, in order — from buying a guitar to playing a full
-                song on it.
+                Five steps, in the right order. From buying a guitar to
+                playing a full song on it.
               </p>
             </Link>
           </section>

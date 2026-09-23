@@ -5,10 +5,10 @@ import { container, focusable } from "@/app/_components/ui";
 import { GuideCard } from "../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "How to find a subject, structure a song, generate lines, rhyme well and revise a draft — the full craft of writing your own songs.";
+  "Find a subject, build the song, write the lines, rhyme well and polish the draft. The whole craft of writing your own songs.";
 
 export const metadata: Metadata = {
-  title: "Learn Songwriting: Guides for Writing Your Own Songs — Trenodo Knowledge",
+  title: "Learn Songwriting: Guides for Writing Your Own Songs | Trenodo Knowledge",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/songwriting" },
   openGraph: {
@@ -24,17 +24,17 @@ const REFERENCE = [
   {
     href: "/knowledge/songwriting/anatomy-of-a-song",
     title: "Anatomy of a Song",
-    body: "What a verse, chorus, bridge, intro and outro each actually do.",
+    body: "What the verse, chorus, bridge, intro and outro each do.",
   },
   {
     href: "/knowledge/songwriting/methods",
     title: "Songwriting Methods",
-    body: "History to Song, improvisation, and writing straight from a metaphor.",
+    body: "History to Song, improvisation, and writing from a metaphor.",
   },
   {
     href: "/knowledge/songwriting/metaphors",
     title: "Using Metaphors",
-    body: "How to turn a plainly stated feeling into a line people remember.",
+    body: "Turn a plain feeling into a line people remember.",
   },
   {
     href: "/knowledge/songwriting/rhyme-patterns",
@@ -44,17 +44,17 @@ const REFERENCE = [
   {
     href: "/knowledge/songwriting/refining-your-lyrics",
     title: "Refining Your Lyrics",
-    body: "Flow, simplicity, and how to actually revise a draft.",
+    body: "Flow, simple words, and how to really edit a draft.",
   },
   {
     href: "/knowledge/songwriting/titles-and-hooks",
     title: "Titles and Hooks",
-    body: "Why your title is probably already written, and where it belongs.",
+    body: "Your title is probably already written. Here is where it belongs.",
   },
   {
     href: "/knowledge/songwriting/common-mistakes",
     title: "Common Songwriting Mistakes",
-    body: "Forced rhymes, vague lines, and the other habits worth catching early.",
+    body: "Forced rhymes, vague lines and other habits to catch early.",
   },
 ] as const;
 
@@ -72,7 +72,7 @@ export default function SongwritingKnowledgePage() {
             Songwriting
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-muted text-pretty">
-            {PAGE_DESCRIPTION}
+            {PAGE_DESCRIPTION} Write on! ✍️
           </p>
 
           <section className="mt-14">
@@ -87,8 +87,8 @@ export default function SongwritingKnowledgePage() {
                 How to Find a Subject for Your Song
               </h2>
               <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted text-pretty">
-                Every other decision gets easier once there&rsquo;s a real
-                subject underneath the song.
+                Every other choice gets easier when your song is about
+                something real.
               </p>
             </Link>
           </section>

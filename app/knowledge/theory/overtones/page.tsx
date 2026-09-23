@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "Why a single played note actually sounds like several tones at once, and how to isolate one of them as a natural harmonic.";
+  "Why one note actually sounds like several notes at once. And how to play a single overtone on its own, as a natural harmonic.";
 
 export const metadata: Metadata = {
-  title: "Overtones Explained: Why One Note Sounds Full — Trenodo",
+  title: "Overtones Explained: Why One Note Sounds Full | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/theory/overtones" },
   openGraph: {
@@ -19,16 +19,16 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
-    q: "Can I actually hear overtones separately?",
-    a: "Not individually during normal playing — they blend into the fundamental to create a note's full, rich timbre. A natural harmonic is the exception: it isolates one overtone on its own.",
+    q: "Can I hear the overtones on their own?",
+    a: "Not when you play normally. They blend into the main note and give it a full, rich sound. A natural harmonic is the exception. It lets you hear one overtone on its own.",
   },
   {
     q: "How do I play a natural harmonic on guitar?",
-    a: "Rest a finger lightly on a string directly over a fret — without pressing it down to the fretboard — pluck the string, then lift the touching finger away. What's left ringing is an isolated overtone.",
+    a: "Put a finger lightly on a string, right above a fret. Don't press it down. Play the string, and then lift your finger. What keeps ringing is a single overtone.",
   },
   {
-    q: "Why does a natural harmonic sound so different from a normal note?",
-    a: "It's a single overtone in isolation rather than the fundamental plus its usual backing overtones, which gives it a distinctly brighter, thinner, less “full” character — and a naturally lower volume than a fretted note.",
+    q: "Why does a natural harmonic sound so different?",
+    a: "You hear one overtone alone, without the main note and the other overtones. That makes it brighter, thinner and less full than a normal note. It is also quieter.",
   },
 ] as const;
 
@@ -63,38 +63,35 @@ export default function OvertonesPage() {
         category="Music Theory"
         categoryHref="/knowledge/theory"
         title="Overtones Explained: Why One Note Sounds Full"
-        intro="A single played note is never really just one tone — it's the fundamental note plus a series of quieter, higher tones layered on top, all sounding at once."
+        intro="When you play one note, you never hear just one note. You hear the main note, plus a row of quieter and higher notes on top. All at the same time."
       >
-        <GuideSection title="What overtones actually are">
+        <GuideSection title="What overtones are">
           <p>
-            Together, the fundamental and its overtones are called partial
-            tones, with the fundamental itself counted as the first
-            partial. The overtones above it act as backup tones — you don&rsquo;t
-            consciously hear them as separate notes, but they&rsquo;re exactly
-            what gives an instrument&rsquo;s sound its full, rich character rather
-            than a flat, single-frequency tone.
+            The main note is called the fundamental. Together with the
+            overtones, they are called partials. The fundamental is the first
+            partial. The overtones work like backing singers. You don&rsquo;t hear
+            them as separate notes. But they are what makes an instrument
+            sound full and rich, instead of flat. 🎶
           </p>
           <p>
-            Overtones produce further overtones of their own, but those are
-            quiet enough to be effectively inaudible in practice.
+            Overtones also make their own overtones. But they are so quiet
+            that you can&rsquo;t really hear them.
           </p>
         </GuideSection>
 
-        <GuideSection title="Isolating one: natural harmonics">
+        <GuideSection title="Play one alone: natural harmonics">
           <p>
-            On a guitar, you can isolate a single overtone directly. Rest a
-            finger lightly on a string exactly over a fret — without
-            pressing it down to the fretboard — pluck the string, and then
-            lift the touching finger away. What keeps ringing is a natural
-            harmonic: one overtone on its own, without the fundamental
-            underneath it.
+            On a guitar, you can play a single overtone on its own. Put a
+            finger lightly on a string, right above a fret. Don&rsquo;t press it
+            down to the fretboard. Play the string, and then lift your finger.
+            What keeps ringing is a natural harmonic. One overtone, without
+            the main note under it.
           </p>
           <p>
-            A natural harmonic sounds noticeably different from a normal
-            fretted note — brighter, thinner and less &ldquo;full,&rdquo; with a lower
-            natural volume. That makes it a useful texture when a delicate,
-            bell-like sound is what a passage calls for, though its low
-            volume limits how it can be used.
+            A natural harmonic sounds very different from a normal note. It
+            is brighter, thinner and less full. And it is quieter. That makes
+            it perfect when a part needs a soft, bell like sound. But because
+            it is quiet, you can&rsquo;t use it everywhere.
           </p>
         </GuideSection>
 

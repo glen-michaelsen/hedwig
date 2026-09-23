@@ -3,10 +3,10 @@ import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-lay
 import { ZoomableImage } from "../../_components/zoomable-image";
 
 const PAGE_DESCRIPTION =
-  "Tonic, dominant and subdominant — the circle of fifths and how it shows you which chords naturally belong together in a key.";
+  "Tonic, dominant and subdominant. The circle of fifths, and how it shows you which chords belong together in a key.";
 
 export const metadata: Metadata = {
-  title: "The Circle of Fifths Explained: Tonic, Dominant and Subdominant — Trenodo",
+  title: "The Circle of Fifths Explained: Tonic, Dominant and Subdominant | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/theory/circle-of-fifths" },
   openGraph: {
@@ -21,15 +21,15 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "Why is the dominant chord always major?",
-    a: "Even in a minor key, the dominant chord is built as major — its major third is specifically what creates the pull back toward the tonic. Play it as minor instead and that pull weakens noticeably.",
+    a: "Even in a minor key, the dominant chord is major. Its major third is exactly what pulls the music back home to the tonic. Play it as minor, and that pull gets much weaker.",
   },
   {
-    q: "What's the circle of fifths actually useful for?",
-    a: "Two big things: working out which chords belong together in a given key (for writing or improvising), and figuring out a key's sharps or flats when reading notation.",
+    q: "What is the circle of fifths useful for?",
+    a: "Two big things. It shows which chords belong together in a key, which helps when you write or improvise. And it tells you the sharps or flats of a key, when you read music.",
   },
   {
-    q: "Where does the name “fifth” come from?",
-    a: "Counting the natural notes from a root up to the next one used (for example C, D, E, F, G) spans five steps — a fifth. That interval is also structurally central to how basic chords are built: a triad is a root, a third, and a fifth.",
+    q: "Where does the name \"fifth\" come from?",
+    a: "Count the natural notes from a root up to the next note on the circle. For example C, D, E, F, G. That is five steps, a fifth. The fifth is also central to how chords are built. A basic chord is a root, a third and a fifth.",
   },
 ] as const;
 
@@ -65,7 +65,7 @@ export default function CircleOfFifthsPage() {
         category="Music Theory"
         categoryHref="/knowledge/theory"
         title="The Circle of Fifths Explained: Tonic, Dominant and Subdominant"
-        intro="The circle of fifths is a harmonization tool — a wheel of every major chord on the outer ring and every minor chord on the inner ring, arranged so that neighboring chords are closely related."
+        intro="The circle of fifths is a tool for harmony. All major chords sit on the outside of the circle. All minor chords sit on the inside. And chords next to each other are close relatives."
       >
         <div className="rounded-4xl border border-line bg-surface p-8 shadow-lift">
           <ZoomableImage
@@ -81,44 +81,40 @@ export default function CircleOfFifthsPage() {
         <GuideSection title="Tonic, dominant, subdominant">
           <ul className="list-disc space-y-3 pl-5">
             <li>
-              <strong className="text-foreground">Tonic</strong> — the
-              &ldquo;home&rdquo; chord of a piece or progression. Analyzing an
-              existing song, it&rsquo;s usually the chord things start and end
-              on; writing your own, you can pick any chord to be the tonic
-              and build outward from there.
+              <strong className="text-foreground">Tonic.</strong> The
+              &ldquo;home&rdquo; chord of a song. When you look at a song, it is
+              usually the chord it starts and ends on. When you write your own,
+              you can pick any chord as the tonic, and build from there. 🏠
             </li>
             <li>
-              <strong className="text-foreground">Dominant</strong> — one
-              position clockwise from the tonic on the circle (a fifth
-              above the root). Its job is to create tension that resolves
-              back to the tonic — which is why the dominant chord is always
-              built as major, regardless of whether the overall key is
-              major or minor.
+              <strong className="text-foreground">Dominant.</strong> One step
+              clockwise from the tonic on the circle (a fifth above). Its job is
+              to build tension that wants to go back home to the tonic. That is
+              why the dominant is always major, even in a minor key.
             </li>
             <li>
-              <strong className="text-foreground">Subdominant</strong> — one
-              position counterclockwise from the tonic (a fourth above it,
-              or equivalently a fifth below).
+              <strong className="text-foreground">Subdominant.</strong> One
+              step counterclockwise from the tonic (a fourth above, or a fifth
+              below).
             </li>
           </ul>
         </GuideSection>
 
-        <GuideSection title="What it's actually used for">
+        <GuideSection title="What it is useful for">
           <p>
-            Two practical uses come up constantly: figuring out which chords
-            naturally belong together in a given key — useful both for
-            writing a progression and for improvising over one — and
-            working out a key&rsquo;s sharps or flats when reading notation.
+            You will use it for two things again and again. First, to find
+            which chords belong together in a key. That helps both when you
+            write a chord progression and when you improvise over one. Second,
+            to find the sharps or flats of a key when you read music.
           </p>
         </GuideSection>
 
-        <GuideSection title="Why “fifth”?">
+        <GuideSection title="Why is it called a fifth?">
           <p>
-            &ldquo;Quint&rdquo; is Latin for five, and the interval spans five
-            natural-note steps — from C up to G, for example, counting C, D,
-            E, F, G. That same interval sits at the center of how a basic
-            chord is built: a triad is a root, a third, and a fifth, and
-            it&rsquo;s only the third that changes between a chord&rsquo;s major and
+            &ldquo;Quint&rdquo; is Latin for five. The step spans five natural notes.
+            From C up to G, you count C, D, E, F, G. The same step is at the
+            center of how a basic chord is built. A chord is a root, a third
+            and a fifth. And only the third changes between the major and the
             minor version.
           </p>
         </GuideSection>

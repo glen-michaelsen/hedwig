@@ -4,10 +4,10 @@ import { container } from "@/app/_components/ui";
 import { GuideFaq, GuideSection } from "../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "What a drummer actually does, and every part of a drum kit — hi-hat, snare, kick, toms and the rest — explained in plain English.";
+  "What a drummer actually does, and every part of the drum kit in plain English. Hi-hat, snare, kick, toms and the rest.";
 
 export const metadata: Metadata = {
-  title: "Learn Drums: Introduction and Kit Anatomy — Trenodo Knowledge",
+  title: "Learn Drums: Introduction and Kit Anatomy | Trenodo Knowledge",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/drums" },
   openGraph: {
@@ -21,16 +21,16 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
-    q: "What size is a standard bass drum?",
-    a: "22 inches is the most common size, though it varies by genre and personal preference — some genres favor larger or smaller kick drums for a different low-end character.",
+    q: "What size is a normal bass drum?",
+    a: "22 inches is the most common size. But it depends on the style and on taste. Some styles like a bigger or smaller kick for a different low end.",
   },
   {
-    q: "What's the difference between a ride and a crash cymbal?",
-    a: "A ride is usually played continuously to carry the rhythm — especially in choruses or jazz — while a crash is used for accents, like marking a section change. A ride can sometimes double as a crash depending on its alloy and thickness.",
+    q: "What is the difference between a ride and a crash cymbal?",
+    a: "The ride is played again and again to carry the rhythm, often in choruses or in jazz. The crash is for accents, like the start of a new part of the song. Some rides can also work as a crash, depending on the metal and the thickness.",
   },
   {
     q: "Should I teach myself drums, or find a teacher?",
-    a: "Basic sticking and fundamental rhythms transfer across almost every genre, which makes them worth learning properly from the start. A real teacher catches bad habits early — ones that are otherwise easy to pick up unnoticed and can make drumming harder than it needs to be, or even lead to injury over time.",
+    a: "The basic stick exercises and rhythms work in almost every style. So they are worth learning right from the start. A teacher catches bad habits early. Habits that are easy to pick up without noticing, and that can make drumming harder or even cause injuries over time.",
   },
 ] as const;
 
@@ -72,109 +72,102 @@ export default function DrumsKnowledgePage() {
             Drums
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-muted text-pretty">
-            {PAGE_DESCRIPTION}
+            {PAGE_DESCRIPTION} Let&rsquo;s get to the beat of it. 🥁
           </p>
 
           <div className="mt-14 max-w-3xl space-y-12">
             <GuideSection title="What a drummer actually does">
               <p>
-                The drummer sets the fundamental rhythm the rest of the band
-                plays against — every other part in a song, in some sense,
-                fits around the timekeeping the drummer establishes. That
-                foundational role is exactly why it&rsquo;s worth understanding
-                the instrument properly from day one, rather than picking up
-                habits at random.
+                The drummer sets the basic rhythm that the rest of the band
+                plays on. In a way, every other part in the song fits around
+                the time the drummer keeps. That is why it pays off to learn
+                the instrument properly from day one. Not just to pick up
+                habits by chance.
               </p>
               <p>
-                Drums look deceptively simple — hit something, it makes a
-                sound — but playing real patterns well, in time, with both
-                hands and feet doing different things at once, takes genuine
-                practice. Three skills sit at the core of it:
+                Drums look simple. You hit something, and it makes a sound. But
+                to play real patterns well, in time, with hands and feet doing
+                different things at once? That takes real practice. Three
+                skills are at the core:
               </p>
               <ul className="list-disc space-y-3 pl-5">
                 <li>
-                  <strong className="text-foreground">A sense of time</strong>{" "}
-                  — playing steadily, not just fast.
+                  <strong className="text-foreground">A sense of time.</strong>{" "}
+                  To play steady. Not just fast.
                 </li>
                 <li>
-                  <strong className="text-foreground">Stick technique</strong>{" "}
-                  — how the hands actually strike the drum, cleanly and
-                  efficiently.
+                  <strong className="text-foreground">Stick technique.</strong>{" "}
+                  How your hands hit the drum. Clean and without wasted energy.
                 </li>
                 <li>
-                  <strong className="text-foreground">Coordination</strong> —
-                  getting all four limbs to do different things
-                  simultaneously without one throwing off the others.
+                  <strong className="text-foreground">Coordination.</strong>{" "}
+                  Getting all four limbs to do different things at the same
+                  time, without one of them tripping up the others.
                 </li>
               </ul>
               <p>
-                The usual path is to master basic sticking exercises and a
-                handful of fundamental rhythms first — these transfer across
-                almost every genre — before specializing into whatever style
-                you actually want to play. Because self-taught habits are
-                easy to pick up without noticing, and can be genuinely hard
-                to undo (or even lead to strain injuries over time), this is
-                one of the instruments where a real teacher earns its cost
-                back quickly.
+                The usual path is to learn basic stick exercises and a few
+                basic rhythms first. They work in almost every style. Then you
+                move on to the style you really want to play. Bad habits sneak
+                in easily when you teach yourself, and they can be hard to get
+                rid of. Some can even lead to injuries over time. So drums is
+                one of the instruments where a teacher is really worth it.
               </p>
             </GuideSection>
 
-            <GuideSection title="Drum kit anatomy">
+            <GuideSection title="The parts of a drum kit">
               <p>
-                A kit is highly customizable — the exact combination of
-                drums and cymbals varies a lot by genre and by the
-                individual drummer&rsquo;s taste — but every kit is built from
-                the same handful of components.
+                A drum kit can be set up in many ways. The exact mix of drums
+                and cymbals depends on the style and on the drummer. But every
+                kit is built from the same few parts.
               </p>
               <ul className="list-disc space-y-3 pl-5">
                 <li>
-                  <strong className="text-foreground">Hi-hat</strong> —
-                  often called the most important cymbal in the kit: two
-                  cymbals worked by a foot pedal, giving a short &ldquo;click&rdquo;
-                  closed or a longer, higher-pitched sound open. A standard
-                  size is 14 inches.
+                  <strong className="text-foreground">Hi-hat.</strong> Often
+                  called the most important cymbal in the kit. Two cymbals you
+                  open and close with a foot pedal. Closed, it gives a short
+                  &ldquo;tick.&rdquo; Open, it rings longer and higher. The normal size is
+                  14 inches.
                 </li>
                 <li>
-                  <strong className="text-foreground">Ride cymbal</strong> —
-                  an alternative to the hi-hat for carrying the rhythm,
-                  especially through choruses and in jazz. Standard size is
-                  20 inches; depending on its alloy and thickness, it can
-                  sometimes double as a crash.
+                  <strong className="text-foreground">Ride cymbal.</strong> An
+                  alternative to the hi-hat for carrying the rhythm, often in
+                  choruses and in jazz. The normal size is 20 inches. Some rides
+                  can also work as a crash, depending on the metal and the
+                  thickness.
                 </li>
                 <li>
-                  <strong className="text-foreground">Crash cymbal</strong> —
-                  used for accents and transitions, like hitting the start
-                  of a chorus. Higher-pitched than the ride; size varies by
-                  genre and preference.
+                  <strong className="text-foreground">Crash cymbal.</strong> For
+                  accents and changes, like the first hit of a chorus. It is
+                  higher than the ride. The size depends on style and taste.
                 </li>
                 <li>
-                  <strong className="text-foreground">China cymbal</strong> —
-                  fills a similar role to a crash, but with a distinct,
-                  trashier tone. Especially associated with rock.
+                  <strong className="text-foreground">China cymbal.</strong> A
+                  similar job as the crash, but with a trashier sound. Very
+                  popular in rock.
                 </li>
                 <li>
-                  <strong className="text-foreground">Snare drum</strong> —
-                  works with the kick and hi-hat as the core rhythmic trio.
-                  Wires stretched underneath the drumhead give the snare its
-                  characteristic &ldquo;crack.&rdquo;
+                  <strong className="text-foreground">Snare drum.</strong>{" "}
+                  Together with the kick and the hi-hat, it forms the core of
+                  the rhythm. Wires under the drum give the snare its famous
+                  &ldquo;crack.&rdquo;
                 </li>
                 <li>
-                  <strong className="text-foreground">Bass drum (kick)</strong>{" "}
-                  — sometimes called the heart of the kit: the largest drum,
-                  played with a foot pedal. 22 inches is the most common
-                  size, though it varies by genre.
+                  <strong className="text-foreground">Bass drum (kick).</strong>{" "}
+                  Often called the heart of the kit. The biggest drum, played
+                  with a foot pedal. 22 inches is the most common size, but it
+                  depends on the style. ❤️
                 </li>
                 <li>
-                  <strong className="text-foreground">Tom-toms</strong> —
-                  used for fills between the main groove. Rock drummers
-                  often favor bigger, deeper toms; jazz drummers often favor
-                  smaller, higher-pitched ones.
+                  <strong className="text-foreground">Toms.</strong> Used for
+                  fills between the main groove. Rock drummers often like big,
+                  deep toms. Jazz drummers often like smaller, higher ones.
                 </li>
                 <li>
-                  <strong className="text-foreground">Hardware</strong> —
-                  the stands and pedals holding everything together: cymbal
-                  stands, the hi-hat stand and pedal, a snare stand, and the
-                  bass drum pedal.
+                  <strong className="text-foreground">Hardware.</strong> The
+                  stands and pedals that hold it all together: cymbal stands,
+                  the hi-hat stand and pedal, a snare stand and the bass drum
+                  pedal.
                 </li>
               </ul>
             </GuideSection>

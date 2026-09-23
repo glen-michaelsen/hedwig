@@ -4,10 +4,10 @@ import { container } from "@/app/_components/ui";
 import { GuideCard } from "../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "A companion to piano lessons, not a replacement for them — the keyboard layout, and every major and minor chord with a diagram.";
+  "A helping hand next to your piano lessons. Learn how the keyboard works, and find every major and minor chord with a diagram.";
 
 export const metadata: Metadata = {
-  title: "Learn Piano: Keyboard Layout and Chords — Trenodo Knowledge",
+  title: "Learn Piano: Keyboard Layout and Chords | Trenodo Knowledge",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/piano" },
   openGraph: {
@@ -23,12 +23,12 @@ const REFERENCE = [
   {
     href: "/knowledge/piano/anatomy",
     title: "Piano Keyboard Layout",
-    body: "White keys, black keys, and how to find any note without counting from the end.",
+    body: "White keys, black keys, and how to find any note in a second.",
   },
   {
     href: "/knowledge/piano/chords",
     title: "Chords",
-    body: "All 12 major and minor chords, with a diagram for each.",
+    body: "All 12 major and all 12 minor chords, each with a diagram.",
   },
 ] as const;
 
@@ -46,7 +46,7 @@ export default function PianoKnowledgePage() {
             Piano
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-muted text-pretty">
-            {PAGE_DESCRIPTION}
+            {PAGE_DESCRIPTION} The key to piano? Well, the keys. 🎹
           </p>
 
           <section className="mt-14">

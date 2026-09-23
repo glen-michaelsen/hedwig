@@ -4,10 +4,10 @@ import { ScaleFigure } from "../../_components/scale-figure";
 import { GUITAR_SCALES } from "@/lib/scale-diagrams/guitar-scales";
 
 const PAGE_DESCRIPTION =
-  "The four scales every guitarist learns first — major, minor, and their pentatonic versions — and which chords each one is built to play over.";
+  "The four scales every guitarist learns first. Major, minor and their pentatonic versions, and which chords each one fits over.";
 
 export const metadata: Metadata = {
-  title: "Guitar Scales for Beginners: Major, Minor and Pentatonic — Trenodo",
+  title: "Guitar Scales for Beginners: Major, Minor and Pentatonic | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/guitar/scales" },
   openGraph: {
@@ -21,16 +21,16 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
-    q: "What's the difference between a scale and the pentatonic version of it?",
-    a: "The pentatonic scale is the full scale with two notes removed — the ones most likely to clash or sound unresolved when you're improvising. That's exactly why it's the standard starting point for soloing: it's very hard to hit a genuinely wrong note in it.",
+    q: "What is the difference between a scale and its pentatonic version?",
+    a: "The pentatonic scale is the full scale with two notes removed. These are the two notes that most easily clash when you improvise. That is why it is the classic starting point for solos. It is very hard to play a wrong note in it.",
   },
   {
-    q: "Do I need to learn scales before I can solo?",
-    a: "You need at least one — usually the minor pentatonic in whatever key the song is in. It's the smallest, most forgiving toolkit for improvising a solo that still sounds intentional.",
+    q: "Do I need to learn scales before I can play a solo?",
+    a: "You need at least one. Usually the minor pentatonic, in the key of the song. It is the smallest and most forgiving toolkit for a solo that still sounds like you meant it.",
   },
   {
-    q: "Can I move a scale shape to a different key, the same way as a barre chord?",
-    a: "Yes. Every scale shown here is shown in C, but the fingering pattern is movable — shift the whole shape up or down the fretboard and you get the same scale in a different key.",
+    q: "Can I move a scale shape to another key, like a barre chord?",
+    a: "Yes. All the scales here are shown in C, but the pattern can move. Slide the whole shape up or down the fretboard, and you get the same scale in a new key.",
   },
 ] as const;
 
@@ -69,24 +69,24 @@ export default function GuitarScalesPage() {
         category="Guitar"
         categoryHref="/knowledge/guitar"
         title="Guitar Scales for Beginners"
-        intro="A scale is a set fretboard pattern — learn the shape once, and you can slide it up or down to play it in any key. These four cover most of what a beginner needs, all shown here rooted on C."
+        intro="A scale is a fixed pattern on the fretboard. Learn the shape once, and you can slide it up or down to play it in any key. These four scales cover most of what a beginner needs. All of them are shown here in C. Time to scale up. 🎸"
       >
-        <GuideSection title="Reading a scale diagram">
+        <GuideSection title="How to read a scale diagram">
           <p>
-            Each diagram is the fretboard from the nut, showing one compact
-            position across the A, D and G strings — rather than every place
-            a note repeats further up the neck, since that&rsquo;s what you&rsquo;d
-            actually practice as a shape.
+            Each diagram shows the fretboard from the nut. You see one compact
+            position on the A, D and G strings. We don&rsquo;t show every place
+            the notes repeat further up the neck. This is the shape you
+            actually practice.
           </p>
         </GuideSection>
 
         <GuideSection title="Major scale">
           <p>
-            The major scale is built for major chords — it&rsquo;s the natural
-            choice to solo or write a melody over a major-key progression.
-            Its pattern of whole and half steps (whole, whole, half, whole,
-            whole, whole, half) is the same shape wherever you play it on the
-            neck, just shifted up or down to change key.
+            The major scale fits major chords. It is the natural choice when
+            you solo or write a melody over a song in a major key. The pattern
+            of whole and half steps is always the same: whole, whole, half,
+            whole, whole, whole, half. You only move it up or down the neck to
+            change key.
           </p>
           <ScaleFigure
             slug="major"
@@ -98,10 +98,10 @@ export default function GuitarScalesPage() {
         <GuideSection title="Minor scale">
           <p>
             The natural minor scale does the same job over minor chords. It
-            shares most of its notes with the relative major scale, but
-            starting from a different point in the pattern gives it a darker,
-            more melancholy character — which is exactly why it&rsquo;s the go-to
-            choice over a minor-key progression.
+            shares most of its notes with its relative major scale. But it
+            starts from another point in the pattern. That gives it a darker,
+            more melancholic feeling. So it is the go to scale for songs in a
+            minor key.
           </p>
           <ScaleFigure
             slug="minor"
@@ -112,11 +112,11 @@ export default function GuitarScalesPage() {
 
         <GuideSection title="Major pentatonic">
           <p>
-            &ldquo;Penta&rdquo; is Greek for five — this is the major scale with two
-            notes removed (the 4th and 7th degrees), leaving five. Those two
-            notes are the ones most likely to sound unresolved against a
-            major chord, so cutting them gives you a scale that&rsquo;s almost
-            impossible to solo badly with.
+            &ldquo;Penta&rdquo; is Greek for five. This is the major scale with two
+            notes taken out, the 4th and the 7th. Five notes are left. Those
+            two notes are the ones that most easily sound unfinished over a
+            major chord. Without them, it is almost impossible to play a bad
+            solo.
           </p>
           <ScaleFigure
             slug="major-pentatonic"
@@ -127,10 +127,10 @@ export default function GuitarScalesPage() {
 
         <GuideSection title="Minor pentatonic">
           <p>
-            The minor equivalent: the natural minor scale with the 2nd and
-            6th degrees removed. It&rsquo;s the single most-used scale in rock and
-            blues guitar soloing — a small, forgiving set of five notes that
-            works over almost any minor or blues progression.
+            The minor version: the natural minor scale without the 2nd and
+            the 6th. It is the most used scale for solos in rock and blues.
+            Five safe notes that work over almost any minor or blues song. If
+            you only learn one scale, learn this one. 💡
           </p>
           <ScaleFigure
             slug="minor-pentatonic"

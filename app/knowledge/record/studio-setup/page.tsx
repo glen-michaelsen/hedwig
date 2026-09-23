@@ -2,14 +2,14 @@ import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "Where to put your desk, how to position your studio monitors, and a simple trick for finding exactly where to put acoustic treatment.";
+  "Where to put your desk, how to place your studio speakers, and a simple trick to find the right spots for acoustic panels.";
 
 export const metadata: Metadata = {
-  title: "Home Studio Setup: Desk, Monitor Placement and Acoustic Treatment — Trenodo",
+  title: "Home Studio Setup: Desk, Speaker Placement and Acoustic Treatment | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/record/studio-setup" },
   openGraph: {
-    title: "Home Studio Setup: Desk, Monitor Placement and Acoustic Treatment",
+    title: "Home Studio Setup: Desk, Speaker Placement and Acoustic Treatment",
     description: PAGE_DESCRIPTION,
     url: "/knowledge/record/studio-setup",
     siteName: "Trenodo",
@@ -19,16 +19,16 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
-    q: "Why not just center the desk on the shortest wall?",
-    a: "It's more common to fit a room that way, but a longer wall gives sound more room before it reflects back off the side walls, which generally makes for a more accurate listening position.",
+    q: "Why not just put the desk by the short wall?",
+    a: "It often fits the room better. But a long wall gives the sound more space before it bounces back from the side walls. That usually gives you a more honest listening spot.",
   },
   {
-    q: "What is the mirror trick actually finding?",
-    a: "First reflection points — the exact spots on the walls and ceiling where sound bounces on its way from your monitors to your ears. Those reflections are what smear an otherwise accurate mix, which is why they're where acoustic panels do the most good.",
+    q: "What does the mirror trick actually find?",
+    a: "The first reflection points. These are the exact spots on the walls and the ceiling where the sound bounces on its way from your speakers to your ears. Those bounces blur your mix. So that is where acoustic panels help the most.",
   },
   {
     q: "Do I need professional acoustic treatment to start?",
-    a: "No — even basic panels at the first reflection points (front wall, side walls, ceiling) make a real difference over an untreated room. Treating everything perfectly can come later.",
+    a: "No. Even simple panels on the first reflection points (front wall, side walls and ceiling) make a real difference. The perfect room can come later.",
   },
 ] as const;
 
@@ -37,7 +37,7 @@ const structuredData = {
   "@graph": [
     {
       "@type": "Article",
-      headline: "Home Studio Setup: Desk, Monitor Placement and Acoustic Treatment",
+      headline: "Home Studio Setup: Desk, Speaker Placement and Acoustic Treatment",
       description: PAGE_DESCRIPTION,
       author: { "@type": "Organization", name: "Trenodo" },
     },
@@ -62,60 +62,59 @@ export default function StudioSetupPage() {
       <GuideLayout
         category="Recording"
         categoryHref="/knowledge/record"
-        title="Home Studio Setup: Desk, Monitor Placement and Acoustic Treatment"
-        intro="Where your desk and monitors sit in the room matters more than most home-studio budgets suggest — a bad position undermines even good gear."
+        title="Home Studio Setup: Desk, Speaker Placement and Acoustic Treatment"
+        intro="Where your desk and your speakers stand matters more than most people think. A bad spot can ruin the sound of even very good gear."
       >
-        <GuideSection title="Positioning your desk">
+        <GuideSection title="Where to put your desk">
           <ul className="list-disc space-y-3 pl-5">
             <li>
-              Put the desk against the room&rsquo;s <strong className="text-foreground">longest wall</strong> —
-              it reduces reflections bouncing back off the side walls
-              compared to sitting on a shorter one.
+              Put the desk against the{" "}
+              <strong className="text-foreground">longest wall</strong> in the
+              room. You get fewer reflections from the side walls than on a
+              short wall.
             </li>
             <li>
-              Keep it <strong className="text-foreground">centered left to right</strong>,
-              equal distance from both side walls, so any acoustic
-              treatment can be applied symmetrically.
+              Keep it{" "}
+              <strong className="text-foreground">in the middle, left to right</strong>.
+              The same distance to both side walls. Then you can treat the room
+              the same way on both sides.
             </li>
             <li>
-              Leave at least <strong className="text-foreground">half a meter of clearance from the back wall</strong> —
-              bass frequencies tend to build up and reflect off a wall
-              that&rsquo;s too close behind you.
+              Leave at least{" "}
+              <strong className="text-foreground">half a meter to the wall behind you</strong>.
+              Bass likes to build up and bounce off a wall that is too close.
             </li>
           </ul>
         </GuideSection>
 
-        <GuideSection title="Positioning your monitors">
+        <GuideSection title="Where to put your speakers">
           <ul className="list-disc space-y-3 pl-5">
             <li>
-              Your mix position and both monitors should form an{" "}
-              <strong className="text-foreground">equilateral triangle</strong>{" "}
-              viewed from above.
+              You and your two speakers should form an{" "}
+              <strong className="text-foreground">equal sided triangle</strong>,
+              seen from above.
             </li>
             <li>
-              <strong className="text-foreground">Angle the monitors inward</strong>,
-              toward your listening position, rather than pointing them
-              straight across the room.
+              <strong className="text-foreground">Turn the speakers in</strong>,
+              so they point at you. Not straight into the room.
             </li>
             <li>
-              Avoid placing the tweeter at the{" "}
-              <strong className="text-foreground">exact vertical midpoint</strong>{" "}
-              between floor and ceiling — offset it up or down slightly
-              instead.
+              Don&rsquo;t put the tweeter{" "}
+              <strong className="text-foreground">exactly halfway</strong>{" "}
+              between the floor and the ceiling. Move it a little up or down.
             </li>
           </ul>
         </GuideSection>
 
-        <GuideSection title="Finding where to treat the room: the mirror trick">
+        <GuideSection title="Find the spots to treat: the mirror trick">
           <p>
-            Sit at your mix position and have someone slide a mirror along
-            the walls and ceiling around you. Anywhere you can see a
-            monitor&rsquo;s reflection in the mirror is a first reflection point —
-            sound is bouncing off that exact spot on its way to your ears.
-            Those points (usually somewhere on the front wall, both side
-            walls, and the ceiling) are where an acoustic panel makes the
-            most difference, since they&rsquo;re what blur an otherwise accurate
-            mix with early reflected sound.
+            Sit in your mixing spot. Ask a friend to slide a mirror along the
+            walls and the ceiling around you. Every place where you can see a
+            speaker in the mirror is a first reflection point. The sound
+            bounces off exactly that spot on its way to your ears. That is
+            where an acoustic panel helps the most. Usually on the front wall,
+            both side walls and the ceiling. A small trick that reflects well
+            on your mixes. 🪞
           </p>
         </GuideSection>
 

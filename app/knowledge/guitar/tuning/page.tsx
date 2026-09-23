@@ -3,10 +3,10 @@ import { GuitarTuner } from "../../_components/guitar-tuner";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "Standard guitar tuning, an easy way to remember the string names, and the tuner apps, clip-ons and online tools that make tuning painless.";
+  "Standard guitar tuning, an easy way to remember the string names, and the apps, clip-on tuners and online tools that make tuning easy.";
 
 export const metadata: Metadata = {
-  title: "How to Tune a Guitar: String Names and the Best Tuners — Trenodo",
+  title: "How to Tune a Guitar: String Names and the Best Tuners | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/guitar/tuning" },
   openGraph: {
@@ -21,15 +21,15 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "What are the guitar string names?",
-    a: "From the thickest string to the thinnest: E, A, D, G, B, E. The low and high strings share a name because they're two octaves apart — the same note, just far lower or higher in pitch.",
+    a: "From the thickest string to the thinnest: E, A, D, G, B, E. The lowest and the highest string have the same name. They are two octaves apart. Same note, much lower or higher.",
   },
   {
-    q: "What's a good way to remember the string names?",
-    a: "\"Eddie Ate Dynamite, Good Bye Eddie\" — each word's first letter spells out E, A, D, G, B, E in order from the thickest string to the thinnest.",
+    q: "How can I remember the string names?",
+    a: "\"Eddie Ate Dynamite, Good Bye Eddie.\" The first letter of each word gives you E, A, D, G, B, E. From the thickest string to the thinnest.",
   },
   {
     q: "Can I tune a guitar without a tuner?",
-    a: "Yes, by ear against a reference pitch — a piano, another instrument, or fretting each string at the 5th fret to match the pitch of the next open string down. It's a useful skill, but a tuner is faster and more accurate, especially while you're still learning to hear pitch differences.",
+    a: "Yes. You can tune by ear against a reference note, like a piano or another instrument. You can also press each string on the 5th fret, and match it to the next open string. It is a good skill to have. But a tuner is faster and more precise, especially while your ear is still learning.",
   },
 ] as const;
 
@@ -57,7 +57,7 @@ const structuredData = {
       operatingSystem: "Any (web-based)",
       offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
       description:
-        "A free browser-based chromatic guitar tuner using your microphone — no app or account required.",
+        "A free chromatic guitar tuner in your browser. It uses your microphone. No app and no account needed.",
     },
   ],
 };
@@ -73,48 +73,48 @@ export default function GuitarTuningPage() {
         category="Guitar"
         categoryHref="/knowledge/guitar"
         title="How to Tune a Guitar: String Names and the Best Tuners"
-        intro="Tuning is simple once you know the target pitches. Try the tuner below with your own microphone, or read on for what each string should sound like and the other tools that get you there."
+        intro="Tuning is simple when you know what each string should sound like. Try the tuner below with your own microphone. Or read on for the string names and the other tools that help. Let's get you in tune. 🎸"
       >
         <GuitarTuner />
 
         <GuideSection title="Standard tuning">
           <p>
-            From the thickest string to the thinnest, a guitar in standard
-            tuning is: E, A, D, G, B, E. Each string, played open (without
-            fretting anything), should ring out at that exact pitch — that&rsquo;s
-            the target every tuning method below is aiming for.
+            From the thickest string to the thinnest, standard tuning is: E,
+            A, D, G, B, E. When you play a string open, with no finger on it,
+            it should ring at exactly that note. That is the goal for every
+            tuning method on this page.
           </p>
           <p>
-            A common way to remember the order: &ldquo;Eddie Ate Dynamite, Good Bye
+            An easy way to remember the order: &ldquo;Eddie Ate Dynamite, Good Bye
             Eddie.&rdquo;
           </p>
         </GuideSection>
 
         <GuideSection title="Tuning with an app">
           <p>
-            The fastest option for most people — point your phone&rsquo;s
-            microphone at the guitar and it tells you whether each string is
-            sharp, flat, or in tune. GuitarTuna, Fender Tune, BOSS Tuner and
-            ClearTune all do this well and work off a single phone mic.
+            This is the fastest way for most people. Point your phone&rsquo;s
+            microphone at the guitar. The app tells you if each string is too
+            high, too low or in tune. GuitarTuna, Fender Tune, BOSS Tuner and
+            ClearTune all do this well.
           </p>
         </GuideSection>
 
         <GuideSection title="Tuning with a clip-on tuner">
           <p>
-            A small tuner that clips onto the headstock and reads pitch
-            through vibration rather than sound — useful in a noisy room
-            where a microphone-based app struggles. The TC Electronic
-            PolyTune and Korg TM-60 are both reliable, inexpensive options
-            worth keeping in a gig bag.
+            A small tuner you clip onto the head of the guitar. It reads the
+            vibration, not the sound. That makes it great in a noisy room,
+            where a phone app struggles. The TC Electronic PolyTune and the
+            Korg TM-60 are both reliable and cheap. Nice to keep in your gig
+            bag.
           </p>
         </GuideSection>
 
         <GuideSection title="Tuning online">
           <p>
-            Plenty of free, browser-based tuners work off nothing more than
-            your computer&rsquo;s built-in microphone — the one at the top of this
-            page among them. Handy whenever you&rsquo;re practising at a desk and
-            don&rsquo;t have a phone or clip-on tuner within reach.
+            Many free tuners run in your browser and only need your
+            computer&rsquo;s microphone. The one at the top of this page is one of
+            them. 👆 Very handy when you practice at your desk, and your phone
+            is in the other room.
           </p>
         </GuideSection>
 

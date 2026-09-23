@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "Songs work best when they're about something the writer actually means — where to look for a subject worth writing about, and how to make it specific.";
+  "Songs work best when they are about something the writer really means. Where to look for a good subject, and how to make it specific.";
 
 export const metadata: Metadata = {
-  title: "How to Find a Subject for Your Song — Trenodo",
+  title: "How to Find a Subject for Your Song | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/songwriting/finding-your-subject" },
   openGraph: {
@@ -20,15 +20,15 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "What if nothing in my life feels interesting enough to write about?",
-    a: "It almost never is the size of the subject that makes a song land — it's the specificity. A breakup everyone's had becomes a song the moment it's about one particular Tuesday, not breakups in general.",
+    a: "It is almost never the size of the subject that makes a song work. It is the details. A breakup everyone has had becomes a song the moment it is about one specific Tuesday. Not about breakups in general.",
   },
   {
-    q: "Can I write about something I haven't personally experienced?",
-    a: "Yes — observation and imagination are both valid starting points, not just memory. The test isn't whether it happened to you; it's whether you can make it specific enough to feel true.",
+    q: "Can I write about something I haven't lived through myself?",
+    a: "Yes. Things you see and things you imagine are just as good as memories. The test is not if it happened to you. The test is if you can make it specific enough to feel true.",
   },
   {
-    q: "Is it bad to write another love song? Hasn't everything already been said?",
-    a: "No — love, loss, friendship and joy are the most-written subjects in music precisely because they're universal, and a specific, honest angle on a familiar feeling is exactly what makes a song feel new.",
+    q: "Is it bad to write another love song?",
+    a: "Not at all. Love, loss, friendship and joy are the most common subjects in music, because we all know them. An honest and specific angle on a well known feeling is exactly what makes a song feel new.",
   },
 ] as const;
 
@@ -63,57 +63,53 @@ export default function FindingYourSubjectPage() {
         category="Songwriting"
         categoryHref="/knowledge/songwriting"
         title="How to Find a Subject for Your Song"
-        intro="Every other decision in songwriting — the words, the structure, the melody — is easier once there's a real subject underneath it. This is usually where to start, and where most stalled songs actually went wrong."
+        intro="Every other choice in a song gets easier with a real subject under it. The words, the structure, the melody. This is where you start. And it is often where a song that got stuck went wrong."
       >
-        <GuideSection title="Write about something that actually means something to you">
+        <GuideSection title="Write about something that means something to you">
           <p>
-            A song is far more convincing when it&rsquo;s built on a subject the
-            writer genuinely cares about, rather than a subject chosen
-            because it seems like what a song &ldquo;should&rdquo; be about. That
-            honesty is audible — listeners can tell the difference between a
-            feeling and a performance of a feeling, even when they can&rsquo;t
-            say exactly how.
+            A song is much stronger when it is about something the writer
+            really cares about. Not a subject picked because a song
+            &ldquo;should&rdquo; be about it. Listeners can hear that honesty. They
+            can feel the difference between a real feeling and a performance
+            of one. Even if they can&rsquo;t explain it. ❤️
           </p>
           <p>
-            A handful of subjects show up constantly across popular music
-            for a reason: they&rsquo;re the feelings almost everyone has actually
-            lived through.
+            A few subjects come back again and again in popular music. For a
+            good reason: almost everyone has felt them.
           </p>
           <ul className="list-disc space-y-3 pl-5">
             <li>
-              <strong className="text-foreground">Romantic love</strong> —
-              new, ongoing, ending, or looked back on.
+              <strong className="text-foreground">Love.</strong> New,
+              ongoing, ending, or seen in the rear view mirror.
             </li>
             <li>
-              <strong className="text-foreground">Friendship</strong> — what
-              it gives you, or what it costs to lose it.
+              <strong className="text-foreground">Friendship.</strong> What it
+              gives you, or what it costs to lose it.
             </li>
             <li>
-              <strong className="text-foreground">Loss and grief</strong> —
-              of a person, a relationship, or a version of your own life.
+              <strong className="text-foreground">Loss and grief.</strong> Of
+              a person, a relationship, or a version of your own life.
             </li>
             <li>
-              <strong className="text-foreground">Joy</strong> — the
-              hardest of the four to write well, precisely because it has no
-              built-in tension to write toward.
+              <strong className="text-foreground">Joy.</strong> The hardest
+              of the four to write well. There is no built in tension to write
+              towards.
             </li>
           </ul>
         </GuideSection>
 
         <GuideSection title="Make it specific">
           <p>
-            A general subject (&ldquo;heartbreak,&rdquo; &ldquo;missing someone&rdquo;) gives a
-            listener nothing to actually picture. A specific one does the
-            opposite — one particular night, one exact phrase someone said,
-            one small physical detail — and specificity is usually what
-            turns a familiar feeling into a song that feels honest rather
-            than generic.
+            A general subject like &ldquo;heartbreak&rdquo; or &ldquo;missing
+            someone&rdquo; gives the listener nothing to see. A specific one does
+            the opposite. One special night. One exact sentence someone said.
+            One small detail. The details are what turn a well known feeling
+            into a song that feels honest.
           </p>
           <p>
-            A useful test while you&rsquo;re choosing a subject: could this line
-            only be about your situation, or could it be the opening line of
-            a thousand other songs? The more specific answer is almost
-            always the stronger one to build from.
+            A good test when you choose: could this line only be about your
+            situation? Or could it open a thousand other songs? The specific
+            answer is almost always the stronger one. 💡
           </p>
         </GuideSection>
 

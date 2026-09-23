@@ -4,16 +4,16 @@ import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
 import { container } from "@/app/_components/ui";
 
 const PAGE_DESCRIPTION =
-  "Guides for the whole musician's journey — learning an instrument, recording, performing, promoting and teaching.";
+  "Guides for your whole journey as a musician. Learn an instrument, write your own songs, record them, play them live and teach others.";
 
 export const metadata: Metadata = {
-  title: "Knowledge — Guides for Musicians — Trenodo",
+  title: "Knowledge: Guides for Musicians | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: {
     canonical: "/knowledge",
   },
   openGraph: {
-    title: "Knowledge — Guides for Musicians",
+    title: "Knowledge: Guides for Musicians",
     description: PAGE_DESCRIPTION,
     url: "/knowledge",
     siteName: "Trenodo",
@@ -25,37 +25,37 @@ const INSTRUMENTS = [
   {
     href: "/knowledge/guitar",
     title: "Guitar",
-    body: "Your first chord through your first song, plus a chord, scale and tuning reference.",
+    body: "From your first chord to your first song. Plus chords, scales and a tuner.",
     image: "/images/knowledge/instruments/guitar.jpg",
   },
   {
     href: "/knowledge/piano",
     title: "Piano",
-    body: "Keyboard layout and every major and minor chord — a companion to piano lessons.",
+    body: "How the keyboard works, and every major and minor chord with a diagram.",
     image: "/images/knowledge/instruments/piano.jpg",
   },
   {
     href: "/knowledge/drums",
     title: "Drums",
-    body: "Kit anatomy, stick technique and the rhythms every drummer starts with.",
+    body: "What a drummer does, and every part of the drum kit explained.",
     image: "/images/knowledge/instruments/drum.jpg",
   },
   {
     href: "/knowledge/bass",
     title: "Bass",
-    body: "Get to know the instrument, then build up your scales and technique.",
+    body: "Get to know the instrument. Then build your scales and your groove.",
     image: "/images/knowledge/instruments/bass.jpg",
   },
   {
     href: "/knowledge/vocals",
     title: "Vocals",
-    body: "Breath support, vocal registers and effects once the basics are solid.",
+    body: "Breath support, vocal registers and the effects singers love to use.",
     image: "/images/knowledge/instruments/vocal.jpg",
   },
   {
     href: "/knowledge/theory",
     title: "Music Theory",
-    body: "The shared vocabulary every instrument draws on — scales, notation, the circle of fifths.",
+    body: "The language all instruments share. Scales, chords and the circle of fifths.",
     image: "/images/knowledge/instruments/theory.jpg",
   },
 ] as const;
@@ -64,31 +64,31 @@ const JOURNEY = [
   {
     href: "/knowledge/songwriting",
     title: "Songwriting",
-    body: "Finding a subject, structuring a song, and turning a draft into a finished lyric.",
+    body: "Find your subject, build the song and turn a rough draft into a finished lyric.",
     image: "/images/knowledge/journey/songwriting.jpg",
   },
   {
     href: "/knowledge/record",
     title: "Recording",
-    body: "Setting up a home studio, choosing software, and getting a take you're happy to send.",
+    body: "Set up a home studio, pick your software and get a take you are proud of.",
     image: "/images/knowledge/journey/recording.jpg",
   },
   {
     href: "/knowledge/perform",
     title: "Performing",
-    body: "From busking to pricing a gig — everything between writing a song and playing it live.",
+    body: "From busking to your first paid gig. Everything about playing live.",
     image: "/images/knowledge/journey/performing.jpg",
   },
   {
     href: "/knowledge/promote",
     title: "Promoting Your Music",
-    body: "Releasing to streaming, building a press kit, and getting your music in front of people.",
+    body: "Release your music, build a press kit and get heard by the right people.",
     image: "/images/knowledge/journey/promoting.jpg",
   },
   {
     href: "/knowledge/teach",
     title: "Teaching Music",
-    body: "Taking your playing online and turning it into lessons other musicians can book.",
+    body: "Share what you know. Turn your playing into lessons other musicians can book.",
     image: "/images/knowledge/journey/teaching.jpg",
   },
 ] as const;

@@ -21,7 +21,7 @@ function TuningMeter({ cents }: { cents: number }) {
   const textColor = inTune
     ? "text-emerald-600 dark:text-emerald-400"
     : "text-foreground";
-  const label = inTune ? "In tune" : cents < 0 ? "Flat — tune up" : "Sharp — tune down";
+  const label = inTune ? "In tune 👍" : cents < 0 ? "Too low. Tune up." : "Too high. Tune down.";
 
   return (
     <div className="text-center">
@@ -93,7 +93,7 @@ export function GuitarTuner() {
 
     if (!navigator.mediaDevices?.getUserMedia) {
       setError(
-        "This browser doesn't support microphone access from a webpage — try a recent version of Chrome, Safari, Firefox or Edge.",
+        "This browser can't use the microphone from a webpage. Try a recent version of Chrome, Safari, Firefox or Edge.",
       );
       return;
     }
@@ -141,7 +141,7 @@ export function GuitarTuner() {
       setListening(true);
     } catch {
       setError(
-        "Microphone access was blocked or unavailable — allow it for this site in your browser settings and try again.",
+        "We couldn't get access to your microphone. Allow it for this site in your browser settings, and try again.",
       );
     }
   }
@@ -153,7 +153,7 @@ export function GuitarTuner() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h3 className="text-base font-semibold tracking-tight">Guitar Tuner</h3>
-          <p className="mt-1 text-sm text-muted">Standard tuning — E A D G B E</p>
+          <p className="mt-1 text-sm text-muted">Standard tuning: E A D G B E</p>
         </div>
         {listening ? (
           <button type="button" onClick={stop} className={buttonGhost}>
@@ -200,8 +200,8 @@ export function GuitarTuner() {
             <TuningMeter cents={reading.cents} />
           ) : (
             <p className="text-center text-sm text-muted">
-              Hearing {reading.detectedLabel}, not {target.label} — check
-              you&rsquo;re plucking the right string.
+              We hear {reading.detectedLabel}, not {target.label}. Are you
+              plucking the right string?
             </p>
           )}
         </div>

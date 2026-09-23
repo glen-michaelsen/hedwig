@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "How a strong song title gets chosen, why it's usually already sitting inside your chorus, and where it typically lands.";
+  "How to find a strong song title, why it is usually already in your chorus, and where it should sit in the song.";
 
 export const metadata: Metadata = {
-  title: "How to Write a Song Title and Hook — Trenodo",
+  title: "How to Write a Song Title and Hook | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/songwriting/titles-and-hooks" },
   openGraph: {
@@ -19,16 +19,16 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
-    q: "What's the difference between a title and a hook?",
-    a: "A hook is any short, catchy phrase or melodic moment designed to stick in a listener's memory. A title is just the name of the song — very often, but not always, the hook and the title are the exact same line.",
+    q: "What is the difference between a title and a hook?",
+    a: "A hook is any short, catchy phrase or melody made to stick in the listener's head. The title is the name of the song. Very often, but not always, the hook and the title are the same line.",
   },
   {
-    q: "Should I choose the title before or after writing the song?",
-    a: "After, usually. It's much easier to spot your song's strongest, most quotable line once the whole lyric already exists than to write toward a title picked in advance.",
+    q: "Should I pick the title before or after I write the song?",
+    a: "Usually after. When the whole lyric exists, it is much easier to spot your strongest line. Much easier than writing towards a title you picked in advance.",
   },
   {
-    q: "Can a title be a phrase that never actually appears in the lyric?",
-    a: "Yes, though it's the less common choice. Most listeners expect the title to show up somewhere in the song, usually in the chorus, so a title that's absent from the lyric works best when that absence itself feels deliberate.",
+    q: "Can the title be a phrase that is not in the lyric?",
+    a: "Yes, but it is less common. Most listeners expect to hear the title somewhere in the song, usually in the chorus. A title that is not in the lyric works best when that feels like a choice.",
   },
 ] as const;
 
@@ -63,36 +63,35 @@ export default function TitlesAndHooksPage() {
         category="Songwriting"
         categoryHref="/knowledge/songwriting"
         title="How to Write a Song Title and Hook"
-        intro="Every song needs one thing a listener walks away remembering. Most of the time, that's the title — and it's usually already hiding somewhere in your draft."
+        intro="Every song needs one thing the listener remembers. Most of the time, that is the title. And it is usually hiding somewhere in your draft already. Let's get you hooked. 🎣"
       >
         <GuideSection title="Your title is probably already written">
           <p>
-            Rather than inventing a title from scratch, look back through
-            your draft for the line that&rsquo;s the most quotable — the one
-            you&rsquo;d be most likely to say out loud if you were describing the
-            song to someone who hadn&rsquo;t heard it. That line is very often
-            your title, whether or not you set out to write it as one.
+            Don&rsquo;t invent a title from nothing. Look through your draft for
+            the line people would quote. The line you would say out loud if
+            you described the song to someone who hasn&rsquo;t heard it. That
+            line is very often your title. Even if you didn&rsquo;t write it as
+            one.
           </p>
         </GuideSection>
 
-        <GuideSection title="Where it usually lands">
+        <GuideSection title="Where it usually sits">
           <p>
-            The title most commonly appears in the chorus — often as the
-            first line (so it&rsquo;s the first thing a listener hears repeated)
-            or the last line (so it&rsquo;s the last thing they&rsquo;re left with
-            before the chorus ends). Both placements work; what matters is
-            that the title lands somewhere the chorus&rsquo;s repetition will
-            reinforce it.
+            The title is most often in the chorus. Either as the first line,
+            so it is the first thing the listener hears repeated. Or as the
+            last line, so it is what they are left with when the chorus ends.
+            Both work. What matters is that the title sits where the
+            repetition of the chorus makes it stronger.
           </p>
         </GuideSection>
 
-        <GuideSection title="What makes a hook actually stick">
+        <GuideSection title="What makes a hook stick">
           <p>
-            A strong hook is usually short, rhythmically simple, and
-            emotionally direct — it doesn&rsquo;t need to be clever so much as
-            immediate. If a phrase needs explaining before it lands, it&rsquo;s
-            probably too complicated to work as a hook, however good it
-            reads on the page.
+            A strong hook is usually short, with a simple rhythm and a direct
+            feeling. It doesn&rsquo;t need to be clever. It needs to hit right away.
+            If a phrase needs to be explained before it lands, it is probably
+            too complicated to be a hook. No matter how good it looks on
+            paper.
           </p>
         </GuideSection>
 

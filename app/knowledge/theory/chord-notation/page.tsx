@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "How chord notation like Cm7 and Dsus4 works — a root letter plus a suffix, the same system for every key.";
+  "How chord symbols like Cm7 and Dsus4 work. A root letter plus an ending, and the same system for every key.";
 
 export const metadata: Metadata = {
-  title: "Chord Notation Explained: Reading Symbols Like Cm7 and Dsus4 — Trenodo",
+  title: "Chord Notation Explained: Reading Symbols Like Cm7 and Dsus4 | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/theory/chord-notation" },
   openGraph: {
@@ -35,16 +35,16 @@ const D_SHARP_EXAMPLES = [
 
 const FAQS = [
   {
-    q: "Is chord notation the same as full sheet music?",
-    a: "No — it's a shorthand. Chord notation tells you which chords to play and roughly when, usually written above lyrics or over measures, but it doesn't specify the exact melody or rhythm the way full notation does.",
+    q: "Is chord notation the same as sheet music?",
+    a: "No, it is a shortcut. Chord notation tells you which chords to play, and roughly when. It usually sits above the lyrics or over the bars. It doesn't show the exact melody or rhythm, like sheet music does.",
   },
   {
-    q: "Do I need to memorize a suffix for every root note separately?",
-    a: "No — that's the whole advantage of the system. Once you know what “sus4” or “m7” means, it means the same thing on top of any root letter.",
+    q: "Do I need to learn every ending for every root note?",
+    a: "No, and that is the beauty of it. When you know what \"sus4\" or \"m7\" means, it means the same thing on every root letter.",
   },
   {
-    q: "Why is chord notation so common for guitar and piano?",
-    a: "Both instruments can play full chords from a single symbol, so a chord chart gives a guitarist or pianist everything they need without the overhead of reading full notation.",
+    q: "Why is chord notation so popular with guitar and piano players?",
+    a: "Both instruments can play a full chord from one symbol. So a chord chart gives a guitarist or pianist all they need, without reading full sheet music.",
   },
 ] as const;
 
@@ -99,7 +99,7 @@ function ExampleTable({
           ))}
         </tbody>
       </table>
-      <p className="sr-only">Chord notation examples rooted on {root}</p>
+      <p className="sr-only">Chord notation examples with the root {root}</p>
     </div>
   );
 }
@@ -115,33 +115,32 @@ export default function ChordNotationPage() {
         category="Music Theory"
         categoryHref="/knowledge/theory"
         title="Chord Notation Explained: Reading Symbols Like Cm7 and Dsus4"
-        intro="Chord notation (sometimes called a chord chart or lead sheet) represents harmony without writing out full notation — just letter symbols, usually placed above lyrics or over measures."
+        intro="Chord notation shows the harmony of a song with letters and symbols. No full sheet music needed. You often see it above the lyrics or over the bars, in a chord chart or lead sheet."
       >
-        <GuideSection title="Root, then suffix">
+        <GuideSection title="First the root, then the ending">
           <p>
-            Every chord symbol starts with a root note letter, followed by a
-            suffix describing its quality or extension. The suffix
-            vocabulary is consistent across every root note, which is the
-            whole point — learn what a suffix means once, and it means the
-            same thing no matter which letter it&rsquo;s attached to.
+            Every chord symbol starts with a root letter. After it comes an
+            ending that tells you the type of chord. The endings are the same
+            for every root. Learn what an ending means once, and it means the
+            same no matter which letter it sits on.
           </p>
           <ExampleTable root="C" examples={C_EXAMPLES} />
         </GuideSection>
 
-        <GuideSection title="The same suffixes, a different root">
+        <GuideSection title="Same endings, new root">
           <p>
-            Reapply those same five suffixes to D♯, and the pattern holds
-            exactly:
+            Put the same five endings on D♯, and the pattern is exactly the
+            same:
           </p>
           <ExampleTable root="D♯" examples={D_SHARP_EXAMPLES} />
         </GuideSection>
 
-        <GuideSection title="Why this is worth learning">
+        <GuideSection title="Why it is worth learning">
           <p>
-            Once the suffix vocabulary is familiar, reading a chord chart
-            becomes fast — you&rsquo;re recognizing shapes and names, not sounding
-            anything out. That&rsquo;s why it&rsquo;s the standard way guitarists and
-            pianists share songs with each other.
+            When you know the endings, you read a chord chart fast. You
+            recognize names and shapes. You don&rsquo;t spell your way through
+            them. That is why guitar and piano players use chord charts to
+            share songs. Quick to read, quick to play. 🎸🎹
           </p>
         </GuideSection>
 

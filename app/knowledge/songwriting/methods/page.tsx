@@ -4,14 +4,14 @@ import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-lay
 import { focusable } from "@/app/_components/ui";
 
 const PAGE_DESCRIPTION =
-  "Three ways to generate the raw material for a song before you worry about structure — writing the story first, improvising over an instrument, and building lines straight from a metaphor.";
+  "Three ways to find the raw material for a song, before you think about structure. Write the story first, improvise over an instrument, or build lines from a metaphor.";
 
 export const metadata: Metadata = {
-  title: "Songwriting Methods: History to Song, Improvisation, Metaphor-Driven — Trenodo",
+  title: "Songwriting Methods: History to Song, Improvisation, Metaphor Driven | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/songwriting/methods" },
   openGraph: {
-    title: "Songwriting Methods: History to Song, Improvisation, Metaphor-Driven",
+    title: "Songwriting Methods: History to Song, Improvisation, Metaphor Driven",
     description: PAGE_DESCRIPTION,
     url: "/knowledge/songwriting/methods",
     siteName: "Trenodo",
@@ -22,15 +22,15 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "Which method should I start with?",
-    a: "History to Song, if you're not sure — it needs no instrument, no melody yet, just something that actually happened or that you can picture clearly, which makes it the most approachable starting point.",
+    a: "History to Song, if you are not sure. You need no instrument and no melody. Only something that happened, or something you can see clearly in your head. That makes it the easiest way in.",
   },
   {
-    q: "Can I combine methods on the same song?",
-    a: "Yes, and it's common to. A typical path is starting a song with History to Song for the story, then switching to improvisation once there's a chord progression to sing the lines over.",
+    q: "Can I mix methods in the same song?",
+    a: "Yes, and many writers do. A common path is to start with History to Song for the story. Then switch to improvisation when you have some chords to sing the lines over.",
   },
   {
-    q: "What if none of my lines from a session feel usable?",
-    a: "Keep them anyway. A line that doesn't fit this song often turns out to fit a different one later — all three methods work better as an ongoing habit of collecting raw material than as a one-time session that has to produce a finished song.",
+    q: "What if none of my lines from a session are usable?",
+    a: "Keep them anyway. A line that doesn't fit this song often fits another song later. All three methods work best as a habit of collecting material. Not as one session that has to deliver a finished song.",
   },
 ] as const;
 
@@ -39,7 +39,7 @@ const structuredData = {
   "@graph": [
     {
       "@type": "Article",
-      headline: "Songwriting Methods: History to Song, Improvisation, Metaphor-Driven",
+      headline: "Songwriting Methods: History to Song, Improvisation, Metaphor Driven",
       description: PAGE_DESCRIPTION,
       author: { "@type": "Organization", name: "Trenodo" },
     },
@@ -64,61 +64,58 @@ export default function SongwritingMethodsPage() {
       <GuideLayout
         category="Songwriting"
         categoryHref="/knowledge/songwriting"
-        title="Songwriting Methods: History to Song, Improvisation, Metaphor-Driven"
-        intro="Before a song has a structure, it needs raw material — actual lines to work with. These three methods are different ways of generating that material, and each suits a different mood or starting point."
+        title="Songwriting Methods: History to Song, Improvisation, Metaphor Driven"
+        intro="Before a song has a structure, it needs raw material. Real lines to work with. These three methods are different ways to get them. Each one fits a different mood and a different starting point."
       >
         <GuideSection title="History to Song">
           <p>
-            Write the story first, in plain prose — a real memory, something
-            you observed, or something entirely invented. Don&rsquo;t worry
-            about rhyme, rhythm or line length at this stage; just get the
-            story down the way you&rsquo;d tell it to a friend.
+            Write the story first, as normal text. A real memory, something
+            you saw, or something you make up. Don&rsquo;t think about rhyme,
+            rhythm or line length yet. Just write it the way you would tell it
+            to a friend.
           </p>
           <p>
-            Once it&rsquo;s written, go back through it and break it into lines —
-            the sentences and phrases that already sound the most like
-            lyrics usually reveal themselves once the whole story is on the
-            page in front of you. This method is especially good when you
-            already have a subject (see{" "}
+            When it is written, go through it and break it into lines. The
+            sentences that already sound like lyrics will jump out at you, once
+            the whole story is in front of you. This method is great when you
+            have a subject (see{" "}
             <Link
               href="/knowledge/songwriting/finding-your-subject"
               className={`font-medium text-brand-600 hover:underline ${focusable} rounded`}
             >
               Finding the Right Subject
             </Link>
-            ) but no lines yet.
+            ) but no lines yet. ✍️
           </p>
         </GuideSection>
 
         <GuideSection title="Improvisation">
           <p>
-            Play a simple chord progression — guitar or piano both work well
-            for this — and sing freely over it, with no plan for what comes
-            out. Words, melodies and phrases will surface that you wouldn&rsquo;t
-            have written sitting down with a pen.
+            Play a simple chord progression on guitar or piano, and sing
+            freely on top. No plan for what comes out. Words, melodies and
+            phrases will show up that you would never write with a pen in
+            your hand.
           </p>
           <p>
-            Record every session. Lines that feel obvious in the moment
-            disappear fast, and the whole value of improvising is capturing
-            the phrases that arrive before you&rsquo;ve had a chance to
-            second-guess them.
+            Record every session. Lines that feel obvious in the moment are
+            gone fast. The whole point of improvising is to catch the lines
+            that come before you start to doubt them. 🎙️
           </p>
         </GuideSection>
 
-        <GuideSection title="Metaphor-Driven">
+        <GuideSection title="Metaphor Driven">
           <p>
-            Start from a metaphor rather than a literal description (see{" "}
+            Start from a metaphor instead of a plain description (see{" "}
             <Link
               href="/knowledge/songwriting/metaphors"
               className={`font-medium text-brand-600 hover:underline ${focusable} rounded`}
             >
               Using Metaphors
             </Link>
-            ), and build short lines around it — the metaphor should carry
-            most of the emotional weight, with as few extra supporting
-            words as possible. This method tends to produce the most
-            distinctive, least generic-sounding lines of the three, because
-            it forces specificity from the very first line.
+            ). Build short lines around it. Let the metaphor carry the
+            feeling, with as few extra words as possible. This method often
+            gives the most personal and least generic lines of the three.
+            Because it forces you to be specific from the very first line.
           </p>
         </GuideSection>
 

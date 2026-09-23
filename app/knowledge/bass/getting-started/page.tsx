@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "What a bassist actually does in a band, and the two habits — steady time and clean technique — worth building before anything else.";
+  "What a bass player really does in a band. And the two habits to build before anything else: steady time and clean technique.";
 
 export const metadata: Metadata = {
-  title: "How to Start Learning Bass Guitar — Trenodo",
+  title: "How to Start Learning Bass Guitar | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/bass/getting-started" },
   openGraph: {
@@ -19,16 +19,16 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
-    q: "What's the bass actually tuned to?",
-    a: "Standard 4-string bass is tuned E-A-D-G, low to high — the same note names as a guitar's four lowest strings, just an octave lower.",
+    q: "How is a bass tuned?",
+    a: "A normal 4 string bass is tuned E, A, D, G, from low to high. Those are the same notes as the four lowest strings on a guitar, just one octave lower.",
   },
   {
     q: "Is bass easier to learn than guitar?",
-    a: "Fewer strings and (usually) simpler individual parts, yes — but the job is harder to do well than it looks. A bassist who doesn't lock in with the drummer makes the whole band feel unsteady, no matter how clean their fingering is.",
+    a: "It has fewer strings, and the parts are often simpler. So yes, in a way. But doing the job well is harder than it looks. If the bass player is not tight with the drummer, the whole band feels unsteady. Clean fingers don't help much then.",
   },
   {
     q: "Do I need to learn scales right away?",
-    a: "Not on day one, but soon. Once basic technique and timing feel comfortable, scale shapes are what let you build your own bass lines and fills instead of only playing root notes.",
+    a: "Not on day one. But soon. When your technique and timing feel okay, scales are what let you make your own bass lines and fills. Not only root notes.",
   },
 ] as const;
 
@@ -62,51 +62,46 @@ export default function BassGettingStartedPage() {
       <GuideLayout
         category="Bass"
         categoryHref="/knowledge/bass"
-        title="What a Bassist Actually Does — And How to Start"
-        intro="A standard bass has four strings, tuned E-A-D-G, low to high. That simplicity is deceptive — the bass carries one of the heaviest responsibilities in a band."
+        title="What a Bass Player Actually Does, and How to Start"
+        intro="A normal bass has four strings, tuned E, A, D, G from low to high. It looks simple. But the bass carries one of the most important jobs in the band."
       >
-        <GuideSection title="The bass's real job">
+        <GuideSection title="The real job of the bass">
           <p>
-            Every other instrument in a band leans on the bass. It lays the
-            rhythmic foundation underneath everything else, usually by
-            playing the root note of whatever chord is currently sounding —
-            acting as a bridge between the harmony (what the guitar or piano
-            is playing) and the rhythm (what the drummer is playing).
+            Everybody else in the band leans on the bass. It lays the
+            foundation under the music. Most of the time, the bass plays the
+            root note of the chord you hear. That makes it the bridge between
+            the harmony (the guitar or piano) and the rhythm (the drums).
           </p>
           <p>
-            That second half of the job — locking in with the drummer — is
-            what actually makes or breaks a band&rsquo;s groove. A bass line can
-            be musically simple and still sound great, but if the bassist and
-            drummer aren&rsquo;t rhythmically tight, the whole band feels
-            unsteady, however good everyone else&rsquo;s parts are.
+            The second part of the job is the most important one: lock in
+            with the drummer. A bass line can be very simple and still sound
+            great. But if bass and drums are not tight, the whole band feels
+            shaky. No matter how good the other parts are. 🥁
           </p>
         </GuideSection>
 
-        <GuideSection title="Two habits worth building early">
+        <GuideSection title="Two habits to build early">
           <ul className="list-disc space-y-3 pl-5">
             <li>
               <strong className="text-foreground">Practice with a metronome.</strong>{" "}
-              Steady time is the single most valuable skill a bassist has —
-              more valuable, early on, than speed or flashy fills.
+              Steady time is the most valuable skill a bass player has. In the
+              beginning it matters more than speed and fancy fills.
             </li>
             <li>
               <strong className="text-foreground">Get your technique right from the start.</strong>{" "}
-              Bad fretting-hand or picking-hand habits are easy to pick up
-              without realizing it, and they&rsquo;re far harder to unlearn later
-              than to avoid in the first place — including habits that
-              strain the hand over time.
+              Bad habits in your hands sneak in without you noticing. And they
+              are much harder to unlearn than to avoid. Some of them can even
+              hurt your hands over time.
             </li>
           </ul>
         </GuideSection>
 
         <GuideSection title="What comes next">
           <p>
-            Once basic technique and timing feel comfortable, scale shapes
-            are the next real skill — they&rsquo;re what let a bassist move
-            beyond just playing root notes into fills and improvised lines
-            that still fit the song&rsquo;s key. A good bass part is usually a
-            tasteful, restrained one, not the busiest one the instrument is
-            capable of.
+            When your technique and timing feel okay, it is time for scales.
+            Scales let you go beyond the root notes. You can play fills and
+            your own lines that still fit the key of the song. And remember: a
+            good bass part is often a simple one. Less is more. 🙂
           </p>
         </GuideSection>
 

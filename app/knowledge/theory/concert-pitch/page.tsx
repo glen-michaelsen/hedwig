@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "Why A is tuned to 440 Hz, where concert pitch sits on the staff, and what it actually means to be in tune with other musicians.";
+  "Why A is tuned to 440 Hz, where concert pitch sits on the staff, and what it means to be in tune with other musicians.";
 
 export const metadata: Metadata = {
-  title: "Concert Pitch Explained: Why A = 440 Hz — Trenodo",
+  title: "Concert Pitch Explained: Why A = 440 Hz | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/theory/concert-pitch" },
   openGraph: {
@@ -20,15 +20,15 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "Do I have to tune to 440 Hz?",
-    a: "Not strictly — practicing alone, it makes no difference. It matters the moment you play with other musicians, since 440 Hz is the shared reference that keeps everyone's instruments compatible with each other.",
+    a: "Not really. When you practice alone, it makes no difference. It matters when you play with others. 440 Hz is the shared reference that keeps everybody's instruments in tune with each other.",
   },
   {
-    q: "How do I actually tune to concert pitch?",
-    a: "The simplest way is a tuner set to A440, or a tuning fork built for that exact pitch. On guitar, the second string from the top (the A string) is the natural starting point — tune it to A440, then tune the rest of the strings relative to it.",
+    q: "How do I tune to concert pitch?",
+    a: "The easiest way is a tuner set to A440, or a tuning fork made for that note. On guitar, start with the second string from the top, the A string. Tune it to A440, and then tune the other strings to it.",
   },
   {
     q: "Has concert pitch always been 440 Hz?",
-    a: "440 Hz is a widely adopted international standard today, but historically the reference pitch has varied — it's a convention that's been settled on over time, not a fixed law of physics.",
+    a: "No. Today 440 Hz is the international standard. But in the past, the reference note has changed a lot. It is an agreement between musicians, not a law of physics.",
   },
 ] as const;
 
@@ -63,32 +63,30 @@ export default function ConcertPitchPage() {
         category="Music Theory"
         categoryHref="/knowledge/theory"
         title="Concert Pitch Explained: Why A = 440 Hz"
-        intro="Concert pitch is the reference tone every instrument — acoustic or electronic — is tuned against: the note A, set to 440 Hz."
+        intro="Concert pitch is the reference note that all instruments tune to. Acoustic or electronic. It is the note A, set to 440 Hz. A pitch perfect agreement, you could say. 🎵"
       >
-        <GuideSection title="What it is and where it sits">
+        <GuideSection title="What it is, and where it sits">
           <p>
-            On a standard staff, concert pitch sits just above the treble
-            clef&rsquo;s own reference line. In practical terms, it&rsquo;s simply the
-            starting point every other note gets tuned relative to.
+            On the staff, concert pitch sits just above the line the treble
+            clef curls around. In practice, it is simply the starting point.
+            All the other notes are tuned from it.
           </p>
           <p>
             The easiest way to find it is a tuner set to A440, or a tuning
-            fork built for that exact pitch. On guitar specifically, the
-            second string from the top — the A string — is the natural
-            reference point: tune it to concert pitch first, then tune the
-            rest of the strings relative to it.
+            fork made for that note. On guitar, the second string from the
+            top is the A string. Tune that one to concert pitch first. Then
+            tune the other strings to it.
           </p>
         </GuideSection>
 
-        <GuideSection title="Is it actually required?">
+        <GuideSection title="Is it really needed?">
           <p>
-            No — nothing stops you from tuning to a different reference
-            entirely, and playing alone it makes no practical difference.
-            What concert pitch actually solves is compatibility: it&rsquo;s a
-            shared, globally adopted convention that keeps every musician&rsquo;s
-            instrument in tune with everyone else&rsquo;s. It matters the moment
-            you want to play with other people, which is why it&rsquo;s so widely
-            adopted by professionals even though it&rsquo;s not a hard requirement.
+            No. Nothing stops you from tuning to another reference. And when
+            you play alone, it makes no difference. What concert pitch solves
+            is playing together. It is a shared agreement, used all over the
+            world, that keeps everyone&rsquo;s instrument in tune with everyone
+            else&rsquo;s. The moment you play with other people, it matters. That
+            is why almost all professional musicians use it.
           </p>
         </GuideSection>
 

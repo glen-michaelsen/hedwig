@@ -7,10 +7,10 @@ import { focusable } from "@/app/_components/ui";
 import { BARRE_CHORDS, OPEN_CHORDS } from "@/lib/chord-diagrams/guitar-chords";
 
 const PAGE_DESCRIPTION =
-  "Open chords, barre chords, and how to read a chord diagram — the reference every beginner guitarist keeps coming back to.";
+  "Open chords, barre chords and how to read a chord diagram. The chord guide every beginner comes back to.";
 
 export const metadata: Metadata = {
-  title: "Guitar Chords for Beginners: Open Chords, Barre Chords and Diagrams — Trenodo",
+  title: "Guitar Chords for Beginners: Open Chords, Barre Chords and Diagrams | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/guitar/chords" },
   openGraph: {
@@ -25,15 +25,15 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "How many guitar chords are there?",
-    a: "Somewhere between 2,000 and 4,000, depending on how you count — twelve root notes, each with major, minor and a long list of extensions (sus2, sus4, 7, maj7, add9 and more). In practice, a working set of a few dozen open and barre chords covers the vast majority of songs.",
+    a: "Somewhere between 2,000 and 4,000, depending on how you count. There are twelve root notes, and each one has major, minor and a long list of variations like sus2, sus4, 7, maj7 and add9. In practice, a few dozen open and barre chords cover most songs.",
   },
   {
     q: "Which chords sound good together?",
-    a: "Chords built from notes in the same key naturally complement each other. C major, for example, pairs well with F, G, Dm, Am and Em — all drawn from the key of C. The circle of fifths is the standard tool for working this out for any key.",
+    a: "Chords from the same key sound good together. C major, for example, works well with F, G, Dm, Am and Em. They all come from the key of C. The circle of fifths is the classic tool to find these for any key.",
   },
   {
     q: "Should I learn open chords or barre chords first?",
-    a: "Open chords. They're easier on your fretting hand while you're still building strength and calluses, and mastering a handful of them — A, C, D, E, G and their minors — already opens up thousands of songs.",
+    a: "Open chords. They are easier on your fingers while you build strength. Learn a handful of them, like A, C, D, E, G and their minor versions, and you can already play thousands of songs.",
   },
 ] as const;
 
@@ -72,14 +72,14 @@ export default function GuitarChordsPage() {
         category="Guitar"
         categoryHref="/knowledge/guitar"
         title="Guitar Chords for Beginners"
-        intro="A chord is at least three notes played together. This is the reference for the ones you'll use constantly — start with open chords, and only reach for barre chords once those feel automatic."
+        intro="A chord is three or more notes played at the same time. Here are the chords you will use again and again. Start with the open chords. Save the barre chords for when the open ones feel easy."
       >
-        <GuideSection title="Open chords — start here">
+        <GuideSection title="Open chords: start here">
           <p>
-            Open chords (sometimes called Spanish or standard chords) use at
-            least one string ringing open, unfretted. They&rsquo;re the easiest
-            chords to physically play, and between them cover an enormous
-            share of popular music.
+            Open chords use at least one string that rings open, without a
+            finger on it. They are the easiest chords to play. And together
+            they cover a huge part of all popular music. Let&rsquo;s strike a
+            chord. 🎸
           </p>
           <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
             {OPEN_CHORDS.map((chord) => (
@@ -92,26 +92,25 @@ export default function GuitarChordsPage() {
             ))}
           </div>
           <p>
-            New to these three specifically?{" "}
+            Brand new to chords?{" "}
             <Link
               href="/knowledge/guitar/getting-started"
               className={`font-medium text-brand-600 hover:underline dark:text-brand-400 ${focusable} rounded`}
             >
               A, D and G
             </Link>{" "}
-            are the standard first three to learn.
+            are the classic first three to learn.
           </p>
         </GuideSection>
 
-        <GuideSection title="Barre chords — once open chords feel automatic">
+        <GuideSection title="Barre chords: when open chords feel easy">
           <p>
-            A barre chord takes an open chord shape and moves it up the
-            fretboard, using one finger laid flat across multiple strings to
-            replace the nut. Moving the same shape up one fret raises the
-            chord by a half-tone (a semitone); moving it down lowers it the
-            same amount. That&rsquo;s what makes barre chords so useful — one
-            shape, moved around, gives you every chord of that type in every
-            key.
+            A barre chord takes an open chord shape and moves it up the neck.
+            One finger lies flat across several strings, and does the job of
+            the nut. Move the shape one fret up, and the chord goes up a half
+            step. Move it one fret down, and it goes down a half step. This is
+            the magic of barre chords. One shape gives you the same chord
+            type in every key.
           </p>
           <div className="grid grid-cols-3 gap-3 sm:grid-cols-5">
             {BARRE_CHORDS.map((chord) => (
@@ -125,26 +124,26 @@ export default function GuitarChordsPage() {
           </div>
         </GuideSection>
 
-        <GuideSection title="Reading a chord diagram">
+        <GuideSection title="How to read a chord diagram">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
             <ul className="list-disc space-y-3 pl-5 sm:flex-1">
               <li>
-                <strong className="text-foreground">Numbers</strong> mark
-                which finger goes where: 1 is index, 2 is middle, 3 is ring,
-                and 4 is pinky.
+                <strong className="text-foreground">Numbers</strong> tell you
+                which finger goes where. 1 is the index finger, 2 the middle,
+                3 the ring finger and 4 the pinky.
               </li>
               <li>
                 <strong className="text-foreground">An &ldquo;x&rdquo; above a string</strong>{" "}
-                means don&rsquo;t play that string at all for this chord.
+                means you don&rsquo;t play that string.
               </li>
               <li>
                 <strong className="text-foreground">An open circle</strong>{" "}
-                means play that string without fretting it.
+                means you play the string open, with no finger on it.
               </li>
               <li>
                 <strong className="text-foreground">A rounded bar</strong>{" "}
-                across several strings is a barre — one finger laid flat,
-                covering all of them at once.
+                across several strings is a barre. One finger lies flat and
+                presses all of them at once.
               </li>
             </ul>
             <ZoomableImage
@@ -158,15 +157,13 @@ export default function GuitarChordsPage() {
           </div>
         </GuideSection>
 
-        <GuideSection title="How to actually get faster">
+        <GuideSection title="How to get faster">
           <p>
-            Repetition is what makes a chord &ldquo;automatic&rdquo; — the point where
-            your fretting hand finds the shape without you consciously
-            thinking through finger placement, freeing your attention for
-            rhythm and tempo instead. Pick songs with fewer chord changes
-            while you&rsquo;re building that automaticity, and start slower than
-            feels necessary; speed comes on its own once the shapes stop
-            requiring thought.
+            Repetition is the secret. At some point your hand finds the chord
+            on its own, without thinking. Then your head is free to focus on
+            rhythm and tempo. While you get there, choose songs with few chord
+            changes. And play slower than you think you need to. The speed
+            comes by itself when the shapes sit in your fingers. 💡
           </p>
         </GuideSection>
 

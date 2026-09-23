@@ -18,10 +18,10 @@ const REAL_SHAPES = ["d-major", "b-minor", "g-major", "a-major"].map(
 );
 
 const PAGE_DESCRIPTION =
-  "How to transpose a song to a different key on guitar — the fast way with a capo, and the manual way without one.";
+  "How to move a song to a new key on guitar. The fast way with a capo, and the manual way without one.";
 
 export const metadata: Metadata = {
-  title: "How to Transpose Guitar Chords (With or Without a Capo) — Trenodo",
+  title: "How to Transpose Guitar Chords (With or Without a Capo) | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/guitar/transposing" },
   openGraph: {
@@ -36,15 +36,15 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "What does a capo actually do?",
-    a: "It clamps across all six strings at a chosen fret, acting as a movable nut. Every chord shape you already know sounds higher in pitch by however many frets up the capo sits, without changing a single finger position.",
+    a: "It clamps across all six strings on a fret you choose. It works like a nut you can move. Every chord shape you know now sounds higher, one half step for each fret. Your fingers don't change at all.",
   },
   {
-    q: "How many frets equal one tone?",
-    a: "Two frets equal one whole tone; one fret equals a half-tone (semitone). A capo on the 2nd fret raises everything by a whole tone; the 1st fret raises it by a semitone.",
+    q: "How many frets is one whole tone?",
+    a: "Two frets is one whole tone. One fret is a half tone, also called a semitone. A capo on the 2nd fret raises everything a whole tone. On the 1st fret, it is a semitone.",
   },
   {
     q: "Why transpose a song at all?",
-    a: "Usually to fit a singer's vocal range, or to swap awkward chords (like barre chords) for easier open-chord shapes in a different key.",
+    a: "Usually so it fits the singer's voice better. Or to swap hard chords, like barre chords, for easier open chords in another key.",
   },
 ] as const;
 
@@ -87,14 +87,14 @@ export default function GuitarTransposingPage() {
         category="Guitar"
         categoryHref="/knowledge/guitar"
         title="How to Transpose Guitar Chords (With or Without a Capo)"
-        intro="Transposing means shifting every chord in a song up or down by the same amount, to play it in a different key. There are two ways to do it."
+        intro="To transpose means to move every chord in a song up or down by the same amount. Then you play it in a new key. There are two ways to do it."
       >
-        <GuideSection title="With a capo — the fast way">
+        <GuideSection title="With a capo: the fast way">
           <p>
-            Clamp a capo on the fretboard and play the exact same chord
-            shapes you already know — the capo does the transposing for you.
-            A song in C major (chords C, Am, F, G) played with a capo on the
-            2nd fret sounds in D major: those same shapes now ring out as D,
+            Put a capo on the neck, and play the same chord shapes you already
+            know. The capo does the transposing for you. Take a song in C
+            major with the chords C, Am, F and G. Put a capo on the 2nd fret,
+            and the song is now in D major. The same shapes now sound as D,
             Bm, G and A.
           </p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -108,8 +108,8 @@ export default function GuitarTransposingPage() {
             ))}
           </div>
           <p>
-            Put the capo on the 2nd fret and play those same four shapes,
-            and this is what actually sounds:
+            Put the capo on the 2nd fret and play the same four shapes. This
+            is what you hear:
           </p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {CAPO_TRANSPOSE_EXAMPLE.map((chord) => (
@@ -122,20 +122,19 @@ export default function GuitarTransposingPage() {
             ))}
           </div>
           <p>
-            Move the capo to the 3rd fret instead and the same four shapes
-            sound a half-tone higher again.
+            Move the capo to the 3rd fret, and the same shapes sound one more
+            half step higher. Easy, right? 🙂
           </p>
         </GuideSection>
 
-        <GuideSection title="Without a capo — the manual way">
+        <GuideSection title="Without a capo: the manual way">
           <p>
-            Work out the new chord names directly and play them as their own
-            shapes. Raising that same C, Am, F, G progression by one whole
-            tone (without a capo) gives you these — the same chords a capo
-            on the 2nd fret would have given you, just played as their
-            actual shapes instead of borrowed ones. A tone scale (or the
-            circle of fifths) is the standard reference for working out
-            which chord a given shift lands on.
+            Here you find the new chord names yourself, and play them as their
+            real shapes. Raise C, Am, F and G by one whole tone, without a
+            capo, and you get the chords below. They are the same chords the
+            capo gave you. You just play the real shapes instead of borrowed
+            ones. A tone scale or the circle of fifths helps you find the
+            right chord for any shift.
           </p>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {REAL_SHAPES.map((chord) => (
@@ -151,11 +150,11 @@ export default function GuitarTransposingPage() {
 
         <GuideSection title="Which one should you use?">
           <p>
-            A capo is faster and asks nothing new of your fretting hand,
-            which is why it&rsquo;s the default choice for most guitarists.
-            Transposing manually is worth learning too — it&rsquo;s what lets you
-            play the new key&rsquo;s chords without a capo at all, and it builds a
-            much better working knowledge of how keys relate to each other.
+            A capo is faster, and your hand doesn&rsquo;t need to learn anything
+            new. That is why most guitarists reach for it first. But learn the
+            manual way too. It lets you play in the new key without a capo.
+            And it teaches you how keys connect to each other. That knowledge
+            pays off again and again. 💡
           </p>
         </GuideSection>
 

@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "Neutral, curbing, overdrive and belting — the four vocal functions singers move between, and when each one actually fits.";
+  "Neutral, curbing, overdrive and belting. The four vocal functions singers move between, and when each one fits.";
 
 export const metadata: Metadata = {
-  title: "Vocal Registers Explained: Neutral, Curbing, Overdrive, Belting — Trenodo",
+  title: "Vocal Registers Explained: Neutral, Curbing, Overdrive, Belting | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/vocals/vocal-registers" },
   openGraph: {
@@ -20,38 +20,38 @@ export const metadata: Metadata = {
 const REGISTERS = [
   {
     name: "Neutral",
-    volume: "1–3",
-    body: "The quietest and softest of the four, with no metallic edge — in the high range it's essentially falsetto. Well suited to quiet, intimate pop passages.",
+    volume: "1 to 3",
+    body: "The softest and quietest of the four, with no metal in the sound. In the high range it is basically falsetto. Great for quiet and close pop parts.",
   },
   {
     name: "Curbing",
-    volume: "4–7",
-    body: "A slightly pinched, “complaining” character — think Michael Jackson or Tim Christensen. Works across genres, but is especially common in pop and rock.",
+    volume: "4 to 7",
+    body: "A slightly held back sound, almost a little whiny. Think Michael Jackson or Tim Christensen. It works in many styles, but you hear it most in pop and rock.",
   },
   {
     name: "Overdrive",
-    volume: "7–10",
-    body: "Louder and more open than curbing, with a penetrating edge in the upper range. A staple of rock vocals.",
+    volume: "7 to 10",
+    body: "Louder and more open than curbing, with a sharp edge in the high range. A classic in rock vocals.",
   },
   {
     name: "Belting",
-    volume: "7–10",
-    body: "Edgy and unrestrained, at full volume in the high register — the signature sound of soul singing.",
+    volume: "7 to 10",
+    body: "Edgy and without limits, at full volume in the high range. The signature sound of soul singing.",
   },
 ] as const;
 
 const FAQS = [
   {
-    q: "Is one of these registers \"correct\" and the others just style?",
-    a: "No — they're better thought of as different tools for different technical situations, not a hierarchy. A quiet verse calling for neutral and a big chorus calling for belting are both correct uses, just for different moments in a song.",
+    q: "Is one of these registers correct, and the rest just style?",
+    a: "No. Think of them as tools for different jobs, not as a ranking. A quiet verse in neutral and a big chorus in belting are both correct. Just for different moments in the song.",
   },
   {
-    q: "Do I need to be able to do all four?",
-    a: "Not right away. Most singers naturally lean toward one or two of these first, based on their voice and the music they listen to, and build the others over time.",
+    q: "Do I need to master all four?",
+    a: "Not right away. Most singers lean towards one or two of them first, based on their voice and the music they love. The rest comes with time.",
   },
   {
-    q: "Can I switch between registers within one song?",
-    a: "Yes — that's normal and often exactly what a song calls for, moving from a softer neutral verse into a more powerful overdrive or belting chorus.",
+    q: "Can I switch between registers in one song?",
+    a: "Yes. That is normal, and often exactly what the song needs. For example a soft verse in neutral, and a powerful chorus in overdrive or belting.",
   },
 ] as const;
 
@@ -86,7 +86,7 @@ export default function VocalRegistersPage() {
         category="Vocals"
         categoryHref="/knowledge/vocals"
         title="Vocal Registers Explained: Neutral, Curbing, Overdrive, Belting"
-        intro="These four “functions” describe distinct ways of producing sound with your voice — each with its own character, natural volume range and genre association. Think of them as tools for solving different vocal problems, not just style choices."
+        intro="These four functions are different ways to make sound with your voice. Each one has its own character, its own natural volume and its own favorite styles. See them as tools for different jobs, not just as styles."
       >
         <GuideSection title="The four registers">
           <div className="space-y-4">
@@ -100,7 +100,7 @@ export default function VocalRegistersPage() {
                     {register.name}
                   </h3>
                   <span className="text-xs font-medium text-faint">
-                    Volume {register.volume}/10
+                    Volume {register.volume} out of 10
                   </span>
                 </div>
                 <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">
@@ -111,13 +111,12 @@ export default function VocalRegistersPage() {
           </div>
         </GuideSection>
 
-        <GuideSection title="Matching register to moment">
+        <GuideSection title="Pick the register for the moment">
           <p>
-            A song rarely sits in one register the whole way through. A
-            quiet verse might call for neutral, while the chorus pushes into
-            overdrive or belting for impact — the skill isn&rsquo;t picking a
-            favorite register, it&rsquo;s recognizing which one a given moment in
-            a song actually needs.
+            A song rarely stays in one register all the way. A quiet verse
+            might need neutral. The chorus might push into overdrive or
+            belting for more punch. The skill is not to pick a favorite. The
+            skill is to hear what each moment in the song needs. 🎤
           </p>
         </GuideSection>
 

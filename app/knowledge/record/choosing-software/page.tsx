@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "An overview of the major recording software (DAWs) — Logic, Cubase, Studio One, Pro Tools and more — and how to actually choose between them.";
+  "An overview of the big recording programs (DAWs) like Logic, Cubase, Studio One and Pro Tools. And how to choose between them.";
 
 export const metadata: Metadata = {
-  title: "Choosing Recording Software: A Guide to DAWs — Trenodo",
+  title: "Choosing Recording Software: A Guide to DAWs | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/record/choosing-software" },
   openGraph: {
@@ -20,42 +20,42 @@ export const metadata: Metadata = {
 const DAWS = [
   {
     name: "Logic Pro",
-    body: "Mac-only, and widely praised for how intuitively it fits macOS conventions.",
+    body: "Only for Mac. Loved for how naturally it fits the way a Mac works.",
   },
   {
     name: "Cubase",
-    body: "From Steinberg, around 30 years in the market, with several price tiers. Mac and Windows.",
+    body: "From Steinberg. Around 30 years on the market, with several price levels. Mac and Windows.",
   },
   {
     name: "Studio One",
-    body: "From PreSonus, newer (about a decade old), praised for being especially user-friendly. Mac and Windows.",
+    body: "From PreSonus. Newer, about ten years old, and known for being very easy to use. Mac and Windows.",
   },
   {
     name: "FL Studio",
-    body: "A Belgian DAW known for a distinctive grid-style layout rather than a standard linear timeline. Cross-platform.",
+    body: "From Belgium. Known for its grid layout instead of a normal timeline. Mac and Windows.",
   },
   {
     name: "Pro Tools",
-    body: "From Avid, around 30 years old and a long-standing industry standard, competing directly with Cubase. Mac and Windows.",
+    body: "From Avid. Around 30 years old and an industry standard. A direct rival to Cubase. Mac and Windows.",
   },
   {
     name: "GarageBand and Audacity",
-    body: "Free options — GarageBand (Mac) and Audacity (cross-platform) are capable for a beginner, though limited for professional work.",
+    body: "Free options. GarageBand (Mac) and Audacity (all systems) are good for beginners, but limited for pro work.",
   },
 ] as const;
 
 const FAQS = [
   {
-    q: "Which DAW is “the best”?",
-    a: "There isn't one universally correct answer — comfort and familiarity with an interface matter more day-to-day than which software has the most features on paper.",
+    q: "Which DAW is the best?",
+    a: "There is no single answer. Feeling at home in the program matters more in daily work than which one has the most features on paper.",
   },
   {
-    q: "How much should I expect to spend?",
-    a: "You can start for free. Beyond that, a hobbyist license typically runs roughly 800–1,500 DKK, while a full professional version with bundled plugins is more like 2,000–4,000 DKK.",
+    q: "How much should I expect to pay?",
+    a: "You can start for free. After that, a hobby license usually costs around 800 to 1,500 DKK. A full pro version with plugins is more like 2,000 to 4,000 DKK.",
   },
   {
-    q: "What does a DAW actually look like once I open it?",
-    a: "Three main areas: a timeline (time running horizontally, your recorded tracks stacked vertically), a separate mixer window for balancing levels, and a media browser for managing your recordings and sounds.",
+    q: "What does a DAW look like when I open it?",
+    a: "Three main parts. A timeline, with time going from left to right and your tracks stacked on top of each other. A mixer window to balance the levels. And a browser to keep your recordings and sounds in order.",
   },
 ] as const;
 
@@ -90,9 +90,9 @@ export default function ChoosingSoftwarePage() {
         category="Recording"
         categoryHref="/knowledge/record"
         title="Choosing Recording Software: A Guide to DAWs"
-        intro="A DAW (digital audio workstation) — sometimes just called a mixing program or sequencer — is the core tool of home recording. Comfort with the interface matters more than which one is technically “best.”"
+        intro="A DAW (digital audio workstation) is the heart of home recording. Some call it a mixing program or a sequencer. Here is the thing: feeling at home in it matters more than which one is the best. 🎧"
       >
-        <GuideSection title="The major options">
+        <GuideSection title="The big options">
           <div className="space-y-4">
             {DAWS.map((daw) => (
               <div
@@ -109,19 +109,20 @@ export default function ChoosingSoftwarePage() {
             ))}
           </div>
           <p>
-            A few other names worth knowing: Ableton Live (built around live
-            performance), Bitwig (newer, and Linux-compatible), and REAPER
-            (Mac, Windows and Linux).
+            A few more names worth knowing: Ableton Live (made for playing
+            live), Bitwig (newer, and works on Linux too) and REAPER (Mac,
+            Windows and Linux).
           </p>
         </GuideSection>
 
         <GuideSection title="What every DAW has in common">
           <p>
-            Regardless of which one you pick, the basic anatomy is the
-            same: a timeline running horizontally with your tracks stacked
-            vertically, a separate mixer window for balancing levels
-            between tracks, and a media library for organizing your
-            recordings and sounds.
+            No matter which one you choose, the basics are the same. A
+            timeline, with time going from left to right and your tracks
+            stacked on top of each other. A mixer window, where you balance
+            the levels between tracks. And a library, where you keep your
+            recordings and sounds in order. Learn one, and you are halfway
+            into all the others. 👍
           </p>
         </GuideSection>
 

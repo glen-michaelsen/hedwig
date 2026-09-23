@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "A plain-English tour of every part of a bass guitar — head, neck, pickups and body — and what each one actually does.";
+  "Every part of a bass guitar in plain English. Head, neck, pickups and body, and what each part actually does.";
 
 export const metadata: Metadata = {
-  title: "Bass Guitar Anatomy: The Parts of a Bass Explained — Trenodo",
+  title: "Bass Guitar Anatomy: The Parts of a Bass Explained | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/bass/anatomy" },
   openGraph: {
@@ -19,16 +19,16 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
-    q: "Why does a bass usually have one or two pickups?",
-    a: "Each pickup senses string vibration at a different point along the string, which picks up a different mix of tones. A bass with two can blend them, giving more tonal range than a single fixed pickup position would.",
+    q: "Why does a bass have one or two pickups?",
+    a: "Each pickup hears the string at a different spot, and each spot gives a different tone. With two pickups you can blend them. That gives you more sounds than one fixed pickup.",
   },
   {
-    q: "What does the bridge actually adjust?",
-    a: "Mainly the strings' height above the fretboard (the action) and, on most basses, each string's exact length (intonation) — both affect how comfortable the bass is to play and how in-tune it stays up the neck.",
+    q: "What does the bridge adjust?",
+    a: "Mainly how high the strings sit over the fretboard (the action). On most basses it also sets the exact length of each string (the intonation). Both affect how easy the bass is to play, and how well it stays in tune up the neck.",
   },
   {
     q: "Do all basses have four strings?",
-    a: "Four (E-A-D-G) is the standard, but five- and six-string basses exist too, adding a lower B string and/or a higher C string for extended range.",
+    a: "Four strings (E, A, D, G) is the normal setup. But there are also basses with five and six strings. They add a lower B string and sometimes a higher C string.",
   },
 ] as const;
 
@@ -63,51 +63,50 @@ export default function BassAnatomyPage() {
         category="Bass"
         categoryHref="/knowledge/bass"
         title="Bass Guitar Anatomy: The Parts of a Bass Explained"
-        intro="A bass looks like a stretched-out guitar, but a few of its parts do a noticeably different job. Here's what each one is for."
+        intro="A bass looks like a stretched guitar. But a few of the parts do a slightly different job. Here is what each part is for."
       >
         <GuideSection title="The main parts">
           <ul className="list-disc space-y-3 pl-5">
             <li>
-              <strong className="text-foreground">Head and tuners</strong> —
-              the end of the neck holding the tuning machines. Turning a
-              tuner raises or lowers that string&rsquo;s pitch.
+              <strong className="text-foreground">Head and tuners.</strong> The
+              end of the neck, with the tuning machines. Turn a tuner, and the
+              string goes higher or lower.
             </li>
             <li>
-              <strong className="text-foreground">Nut</strong> — where the
-              headstock meets the neck, keeping the strings evenly spaced and
-              at the right height above the first fret.
+              <strong className="text-foreground">Nut.</strong> Where the head
+              meets the neck. It keeps the strings evenly spaced, and at the
+              right height over the first fret.
             </li>
             <li>
-              <strong className="text-foreground">Neck and fretboard</strong>{" "}
-              — fretted like a guitar&rsquo;s, with position markers (dots) inlaid
-              along it to help you find your place without looking at the
-              headstock.
+              <strong className="text-foreground">Neck and fretboard.</strong>{" "}
+              It has frets, just like a guitar. The dots on the fretboard help
+              you find your place, without looking at the head.
             </li>
             <li>
-              <strong className="text-foreground">Pickguard</strong> — a
-              plate protecting the body&rsquo;s finish from pick scratches or
-              slap-technique contact.
+              <strong className="text-foreground">Pickguard.</strong> A plate
+              that protects the body from scratches, from a pick or from slap
+              playing.
             </li>
             <li>
-              <strong className="text-foreground">Pickups</strong> — magnetic
-              sensors (one or two) that turn string vibration into an
-              electrical signal. Pickup type and position are a major part of
-              a bass&rsquo;s tone.
+              <strong className="text-foreground">Pickups.</strong> Magnets
+              (one or two) that turn the vibration of the strings into a
+              signal. The type and placement of the pickups shape a big part of
+              the tone.
             </li>
             <li>
-              <strong className="text-foreground">Controls</strong> — volume
-              and tone knobs, and on a bass with two pickups, usually a way
-              to blend between them.
+              <strong className="text-foreground">Controls.</strong> Knobs for
+              volume and tone. With two pickups, you can often blend between
+              them too.
             </li>
             <li>
-              <strong className="text-foreground">Body</strong> — resonates
-              with the strings and shapes the instrument&rsquo;s overall tone,
-              alongside the pickups.
+              <strong className="text-foreground">Body.</strong> Vibrates with
+              the strings. Together with the pickups, it shapes the sound of
+              the bass.
             </li>
             <li>
-              <strong className="text-foreground">Bridge</strong> — anchors
-              the strings at the body end and sets their height (action) and,
-              on most basses, each string&rsquo;s precise length (intonation).
+              <strong className="text-foreground">Bridge.</strong> Holds the
+              strings at the body end. It sets the height of the strings, and
+              on most basses also the exact length of each string.
             </li>
           </ul>
         </GuideSection>

@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "Singing is the one instrument you can't buy or swap out — how to get comfortable with your own voice before worrying about technique.";
+  "Your voice is the one instrument you can't buy or swap. How to get comfortable with it, before you worry about technique.";
 
 export const metadata: Metadata = {
-  title: "Getting Started with Singing — Trenodo",
+  title: "Getting Started with Singing | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/vocals/getting-started" },
   openGraph: {
@@ -19,16 +19,16 @@ export const metadata: Metadata = {
 
 const FAQS = [
   {
-    q: "I don't like the sound of my own voice — is that normal?",
-    a: "Very. Most people are unused to hearing their voice the way a microphone or a recording captures it, rather than the way it sounds inside their own head. That reaction fades with exposure, not with a different voice.",
+    q: "I don't like the sound of my own voice. Is that normal?",
+    a: "Very normal. Most people are not used to hearing their voice the way a microphone hears it. Inside your head it sounds different. The feeling goes away when you hear it more often. You don't need a new voice.",
   },
   {
     q: "Do I need lessons to start singing?",
-    a: "No — singing along to songs you like at home, with no pressure or audience, is a completely valid way to start. Lessons matter more once you're trying to unlock range, power or control you don't have yet.",
+    a: "No. Singing along to songs you like, at home and without an audience, is a great way to start. Lessons matter more later, when you want more range, power or control.",
   },
   {
-    q: "What should I actually practice first?",
-    a: "Comfort before technique. Get used to your own tone and how your voice sits in a song before layering in the more technical breath-support work.",
+    q: "What should I practice first?",
+    a: "Feeling comfortable comes before technique. Get used to your own tone, and how your voice sits in a song. Then add the more technical work, like breath support.",
   },
 ] as const;
 
@@ -63,33 +63,31 @@ export default function VocalsGettingStartedPage() {
         category="Vocals"
         categoryHref="/knowledge/vocals"
         title="Getting Started with Singing"
-        intro="Singing is different from every other instrument on this site in one specific way: you use your own body as the instrument, which means every voice is a little different by default."
+        intro="Singing is different from all the other instruments on this site. You use your own body as the instrument. And that means every voice is a little bit different. 🎤"
       >
         <GuideSection title="Your voice is already an instrument">
           <p>
-            That uniqueness isn&rsquo;t a flaw to fix — it&rsquo;s the raw material a
-            personal singing style is built from. Two singers can learn the
-            exact same technique and still sound completely different,
-            because the instrument itself (their voice) is different. That&rsquo;s
-            not true of two guitarists playing the same guitar.
+            Your unique voice is not a problem to fix. It is the raw material
+            for your own style. Two singers can learn the exact same
+            technique, and still sound totally different. Because the
+            instrument itself is different. That is not true for two
+            guitarists on the same guitar.
           </p>
         </GuideSection>
 
-        <GuideSection title="Where to actually start">
+        <GuideSection title="Where to start">
           <p>
-            The simplest starting point is also the most effective one:
-            sing along to songs you already like, at home, with no pressure.
-            The goal at this stage isn&rsquo;t correctness — it&rsquo;s comfort. Get
-            used to the sound and feel of your own voice, and start
-            noticing which songs sit naturally in your range and which ones
-            feel like a stretch.
+            The easiest start is also the best one. Sing along to songs you
+            already like. At home, with no pressure. The goal is not to be
+            perfect. The goal is to feel at home in your own voice. Notice
+            which songs sit well in your range, and which ones feel like a
+            stretch.
           </p>
           <p>
-            From there, two natural next steps: find a singing teacher to
-            start unlocking range and control you don&rsquo;t have yet, or start
-            performing along to an instrument — a guitarist or pianist
-            playing while you sing — which teaches you to hold your own
-            part against a real accompaniment.
+            After that, there are two natural next steps. Find a singing
+            teacher, who can help you unlock more range and control. Or start
+            singing with a guitarist or a pianist. That teaches you to hold
+            your own part next to real music. Both are great. 🙂
           </p>
         </GuideSection>
 

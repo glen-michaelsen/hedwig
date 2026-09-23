@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
-  "Metaphor is the seasoning that turns a plainly stated feeling into a line people remember — how to build one from scratch, with a worked example.";
+  "A metaphor is the spice that turns a plain feeling into a line people remember. How to build one from scratch, with an example.";
 
 export const metadata: Metadata = {
-  title: "Using Metaphors in Songwriting — Trenodo",
+  title: "Using Metaphors in Songwriting | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/songwriting/metaphors" },
   openGraph: {
@@ -20,15 +20,15 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: "Do I need a metaphor in every line?",
-    a: "No — a song built entirely from metaphor can become hard to follow. One strong, consistent metaphor doing real work is worth far more than a different one in every line.",
+    a: "No. A song made only of metaphors can be hard to follow. One strong metaphor that does real work is worth much more than a new one in every line.",
   },
   {
     q: "What if my metaphor feels like a cliché?",
-    a: "Push it one layer further. \"Broken heart\" is a cliché; the specific physical sensation or image behind your version of that feeling usually isn't. Cliché lives in the generic version of an image, not the image itself.",
+    a: "Go one step deeper. \"Broken heart\" is a cliché. The exact feeling or picture behind your own version usually isn't. The cliché lives in the general version of an image, not in the image itself.",
   },
   {
-    q: "Is it better to state a feeling directly or always use a metaphor?",
-    a: "Neither is automatically better — they're different tools. A direct line can hit hard precisely because the song has earned it with metaphor elsewhere; using metaphor everywhere can blunt that contrast.",
+    q: "Should I say the feeling directly, or always use a metaphor?",
+    a: "Neither is always better. They are different tools. A direct line can hit very hard, exactly because the rest of the song used metaphors. Metaphors everywhere can take away that contrast.",
   },
 ] as const;
 
@@ -63,23 +63,23 @@ export default function MetaphorsPage() {
         category="Songwriting"
         categoryHref="/knowledge/songwriting"
         title="Using Metaphors in Songwriting"
-        intro="A metaphor isn't required to write a good song, but it's often what separates a line that's merely accurate from one that actually sticks. Think of it as seasoning — optional, but it's doing real work when it's there."
+        intro="You don't need a metaphor to write a good song. But it is often what makes a line stick, instead of just being correct. Think of it as the spice in the dish. Optional, but you notice when it is there. 🌶️"
       >
-        <GuideSection title="Why metaphor works">
+        <GuideSection title="Why metaphors work">
           <p>
-            Stating a feeling directly (&ldquo;I feel lonely&rdquo;) tells a listener
-            what to think. A metaphor shows them an image and lets the
-            feeling arrive on its own — which is usually a more powerful
-            way to land the same emotion. Many of the most memorable lines
-            in popular music are, underneath, a familiar feeling packaged
-            inside an unexpected image.
+            When you say a feeling straight out, like &ldquo;I feel lonely,&rdquo; you
+            tell the listener what to think. A metaphor shows them a picture,
+            and lets the feeling come by itself. That is usually a stronger
+            way to land the same emotion. Many of the most famous lines in pop
+            music are, deep down, a well known feeling wrapped in a surprising
+            picture.
           </p>
         </GuideSection>
 
-        <GuideSection title="A worked example: loneliness">
+        <GuideSection title="An example: loneliness">
           <p>
-            Instead of naming the feeling, describe an image or situation
-            that embodies it without saying the word:
+            Instead of naming the feeling, describe a picture or a situation
+            that holds it. Without using the word:
           </p>
           <ul className="list-disc space-y-2 pl-5">
             <li>Alone in darkness</li>
@@ -88,20 +88,19 @@ export default function MetaphorsPage() {
             <li>Hidden away</li>
           </ul>
           <p>
-            None of these say &ldquo;lonely&rdquo; — each one puts the listener inside
-            a specific image or situation that carries the feeling instead.
-            That&rsquo;s the actual mechanism: pick the emotion first, then
-            brainstorm images or scenarios that embody it without ever
-            naming it directly.
+            None of them say &ldquo;lonely.&rdquo; Each one puts the listener inside a
+            picture or a situation that carries the feeling. That is the whole
+            trick. First you pick the emotion. Then you look for pictures that
+            hold it, without ever saying its name.
           </p>
         </GuideSection>
 
-        <GuideSection title="Building your own">
+        <GuideSection title="Build your own">
           <ol className="list-decimal space-y-3 pl-5">
-            <li>Name the feeling you&rsquo;re actually writing about — just for yourself, not for the lyric.</li>
-            <li>List images, objects or situations that carry that same feeling without stating it.</li>
-            <li>Test each one: does it evoke the feeling on its own, or does it still need the feeling named alongside it to make sense? If it needs the label, it isn&rsquo;t doing the work yet.</li>
-            <li>Keep the strongest one or two — a song usually only has room to develop a single metaphor properly.</li>
+            <li>Name the feeling you are writing about. Just for yourself, not for the lyric.</li>
+            <li>List pictures, objects or situations that carry the same feeling, without saying it.</li>
+            <li>Test each one. Does it give you the feeling on its own? Or does it need the feeling named next to it? If it needs the label, it is not working yet.</li>
+            <li>Keep the best one or two. A song usually only has room to build one metaphor properly.</li>
           </ol>
         </GuideSection>
 

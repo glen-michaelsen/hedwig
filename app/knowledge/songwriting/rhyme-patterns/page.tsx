@@ -4,10 +4,10 @@ import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-lay
 import { focusable } from "@/app/_components/ui";
 
 const PAGE_DESCRIPTION =
-  "The standard rhyme schemes behind most lyrics, why rhyme matters at all, and when a near-rhyme beats a perfect one.";
+  "The classic rhyme patterns behind most lyrics, why rhyme matters at all, and when a near rhyme beats a perfect one.";
 
 export const metadata: Metadata = {
-  title: "Rhyme Patterns in Songwriting: AABB, ABAB, ABCB Explained — Trenodo",
+  title: "Rhyme Patterns in Songwriting: AABB, ABAB, ABCB Explained | Trenodo",
   description: PAGE_DESCRIPTION,
   alternates: { canonical: "/knowledge/songwriting/rhyme-patterns" },
   openGraph: {
@@ -22,34 +22,34 @@ export const metadata: Metadata = {
 const PATTERNS = [
   {
     name: "AABB",
-    body: "Consecutive lines rhyme in pairs: line 1 rhymes with line 2, line 3 with line 4. The tightest, most immediately satisfying pattern — and the easiest to overuse until it feels sing-song.",
+    body: "Lines rhyme in pairs. Line 1 with line 2, line 3 with line 4. The tightest and most satisfying pattern. But use it too much, and it starts to sound like a nursery rhyme.",
   },
   {
     name: "ABAB",
-    body: "Alternating rhyme: line 1 rhymes with line 3, line 2 with line 4. A common verse pattern — it gives structure without the pairs of AABB landing quite so predictably.",
+    body: "Every other line rhymes. Line 1 with line 3, line 2 with line 4. A classic for verses. It gives structure, but the rhymes land a bit less predictably than AABB.",
   },
   {
     name: "ABCB",
-    body: "Only the 2nd and 4th lines rhyme; the 1st and 3rd are free. The least demanding pattern to write, and one of the most common in verses, since it leaves more room for the story to move without forcing a rhyme at every turn.",
+    body: "Only line 2 and line 4 rhyme. Lines 1 and 3 are free. The easiest pattern to write, and one of the most common in verses. It leaves room for the story, without a forced rhyme in every line.",
   },
   {
     name: "AAAA",
-    body: "Every line rhymes with every other — monorhyme. Rare over a whole song, but effective in short bursts for emphasis or building tension into a chorus.",
+    body: "Every line rhymes with every other line. Rare over a whole song, but strong in short bursts. Great for building up tension towards a chorus.",
   },
 ] as const;
 
 const FAQS = [
   {
-    q: "Does every line in a song have to rhyme?",
-    a: "No. Plenty of well-regarded lyrics use rhyme sparingly or not at all, leaning on rhythm and imagery instead. Rhyme is a tool for a reason, not an obligation.",
+    q: "Does every line in a song need to rhyme?",
+    a: "No. Many great lyrics use very few rhymes, or none at all. They lean on rhythm and pictures instead. Rhyme is a tool with a purpose, not a rule.",
   },
   {
-    q: "What's a near-rhyme, and why use one?",
-    a: "A near-rhyme (or slant rhyme) pairs words that sound close but not identical — like \"time\" and \"mind,\" or \"home\" and \"alone.\" It often sounds more natural than forcing a perfect rhyme, especially when the perfect rhyme would mean twisting the meaning or grammar of a line to make it fit.",
+    q: "What is a near rhyme, and why use one?",
+    a: "A near rhyme (or slant rhyme) pairs words that sound close, but not the same. Like \"time\" and \"mind,\" or \"home\" and \"alone.\" It often sounds more natural than a perfect rhyme. Especially when the perfect rhyme would force you to twist the meaning or the grammar of a line.",
   },
   {
     q: "Why does rhyme matter at all?",
-    a: "It creates a sense of closure a listener can feel coming, which makes lines easier to remember and phrases easier to sing along to on a first listen — rhyme is doing a structural job, not just a decorative one.",
+    a: "Rhyme gives a feeling of closure that the listener can feel coming. That makes lines easier to remember, and easier to sing along to on the first listen. It does a real job in the structure. It is not just decoration.",
   },
 ] as const;
 
@@ -84,12 +84,12 @@ export default function RhymePatternsPage() {
         category="Songwriting"
         categoryHref="/knowledge/songwriting"
         title="Rhyme Patterns in Songwriting: AABB, ABAB, ABCB Explained"
-        intro="Rhyme isn't decoration — it's one of the main tools a lyric uses to feel structured and memorable on a first listen. A handful of patterns cover almost everything you'll need."
+        intro="Rhyme is not decoration. It is one of the main tools that makes a lyric feel structured and easy to remember. And a few patterns cover almost everything you need. No need to rhyme all the time. 🙂"
       >
-        <GuideSection title="The standard patterns">
+        <GuideSection title="The classic patterns">
           <p>
-            Each letter stands for one line; lines sharing a letter rhyme
-            with each other.
+            Each letter is one line. Lines with the same letter rhyme with
+            each other.
           </p>
           <div className="space-y-4">
             {PATTERNS.map((pattern) => (
@@ -110,30 +110,28 @@ export default function RhymePatternsPage() {
 
         <GuideSection title="Why rhyme matters">
           <p>
-            A rhyme signals to the listener&rsquo;s ear that a phrase is
-            complete — it&rsquo;s a structural cue, not just a pleasant sound.
-            That&rsquo;s what makes a rhymed line easier to remember and easier
-            to sing along to than an unrhymed one saying the same thing:
-            the listener can feel the line coming to a close before it
-            actually finishes.
+            A rhyme tells the ear that a line is finished. It is a signal in
+            the structure, not just a nice sound. That is why a rhymed line is
+            easier to remember and to sing along to than an unrhymed line that
+            says the same thing. The listener can feel the end of the line
+            coming, before it is there.
           </p>
         </GuideSection>
 
         <GuideSection title="Don't force it">
           <p>
-            A rhyme that bends a word&rsquo;s natural meaning, grammar or
-            pronunciation just to land is usually more noticeable — and
-            more distracting — than no rhyme at all. A near-rhyme (&ldquo;time&rdquo;
-            and &ldquo;mind,&rdquo; &ldquo;home&rdquo; and &ldquo;alone&rdquo;) that keeps the line natural is
-            almost always the better choice over a perfect rhyme that
-            doesn&rsquo;t. Flow beats precision here — see{" "}
+            A rhyme that twists the meaning, the grammar or the sound of a
+            word just to fit is easy to spot. And it is more annoying than no
+            rhyme at all. A near rhyme like &ldquo;time&rdquo; and &ldquo;mind&rdquo; or
+            &ldquo;home&rdquo; and &ldquo;alone&rdquo; keeps the line natural. It is almost always the
+            better choice. Flow beats perfection here. Read more about that in{" "}
             <Link
               href="/knowledge/songwriting/refining-your-lyrics"
               className={`font-medium text-brand-600 hover:underline ${focusable} rounded`}
             >
               Refining Your Lyrics
-            </Link>{" "}
-            for more on that trade-off.
+            </Link>
+            .
           </p>
         </GuideSection>
 
