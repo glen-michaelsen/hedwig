@@ -2,8 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import {
+  FeaturesIcon,
+  IdeasIcon,
+  KnowledgeIcon,
+  LoginIcon,
+  SpotlightIcon,
+} from "./nav-icons";
 import { featureItems, loginItems, type NavItem } from "./nav-items";
 import { button, focusable } from "./ui";
 
@@ -18,10 +25,12 @@ const triggerBase = `inline-flex items-center gap-1.5 rounded-full px-4 py-2.5 t
  */
 function Dropdown({
   label,
+  icon,
   items,
   align = "left",
 }: {
   label: string;
+  icon: ReactNode;
   items: NavItem[];
   align?: "left" | "right";
 }) {
@@ -77,6 +86,7 @@ function Dropdown({
             : "text-muted hover:bg-surface-muted hover:text-foreground"
         }`}
       >
+        {icon}
         {label}
         <Chevron open={open} />
       </button>
@@ -128,7 +138,7 @@ export function DesktopNav() {
 
   return (
     <nav className="hidden items-center gap-1 md:flex">
-      <Dropdown label="Features" items={featureItems} />
+      <Dropdown label="Features" icon={<FeaturesIcon />} items={featureItems} />
       <Link
         href="/knowledge"
         className={`${triggerBase} ${
@@ -137,6 +147,7 @@ export function DesktopNav() {
             : "text-muted hover:bg-surface-muted hover:text-foreground"
         }`}
       >
+        <KnowledgeIcon />
         Knowledge
       </Link>
       <Link
@@ -147,6 +158,7 @@ export function DesktopNav() {
             : "text-muted hover:bg-surface-muted hover:text-foreground"
         }`}
       >
+        <SpotlightIcon />
         Spotlight
       </Link>
       <Link
@@ -157,10 +169,11 @@ export function DesktopNav() {
             : "text-muted hover:bg-surface-muted hover:text-foreground"
         }`}
       >
+        <IdeasIcon />
         Ideas
       </Link>
       <span className="mx-2 h-6 w-px bg-line" aria-hidden="true" />
-      <Dropdown label="Log in" items={loginItems} align="right" />
+      <Dropdown label="Log in" icon={<LoginIcon />} items={loginItems} align="right" />
     </nav>
   );
 }
@@ -238,30 +251,33 @@ export function MobileNav() {
             id={panelId}
             className="fixed inset-x-0 top-18 bottom-0 z-50 overflow-y-auto bg-surface px-6 py-6"
           >
-            <MobileSection title="Features" items={featureItems} />
+            <MobileSection title="Features" icon={<FeaturesIcon className="h-3.5 w-3.5" />} items={featureItems} />
 
             <Link
               href="/knowledge"
-              className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
+              className={`mt-2 flex items-center gap-2.5 rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
             >
+              <KnowledgeIcon />
               Knowledge
             </Link>
 
             <Link
               href="/spotlight"
-              className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
+              className={`mt-2 flex items-center gap-2.5 rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
             >
+              <SpotlightIcon />
               Spotlight
             </Link>
 
             <Link
               href="/ideas"
-              className={`mt-2 block rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
+              className={`mt-2 flex items-center gap-2.5 rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
             >
+              <IdeasIcon />
               Ideas
             </Link>
 
-            <MobileSection title="Log in" items={loginItems} />
+            <MobileSection title="Log in" icon={<LoginIcon className="h-3.5 w-3.5" />} items={loginItems} />
 
             <Link
               href="/account/signup"
@@ -277,10 +293,19 @@ export function MobileNav() {
   );
 }
 
-function MobileSection({ title, items }: { title: string; items: NavItem[] }) {
+function MobileSection({
+  title,
+  icon,
+  items,
+}: {
+  title: string;
+  icon: ReactNode;
+  items: NavItem[];
+}) {
   return (
     <div className="mt-2 first:mt-0">
-      <p className="px-4 pb-1 pt-4 text-xs font-semibold uppercase tracking-[0.1em] text-faint">
+      <p className="flex items-center gap-2 px-4 pb-1 pt-4 text-xs font-semibold uppercase tracking-[0.1em] text-faint">
+        {icon}
         {title}
       </p>
       {items.map((item) => (
