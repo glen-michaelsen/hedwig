@@ -11,6 +11,7 @@ import {
 } from "../_components/ui";
 import { BioMockup } from "./_components/bio-mockup";
 import { FaqSection } from "@/app/_components/marketing/faq-section";
+import { StepsSection } from "@/app/_components/marketing/steps-section";
 
 const PAGE_DESCRIPTION =
   "A free link in bio page for musicians. Your music, tour dates and links in one place. Blocks and themes made for artists, not for everyone.";
@@ -276,36 +277,10 @@ function Steps() {
   ];
 
   return (
-    <section className={`${container} py-24 sm:py-32`}>
-      <div className="max-w-2xl">
-        <h2 className="text-4xl font-semibold tracking-tight text-balance">
-          Live in a few minutes
-        </h2>
-        <p className="mt-5 text-lg leading-relaxed text-muted text-pretty">
-          No draft to remember to publish. When your page is live, your
-          changes go out right away.
-        </p>
-      </div>
-
-      <ol className="mt-14 grid gap-6 md:grid-cols-3">
-        {steps.map((step) => (
-          <li
-            key={step.n}
-            className="rounded-4xl border border-line bg-surface p-8 shadow-soft"
-          >
-            <span className="font-mono text-sm font-medium text-brand-600">
-              {step.n}
-            </span>
-            <h3 className="mt-5 text-lg font-semibold tracking-tight">
-              {step.title}
-            </h3>
-            <p className="mt-2.5 text-[15px] leading-relaxed text-muted text-pretty">
-              {step.body}
-            </p>
-          </li>
-        ))}
-      </ol>
-    </section>
+    <StepsSection title="Live in a few minutes" steps={steps}>
+        No draft to remember to publish. When your page is live, your
+        changes go out right away.
+    </StepsSection>
   );
 }
 

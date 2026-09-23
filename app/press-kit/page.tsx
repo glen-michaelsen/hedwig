@@ -11,6 +11,7 @@ import {
 } from "../_components/ui";
 import { PressKitMockup } from "./_components/press-kit-mockup";
 import { FaqSection } from "@/app/_components/marketing/faq-section";
+import { StepsSection } from "@/app/_components/marketing/steps-section";
 
 const PAGE_DESCRIPTION =
   "Make an electronic press kit (EPK) for every release. Singles, EPs and albums, with cover art, photos, masters and the one sheet a promoter or blog asks for. All in one place.";
@@ -273,36 +274,10 @@ function Steps() {
   ];
 
   return (
-    <section className={`${container} py-24 sm:py-32`}>
-      <div className="max-w-2xl">
-        <h2 className="text-4xl font-semibold tracking-tight text-balance">
-          Set up once, per release
-        </h2>
-        <p className="mt-5 text-lg leading-relaxed text-muted text-pretty">
-          Add the release, drop the files in when they&rsquo;re ready, and it&rsquo;s
-          there when someone asks. Always ready to press send. 🙂
-        </p>
-      </div>
-
-      <ol className="mt-14 grid gap-6 md:grid-cols-3">
-        {steps.map((step) => (
-          <li
-            key={step.n}
-            className="rounded-4xl border border-line bg-surface p-8 shadow-soft"
-          >
-            <span className="font-mono text-sm font-medium text-brand-600">
-              {step.n}
-            </span>
-            <h3 className="mt-5 text-lg font-semibold tracking-tight">
-              {step.title}
-            </h3>
-            <p className="mt-2.5 text-[15px] leading-relaxed text-muted text-pretty">
-              {step.body}
-            </p>
-          </li>
-        ))}
-      </ol>
-    </section>
+    <StepsSection title="Set up once, per release" steps={steps}>
+        Add the release, drop the files in when they&rsquo;re ready, and it&rsquo;s
+        there when someone asks. Always ready to press send. 🙂
+    </StepsSection>
   );
 }
 

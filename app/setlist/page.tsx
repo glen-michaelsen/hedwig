@@ -11,6 +11,7 @@ import {
 } from "../_components/ui";
 import { SetlistMockup } from "./_components/setlist-mockup";
 import { FaqSection } from "@/app/_components/marketing/faq-section";
+import { StepsSection } from "@/app/_components/marketing/steps-section";
 
 const PAGE_DESCRIPTION =
   "Make a setlist online, for free. Drag songs into sets, keep an eye on the minutes, and take a printed sheet on stage. No more squinting at your phone.";
@@ -278,36 +279,10 @@ function Steps() {
   ];
 
   return (
-    <section className={`${container} py-24 sm:py-32`}>
-      <div className="max-w-2xl">
-        <h2 className="text-4xl font-semibold tracking-tight text-balance">
-          From a blank gig to a printed sheet
-        </h2>
-        <p className="mt-5 text-lg leading-relaxed text-muted text-pretty">
-          The whole way, from booking the gig to walking on stage with the
-          order ready.
-        </p>
-      </div>
-
-      <ol className="mt-14 grid gap-6 md:grid-cols-3">
-        {steps.map((step) => (
-          <li
-            key={step.n}
-            className="rounded-4xl border border-line bg-surface p-8 shadow-soft"
-          >
-            <span className="font-mono text-sm font-medium text-brand-600">
-              {step.n}
-            </span>
-            <h3 className="mt-5 text-lg font-semibold tracking-tight">
-              {step.title}
-            </h3>
-            <p className="mt-2.5 text-[15px] leading-relaxed text-muted text-pretty">
-              {step.body}
-            </p>
-          </li>
-        ))}
-      </ol>
-    </section>
+    <StepsSection title="From a blank gig to a printed sheet" steps={steps}>
+        The whole way, from booking the gig to walking on stage with the
+        order ready.
+    </StepsSection>
   );
 }
 
