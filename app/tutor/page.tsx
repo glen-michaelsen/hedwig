@@ -105,7 +105,7 @@ export default async function DashboardPage() {
         )}
       </section>
 
-      <div className="grid gap-14 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-14 lg:grid-cols-2">
         <section>
           <SectionTitle>Recent lessons</SectionTitle>
           {recentNotes.length === 0 ? (
@@ -122,10 +122,10 @@ export default async function DashboardPage() {
                       href={`/tutor/students/${note.studentId}/notes/${note.id}`}
                       className={panelRow}
                     >
-                      <span className="flex-1 text-sm font-medium">
+                      <span className="min-w-0 flex-1 truncate text-sm font-medium">
                         {note.studentName}
                       </span>
-                      <span className="text-sm tabular-nums text-faint">
+                      <span className="shrink-0 text-sm tabular-nums text-faint">
                         {note.date}
                       </span>
                     </Link>
