@@ -133,6 +133,37 @@ function Hero() {
   );
 }
 
+/** Who's behind it, right before the why. Sits tight above Mission so the two read as one story. */
+function AboutMe() {
+  return (
+    <section className={`${containerNarrow} pb-6 sm:pb-8`}>
+      <div className="flex flex-col items-center gap-8 rounded-5xl border border-line bg-surface p-8 text-center shadow-soft sm:flex-row sm:items-center sm:gap-10 sm:p-12 sm:text-left">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/about/glen.jpg"
+          alt="Glen Michaelsen, the musician and teacher behind Trenodo"
+          width={640}
+          height={640}
+          className="h-40 w-40 shrink-0 rounded-4xl object-cover shadow-lift sm:h-44 sm:w-44"
+        />
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-600">
+            👋 About me
+          </p>
+          <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:text-3xl">
+            Hi, I&rsquo;m Glen
+          </h2>
+          <p className="mt-4 text-lg leading-relaxed text-muted text-pretty">
+            A hobby musician and music teacher from Denmark. I play guitar,
+            write songs and sing. I started Trenodo to help musicians, and to
+            bring a little more harmony to the music industry. 🎶
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /**
  * The frontpage's job, per the brief: talk about the mission first, features
  * second. First person and specific, not a generic "our story" block.
@@ -373,6 +404,7 @@ export default async function LandingPage() {
       <SiteHeader />
       <main className="flex-1">
         <Hero />
+        <AboutMe />
         <Mission />
         <Tools />
         <Spotlight articles={spotlights} />
