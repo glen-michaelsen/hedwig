@@ -120,7 +120,7 @@ function Hero() {
             </div>
 
             <p className="mt-6 text-sm text-muted">
-              Free while it&rsquo;s young. Students never need an account.
+              Free for musicians and students. Students never need an account.
             </p>
           </div>
 
