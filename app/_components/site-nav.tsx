@@ -6,12 +6,16 @@ import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import {
   FeaturesIcon,
-  IdeasIcon,
   KnowledgeIcon,
   LoginIcon,
   SpotlightIcon,
 } from "./nav-icons";
-import { featureItems, loginItems, type NavItem } from "./nav-items";
+import {
+  featureItems,
+  loginItems,
+  spotlightItems,
+  type NavItem,
+} from "./nav-items";
 import { button, focusable } from "./ui";
 
 // Icons only from lg up: between md and lg the nav already fills the row,
@@ -154,28 +158,11 @@ export function DesktopNav() {
         <KnowledgeIcon className={navIcon} />
         Knowledge
       </Link>
-      <Link
-        href="/spotlight"
-        className={`${triggerBase} ${
-          pathname.startsWith("/spotlight")
-            ? "bg-linear-to-br from-brand-500 to-brand-700 text-white shadow-brand"
-            : "text-muted hover:bg-surface-muted hover:text-foreground"
-        }`}
-      >
-        <SpotlightIcon className={navIcon} />
-        Spotlight
-      </Link>
-      <Link
-        href="/ideas"
-        className={`${triggerBase} ${
-          pathname.startsWith("/ideas")
-            ? "bg-linear-to-br from-brand-500 to-brand-700 text-white shadow-brand"
-            : "text-muted hover:bg-surface-muted hover:text-foreground"
-        }`}
-      >
-        <IdeasIcon className={navIcon} />
-        Ideas
-      </Link>
+      <Dropdown
+        label="Spotlight"
+        icon={<SpotlightIcon className={navIcon} />}
+        items={spotlightItems}
+      />
       <span className="mx-2 h-6 w-px bg-line" aria-hidden="true" />
       <Dropdown label="Log in" icon={<LoginIcon className={navIcon} />} items={loginItems} align="right" />
     </nav>
@@ -265,21 +252,11 @@ export function MobileNav() {
               Knowledge
             </Link>
 
-            <Link
-              href="/spotlight"
-              className={`mt-2 flex items-center gap-2.5 rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
-            >
-              <SpotlightIcon />
-              Spotlight
-            </Link>
-
-            <Link
-              href="/ideas"
-              className={`mt-2 flex items-center gap-2.5 rounded-2xl px-4 py-3 text-sm font-medium transition-colors hover:bg-surface-muted ${focusable}`}
-            >
-              <IdeasIcon />
-              Ideas
-            </Link>
+            <MobileSection
+              title="Spotlight"
+              icon={<SpotlightIcon className="h-3.5 w-3.5" />}
+              items={spotlightItems}
+            />
 
             <MobileSection title="Log in" icon={<LoginIcon className="h-3.5 w-3.5" />} items={loginItems} />
 

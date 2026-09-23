@@ -20,6 +20,13 @@ export const featureItems: NavItem[] = [
   { href: "/tutoring", label: "Tutor" },
   { href: "/press-kit", label: "Press Kit" },
   { href: "/setlist", label: "Setlist" },
+  { href: "/ideas", label: "Ideas" },
+];
+
+/** Spotlight is two things: the articles, and how to get your own release in them. */
+export const spotlightItems: NavItem[] = [
+  { href: "/spotlight", label: "Spotlight articles" },
+  { href: "/spotlight/get-featured", label: "Get featured" },
 ];
 
 export const loginItems: NavItem[] = [

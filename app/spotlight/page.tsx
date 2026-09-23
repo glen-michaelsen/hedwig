@@ -84,6 +84,15 @@ export default async function SpotlightIndexPage() {
           <h1 className="mt-3 max-w-2xl text-4xl font-semibold tracking-tight text-balance sm:text-6xl">
             New music, one release at a time.
           </h1>
+          <p className="mt-4 text-sm text-muted">
+            Want your music here?{" "}
+            <Link
+              href="/spotlight/get-featured"
+              className={`font-medium text-brand-600 hover:underline ${focusable} rounded`}
+            >
+              See how to get featured →
+            </Link>
+          </p>
         </div>
 
         {articles.length === 0 ? (

@@ -191,6 +191,11 @@ const PAGES: {
     changeFrequency: "monthly",
   },
   { path: "/spotlight", priority: 0.6, changeFrequency: "weekly" },
+  {
+    path: "/spotlight/get-featured",
+    priority: 0.7,
+    changeFrequency: "monthly",
+  },
   { path: "/ideas", priority: 0.5, changeFrequency: "weekly" },
   { path: "/account/signup", priority: 0.7, changeFrequency: "monthly" },
   { path: "/account/login", priority: 0.3, changeFrequency: "yearly" },
