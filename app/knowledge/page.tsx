@@ -65,49 +65,40 @@ const JOURNEY = [
     href: "/knowledge/songwriting",
     title: "Songwriting",
     body: "Finding a subject, structuring a song, and turning a draft into a finished lyric.",
+    image: "/images/knowledge/journey/songwriting.jpg",
   },
   {
     href: "/knowledge/record",
     title: "Recording",
     body: "Setting up a home studio, choosing software, and getting a take you're happy to send.",
+    image: "/images/knowledge/journey/recording.jpg",
   },
   {
     href: "/knowledge/perform",
     title: "Performing",
     body: "From busking to pricing a gig — everything between writing a song and playing it live.",
+    image: "/images/knowledge/journey/performing.jpg",
   },
   {
     href: "/knowledge/promote",
     title: "Promoting Your Music",
     body: "Releasing to streaming, building a press kit, and getting your music in front of people.",
+    image: "/images/knowledge/journey/promoting.jpg",
   },
   {
     href: "/knowledge/teach",
     title: "Teaching Music",
     body: "Taking your playing online and turning it into lessons other musicians can book.",
+    image: "/images/knowledge/journey/teaching.jpg",
   },
 ] as const;
 
-function Card({ href, title, body }: { href: string; title: string; body: string }) {
-  return (
-    <Link
-      href={href}
-      className="block rounded-4xl border border-line bg-surface p-6 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift"
-    >
-      <h3 className="text-base font-semibold tracking-tight">{title}</h3>
-      <p className="mt-2 text-sm leading-relaxed text-muted text-pretty">
-        {body}
-      </p>
-    </Link>
-  );
-}
-
 /**
- * A photo-backed instrument card — the photo desaturated and tinted in
- * brand purple (a duotone) rather than shown raw, so a stock-feeling photo
- * reads as part of Trenodo's own palette instead of a generic product
- * shot. `alt=""`: the photo is decorative here, the title already names
- * the instrument.
+ * A photo-backed card — the photo desaturated and tinted in brand purple
+ * (a duotone) rather than shown raw, so a stock-feeling photo reads as
+ * part of Trenodo's own palette instead of a generic product shot.
+ * `alt=""`: the photo is decorative here, the title already names the
+ * instrument or topic. Shared by both sections on this page.
  */
 function PhotoCard({
   href,
@@ -179,7 +170,7 @@ export default function KnowledgeIndexPage() {
             </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {JOURNEY.map((item) => (
-                <Card key={item.href} {...item} />
+                <PhotoCard key={item.href} {...item} />
               ))}
             </div>
           </section>
