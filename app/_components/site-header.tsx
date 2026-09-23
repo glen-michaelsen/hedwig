@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { NavItem } from "./nav-items";
 import { featureItems, knowledgeItems, loginItems } from "./nav-items";
 import { DesktopNav, MobileNav } from "./site-nav";
+import { SocialLinks } from "./social-links";
 import { Wordmark, container, focusable } from "./ui";
 
 /**
@@ -60,6 +61,9 @@ export function SiteFooter() {
             <p className="mt-4 text-sm leading-relaxed text-white/70 text-pretty">
               Making life simpler and more efficient for musicians.
             </p>
+            <div className="mt-6">
+              <SocialLinks />
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 sm:gap-16">
