@@ -2,9 +2,15 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
 import { container, focusable } from "@/app/_components/ui";
+import {
+  COMPARISONS,
+  TOOL_META,
+  comparisonTitle,
+  type CompareTool,
+} from "@/lib/compare";
 
 const PAGE_DESCRIPTION =
-  "Honest comparisons between Trenodo and other tools musicians use. Including where the other tool is the better choice.";
+  "Honest comparisons between Trenodo and other tools musicians use. Link in bio, press kits, music teaching and setlists, including where the other tool is the better choice.";
 
 export const metadata: Metadata = {
   title: "Compare Trenodo With Other Music Tools | Trenodo",
@@ -19,15 +25,7 @@ export const metadata: Metadata = {
   },
 };
 
-/** One entry per comparison page. More tools join as their pages are written. */
-const COMPARISONS = [
-  {
-    href: "/compare/linktree",
-    tool: "Link in Bio",
-    title: "Trenodo vs Linktree",
-    body: "Price, music features, branding, analytics and fees. And where Linktree is the better pick.",
-  },
-];
+const TOOL_ORDER: CompareTool[] = ["link-in-bio", "press-kit", "tutor", "setlist"];
 
 export default function ComparePage() {
   return (
@@ -35,7 +33,7 @@ export default function ComparePage() {
       <SiteHeader />
 
       <main className="flex-1">
-        <section className="relative isolate overflow-hidden pt-20 pb-24 sm:pt-28 sm:pb-32">
+        <section className="relative isolate overflow-hidden pt-20 pb-16 sm:pt-28 sm:pb-20">
           <div className="brand-wash" />
           <div className={container}>
             <div className="max-w-2xl">
@@ -52,37 +50,55 @@ export default function ComparePage() {
                 the other tool is the better choice for you, we say so.
               </p>
             </div>
-
-            <div className="mt-14 grid gap-6 md:grid-cols-2">
-              {COMPARISONS.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`group flex flex-col rounded-4xl border border-line bg-surface p-8 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift ${focusable}`}
-                >
-                  <span className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-600">
-                    {item.tool}
-                  </span>
-                  <h2 className="mt-3 text-xl font-semibold tracking-tight">
-                    {item.title}
-                  </h2>
-                  <p className="mt-2 flex-1 text-[15px] leading-relaxed text-muted text-pretty">
-                    {item.body}
-                  </p>
-                  <span className="mt-6 text-sm font-medium text-brand-600">
-                    Read the comparison{" "}
-                    <span
-                      aria-hidden
-                      className="inline-block transition-transform group-hover:translate-x-0.5"
-                    >
-                      →
-                    </span>
-                  </span>
-                </Link>
-              ))}
-            </div>
           </div>
         </section>
+
+        <div className={`${container} space-y-16 pb-24 sm:pb-32`}>
+          {TOOL_ORDER.map((tool) => {
+            const items = COMPARISONS.filter((item) => item.tool === tool);
+            if (items.length === 0) return null;
+
+            return (
+              <section key={tool}>
+                <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-brand-600">
+                  {TOOL_META[tool].label}
+                </h2>
+                <div className="mt-5 grid gap-5 md:grid-cols-2">
+                  {items.map((item) => (
+                    <Link
+                      key={item.slug}
+                      href={`/compare/${item.slug}`}
+                      className={`group flex flex-col rounded-4xl bg-surface p-7 shadow-soft transition-all hover:-translate-y-1 hover:shadow-lift ${focusable} ${
+                        item.kind === "roundup" ? "border-2 border-brand-500/40" : "border border-line"
+                      }`}
+                    >
+                      {item.kind === "roundup" && (
+                        <span className="mb-2 text-xs font-medium text-muted">
+                          Overview
+                        </span>
+                      )}
+                      <h3 className="text-lg font-semibold tracking-tight">
+                        {comparisonTitle(item)}
+                      </h3>
+                      <p className="mt-2 flex-1 text-[15px] leading-relaxed text-muted text-pretty">
+                        {item.description}
+                      </p>
+                      <span className="mt-5 text-sm font-medium text-brand-600">
+                        Read the comparison{" "}
+                        <span
+                          aria-hidden
+                          className="inline-block transition-transform group-hover:translate-x-0.5"
+                        >
+                          →
+                        </span>
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </section>
+            );
+          })}
+        </div>
       </main>
 
       <SiteFooter />

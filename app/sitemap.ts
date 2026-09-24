@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { COMPARISONS } from "@/lib/compare";
 import { listPublishedSpotlights } from "@/lib/dal/spotlight";
 
 /**
@@ -197,7 +198,6 @@ const PAGES: {
     changeFrequency: "monthly",
   },
   { path: "/compare", priority: 0.5, changeFrequency: "monthly" },
-  { path: "/compare/linktree", priority: 0.7, changeFrequency: "monthly" },
   { path: "/ideas", priority: 0.5, changeFrequency: "weekly" },
   { path: "/account/signup", priority: 0.7, changeFrequency: "monthly" },
   { path: "/account/login", priority: 0.3, changeFrequency: "yearly" },
@@ -211,7 +211,15 @@ export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
-  const staticEntries = PAGES.map((page) => ({
+  // Every compare page, straight from lib/compare, so a new one is never
+  // missing here.
+  const comparePages = COMPARISONS.map((item) => ({
+    path: `/compare/${item.slug}`,
+    priority: 0.7,
+    changeFrequency: "monthly" as const,
+  }));
+
+  const staticEntries = [...PAGES, ...comparePages].map((page) => ({
     url: `https://trenodo.com${page.path}`,
     lastModified,
     changeFrequency: page.changeFrequency,
