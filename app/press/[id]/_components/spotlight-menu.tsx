@@ -71,7 +71,7 @@ export function SpotlightMenu({ articleUrl }: { articleUrl: string }) {
         className={`group inline-flex items-center gap-1.5 rounded-full bg-brand-500/12 px-4 py-2.5 text-sm font-medium text-brand-700 transition-colors hover:bg-brand-500/18 ${focusable}`}
       >
         <SpotlightIcon className="h-4 w-4" />
-        In the Spotlight
+        Spotlight
         <svg
           viewBox="0 0 20 20"
           aria-hidden="true"

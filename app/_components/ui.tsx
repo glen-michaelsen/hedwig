@@ -102,8 +102,11 @@ export function PageHeader({
   action?: ReactNode;
 }) {
   return (
-    <div className="mb-10 flex flex-wrap items-end justify-between gap-5">
-      <div className="max-w-xl">
+    // From sm up the buttons never wrap under the title: the title takes
+    // what's left and wraps inside it instead. On a phone there's no room
+    // beside it, so they go below.
+    <div className="mb-10 flex flex-wrap items-end justify-between gap-5 sm:flex-nowrap">
+      <div className="min-w-0 max-w-xl sm:flex-1">
         <h1 className="text-3xl font-semibold tracking-tight text-balance">
           {title}
         </h1>
@@ -113,7 +116,7 @@ export function PageHeader({
           </p>
         )}
       </div>
-      {action}
+      {action && <div className="shrink-0">{action}</div>}
     </div>
   );
 }

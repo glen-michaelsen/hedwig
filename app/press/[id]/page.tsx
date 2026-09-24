@@ -217,8 +217,12 @@ export default async function ReleasePage({
                 articleUrl={`${APP_URL}/spotlight/${liveSpotlight.slug}`}
               />
             )}
-            <Link className={buttonGhost} href={`/press/${id}/edit`}>
-              Edit details
+            <Link
+              className={buttonGhost}
+              href={`/press/${id}/edit`}
+              aria-label="Edit release details"
+            >
+              Edit
             </Link>
             <PublishStatusMenu
               releaseId={id}
