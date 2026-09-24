@@ -67,7 +67,10 @@ export function SiteFooter() {
           </div>
 
           <div className="grid grid-cols-2 gap-10 sm:grid-cols-3 sm:gap-16">
-            <FooterColumn title="Features" items={featureItems} />
+            <FooterColumn
+              title="Features"
+              items={[...featureItems, { href: "/compare", label: "Compare" }]}
+            />
             <FooterColumn title="Knowledge" items={knowledgeItems} />
             <FooterColumn title="Log in" items={loginItems} />
           </div>
@@ -76,9 +79,6 @@ export function SiteFooter() {
         <div className="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-8 text-sm text-white/60">
           <p>&copy; {new Date().getFullYear()} Trenodo</p>
           <div className="flex flex-wrap items-center gap-6">
-            <Link href="/compare" className="transition-colors hover:text-white">
-              Compare
-            </Link>
             <Link href="/ideas" className="transition-colors hover:text-white">
               Ideas
             </Link>
