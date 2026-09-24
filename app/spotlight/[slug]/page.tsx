@@ -18,6 +18,7 @@ import {
   getPublishedSpotlight,
   getSpotlightByPreviewToken,
   getSpotlightBySlugForAdmin,
+  isSpotlightOwner,
   listRelatedSpotlights,
 } from "@/lib/dal/spotlight";
 import { MAX_RATING } from "@/lib/spotlight/slug";
@@ -59,6 +60,25 @@ async function findArticle(slug: string, previewToken?: string) {
   }
 
   return null;
+}
+
+/**
+ * The badge box is for the artist, not for every reader: anyone with the
+ * preview link (the email to the owner carries it), the signed-in owner of
+ * the press kit, or an admin. The badge images themselves stay public, or
+ * they couldn't be embedded on the artist's site.
+ */
+async function canSeeBadges(
+  article: { id: string; slug: string },
+  previewToken: string | undefined,
+) {
+  if (previewToken && (await getSpotlightByPreviewToken(article.slug, previewToken))) {
+    return true;
+  }
+  const account = await getAccount();
+  if (!account) return false;
+  if (await isSpotlightOwner(article.id, account.id)) return true;
+  return isAdmin(account);
 }
 
 function previewTokenFrom(value: string | string[] | undefined) {
@@ -127,7 +147,11 @@ export default async function SpotlightArticlePage({
     ? `${article.headerFocusX}% ${article.headerFocusY}%`
     : "50% 50%";
   const released = formatDate(article.releaseDate);
-  const related = await listRelatedSpotlights(article.id);
+  const [related, showBadges] = await Promise.all([
+    listRelatedSpotlights(article.id),
+    // The badge images only answer for published articles.
+    mode === "published" ? canSeeBadges(article, previewToken) : false,
+  ]);
 
   // Both are plain YYYY-MM-DD, so a string compare is a date compare — and
   // it can't be knocked a day out by a timezone the way parsing would.
@@ -355,8 +379,7 @@ export default async function SpotlightArticlePage({
 
           <ShareBox title={article.headline} />
 
-          {/* The badge images only answer for published articles. */}
-          {mode === "published" && (
+          {showBadges && (
             <BadgeBox
               slug={article.slug}
               title={article.releaseTitle}

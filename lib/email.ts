@@ -230,7 +230,8 @@ export type SpotlightEmail = {
   releaseDate: string | null;
   /** The public article, /spotlight/<slug>. */
   articleUrl: string;
-  /** A link that works before the article is public. Planned only. */
+  /** The article with its preview token: readable before it is public, and
+   *  the way the owner sees the badge box without signing in. */
   previewUrl?: string | null;
 };
 
@@ -311,7 +312,11 @@ function spotlightPlanned(email: SpotlightEmail) {
 function spotlightPublished(email: SpotlightEmail) {
   const name = escapeHtml(email.ownerName);
   const title = escapeHtml(email.releaseTitle);
-  const badgesUrl = `${email.articleUrl}#badges`;
+  // Through the preview link: the badge box only shows for the artist, and
+  // they may not be signed in when they click this.
+  const badgesUrl = email.previewUrl
+    ? `${email.previewUrl}#badges`
+    : `${email.articleUrl}#badges`;
   const subject = "Your Spotlight is live \u{1F526}";
 
   const html = cardEmailHtml(

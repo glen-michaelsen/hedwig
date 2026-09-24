@@ -492,6 +492,19 @@ export async function getSpotlightOwner(spotlightId: string) {
   return row ?? null;
 }
 
+/** Whether this account owns the release the article is about. */
+export async function isSpotlightOwner(spotlightId: string, accountId: string) {
+  const db = await getDb();
+  const [row] = await db
+    .select({ id: spotlight.id })
+    .from(spotlight)
+    .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
+    .where(and(eq(spotlight.id, spotlightId), eq(pressRelease.accountId, accountId)))
+    .limit(1);
+
+  return Boolean(row);
+}
+
 export async function getSpotlightEmailLog(spotlightId: string) {
   const db = await getDb();
   const [row] = await db

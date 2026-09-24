@@ -89,8 +89,10 @@ function subscribe() {
   return () => {};
 }
 
+/** The clean article URL. Never the query string: an artist who opened
+ *  the page through their private preview link shouldn't share the token. */
 function getUrl() {
-  return window.location.href;
+  return `${window.location.origin}${window.location.pathname}`;
 }
 
 function getServerUrl() {

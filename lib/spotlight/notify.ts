@@ -48,7 +48,9 @@ export async function sendSpotlightEmailFor(
   if (!article || !owner) return false;
 
   const articleUrl = `${APP_URL}/spotlight/${article.slug}`;
-  const token = kind === "planned" ? await ensurePreviewToken(spotlightId) : null;
+  // Both emails carry the preview link: the planned one to read early, the
+  // published one so "Get your badges" shows the badge box without signing in.
+  const token = await ensurePreviewToken(spotlightId);
 
   return sendSpotlightEmail({
     kind,
