@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Hearts } from "@/app/_components/hearts";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
 import { MoreSpotlights } from "./_components/more-spotlights";
+import { BadgeBox } from "./_components/badge-box";
 import { ShareBox } from "./_components/share-box";
 import {
   button,
@@ -353,6 +354,17 @@ export default async function SpotlightArticlePage({
           )}
 
           <ShareBox title={article.headline} />
+
+          {/* The badge images only answer for published articles. */}
+          {mode === "published" && (
+            <BadgeBox
+              slug={article.slug}
+              title={article.releaseTitle}
+              artist={article.artistName}
+              rating={article.rating}
+              maxRating={MAX_RATING}
+            />
+          )}
 
           <MoreSpotlights articles={related} />
 
