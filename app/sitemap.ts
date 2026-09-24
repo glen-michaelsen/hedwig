@@ -196,6 +196,8 @@ const PAGES: {
     priority: 0.7,
     changeFrequency: "monthly",
   },
+  { path: "/compare", priority: 0.5, changeFrequency: "monthly" },
+  { path: "/compare/linktree", priority: 0.7, changeFrequency: "monthly" },
   { path: "/ideas", priority: 0.5, changeFrequency: "weekly" },
   { path: "/account/signup", priority: 0.7, changeFrequency: "monthly" },
   { path: "/account/login", priority: 0.3, changeFrequency: "yearly" },
