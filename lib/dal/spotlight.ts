@@ -1,11 +1,12 @@
 import "server-only";
-import { and, asc, desc, eq, isNull, lte, ne, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, isNotNull, isNull, lte, ne, or, sql } from "drizzle-orm";
 import {
   artist,
   pressRelease,
   releaseAsset,
   spotlight,
   spotlightSkip,
+  user,
 } from "@/db/schema";
 import { todayIso } from "@/lib/clock";
 import { newId } from "@/lib/crypto";
@@ -468,3 +469,75 @@ export type SpotlightRow = Awaited<ReturnType<typeof listSpotlights>>[number];
 export type ReleaseOption = Awaited<
   ReturnType<typeof listReleasesForPicker>
 >[number];
+
+/* --------------------------- emails to the owner --------------------------- */
+
+export type SpotlightEmailKind = "planned" | "published";
+
+/**
+ * Who a Spotlight email goes to: the account that owns the release's press
+ * kit. Spotlight has no tenant key, so this crosses from the admin's side to
+ * the musician's on purpose. Only admin actions and the cron call it.
+ */
+export async function getSpotlightOwner(spotlightId: string) {
+  const db = await getDb();
+  const [row] = await db
+    .select({ name: user.name, email: user.email })
+    .from(spotlight)
+    .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
+    .innerJoin(user, eq(user.id, pressRelease.accountId))
+    .where(eq(spotlight.id, spotlightId))
+    .limit(1);
+
+  return row ?? null;
+}
+
+export async function getSpotlightEmailLog(spotlightId: string) {
+  const db = await getDb();
+  const [row] = await db
+    .select({
+      plannedEmailSentAt: spotlight.plannedEmailSentAt,
+      publishedEmailSentAt: spotlight.publishedEmailSentAt,
+    })
+    .from(spotlight)
+    .where(eq(spotlight.id, spotlightId))
+    .limit(1);
+
+  return row ?? null;
+}
+
+export async function markSpotlightEmailSent(
+  spotlightId: string,
+  kind: SpotlightEmailKind,
+) {
+  const db = await getDb();
+  await db
+    .update(spotlight)
+    .set(
+      kind === "planned"
+        ? { plannedEmailSentAt: new Date() }
+        : { publishedEmailSentAt: new Date() },
+    )
+    .where(eq(spotlight.id, spotlightId));
+}
+
+/**
+ * Planned articles whose release day has come: live now, told "planned"
+ * earlier, not yet told "published". Only articles that got the planned
+ * email qualify, so turning this on never mails every article that was
+ * already live before these emails existed.
+ */
+export async function listSpotlightsDueLiveEmail() {
+  const db = await getDb();
+  return db
+    .select({ id: spotlight.id })
+    .from(spotlight)
+    .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
+    .where(
+      and(
+        await isPubliclyVisible(),
+        isNotNull(spotlight.plannedEmailSentAt),
+        isNull(spotlight.publishedEmailSentAt),
+      ),
+    );
+}

@@ -1,6 +1,11 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"main": ".open-next/worker.js",
+	// OpenNext's generated worker, wrapped to add the hourly cron. See the
+	// comment at the top of cloudflare-worker.mjs.
+	"main": "cloudflare-worker.mjs",
+	// Hourly: sends "your Spotlight is live" to planned articles whose
+	// release day has come (app/api/cron/spotlight-emails).
+	"triggers": { "crons": ["0 * * * *"] },
 	"name": "hedwig",
 	"compatibility_date": "2026-01-15",
 	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
@@ -76,6 +81,7 @@
 		"preview": {
 			"name": "hedwig-preview",
 			"compatibility_date": "2026-01-15",
+			"triggers": { "crons": ["0 * * * *"] },
 			"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
 			"assets": {
 				"directory": ".open-next/assets",

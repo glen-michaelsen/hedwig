@@ -591,6 +591,15 @@ export const spotlight = sqliteTable(
      * generated once, on first request, not at creation. Null until then.
      */
     previewToken: text("preview_token"),
+    /**
+     * When the automatic emails to the release's owner went out. Each is
+     * sent once: "planned" when the article is published ahead of a future
+     * release date, "published" when it actually goes live (right away, or
+     * on release day through the cron). Test sends from the admin page
+     * don't touch these.
+     */
+    plannedEmailSentAt: integer("planned_email_sent_at", { mode: "timestamp" }),
+    publishedEmailSentAt: integer("published_email_sent_at", { mode: "timestamp" }),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
       .default(sql`(unixepoch())`),

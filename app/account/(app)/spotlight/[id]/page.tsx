@@ -2,16 +2,31 @@ import { notFound } from "next/navigation";
 import { Card, PageHeader } from "@/app/_components/ui";
 import { requireAdmin } from "@/lib/auth";
 import { todayIso } from "@/lib/clock";
-import { getSpotlight, listPhotosForRelease } from "@/lib/dal/spotlight";
+import {
+  getSpotlight,
+  getSpotlightEmailLog,
+  getSpotlightOwner,
+  listPhotosForRelease,
+} from "@/lib/dal/spotlight";
 import { buildSpotlightCaption } from "@/lib/press/spotlight-caption";
 import { MAX_RATING, computeSpotlightStatus } from "@/lib/spotlight/slug";
 import { updateSpotlightAction } from "../actions";
 import { SpotlightForm } from "../_components/spotlight-form";
 import { DeleteSpotlightButton } from "./_components/delete-spotlight-button";
+import { EmailTestButtons } from "./_components/email-test-buttons";
 import { SocialMenu } from "./_components/social-menu";
 import { SpotlightStatusMenu } from "./_components/spotlight-status-menu";
 
 const KIND_LABELS = { single: "Single", ep: "EP", album: "Album" } as const;
+
+function sentLabel(date: Date | null | undefined) {
+  if (!date) return "Not sent yet";
+  return `Sent ${new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(date)}`;
+}
 
 export async function generateMetadata({
   params,
@@ -31,7 +46,11 @@ export default async function EditSpotlightPage({
   const article = await getSpotlight(id);
   if (!article) notFound();
 
-  const photos = await listPhotosForRelease(article.releaseId);
+  const [photos, owner, emailLog] = await Promise.all([
+    listPhotosForRelease(article.releaseId),
+    getSpotlightOwner(article.id),
+    getSpotlightEmailLog(article.id),
+  ]);
   const today = await todayIso();
   const status = computeSpotlightStatus(
     article.published,
@@ -86,6 +105,43 @@ export default async function EditSpotlightPage({
           submitLabel="Save changes"
         />
       </Card>
+
+      <section className="mt-10">
+        <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
+          Emails to the artist
+        </h2>
+        <Card className="mt-4">
+          <p className="text-sm leading-relaxed text-muted text-pretty">
+            {owner ? (
+              <>
+                The press kit belongs to <span className="font-medium text-foreground">{owner.email}</span>.
+              </>
+            ) : (
+              "The press kit's owner couldn't be found."
+            )}{" "}
+            They get an email when you publish: &ldquo;planned&rdquo; if the
+            release date is still ahead, and &ldquo;published&rdquo; when the
+            article goes live. Each goes out once, by itself.
+          </p>
+          <dl className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
+            <div>
+              <dt className="text-muted">Planned email</dt>
+              <dd className="font-medium">{sentLabel(emailLog?.plannedEmailSentAt)}</dd>
+            </div>
+            <div>
+              <dt className="text-muted">Published email</dt>
+              <dd className="font-medium">{sentLabel(emailLog?.publishedEmailSentAt)}</dd>
+            </div>
+          </dl>
+          <p className="mt-5 text-sm leading-relaxed text-muted text-pretty">
+            These two buttons send a copy to you, not to the artist. For testing, or
+            to forward.
+          </p>
+          <div className="mt-3">
+            <EmailTestButtons spotlightId={article.id} />
+          </div>
+        </Card>
+      </section>
 
       <section className="mt-10">
         <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">

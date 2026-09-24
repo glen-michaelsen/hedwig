@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { getEnv } from "@/lib/db";
 import * as dal from "@/lib/dal/spotlight";
+import { sendAutomaticSpotlightEmail, sendSpotlightEmailFor } from "@/lib/spotlight/notify";
 import { isValidRating } from "@/lib/spotlight/slug";
 
 export type SpotlightFormState = { error?: string };
@@ -106,11 +107,33 @@ export async function togglePublishedAction(formData: FormData) {
   await requireAdmin();
 
   const id = String(formData.get("spotlightId"));
-  await dal.setSpotlightPublished(id, formData.get("published") === "1");
+  const published = formData.get("published") === "1";
+  await dal.setSpotlightPublished(id, published);
+
+  // Tells the release's owner, once: "planned" ahead of a future release
+  // date, "published" when it's live right away. Best-effort, so a mail
+  // hiccup never blocks publishing.
+  if (published) await sendAutomaticSpotlightEmail(id);
 
   revalidatePath("/account/spotlight");
   revalidatePath(`/account/spotlight/${id}`);
   revalidatePath("/spotlight");
+}
+
+/**
+ * The test buttons on the admin page. Always to the admin's own inbox, never
+ * to the musician, so testing and forwarding can't spam anyone. Doesn't
+ * touch the automatic-email log either.
+ */
+export async function sendSpotlightTestEmailAction(
+  spotlightId: string,
+  kind: dal.SpotlightEmailKind,
+): Promise<{ sentTo: string } | { error: string }> {
+  const admin = await requireAdmin();
+  if (kind !== "planned" && kind !== "published") return { error: "Unknown email" };
+
+  const ok = await sendSpotlightEmailFor(spotlightId, kind, admin.email);
+  return ok ? { sentTo: admin.email } : { error: "The email didn't go out. Try again in a moment" };
 }
 
 /** Called directly from a client onClick, not a <form> — same pattern as

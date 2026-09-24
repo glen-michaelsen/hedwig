@@ -146,7 +146,8 @@ function escapeHtml(value: string): string {
     .replaceAll("'", "&#39;");
 }
 
-function adminEmailHtml(heading: string, bodyHtml: string): string {
+/** The white card on the warm background, shared by every non-invite email. */
+function cardEmailHtml(heading: string, bodyHtml: string): string {
   return `<!doctype html>
 <html>
   <body style="margin:0;padding:0;background:${COLOR.bg};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
@@ -191,7 +192,7 @@ async function sendAdminEmail(
     from: FROM,
     to: ADMIN_EMAIL,
     subject,
-    html: adminEmailHtml(subject, bodyHtml),
+    html: cardEmailHtml(subject, bodyHtml),
     text: [subject, "", bodyText].join("\n"),
   });
 
@@ -213,4 +214,157 @@ export async function sendNewSignupAdminEmail(
     `<p style="margin:0;font-size:16px;line-height:1.6;color:${COLOR.ink};"><strong>${escapeHtml(name)}</strong>, ${escapeHtml(detail)}</p>`,
     `${name}, ${detail}`,
   );
+}
+
+/* ------------------------------ Spotlight ------------------------------ */
+
+export type SpotlightEmail = {
+  kind: "planned" | "published";
+  to: string;
+  ownerName: string;
+  releaseTitle: string;
+  headline: string;
+  rating: number;
+  maxRating: number;
+  /** "11 September 2026", or null for an undated release. */
+  releaseDate: string | null;
+  /** The public article, /spotlight/<slug>. */
+  articleUrl: string;
+  /** A link that works before the article is public. Planned only. */
+  previewUrl?: string | null;
+};
+
+function hearts(rating: number, maxRating: number) {
+  const filled = "\u2665".repeat(rating);
+  const empty = "\u2665".repeat(Math.max(0, maxRating - rating));
+  return {
+    html: `<span style="font-size:20px;letter-spacing:3px;color:${COLOR.accent};">${filled}</span><span style="font-size:20px;letter-spacing:3px;color:#ddd3ec;">${empty}</span>`,
+    text: `${rating} of ${maxRating} hearts`,
+  };
+}
+
+function pillButton(href: string, label: string) {
+  return `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 12px;">
+                  <tr>
+                    <td style="border-radius:999px;background:${COLOR.accent};">
+                      <a href="${href}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:600;color:#ffffff;text-decoration:none;border-radius:999px;">${label}</a>
+                    </td>
+                  </tr>
+                </table>`;
+}
+
+function paragraph(html: string) {
+  return `<p style="margin:0 0 20px;font-size:16px;line-height:1.6;color:${COLOR.ink};">${html}</p>`;
+}
+
+/** Headline and hearts, in a soft box, like a quote from the article. */
+function articleBox(headline: string, rating: number, maxRating: number) {
+  const h = hearts(rating, maxRating);
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;background:${COLOR.bg};border:1px solid ${COLOR.border};border-radius:16px;">
+                  <tr>
+                    <td style="padding:20px 22px;">
+                      <p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:0.12em;color:${COLOR.accent};text-transform:uppercase;">Headline</p>
+                      <p style="margin:0 0 14px;font-size:18px;line-height:1.35;font-weight:700;color:${COLOR.ink};">${escapeHtml(headline)}</p>
+                      <p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:0.12em;color:${COLOR.accent};text-transform:uppercase;">Rating</p>
+                      <p style="margin:0;">${h.html} <span style="font-size:14px;color:${COLOR.muted};">${h.text}</span></p>
+                    </td>
+                  </tr>
+                </table>`;
+}
+
+function spotlightPlanned(email: SpotlightEmail) {
+  const name = escapeHtml(email.ownerName);
+  const title = escapeHtml(email.releaseTitle);
+  const when = email.releaseDate
+    ? `on ${escapeHtml(email.releaseDate)}, the day your release comes out`
+    : "on your release day";
+  const subject = "Your release is getting a Spotlight \u{1F526}";
+
+  const html = cardEmailHtml(
+    `${title} is getting a Spotlight \u{1F526}`,
+    [
+      paragraph(`Good news, ${name}. We listened to <strong>${title}</strong>, and we wrote about it. The article goes live ${when}.`),
+      articleBox(email.headline, email.rating, email.maxRating),
+      email.previewUrl
+        ? paragraph("Want a sneak peek? This link works for you now, before anyone else can see the article.") +
+          pillButton(email.previewUrl, "Read it before everyone else")
+        : "",
+      `<p style="margin:16px 0 0;font-size:14px;line-height:1.6;color:${COLOR.muted};">On release day you get one more email, with the public link and badges for your website. Nothing to do until then. \u{1F642}</p>`,
+    ].join(""),
+  );
+
+  const text = [
+    `${email.releaseTitle} is getting a Spotlight`,
+    "",
+    `Good news, ${email.ownerName}. We listened to ${email.releaseTitle}, and we wrote about it. The article goes live ${email.releaseDate ? `on ${email.releaseDate}` : "on your release day"}.`,
+    "",
+    `Headline: ${email.headline}`,
+    `Rating: ${hearts(email.rating, email.maxRating).text}`,
+    ...(email.previewUrl ? ["", "Read it before everyone else:", email.previewUrl] : []),
+    "",
+    "On release day you get one more email, with the public link and badges for your website.",
+  ].join("\n");
+
+  return { subject, html, text };
+}
+
+function spotlightPublished(email: SpotlightEmail) {
+  const name = escapeHtml(email.ownerName);
+  const title = escapeHtml(email.releaseTitle);
+  const badgesUrl = `${email.articleUrl}#badges`;
+  const subject = "Your Spotlight is live \u{1F526}";
+
+  const html = cardEmailHtml(
+    `Your Spotlight is live \u{1F526}`,
+    [
+      paragraph(`${name}, the article about <strong>${title}</strong> is now on Trenodo. Anyone can read it, and it's yours to share.`),
+      articleBox(email.headline, email.rating, email.maxRating),
+      pillButton(email.articleUrl, "Read the article"),
+      `<p style="margin:0 0 28px;font-size:13px;line-height:1.5;color:${COLOR.muted};word-break:break-all;"><a href="${email.articleUrl}" style="color:${COLOR.accent};">${email.articleUrl}</a></p>`,
+      `<p style="margin:0 0 8px;font-size:17px;font-weight:700;color:${COLOR.ink};">Put a badge on your website</p>`,
+      paragraph("Show fans and bookers that your release was featured. The badge links to the article. Pick one, copy the code, paste it on your site or in your EPK."),
+      `<p style="margin:0 0 20px;"><a href="${badgesUrl}"><img src="${email.articleUrl}/badge/b.png" alt="Featured on Trenodo, ${email.rating} of ${email.maxRating} hearts" width="340" height="68" style="display:block;max-width:100%;height:auto;border:0;"></a></p>`,
+      pillButton(badgesUrl, "Get your badges"),
+      `<p style="margin:16px 0 0;font-size:14px;line-height:1.6;color:${COLOR.muted};">A review is a good reason to post about your release again. Share the link with your fans. \u{1F3B6}</p>`,
+    ].join(""),
+  );
+
+  const text = [
+    "Your Spotlight is live",
+    "",
+    `${email.ownerName}, the article about ${email.releaseTitle} is now on Trenodo. Anyone can read it, and it's yours to share.`,
+    "",
+    `Headline: ${email.headline}`,
+    `Rating: ${hearts(email.rating, email.maxRating).text}`,
+    "",
+    "Read the article:",
+    email.articleUrl,
+    "",
+    "Get badges for your website:",
+    badgesUrl,
+  ].join("\n");
+
+  return { subject, html, text };
+}
+
+/**
+ * Best-effort, like the other senders: returns false instead of throwing,
+ * so a Resend hiccup never blocks publishing an article.
+ */
+export async function sendSpotlightEmail(email: SpotlightEmail): Promise<boolean> {
+  const { RESEND_API_KEY } = await getEnv();
+  if (!RESEND_API_KEY) return false;
+
+  const content = email.kind === "planned" ? spotlightPlanned(email) : spotlightPublished(email);
+  const resend = new Resend(RESEND_API_KEY);
+
+  const { error } = await resend.emails.send({
+    from: FROM,
+    to: email.to,
+    subject: content.subject,
+    html: content.html,
+    text: content.text,
+  });
+
+  return !error;
 }
