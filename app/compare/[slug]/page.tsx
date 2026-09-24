@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
-import { COMPARISONS, comparisonTitle, getComparison } from "@/lib/compare";
+import { comparisonTitle, getComparison } from "@/lib/compare";
 import { RoundupView } from "../_components/roundup-view";
 import { VersusView } from "../_components/versus-view";
 
-/** Every compare page is known at build time, from lib/compare. */
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return COMPARISONS.map((item) => ({ slug: item.slug }));
-}
+/*
+ * Rendered per request, on purpose. generateStaticParams would prerender
+ * these, but open-next.config.ts has no incremental cache, so the Worker
+ * has nowhere to serve prerendered param pages from and answers 404.
+ * An unknown slug still gets a real 404 through notFound() below.
+ */
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
