@@ -91,20 +91,20 @@ const TILES: {
   kind: KitEventKind;
   label: string;
   Icon: (props: IconProps) => ReactElement;
-  list?: { title: string; empty: string; unit: string };
+  list?: { title: string; empty: string; unit: [one: string, many: string] };
 }[] = [
   { kind: "view", label: "Visits", Icon: EyeIcon },
   {
     kind: "play",
     label: "Plays",
     Icon: PlayIcon,
-    list: { title: "Most listened", empty: "No tracks played yet.", unit: "plays" },
+    list: { title: "Most listened", empty: "No tracks played yet.", unit: ["play", "plays"] },
   },
   {
     kind: "download",
     label: "Downloads",
     Icon: DownloadIcon,
-    list: { title: "Most downloaded", empty: "Nothing downloaded yet.", unit: "downloads" },
+    list: { title: "Most downloaded", empty: "Nothing downloaded yet.", unit: ["download", "downloads"] },
   },
   { kind: "link", label: "Listen clicks", Icon: LinkOutIcon },
 ];
@@ -188,7 +188,7 @@ export function StatTiles({
                 <span className="w-5 shrink-0 font-mono text-xs text-faint">{index + 1}</span>
                 <span className="min-w-0 flex-1 truncate text-sm">{row.name}</span>
                 <span className="shrink-0 text-sm tabular-nums text-muted">
-                  {row.total} {openTile?.list?.unit}
+                  {row.total} {openTile?.list?.unit[row.total === 1 ? 0 : 1]}
                 </span>
               </li>
             ))}
