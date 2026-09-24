@@ -54,6 +54,7 @@ function getServerOrigin() {
  *
  * Built from `window.location.origin`, like ShareBox, so the code on
  * preview points at preview and the code on trenodo.com at trenodo.com.
+ * The release page links straight here, at #badges.
  */
 export function BadgeBox({
   slug,
@@ -72,9 +73,10 @@ export function BadgeBox({
   const [tones, setTones] = useState<Record<string, Tone>>({ a: "light", c: "light" });
   const [copied, setCopied] = useState<string | null>(null);
 
-  if (!origin) return null;
-
-  const articleUrl = `${origin}/spotlight/${slug}`;
+  // Rendered on the server too, without the origin, so the #badges anchor
+  // exists on first paint and a link to it lands. The code fills in the
+  // full URL right after hydration.
+  const articleUrl = `${origin ?? ""}/spotlight/${slug}`;
 
   function embedCode(variant: BadgeVariant) {
     const { width, height } = badgeSize(variant);
@@ -93,7 +95,7 @@ export function BadgeBox({
   }
 
   return (
-    <section className="mt-16 border-t border-line pt-8">
+    <section id="badges" className="mt-16 scroll-mt-24 border-t border-line pt-8">
       <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
         Badge for your website
       </p>

@@ -23,11 +23,17 @@ export function DropdownMenu({
   open,
   onClose,
   items,
+  onPointerEnter,
+  onPointerLeave,
 }: {
   anchorRef: RefObject<HTMLElement | null>;
   open: boolean;
   onClose: () => void;
   items: { label: string; onSelect: () => void; danger?: boolean }[];
+  /** For a menu that also opens on hover: the pointer moving from the
+   *  trigger into the panel mustn't count as leaving. */
+  onPointerEnter?: () => void;
+  onPointerLeave?: () => void;
 }) {
   const [origin, setOrigin] = useState<{ top: number; right: number } | null>(
     null,
@@ -69,6 +75,8 @@ export function DropdownMenu({
   return createPortal(
     <div
       ref={menuRef}
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
       style={{ position: "fixed", top: origin.top, right: origin.right }}
       className="z-50 w-44 overflow-hidden rounded-2xl border border-line bg-surface p-1.5 shadow-float"
     >

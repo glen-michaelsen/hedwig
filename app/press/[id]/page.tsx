@@ -18,6 +18,8 @@ import { CoverageSection } from "./_components/coverage";
 import { KitStatsPanel } from "./_components/kit-stats-panel";
 import { PublishStatusMenu } from "./_components/publish-status-menu";
 import { SpotlightChecklist } from "./_components/spotlight-checklist";
+import { SpotlightMenu } from "./_components/spotlight-menu";
+import { getLiveSpotlightForRelease } from "@/lib/dal/spotlight";
 import { displayName } from "@/lib/press/naming";
 import { DeleteAssetButton } from "./_components/delete-asset-button";
 import { RenameAssetButton } from "./_components/rename-asset-button";
@@ -137,7 +139,17 @@ export default async function ReleasePage({
    * and it turns eight round trips to D1 into one wait instead of several,
    * which is what made publishing feel like nothing had happened.
    */
-  const [release, assets, { APP_URL }, totals, daily, downloads, plays, coverage] =
+  const [
+    release,
+    assets,
+    { APP_URL },
+    totals,
+    daily,
+    downloads,
+    plays,
+    coverage,
+    liveSpotlight,
+  ] =
     await Promise.all([
       getRelease(account.id, id),
       listAssets(account.id, id),
@@ -147,6 +159,7 @@ export default async function ReleasePage({
       getKitTopAssets(account.id, id, "download"),
       getKitTopAssets(account.id, id, "play"),
       listCoverage(account.id, id),
+      getLiveSpotlightForRelease(account.id, id),
     ]);
 
   if (!release) notFound();
@@ -187,6 +200,11 @@ export default async function ReleasePage({
         }
         action={
           <div className="flex flex-wrap items-center gap-2.5">
+            {liveSpotlight && (
+              <SpotlightMenu
+                articleUrl={`${APP_URL}/spotlight/${liveSpotlight.slug}`}
+              />
+            )}
             <Link className={buttonGhost} href={`/press/${id}/edit`}>
               Edit details
             </Link>

@@ -306,6 +306,33 @@ export async function getPublishedSpotlight(slug: string) {
 }
 
 /**
+ * The live article about one of this account's own releases, if there is
+ * one, for the Spotlight button on the release page. Scoped by account like
+ * everything in lib/dal/press.ts, and only once the article is public, so a
+ * musician never gets a link that doesn't work yet.
+ */
+export async function getLiveSpotlightForRelease(
+  accountId: string,
+  releaseId: string,
+) {
+  const db = await getDb();
+  const [row] = await db
+    .select({ slug: spotlight.slug })
+    .from(spotlight)
+    .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
+    .where(
+      and(
+        eq(pressRelease.id, releaseId),
+        eq(pressRelease.accountId, accountId),
+        await isPubliclyVisible(),
+      ),
+    )
+    .limit(1);
+
+  return row ?? null;
+}
+
+/**
  * By slug, published or not — for the admin previewing a draft at its real
  * URL. The page must check isAdmin() before calling this.
  */
