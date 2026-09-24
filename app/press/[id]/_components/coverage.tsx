@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState, useTransition } from "react";
+import { Fragment, useActionState, useState, useTransition } from "react";
 import {
   addCoverageAction,
   deleteCoverageAction,
@@ -90,17 +90,67 @@ function CoverageItem({
   );
 }
 
+export type SpotlightCoverage = {
+  url: string;
+  headline: string;
+  rating: number;
+  maxRating: number;
+  /** YYYY-MM-DD, the day the article went live. */
+  liveOn: string | null;
+};
+
+/** Trenodo's own review of the release. Added by us, so no Remove button:
+ *  it goes away by itself if the article is ever taken down. */
+function SpotlightCoverageItem({ spotlight }: { spotlight: SpotlightCoverage }) {
+  const date = formatDate(spotlight.liveOn);
+
+  return (
+    <li className="flex flex-wrap items-start gap-3 border-b border-line py-3 last:border-b-0">
+      <div className="min-w-0 flex-1">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="rounded-full bg-brand-500/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-brand-700">
+            {KIND_LABELS.review}
+          </span>
+          <span className="text-xs font-medium">Trenodo Spotlight</span>
+          {date && <span className="text-xs text-faint">{date}</span>}
+        </div>
+
+        <a
+          href={spotlight.url}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="mt-1.5 block truncate text-sm transition-colors hover:text-brand-700"
+        >
+          {spotlight.headline}
+        </a>
+        <p className="mt-1 text-xs text-muted">
+          {spotlight.rating} of {spotlight.maxRating} hearts
+        </p>
+      </div>
+
+      <span className="shrink-0 rounded-full bg-surface-muted px-3 py-1.5 text-xs font-medium text-muted">
+        Added by Trenodo
+      </span>
+    </li>
+  );
+}
+
 /**
  * Where a release got written about. Typed in by hand, because nothing
  * reliably discovers a review and the artist usually hears first — a manager
  * forwarding "we got album of the week" is the moment this gets used.
+ *
+ * The one exception is a live Spotlight, which Trenodo knows about already.
+ * It slots in by date, unless the musician logged that article by hand.
  */
 export function CoverageSection({
   releaseId,
   items,
+  spotlight,
 }: {
   releaseId: string;
   items: CoverageRow[];
+  spotlight: SpotlightCoverage | null;
 }) {
   const [state, formAction, pending] = useActionState<CoverageState, FormData>(
     addCoverageAction,
@@ -108,17 +158,38 @@ export function CoverageSection({
   );
   const [open, setOpen] = useState(false);
 
+  const showSpotlight =
+    spotlight !== null && !items.some((item) => item.url === spotlight.url);
+  // Where the Spotlight goes in the newest-first list: before the first
+  // hand-logged item that's older, or undated.
+  const spotlightIndex = showSpotlight
+    ? (() => {
+        const index = items.findIndex(
+          (item) => !item.publishedOn || (spotlight.liveOn ?? "") >= item.publishedOn,
+        );
+        return index === -1 ? items.length : index;
+      })()
+    : -1;
+
   return (
     <div>
-      {items.length === 0 ? (
+      {items.length === 0 && !showSpotlight ? (
         <p className="text-sm text-muted">
           Nothing logged yet. Add the first review, playlist or post.
         </p>
       ) : (
         <ul>
-          {items.map((item) => (
-            <CoverageItem key={item.id} releaseId={releaseId} item={item} />
+          {items.map((item, index) => (
+            <Fragment key={item.id}>
+              {index === spotlightIndex && spotlight && (
+                <SpotlightCoverageItem spotlight={spotlight} />
+              )}
+              <CoverageItem releaseId={releaseId} item={item} />
+            </Fragment>
           ))}
+          {spotlightIndex === items.length && spotlight && (
+            <SpotlightCoverageItem spotlight={spotlight} />
+          )}
         </ul>
       )}
 

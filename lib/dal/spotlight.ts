@@ -308,7 +308,7 @@ export async function getPublishedSpotlight(slug: string) {
 
 /**
  * The live article about one of this account's own releases, if there is
- * one, for the Spotlight button on the release page. Scoped by account like
+ * one, for the Spotlight button and the Coverage list on the release page. Scoped by account like
  * everything in lib/dal/press.ts, and only once the article is public, so a
  * musician never gets a link that doesn't work yet.
  */
@@ -318,7 +318,13 @@ export async function getLiveSpotlightForRelease(
 ) {
   const db = await getDb();
   const [row] = await db
-    .select({ slug: spotlight.slug })
+    .select({
+      slug: spotlight.slug,
+      headline: spotlight.headline,
+      rating: spotlight.rating,
+      publishedAt: spotlight.publishedAt,
+      releaseDate: pressRelease.releaseDate,
+    })
     .from(spotlight)
     .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
     .where(

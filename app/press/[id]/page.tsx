@@ -20,6 +20,7 @@ import { PublishStatusMenu } from "./_components/publish-status-menu";
 import { SpotlightChecklist } from "./_components/spotlight-checklist";
 import { SpotlightMenu } from "./_components/spotlight-menu";
 import { getLiveSpotlightForRelease } from "@/lib/dal/spotlight";
+import { MAX_RATING } from "@/lib/spotlight/slug";
 import { displayName } from "@/lib/press/naming";
 import { DeleteAssetButton } from "./_components/delete-asset-button";
 import { RenameAssetButton } from "./_components/rename-asset-button";
@@ -118,6 +119,17 @@ export async function generateMetadata({ params }: PageProps<"/press/[id]">) {
   const account = await requireAccount(`/press/${id}`);
   const release = await getRelease(account.id, id);
   return { title: release ? `Press Kit: ${release.title}` : "Press Kit" };
+}
+
+/**
+ * The day a Spotlight went live, as YYYY-MM-DD: its publish date, or the
+ * release date if it was planned ahead and waited for that.
+ */
+function spotlightLiveOn(article: { publishedAt: Date | null; releaseDate: string | null }) {
+  const published = article.publishedAt?.toISOString().slice(0, 10) ?? null;
+  if (!published) return article.releaseDate;
+  if (!article.releaseDate) return published;
+  return article.releaseDate > published ? article.releaseDate : published;
 }
 
 export default async function ReleasePage({
@@ -258,7 +270,21 @@ export default async function ReleasePage({
           Coverage
         </h2>
         <Card className="mt-4">
-          <CoverageSection releaseId={id} items={coverage} />
+          <CoverageSection
+            releaseId={id}
+            items={coverage}
+            spotlight={
+              liveSpotlight
+                ? {
+                    url: `${APP_URL}/spotlight/${liveSpotlight.slug}`,
+                    headline: liveSpotlight.headline,
+                    rating: liveSpotlight.rating,
+                    maxRating: MAX_RATING,
+                    liveOn: spotlightLiveOn(liveSpotlight),
+                  }
+                : null
+            }
+          />
         </Card>
       </section>
 
