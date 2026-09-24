@@ -26,6 +26,13 @@ matter. The short version:
   scale, warm surfaces and shadows; `app/_components/ui.tsx` holds the
   primitives. Use `bg-surface`, `text-muted`, `border-line`, `shadow-soft` —
   never a raw colour.
+- **Name a feature, link to it.** When public copy mentions a Trenodo
+  feature (Link in Bio, Press Kit, Setlist, Tutor, Spotlight), its first
+  mention in a section links to that feature's page. The list of terms and
+  the `linkTerms()` helper live in `app/_components/linked-terms.tsx`;
+  FAQ answers and step texts already go through it. In hand-written JSX,
+  use `<TermLink>`. Never link inside a link, button or heading. A new
+  feature page means a new row in that list.
 - **The product is light-theme only.** Don't add `dark:` utilities; the
   variant is rebound to an unused `.dark` class, so they'd be dead code.
 - **`tutorId` is the tenant key.** Every query in `lib/dal/tutor.ts` filters on

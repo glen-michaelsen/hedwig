@@ -9,6 +9,8 @@ import {
   containerNarrow,
 } from "@/app/_components/ui";
 import { FaqSection } from "@/app/_components/marketing/faq-section";
+import { linkTerms } from "@/app/_components/linked-terms";
+import { TermLink } from "@/app/_components/term-link";
 
 const PAGE_DESCRIPTION =
   "How to get your release featured in Trenodo Spotlight. Create a free account, build a press kit for your release, and we take it from there.";
@@ -102,6 +104,8 @@ const structuredData = {
 };
 
 export default function GetFeaturedPage() {
+  const used = new Set<string>();
+
   return (
     <>
       <script
@@ -124,7 +128,7 @@ export default function GetFeaturedPage() {
                 Get your music in the Spotlight.
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted text-pretty">
-                Spotlight is where I write about releases that deserve more
+                <TermLink href="/spotlight">Spotlight</TermLink> is where I write about releases that deserve more
                 ears. Want yours to be one of them? It doesn&rsquo;t take a
                 pitch email or a PR agency. Just four simple steps. 🎧
               </p>
@@ -164,7 +168,7 @@ export default function GetFeaturedPage() {
                     {step.title}
                   </h3>
                   <p className="mt-2.5 text-[15px] leading-relaxed text-muted text-pretty">
-                    {step.body}
+                    {linkTerms(step.body, used)}
                   </p>
                 </li>
               ))}

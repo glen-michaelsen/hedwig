@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
 import { containerNarrow, focusable } from "@/app/_components/ui";
+import { linkTerms } from "@/app/_components/linked-terms";
 
 /**
  * Shared shell for every long-form guide under /knowledge — breadcrumb,
@@ -98,6 +99,8 @@ export function GuideFaq({
 }: {
   items: readonly { q: string; a: string }[];
 }) {
+  const used = new Set<string>();
+
   return (
     <section>
       <h2 className="text-2xl font-semibold tracking-tight">
@@ -129,7 +132,7 @@ export function GuideFaq({
               </svg>
             </summary>
             <p className="px-5 pb-4 text-base leading-relaxed text-muted text-pretty">
-              {item.a}
+              {linkTerms(item.a, used)}
             </p>
           </details>
         ))}

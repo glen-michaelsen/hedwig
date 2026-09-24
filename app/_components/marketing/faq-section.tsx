@@ -1,4 +1,5 @@
 import { containerNarrow, focusable } from "@/app/_components/ui";
+import { linkTerms } from "@/app/_components/linked-terms";
 
 /**
  * The "Before you ask" block on the marketing pages. Every question folds
@@ -11,6 +12,9 @@ export function FaqSection({
 }: {
   items: readonly { q: string; a: string }[];
 }) {
+  // Shared by every answer, so a feature links once per FAQ.
+  const used = new Set<string>();
+
   return (
     <section className="border-y border-line/70 bg-surface-muted/40 py-24 sm:py-32">
       <div className={containerNarrow}>
@@ -47,7 +51,7 @@ export function FaqSection({
                 </svg>
               </summary>
               <p className="px-6 pb-5 text-[15px] leading-relaxed text-muted text-pretty">
-                {item.a}
+                {linkTerms(item.a, used)}
               </p>
             </details>
           ))}

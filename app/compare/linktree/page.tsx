@@ -10,6 +10,7 @@ import {
   containerNarrow,
   focusable,
 } from "@/app/_components/ui";
+import { linkTerms } from "@/app/_components/linked-terms";
 
 /**
  * An honest comparison. Every Linktree fact below is sourced (SOURCES), and
@@ -161,7 +162,7 @@ const TRENODO_WINS = [
   "Everything is free. No trial, no plan to upgrade to.",
   "Remove the logo, pick your colours and see your numbers. All free.",
   "Made only for musicians, so the page stays simple.",
-  "Your link in bio, press kit and setlists live in one account.",
+  "Your Link in Bio, Press Kit and Setlist live in one account.",
   "A release button that switches from Pre-save to Listen on release day.",
 ];
 
@@ -225,6 +226,8 @@ const structuredData = {
 };
 
 function WinList({ items }: { items: readonly string[] }) {
+  const used = new Set<string>();
+
   return (
     <ul className="mt-5 space-y-3">
       {items.map((item) => (
@@ -243,7 +246,7 @@ function WinList({ items }: { items: readonly string[] }) {
               />
             </svg>
           </span>
-          {item}
+          <span>{linkTerms(item, used)}</span>
         </li>
       ))}
     </ul>
@@ -251,6 +254,9 @@ function WinList({ items }: { items: readonly string[] }) {
 }
 
 export default function TrenodoVsLinktreePage() {
+  // One set for the whole table, so each feature links once in it.
+  const used = new Set<string>();
+
   return (
     <>
       <script
@@ -345,7 +351,7 @@ export default function TrenodoVsLinktreePage() {
                       {row.feature}
                     </div>
                     <div className="px-5 py-3 text-sm leading-relaxed text-foreground text-pretty sm:px-6 sm:py-4">
-                      {row.trenodo}
+                      {linkTerms(row.trenodo, used)}
                     </div>
                     <div className="px-5 py-3 text-sm leading-relaxed text-muted text-pretty sm:px-6 sm:py-4">
                       {row.linktree}

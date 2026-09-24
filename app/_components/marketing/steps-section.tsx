@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { container } from "@/app/_components/ui";
+import { linkTerms } from "@/app/_components/linked-terms";
 
 /**
  * The numbered "how it works" steps on each tool page. Same dark purple
@@ -16,6 +17,8 @@ export function StepsSection({
   children: ReactNode;
   steps: readonly { n: string; title: string; body: string }[];
 }) {
+  const used = new Set<string>();
+
   return (
     <section className="bg-linear-to-br from-brand-700 via-brand-800 to-brand-900 py-24 sm:py-32">
       <div className={container}>
@@ -44,7 +47,7 @@ export function StepsSection({
                 {step.title}
               </h3>
               <p className="mt-2.5 text-[15px] leading-relaxed text-muted text-pretty">
-                {step.body}
+                {linkTerms(step.body, used)}
               </p>
             </li>
           ))}
