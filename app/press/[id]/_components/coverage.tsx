@@ -10,6 +10,7 @@ import {
   ErrorText,
   actionPill,
   button,
+  focusable,
   inputBase,
 } from "@/app/_components/ui";
 import type { CoverageRow } from "@/lib/dal/kit-stats";
@@ -34,6 +35,59 @@ function formatDate(value: string | null) {
   }).format(new Date(year, month - 1, day));
 }
 
+/**
+ * One line per piece of coverage. A real table, so a release with a dozen
+ * reviews stays a compact list instead of a tall stack of cards. Outlet and
+ * note drop off on small screens; the title keeps the room and truncates.
+ */
+function CoverageLine({
+  date,
+  kind,
+  title,
+  url,
+  outlet,
+  note,
+  action,
+}: {
+  date: string | null;
+  kind: string;
+  title: string;
+  url: string;
+  outlet: string | null;
+  note: string | null;
+  action: React.ReactNode;
+}) {
+  return (
+    <tr className="border-b border-line last:border-b-0">
+      <td className="py-2.5 pr-3 text-xs tabular-nums text-faint whitespace-nowrap">
+        {date ?? "No date"}
+      </td>
+      <td className="py-2.5 pr-3">
+        <span className="rounded-full bg-brand-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-brand-700">
+          {kind}
+        </span>
+      </td>
+      <td className="truncate py-2.5 pr-3 text-sm" title={title}>
+        <a
+          href={url}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="transition-colors hover:text-brand-700"
+        >
+          {title}
+        </a>
+      </td>
+      <td className="hidden truncate py-2.5 pr-3 text-xs font-medium sm:table-cell" title={outlet ?? undefined}>
+        {outlet}
+      </td>
+      <td className="hidden truncate py-2.5 pr-3 text-xs text-muted md:table-cell" title={note ?? undefined}>
+        {note}
+      </td>
+      <td className="py-2.5 text-right">{action}</td>
+    </tr>
+  );
+}
+
 function CoverageItem({
   releaseId,
   item,
@@ -50,43 +104,29 @@ function CoverageItem({
     startTransition(() => deleteCoverageAction(formData));
   }
 
-  const date = formatDate(item.publishedOn);
+  const title = item.title ?? item.url;
 
   return (
-    <li className="flex flex-wrap items-start gap-3 border-b border-line py-3 last:border-b-0">
-      <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-brand-500/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-brand-700 dark:text-brand-300">
-            {KIND_LABELS[item.kind]}
-          </span>
-          {item.outlet && (
-            <span className="text-xs font-medium">{item.outlet}</span>
-          )}
-          {date && <span className="text-xs text-faint">{date}</span>}
-        </div>
-
-        <a
-          href={item.url}
-          target="_blank"
-          rel="noreferrer noopener"
-          className="mt-1.5 block truncate text-sm transition-colors hover:text-brand-700 dark:hover:text-brand-300"
+    <CoverageLine
+      date={formatDate(item.publishedOn)}
+      kind={KIND_LABELS[item.kind]}
+      title={title}
+      url={item.url}
+      outlet={item.outlet}
+      note={item.note}
+      action={
+        <button
+          type="button"
+          onClick={remove}
+          disabled={pending}
+          aria-label={`Remove ${title}`}
+          title="Remove"
+          className={`inline-grid h-7 w-7 place-items-center rounded-full text-faint transition-colors hover:bg-rose-500/10 hover:text-rose-700 disabled:opacity-50 ${focusable}`}
         >
-          {item.title ?? item.url}
-        </a>
-        {item.note && (
-          <p className="mt-1 text-xs text-muted">{item.note}</p>
-        )}
-      </div>
-
-      <button
-        type="button"
-        onClick={remove}
-        disabled={pending}
-        className={`${actionPill} shrink-0 hover:border-rose-500/40 hover:text-rose-700`}
-      >
-        {pending ? "Removing…" : "Remove"}
-      </button>
-    </li>
+          ✕
+        </button>
+      }
+    />
   );
 }
 
@@ -102,36 +142,23 @@ export type SpotlightCoverage = {
 /** Trenodo's own review of the release. Added by us, so no Remove button:
  *  it goes away by itself if the article is ever taken down. */
 function SpotlightCoverageItem({ spotlight }: { spotlight: SpotlightCoverage }) {
-  const date = formatDate(spotlight.liveOn);
-
   return (
-    <li className="flex flex-wrap items-start gap-3 border-b border-line py-3 last:border-b-0">
-      <div className="min-w-0 flex-1">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-brand-500/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-brand-700">
-            {KIND_LABELS.review}
-          </span>
-          <span className="text-xs font-medium">Trenodo Spotlight</span>
-          {date && <span className="text-xs text-faint">{date}</span>}
-        </div>
-
-        <a
-          href={spotlight.url}
-          target="_blank"
-          rel="noreferrer noopener"
-          className="mt-1.5 block truncate text-sm transition-colors hover:text-brand-700"
+    <CoverageLine
+      date={formatDate(spotlight.liveOn)}
+      kind={KIND_LABELS.review}
+      title={spotlight.headline}
+      url={spotlight.url}
+      outlet="Trenodo Spotlight"
+      note={`${spotlight.rating} of ${spotlight.maxRating} hearts`}
+      action={
+        <span
+          title="Added by Trenodo. It updates by itself."
+          className="whitespace-nowrap rounded-full bg-surface-muted px-2 py-0.5 text-[11px] font-medium text-muted"
         >
-          {spotlight.headline}
-        </a>
-        <p className="mt-1 text-xs text-muted">
-          {spotlight.rating} of {spotlight.maxRating} hearts
-        </p>
-      </div>
-
-      <span className="shrink-0 rounded-full bg-surface-muted px-3 py-1.5 text-xs font-medium text-muted">
-        Added by Trenodo
-      </span>
-    </li>
+          By Trenodo
+        </span>
+      }
+    />
   );
 }
 
@@ -178,19 +205,33 @@ export function CoverageSection({
           Nothing logged yet. Add the first review, playlist or post.
         </p>
       ) : (
-        <ul>
-          {items.map((item, index) => (
-            <Fragment key={item.id}>
-              {index === spotlightIndex && spotlight && (
-                <SpotlightCoverageItem spotlight={spotlight} />
-              )}
-              <CoverageItem releaseId={releaseId} item={item} />
-            </Fragment>
-          ))}
-          {spotlightIndex === items.length && spotlight && (
-            <SpotlightCoverageItem spotlight={spotlight} />
-          )}
-        </ul>
+        <table className="w-full table-fixed border-collapse text-left">
+          <thead>
+            <tr className="border-b border-line text-[11px] font-semibold uppercase tracking-[0.08em] text-faint">
+              <th scope="col" className="w-24 pb-2 pr-3 font-semibold">Date</th>
+              <th scope="col" className="w-24 pb-2 pr-3 font-semibold">Type</th>
+              <th scope="col" className="pb-2 pr-3 font-semibold">Title</th>
+              <th scope="col" className="hidden w-36 pb-2 pr-3 font-semibold sm:table-cell">Outlet</th>
+              <th scope="col" className="hidden w-32 pb-2 pr-3 font-semibold md:table-cell">Note</th>
+              <th scope="col" className="w-20 pb-2">
+                <span className="sr-only">Actions</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item, index) => (
+              <Fragment key={item.id}>
+                {index === spotlightIndex && spotlight && (
+                  <SpotlightCoverageItem spotlight={spotlight} />
+                )}
+                <CoverageItem releaseId={releaseId} item={item} />
+              </Fragment>
+            ))}
+            {spotlightIndex === items.length && spotlight && (
+              <SpotlightCoverageItem spotlight={spotlight} />
+            )}
+          </tbody>
+        </table>
       )}
 
       {open ? (
