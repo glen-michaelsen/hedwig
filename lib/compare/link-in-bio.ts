@@ -339,10 +339,10 @@ export const linktreeAlternatives: Roundup = {
   kind: "roundup",
   slug: "linktree-alternatives",
   tool: "link-in-bio",
-  title: "Linktree Alternatives for Musicians",
+  title: "Link in Bio Tools for Musicians, Compared",
   lastChecked: LAST_CHECKED,
   description:
-    "The best Linktree alternatives for musicians, compared honestly. Price, fees and music features for Trenodo, Beacons, Feature.fm and Linkfire.",
+    "Link in bio tools for musicians, compared honestly. Price, fees and music features for Trenodo, Linktree, Beacons, Feature.fm and Linkfire, and the best Linktree alternatives.",
   intro:
     "Linktree is the default. But it's made for everyone, and the good parts cost money. Here are the alternatives worth a look if you make music. Full disclosure: the first one is ours.",
   entries: [

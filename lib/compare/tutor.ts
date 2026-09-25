@@ -217,10 +217,10 @@ export const myMusicStaffAlternatives: Roundup = {
   kind: "roundup",
   slug: "my-music-staff-alternatives",
   tool: "tutor",
-  title: "My Music Staff Alternatives for Music Teachers",
+  title: "Music Teacher Software, Compared",
   lastChecked: LAST_CHECKED,
   description:
-    "My Music Staff alternatives for private music teachers, compared honestly. Trenodo Tutor, TutorBird and Opus1, with price and what each one is for.",
+    "Music teacher software, compared honestly. Trenodo Tutor, My Music Staff, TutorBird and Opus1, with price and what each one is for. Including the best My Music Staff alternatives.",
   intro:
     "My Music Staff is the best-known software for music teachers. But it's not the only way to run your teaching. Here are the alternatives, and what each one is actually good at. Full disclosure: the first one is ours.",
   entries: [
