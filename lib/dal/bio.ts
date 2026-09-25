@@ -8,6 +8,7 @@ import {
   bioSocial,
   bioView,
 } from "@/db/schema";
+import { isOnPage } from "@/lib/bio/blocks";
 import { newId } from "@/lib/crypto";
 import { getDb } from "@/lib/db";
 
@@ -118,10 +119,13 @@ export async function listBlocks(pageId: string) {
     .orderBy(asc(bioBlock.position));
 }
 
+export type BlockScheduleInput = { showFrom: Date | null; showUntil: Date | null };
+
 export async function addBlock(
   accountId: string,
   kind: string,
   config: unknown,
+  schedule: BlockScheduleInput,
 ) {
   const db = await getDb();
   const pageId = await ownedPageId(accountId);
@@ -136,6 +140,7 @@ export async function addBlock(
     kind: kind as "link",
     position: existing.length,
     config: JSON.stringify(config),
+    ...schedule,
   });
   return id;
 }
@@ -144,6 +149,7 @@ export async function updateBlock(
   accountId: string,
   blockId: string,
   config: unknown,
+  schedule: BlockScheduleInput,
 ) {
   const db = await getDb();
   const pageId = await ownedPageId(accountId);
@@ -151,7 +157,7 @@ export async function updateBlock(
 
   await db
     .update(bioBlock)
-    .set({ config: JSON.stringify(config) })
+    .set({ config: JSON.stringify(config), ...schedule })
     .where(and(eq(bioBlock.id, blockId), eq(bioBlock.pageId, pageId)));
 }
 
@@ -298,7 +304,10 @@ export async function getPublicPage(handle: string) {
     listSocials(page.id),
   ]);
 
-  return { page, blocks: blocks.filter((b) => b.visible), socials };
+  // Switched on and inside its schedule. The owner's preview goes through
+  // the same filter, so it shows what fans see right now.
+  const now = new Date();
+  return { page, blocks: blocks.filter((b) => isOnPage(b, now)), socials };
 }
 
 /**
@@ -322,7 +331,10 @@ export async function getPreviewPage(handle: string, accountId: string) {
     listSocials(page.id),
   ]);
 
-  return { page, blocks: blocks.filter((b) => b.visible), socials };
+  // Switched on and inside its schedule. The owner's preview goes through
+  // the same filter, so it shows what fans see right now.
+  const now = new Date();
+  return { page, blocks: blocks.filter((b) => isOnPage(b, now)), socials };
 }
 
 /** An old handle resolves to the current one so the URL can redirect. */

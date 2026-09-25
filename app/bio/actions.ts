@@ -209,6 +209,32 @@ async function configFromForm(kind: string, formData: FormData) {
   return null;
 }
 
+/**
+ * The block's schedule. The form sends ISO strings in UTC: the browser
+ * converts from the musician's own time zone before submitting, so the
+ * server never has to guess which zone "18:00" meant.
+ */
+function scheduleFromForm(
+  formData: FormData,
+): { ok: true; value: dal.BlockScheduleInput } | { ok: false; error: string } {
+  const read = (name: string) => {
+    const raw = String(formData.get(name) ?? "").trim();
+    if (!raw) return null;
+    const date = new Date(raw);
+    return Number.isNaN(date.getTime()) ? undefined : date;
+  };
+
+  const showFrom = read("showFrom");
+  const showUntil = read("showUntil");
+  if (showFrom === undefined || showUntil === undefined) {
+    return { ok: false, error: "Check the dates in the schedule." };
+  }
+  if (showFrom && showUntil && showUntil <= showFrom) {
+    return { ok: false, error: "The end of the schedule has to be after the start." };
+  }
+  return { ok: true, value: { showFrom, showUntil } };
+}
+
 export async function saveBlockAction(
   formData: FormData,
 ): Promise<ActionResult> {
@@ -245,10 +271,13 @@ export async function saveBlockAction(
     }
   }
 
+  const schedule = scheduleFromForm(formData);
+  if (!schedule.ok) return { error: schedule.error };
+
   if (blockId) {
-    await dal.updateBlock(account.id, blockId, config);
+    await dal.updateBlock(account.id, blockId, config, schedule.value);
   } else {
-    await dal.addBlock(account.id, kind, config);
+    await dal.addBlock(account.id, kind, config, schedule.value);
   }
 
   revalidateBio(page.handle);

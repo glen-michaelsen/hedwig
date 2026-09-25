@@ -16,3 +16,8 @@ export async function daysAgoIso(days: number): Promise<string> {
     .toISOString()
     .slice(0, 10);
 }
+
+/** This moment as an ISO string, for server components to pass down. */
+export async function nowIso(): Promise<string> {
+  return new Date().toISOString();
+}

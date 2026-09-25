@@ -18,6 +18,7 @@ import { CopyLink } from "./_components/copy-link";
 import { ProfileForm } from "./_components/profile-form";
 import { SocialsForm } from "./_components/socials-form";
 import { setPublishedAction } from "./actions";
+import { nowIso } from "@/lib/clock";
 
 export const metadata = { title: "Link in Bio" };
 
@@ -46,6 +47,8 @@ export default async function BioEditorPage() {
   ]);
 
   const blocks = parseBlocks(blockRows);
+  // One moment for the whole list, so every block's schedule status agrees.
+  const now = await nowIso();
   const clicks = Object.fromEntries(stats.clicksByBlock);
   const url = bioPageUrl(page.handle);
   const shareUrl = `${APP_URL}${url}`;
@@ -103,7 +106,12 @@ export default async function BioEditorPage() {
 
       <div className="space-y-14">
         <section>
-          <BlockEditor blocks={blocks} clicks={clicks} releases={releases} />
+          <BlockEditor
+            blocks={blocks}
+            clicks={clicks}
+            releases={releases}
+            now={now}
+          />
         </section>
 
         <section>

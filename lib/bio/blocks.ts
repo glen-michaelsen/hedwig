@@ -56,12 +56,40 @@ export type PlayerConfig = z.infer<typeof playerConfig>;
 export type VideoConfig = z.infer<typeof videoConfig>;
 export type ReleaseConfig = z.infer<typeof releaseConfig>;
 
-export type ParsedBlock =
-  | { id: string; kind: "link"; visible: boolean; config: LinkConfig }
-  | { id: string; kind: "text"; visible: boolean; config: TextConfig }
-  | { id: string; kind: "player"; visible: boolean; config: PlayerConfig }
-  | { id: string; kind: "video"; visible: boolean; config: VideoConfig }
-  | { id: string; kind: "release"; visible: boolean; config: ReleaseConfig };
+/** When a block is live. Either side can be open. Optional so sample
+ *  blocks (the marketing mockup) don't have to spell it out. */
+type BlockSchedule = { showFrom?: Date | null; showUntil?: Date | null };
+
+export type ParsedBlock = BlockSchedule &
+  (
+    | { id: string; kind: "link"; visible: boolean; config: LinkConfig }
+    | { id: string; kind: "text"; visible: boolean; config: TextConfig }
+    | { id: string; kind: "player"; visible: boolean; config: PlayerConfig }
+    | { id: string; kind: "video"; visible: boolean; config: VideoConfig }
+    | { id: string; kind: "release"; visible: boolean; config: ReleaseConfig }
+  );
+
+export type ScheduleState = "always" | "upcoming" | "live" | "ended";
+
+/**
+ * Where a block is in its schedule at `now`. "live" means inside a window
+ * that has an end; "always" means no schedule at all. Ignores `visible`,
+ * which is a separate, manual switch.
+ */
+export function scheduleState(block: BlockSchedule, now: Date): ScheduleState {
+  const from = block.showFrom ?? null;
+  const until = block.showUntil ?? null;
+  if (!from && !until) return "always";
+  if (from && now < from) return "upcoming";
+  if (until && now >= until) return "ended";
+  return "live";
+}
+
+/** Whether fans see the block right now: switched on, and inside its window. */
+export function isOnPage(block: BlockSchedule & { visible: boolean }, now: Date) {
+  const state = scheduleState(block, now);
+  return block.visible && (state === "always" || state === "live");
+}
 
 export function parseBlockConfig(kind: string, raw: unknown) {
   const schema = CONFIG_BY_KIND[kind as BlockKind];
@@ -72,7 +100,14 @@ export function parseBlockConfig(kind: string, raw: unknown) {
 
 /** Rows straight from the database → blocks safe to render. */
 export function parseBlocks(
-  rows: { id: string; kind: string; visible: boolean; config: string }[],
+  rows: {
+    id: string;
+    kind: string;
+    visible: boolean;
+    config: string;
+    showFrom?: Date | null;
+    showUntil?: Date | null;
+  }[],
 ): ParsedBlock[] {
   const out: ParsedBlock[] = [];
 
@@ -91,6 +126,8 @@ export function parseBlocks(
       kind: row.kind as BlockKind,
       visible: row.visible,
       config,
+      showFrom: row.showFrom ?? null,
+      showUntil: row.showUntil ?? null,
     } as ParsedBlock);
   }
 

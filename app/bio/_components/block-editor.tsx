@@ -22,7 +22,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useState, useSyncExternalStore, useTransition } from "react";
 import {
   deleteBlockAction,
   lookupVideoTitleAction,
@@ -30,7 +30,13 @@ import {
   saveBlockAction,
   toggleBlockAction,
 } from "../actions";
-import { BLOCK_KINDS, BLOCK_LABELS, type ParsedBlock } from "@/lib/bio/blocks";
+import {
+  BLOCK_KINDS,
+  BLOCK_LABELS,
+  isOnPage,
+  scheduleState,
+  type ParsedBlock,
+} from "@/lib/bio/blocks";
 import type { BlockKind } from "@/lib/bio/blocks";
 import type { ReleaseLink } from "@/lib/dal/press";
 import { Modal } from "@/app/_components/modal";
@@ -50,6 +56,94 @@ import { useAction } from "./use-action";
 
 type Editing = { mode: "add" } | { mode: "edit"; block: ParsedBlock };
 
+/* ------------------------------- schedule ------------------------------- */
+
+function subscribe() {
+  return () => {};
+}
+
+/**
+ * Schedule times show in the musician's own time zone, which only the
+ * browser knows. So they render after hydration, never on the server,
+ * where they'd come out in UTC and then disagree with the client.
+ */
+function useIsClient() {
+  return useSyncExternalStore(subscribe, () => true, () => false);
+}
+
+function formatWhen(date: Date, now: Date) {
+  return new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    ...(date.getFullYear() === now.getFullYear() ? {} : { year: "numeric" }),
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+}
+
+/** "2026-10-12T18:00", the value a datetime-local input wants, in local time. */
+function toLocalInput(date: Date | null | undefined) {
+  if (!date) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(
+    date.getHours(),
+  )}:${pad(date.getMinutes())}`;
+}
+
+/** The input's local wall time as an ISO string in UTC, or "" when empty. */
+function toIso(local: string) {
+  if (!local) return "";
+  const date = new Date(local);
+  return Number.isNaN(date.getTime()) ? "" : date.toISOString();
+}
+
+function ClockIcon() {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className="h-3.5 w-3.5 shrink-0">
+      <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M10 6v4l2.5 2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/**
+ * One line under a scheduled block, saying where it stands. An ended block
+ * stays ended until its schedule is edited, so that line spells it out.
+ */
+function ScheduleLine({ block, now }: { block: ParsedBlock; now: Date }) {
+  const isClient = useIsClient();
+  const state = scheduleState(block, now);
+  if (state === "always" || !isClient) return null;
+
+  const from = block.showFrom ?? null;
+  const until = block.showUntil ?? null;
+
+  const text =
+    state === "upcoming"
+      ? `Not live yet. Shows from ${formatWhen(from!, now)}${
+          until ? ` until ${formatWhen(until, now)}` : ""
+        }`
+      : state === "ended"
+        ? `Ended ${formatWhen(until!, now)}. No longer on your page`
+        : until
+          ? `Live until ${formatWhen(until, now)}`
+          : `Live since ${formatWhen(from!, now)}`;
+
+  const tone =
+    state === "upcoming"
+      ? "text-amber-700"
+      : state === "ended"
+        ? "text-faint"
+        : "text-brand-700";
+
+  return (
+    <span className={`mt-1 flex items-center gap-1.5 text-xs ${tone}`}>
+      <ClockIcon />
+      <span className="truncate">{text}</span>
+    </span>
+  );
+}
+
 function summarise(block: ParsedBlock, releases: ReleaseLink[]): string {
   if (block.kind === "link") return block.config.label;
   if (block.kind === "text") {
@@ -68,11 +162,15 @@ export function BlockEditor({
   blocks,
   clicks,
   releases,
+  now: nowIso,
 }: {
   blocks: ParsedBlock[];
   clicks: Record<string, number>;
   releases: ReleaseLink[];
+  /** When the server rendered the list, as ISO. */
+  now: string;
 }) {
+  const now = new Date(nowIso);
   const [editing, setEditing] = useState<Editing | null>(null);
   const [, startTransition] = useTransition();
 
@@ -149,6 +247,7 @@ export function BlockEditor({
                     block={block}
                     releases={releases}
                     clicks={clicks[block.id] ?? 0}
+                    now={now}
                     onEdit={() => setEditing({ mode: "edit", block })}
                   />
                 ))}
@@ -178,11 +277,13 @@ function SortableRow({
   block,
   releases,
   clicks,
+  now,
   onEdit,
 }: {
   block: ParsedBlock;
   releases: ReleaseLink[];
   clicks: number;
+  now: Date;
   onEdit: () => void;
 }) {
   const {
@@ -203,7 +304,7 @@ function SortableRow({
         isDragging
           ? "relative z-10 border-brand-400 shadow-lift"
           : "border-line shadow-soft"
-      } ${block.visible ? "" : "opacity-60"}`}
+      } ${isOnPage(block, now) ? "" : "opacity-60"}`}
     >
       <button
         ref={setActivatorNodeRef}
@@ -234,9 +335,10 @@ function SortableRow({
         </span>
         {clicks > 0 && (
           <span className="mt-0.5 block text-xs tabular-nums text-faint">
-            {clicks} clicks
+            {clicks} {clicks === 1 ? "click" : "clicks"}
           </span>
         )}
+        <ScheduleLine block={block} now={now} />
       </span>
 
       <span className="flex shrink-0 items-center gap-2">
@@ -290,6 +392,13 @@ function BlockModal({
     existing?.kind === "video" ? (existing.config.title ?? "") : "",
   );
   const [lookingUpTitle, setLookingUpTitle] = useState(false);
+
+  const [showFrom, setShowFrom] = useState(toLocalInput(existing?.showFrom));
+  const [showUntil, setShowUntil] = useState(toLocalInput(existing?.showUntil));
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  // Decided once, when the modal opens. Tied to the fields instead, clearing
+  // both would snap the section shut while you're still in it.
+  const [scheduleOpenAtStart] = useState(Boolean(showFrom || showUntil));
 
   /**
    * Fills the title from the video page as soon as a URL is entered — only
@@ -544,6 +653,68 @@ function BlockModal({
             )}
           </div>
         )}
+
+        {/* Open by itself when the block already has a schedule. */}
+        <details
+          open={scheduleOpenAtStart}
+          className="group rounded-3xl border border-line px-5 py-4"
+        >
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-medium [&::-webkit-details-marker]:hidden">
+            <span className="flex items-center gap-2">
+              <ClockIcon />
+              Schedule
+              <span className="font-normal text-faint">Optional</span>
+            </span>
+            <svg
+              viewBox="0 0 12 12"
+              aria-hidden="true"
+              className="h-3 w-3 text-muted transition-transform group-open:rotate-180"
+            >
+              <path d="M2.5 4.5 6 8l3.5-3.5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </summary>
+
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            {(
+              [
+                { id: "showFromLocal", title: "Show from", value: showFrom, set: setShowFrom },
+                { id: "showUntilLocal", title: "Show until", value: showUntil, set: setShowUntil },
+              ] as const
+            ).map((field) => (
+              <div key={field.id}>
+                <div className="flex items-baseline justify-between gap-2">
+                  <label className={label} htmlFor={field.id}>
+                    {field.title}
+                  </label>
+                  {field.value && (
+                    <button
+                      type="button"
+                      onClick={() => field.set("")}
+                      className="text-xs text-faint transition-colors hover:text-foreground"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+                <input
+                  className={input}
+                  id={field.id}
+                  type="datetime-local"
+                  value={field.value}
+                  onChange={(event) => field.set(event.target.value)}
+                />
+              </div>
+            ))}
+          </div>
+          {/* What the server gets: the same moments, in UTC. */}
+          <input type="hidden" name="showFrom" value={toIso(showFrom)} />
+          <input type="hidden" name="showUntil" value={toIso(showUntil)} />
+          <p className="mt-3 text-xs leading-relaxed text-faint">
+            Leave both empty to show the block right away and keep it up.
+            Times are in your time zone ({timeZone}). A block that has ended
+            stays off your page until you change its schedule.
+          </p>
+        </details>
 
         {error && <ErrorText>{error}</ErrorText>}
 

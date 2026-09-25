@@ -367,6 +367,14 @@ export const bioBlock = sqliteTable(
     position: integer("position").notNull(),
     visible: integer("visible", { mode: "boolean" }).notNull().default(true),
     config: text("config").notNull(),
+    /**
+     * An optional window the block is live in. Null means no limit on that
+     * side. Checked when the public page renders, so a block appears and
+     * disappears on time with no job running. `visible` still wins: a
+     * hidden block stays hidden whatever its schedule says.
+     */
+    showFrom: integer("show_from", { mode: "timestamp" }),
+    showUntil: integer("show_until", { mode: "timestamp" }),
   },
   (t) => [index("bio_block_page_idx").on(t.pageId, t.position)],
 );
