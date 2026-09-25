@@ -9,19 +9,19 @@ import { resolveTheme, themeVars } from "@/lib/bio/theme";
 
 /**
  * A real phone showing a real bio page — reusing the actual public-page
- * renderer (BlockRenderer) and theme engine (resolveTheme/themeVars) with
- * made-up content, rather than a screenshot. It never drifts from what the
- * product actually looks like, and switching the swatch below is a real
- * theme change, not a second image to keep in sync.
+ * renderer (BlockRenderer) and theme engine (resolveTheme/themeVars), rather
+ * than a screenshot. It never drifts from what the product actually looks
+ * like, and switching the swatch below is a real theme change, not a second
+ * image to keep in sync.
  *
- * Sample content only: nothing here reads from the database, and the phone
- * itself is inert (pointer-events-none) — it's a picture that happens to be
- * built out of real components, not a working page.
+ * The content is Glen's own page, trenodo.com/@glen, copied here by hand:
+ * nothing reads from the database, and the phone itself is inert
+ * (pointer-events-none). If that page changes a lot, update this to match.
  */
 
-const SAMPLE_PAGE = {
-  title: "Glen",
-  tagline: "Producer & vocalist. New EP out now",
+const PAGE = {
+  title: "Glen Michaelsen",
+  tagline: "Passionate about Marketing, Entrepreneurship, Music, and Board Games",
   avatarKey: null,
   accentColor: null as string | null,
   backgroundKind: "preset" as const,
@@ -29,60 +29,51 @@ const SAMPLE_PAGE = {
   showCredit: true,
 };
 
-const SAMPLE_SOCIALS = [
+/** Same photo as the About me section on the front page. */
+const AVATAR = "/images/about/glen.jpg";
+
+const SOCIALS = [
   { id: "s1", platform: "instagram", url: "#" },
-  { id: "s2", platform: "spotify", url: "#" },
+  { id: "s2", platform: "youtube", url: "#" },
 ];
 
-const SAMPLE_BLOCKS: ParsedBlock[] = [
-  {
-    id: "b1",
-    kind: "link",
-    visible: true,
-    config: { label: "Listen to “Nordlys”", url: "#", description: null },
-  },
+const BLOCKS: ParsedBlock[] = [
+  { id: "b1", kind: "text", visible: true, config: { variant: "heading", value: "Projects" } },
   {
     id: "b2",
-    kind: "text",
+    kind: "link",
     visible: true,
-    config: { variant: "heading", value: "Upcoming shows" },
+    config: { label: "Trenodo", url: "#", description: "Free Toolbox for Musicians" },
   },
   {
     id: "b3",
     kind: "link",
     visible: true,
-    config: { label: "Copenhagen, Vega", url: "#", description: "Sept 14" },
+    config: { label: "Čujemo se", url: "#", description: "Free Online Serbian Lessons" },
   },
-  {
-    id: "b4",
-    kind: "link",
-    visible: true,
-    config: { label: "Aarhus, Voxhall", url: "#", description: "Sept 21" },
-  },
-  { id: "b5", kind: "text", visible: true, config: { variant: "divider", value: null } },
-  {
-    id: "b6",
-    kind: "link",
-    visible: true,
-    config: { label: "Merch", url: "#", description: null },
-  },
+  { id: "b4", kind: "text", visible: true, config: { variant: "divider", value: null } },
+  { id: "b5", kind: "text", visible: true, config: { variant: "heading", value: "Portfolio" } },
+  { id: "b6", kind: "link", visible: true, config: { label: "Unsplash", url: "#", description: null } },
+  { id: "b7", kind: "link", visible: true, config: { label: "SoundCloud", url: "#", description: null } },
+  { id: "b8", kind: "link", visible: true, config: { label: "Medium", url: "#", description: null } },
 ];
 
+/** Ivory first: it's the theme Glen's real page uses. */
 const SWATCHES = [
-  { id: "midnight", label: "Midnight" },
+  { id: "ivory", label: "Ivory" },
   { id: "sand", label: "Sand" },
   { id: "blush", label: "Blush" },
+  { id: "midnight", label: "Midnight" },
 ] as const;
 
 export function BioMockup() {
-  // Starts on a light theme — a dark one sits right against the phone's
-  // own black bezel and reads as one flat block. Midnight's still one of
-  // the swatches below, just not what loads first.
+  // Starts on Ivory, the real page's theme. A dark one would also sit
+  // right against the phone's black bezel and read as one flat block.
   const [presetId, setPresetId] = useState<(typeof SWATCHES)[number]["id"]>(
-    "sand",
+    "ivory",
   );
 
-  const theme = resolveTheme({ ...SAMPLE_PAGE, themePreset: presetId });
+  const theme = resolveTheme({ ...PAGE, themePreset: presetId });
 
   return (
     <div className="select-none">
@@ -92,20 +83,25 @@ export function BioMockup() {
       >
         <div className="px-6 pt-14 pb-16">
           <header className="flex flex-col items-center text-center">
-            <span className="grid h-24 w-24 place-items-center rounded-full bg-[var(--bio-accent)] text-2xl font-semibold text-[var(--bio-accent-fg)]">
-              {SAMPLE_PAGE.title.slice(0, 1)}
-            </span>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={AVATAR}
+              alt=""
+              width={96}
+              height={96}
+              className="h-24 w-24 rounded-full object-cover shadow-lg"
+            />
 
             <h1 className="mt-6 text-2xl font-semibold tracking-tight text-balance">
-              {SAMPLE_PAGE.title}
+              {PAGE.title}
             </h1>
 
             <p className="mt-2 text-sm leading-relaxed text-[var(--bio-muted)] text-pretty">
-              {SAMPLE_PAGE.tagline}
+              {PAGE.tagline}
             </p>
 
             <nav className="mt-6 flex flex-wrap justify-center gap-2">
-              {SAMPLE_SOCIALS.map((social) => (
+              {SOCIALS.map((social) => (
                 <span
                   key={social.id}
                   className="rounded-full border border-current/20 px-3.5 py-1.5 text-xs font-medium opacity-80"
@@ -117,7 +113,7 @@ export function BioMockup() {
           </header>
 
           <div className="mt-10 space-y-3.5">
-            {SAMPLE_BLOCKS.map((block) => (
+            {BLOCKS.map((block) => (
               <BlockRenderer key={block.id} block={block} today="2026-01-01" />
             ))}
           </div>
@@ -142,7 +138,7 @@ export function BioMockup() {
                 : "border-transparent hover:scale-105"
             }`}
             style={{
-              background: resolveTheme({ ...SAMPLE_PAGE, themePreset: swatch.id }).bg,
+              background: resolveTheme({ ...PAGE, themePreset: swatch.id }).bg,
             }}
           />
         ))}
