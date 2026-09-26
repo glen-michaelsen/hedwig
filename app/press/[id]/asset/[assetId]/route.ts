@@ -1,5 +1,6 @@
 import { getAccount } from "@/lib/auth";
 import { getAsset } from "@/lib/dal/press";
+import { pressOwnerFor } from "@/lib/press/scope";
 import { downloadName } from "@/lib/press/naming";
 import { getObject } from "@/lib/r2";
 import { getImageVariant } from "@/lib/press/images";
@@ -18,13 +19,17 @@ export async function GET(
   request: Request,
   { params }: RouteContext<"/press/[id]/asset/[assetId]">,
 ) {
-  const { assetId } = await params;
+  const { id: releaseId, assetId } = await params;
 
   const account = await getAccount();
   if (!account) return new Response("Not found", { status: 404 });
 
-  const asset = await getAsset(account.id, assetId);
-  if (!asset) return new Response("Not found", { status: 404 });
+  // The owner's account, also when an admin opens someone else's kit. The
+  // asset must belong to the release in the URL, not just to that account.
+  const asset = await getAsset(await pressOwnerFor(account, releaseId), assetId);
+  if (!asset || asset.releaseId !== releaseId) {
+    return new Response("Not found", { status: 404 });
+  }
 
   const url = new URL(request.url);
   const wantsDownload = url.searchParams.has("download");

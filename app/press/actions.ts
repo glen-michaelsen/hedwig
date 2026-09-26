@@ -3,11 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { requireAccount } from "@/lib/auth";
+import { requireAccount, requireAdmin } from "@/lib/auth";
 import * as dal from "@/lib/dal/press";
 import * as stats from "@/lib/dal/kit-stats";
 import { fetchLinkMeta } from "@/lib/links";
 import { deletePressObject } from "@/lib/press/images";
+import { pressOwnerFor } from "@/lib/press/scope";
 import {
   GENRES,
   GENRE_MAX,
@@ -135,14 +136,15 @@ export async function updateReleaseAction(
 ): Promise<ReleaseFormState> {
   const account = await requireAccount();
   const releaseId = String(formData.get("releaseId"));
+  const ownerId = await pressOwnerFor(account, releaseId);
 
   const parsed = readRelease(formData);
   if (!parsed.ok) return { error: parsed.error };
 
-  const artistId = await resolveArtistId(account.id, formData);
+  const artistId = await resolveArtistId(ownerId, formData);
   if (!artistId) return { error: "Choose an artist, or add a new one" };
 
-  await dal.updateRelease(account.id, releaseId, {
+  await dal.updateRelease(ownerId, releaseId, {
     artistId,
     ...parsed.value,
   });
@@ -155,8 +157,9 @@ export async function updateReleaseAction(
 export async function deleteReleaseAction(formData: FormData) {
   const account = await requireAccount();
   const releaseId = String(formData.get("releaseId"));
+  const ownerId = await pressOwnerFor(account, releaseId);
 
-  const keys = await dal.deleteRelease(account.id, releaseId);
+  const keys = await dal.deleteRelease(ownerId, releaseId);
   // Rows first, then the objects: an orphaned object costs storage, while a
   // row pointing at a deleted object is a broken page.
   await Promise.all(keys.map((key) => deletePressObject(key)));
@@ -168,8 +171,9 @@ export async function deleteReleaseAction(formData: FormData) {
 export async function deleteAssetAction(formData: FormData) {
   const account = await requireAccount();
   const releaseId = String(formData.get("releaseId"));
+  const ownerId = await pressOwnerFor(account, releaseId);
 
-  const key = await dal.deleteAsset(account.id, String(formData.get("assetId")));
+  const key = await dal.deleteAsset(ownerId, String(formData.get("assetId")));
   if (key) await deletePressObject(key);
 
   revalidatePath(`/press/${releaseId}`);
@@ -183,9 +187,10 @@ export async function deleteAssetAction(formData: FormData) {
 export async function toggleReleasePublishedAction(formData: FormData) {
   const account = await requireAccount();
   const releaseId = String(formData.get("releaseId"));
+  const ownerId = await pressOwnerFor(account, releaseId);
 
   await dal.setReleasePublished(
-    account.id,
+    ownerId,
     releaseId,
     formData.get("published") === "1",
   );
@@ -204,9 +209,10 @@ function captionValue(formData: FormData): string | null {
 export async function setAssetCaptionAction(formData: FormData) {
   const account = await requireAccount();
   const releaseId = String(formData.get("releaseId"));
+  const ownerId = await pressOwnerFor(account, releaseId);
 
   await dal.setAssetCaption(
-    account.id,
+    ownerId,
     String(formData.get("assetId")),
     captionValue(formData),
   );
@@ -217,8 +223,9 @@ export async function setAssetCaptionAction(formData: FormData) {
 export async function setAllPhotoCaptionsAction(formData: FormData) {
   const account = await requireAccount();
   const releaseId = String(formData.get("releaseId"));
+  const ownerId = await pressOwnerFor(account, releaseId);
 
-  await dal.setAllPhotoCaptions(account.id, releaseId, captionValue(formData));
+  await dal.setAllPhotoCaptions(ownerId, releaseId, captionValue(formData));
 
   revalidatePath(`/press/${releaseId}`);
 }
@@ -248,6 +255,7 @@ export async function addCoverageAction(
 ): Promise<CoverageState> {
   const account = await requireAccount();
   const releaseId = String(formData.get("releaseId"));
+  const ownerId = await pressOwnerFor(account, releaseId);
 
   const url = String(formData.get("url") ?? "").trim();
   if (!z.url().safeParse(url).success) {
@@ -281,7 +289,7 @@ export async function addCoverageAction(
     }
   }
 
-  const ok = await stats.addCoverage(account.id, releaseId, {
+  const ok = await stats.addCoverage(ownerId, releaseId, {
     url,
     title,
     outlet,
@@ -298,21 +306,56 @@ export async function addCoverageAction(
 
 export async function deleteCoverageAction(formData: FormData) {
   const account = await requireAccount();
-  await stats.deleteCoverage(account.id, String(formData.get("coverageId")));
-  revalidatePath(`/press/${String(formData.get("releaseId"))}`);
+  const releaseId = String(formData.get("releaseId"));
+  const ownerId = await pressOwnerFor(account, releaseId);
+  await stats.deleteCoverage(ownerId, String(formData.get("coverageId")));
+  revalidatePath(`/press/${releaseId}`);
 }
 
 /** Renaming a file changes what pages call it, never the stored object. */
 export async function renameAssetAction(formData: FormData) {
   const account = await requireAccount();
   const releaseId = String(formData.get("releaseId"));
+  const ownerId = await pressOwnerFor(account, releaseId);
 
   const raw = String(formData.get("title") ?? "").trim();
   await dal.setAssetTitle(
-    account.id,
+    ownerId,
     String(formData.get("assetId")),
     raw.length > 0 ? raw.slice(0, 200) : null,
   );
 
   revalidatePath(`/press/${releaseId}`);
+}
+
+/* ------------------------------ admin only ------------------------------ */
+
+export type AccountMatch = { id: string; name: string; email: string };
+
+/** The transfer dialog's search, by name or email. Admins only. */
+export async function searchAccountsAction(query: string): Promise<AccountMatch[]> {
+  await requireAdmin();
+  if (query.trim().length < 2) return [];
+  return dal.searchAccounts(query);
+}
+
+/**
+ * Hands a press kit to another account. Admins only: the check is here, not
+ * in the dialog, since anyone can call a server action directly.
+ */
+export async function transferReleaseAction(
+  releaseId: string,
+  toAccountId: string,
+): Promise<{ ok: true; name: string } | { error: string }> {
+  await requireAdmin();
+
+  const target = await dal.getAccountSummary(toAccountId);
+  if (!target) return { error: "That account doesn't exist anymore" };
+
+  const ok = await dal.transferRelease(releaseId, toAccountId);
+  if (!ok) return { error: "That press kit doesn't exist anymore" };
+
+  revalidatePath("/press");
+  revalidatePath(`/press/${releaseId}`);
+  return { ok: true, name: target.name };
 }

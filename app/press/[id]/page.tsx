@@ -1,9 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { requireAccount } from "@/lib/auth";
+import { isAdmin, requireAccount } from "@/lib/auth";
+import { pressOwnerFor } from "@/lib/press/scope";
 import { daysAgoIso } from "@/lib/clock";
 import { getEnv } from "@/lib/db";
-import { getRelease, listAssets, type ReleaseAssetRow } from "@/lib/dal/press";
+import {
+  getAccountSummary,
+  getRelease,
+  listAssets,
+  type ReleaseAssetRow,
+} from "@/lib/dal/press";
 import { ASSET_RULES, formatBytes, type AssetKind } from "@/lib/press/assets";
 import { parseTagList } from "@/lib/press/taxonomy";
 import { Card, PageHeader, actionPill, buttonGhost } from "@/app/_components/ui";
@@ -19,6 +25,7 @@ import { KitStatsPanel } from "./_components/kit-stats-panel";
 import { PublishStatusMenu } from "./_components/publish-status-menu";
 import { SpotlightChecklist } from "./_components/spotlight-checklist";
 import { SpotlightMenu } from "./_components/spotlight-menu";
+import { TransferOwnership } from "./_components/transfer-ownership";
 import { getLiveSpotlightForRelease } from "@/lib/dal/spotlight";
 import { MAX_RATING } from "@/lib/spotlight/slug";
 import { displayName } from "@/lib/press/naming";
@@ -117,7 +124,7 @@ function FileRow({
 export async function generateMetadata({ params }: PageProps<"/press/[id]">) {
   const { id } = await params;
   const account = await requireAccount(`/press/${id}`);
-  const release = await getRelease(account.id, id);
+  const release = await getRelease(await pressOwnerFor(account, id), id);
   return { title: release ? `Press Kit: ${release.title}` : "Press Kit" };
 }
 
@@ -137,6 +144,9 @@ export default async function ReleasePage({
 }: PageProps<"/press/[id]">) {
   const { id } = await params;
   const account = await requireAccount(`/press/${id}`);
+  // Your own kit, or, for an admin, whoever owns it (lib/press/scope.ts).
+  const ownerId = await pressOwnerFor(account, id);
+  const admin = await isAdmin(account);
 
   const since = await daysAgoIso(29);
   // The window itself, so the chart can draw the quiet days too. Pure date
@@ -163,18 +173,21 @@ export default async function ReleasePage({
     liveSpotlight,
   ] =
     await Promise.all([
-      getRelease(account.id, id),
-      listAssets(account.id, id),
+      getRelease(ownerId, id),
+      listAssets(ownerId, id),
       getEnv(),
-      getKitStats(account.id, id),
-      getKitDaily(account.id, id, since),
-      getKitTopAssets(account.id, id, "download"),
-      getKitTopAssets(account.id, id, "play"),
-      listCoverage(account.id, id),
-      getLiveSpotlightForRelease(account.id, id),
+      getKitStats(ownerId, id),
+      getKitDaily(ownerId, id, since),
+      getKitTopAssets(ownerId, id, "download"),
+      getKitTopAssets(ownerId, id, "play"),
+      listCoverage(ownerId, id),
+      getLiveSpotlightForRelease(ownerId, id),
     ]);
 
   if (!release) notFound();
+
+  // Admin only: who owns this kit, and the button to hand it over.
+  const owner = admin ? await getAccountSummary(ownerId) : null;
 
   const byKind = (kind: AssetKind) =>
     assets.filter((asset) => asset.kind === kind);
@@ -189,6 +202,26 @@ export default async function ReleasePage({
 
   return (
     <>
+      {owner && (
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-brand-500/25 bg-brand-500/8 px-5 py-3">
+          <p className="min-w-0 text-sm text-brand-700">
+            <span className="font-semibold">Admin</span>
+            {" · "}
+            {owner.id === account.id ? (
+              "This is your own press kit"
+            ) : (
+              <>
+                Owned by {owner.name} ({owner.email})
+              </>
+            )}
+          </p>
+          <TransferOwnership
+            releaseId={id}
+            releaseTitle={release.title}
+            currentOwnerId={ownerId}
+          />
+        </div>
+      )}
       <PageHeader
         title={release.title}
         subtitle={

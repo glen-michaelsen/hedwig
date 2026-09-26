@@ -17,6 +17,7 @@ import {
   pressKey,
   resumeUpload,
 } from "@/lib/r2";
+import { pressOwnerFor } from "@/lib/press/scope";
 
 /**
  * Chunked upload for press-kit files, in four phases: start, part, complete,
@@ -44,20 +45,22 @@ export async function POST(
   const account = await getAccount();
   if (!account) return bad("Not signed in", 401);
 
-  const release = await getRelease(account.id, releaseId);
+  // The owner's account, also when an admin uploads to someone else's kit.
+  const ownerId = await pressOwnerFor(account, releaseId);
+  const release = await getRelease(ownerId, releaseId);
   if (!release) return bad("Not found", 404);
 
   const phase = new URL(request.url).searchParams.get("phase");
 
   switch (phase) {
     case "start":
-      return start(request, account.id, releaseId);
+      return start(request, ownerId, releaseId);
     case "part":
-      return part(request, account.id, releaseId);
+      return part(request, ownerId, releaseId);
     case "complete":
-      return complete(request, account.id, releaseId);
+      return complete(request, ownerId, releaseId);
     case "abort":
-      return abort(request, account.id, releaseId);
+      return abort(request, ownerId, releaseId);
     default:
       return bad("Unknown phase");
   }

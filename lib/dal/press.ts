@@ -1,6 +1,6 @@
 import "server-only";
-import { and, asc, desc, eq, ne, sql } from "drizzle-orm";
-import { artist, pressRelease, releaseAsset } from "@/db/schema";
+import { and, asc, desc, eq, ne, or, sql } from "drizzle-orm";
+import { artist, pressRelease, releaseAsset, user } from "@/db/schema";
 import { newId } from "@/lib/crypto";
 import { slugify } from "@/lib/slug";
 import { getDb } from "@/lib/db";
@@ -9,7 +9,8 @@ import type { AssetKind } from "@/lib/press/assets";
 /**
  * Every function here takes `accountId` first and filters on it. Assets are
  * reached only through their release, so an asset id from another account
- * resolves to nothing rather than to someone else's master.
+ * resolves to nothing rather than to someone else's master. The admin-only
+ * functions at the bottom are the one exception, and say so.
  */
 
 /* -------------------------------- artists ------------------------------- */
@@ -602,4 +603,100 @@ export async function setAssetTitle(
   if (!asset) return;
 
   await db.update(releaseAsset).set({ title }).where(eq(releaseAsset.id, assetId));
+}
+
+/* ---------------------------------------------------------------------------
+ * Admin only. These cross accounts on purpose; every caller checks isAdmin
+ * first (lib/press/scope.ts and the admin actions in app/press/actions.ts).
+ * ------------------------------------------------------------------------ */
+
+/** Which account owns a release, or null if it doesn't exist. */
+export async function getReleaseOwnerId(releaseId: string) {
+  const db = await getDb();
+  const [row] = await db
+    .select({ accountId: pressRelease.accountId })
+    .from(pressRelease)
+    .where(eq(pressRelease.id, releaseId))
+    .limit(1);
+
+  return row?.accountId ?? null;
+}
+
+/** Every other account's releases, with who owns them, for the admin list. */
+export async function listOtherAccountsReleases(exceptAccountId: string) {
+  const db = await getDb();
+  return db
+    .select({
+      id: pressRelease.id,
+      title: pressRelease.title,
+      kind: pressRelease.kind,
+      releaseDate: pressRelease.releaseDate,
+      slug: pressRelease.slug,
+      published: pressRelease.published,
+      artistName: artist.name,
+      ownerName: user.name,
+      ownerEmail: user.email,
+      coverAssetId: sql<string | null>`(
+        select ${releaseAsset.id} from ${releaseAsset}
+        where ${releaseAsset.releaseId} = ${pressRelease.id}
+          and ${releaseAsset.kind} = 'cover'
+        limit 1
+      )`,
+      assetCount: sql<number>`(
+        select count(*) from ${releaseAsset}
+        where ${releaseAsset.releaseId} = ${pressRelease.id}
+      )`.mapWith(Number),
+    })
+    .from(pressRelease)
+    .innerJoin(artist, eq(artist.id, pressRelease.artistId))
+    .innerJoin(user, eq(user.id, pressRelease.accountId))
+    .where(ne(pressRelease.accountId, exceptAccountId))
+    .orderBy(desc(pressRelease.createdAt));
+}
+
+export async function getAccountSummary(accountId: string) {
+  const db = await getDb();
+  const [row] = await db
+    .select({ id: user.id, name: user.name, email: user.email })
+    .from(user)
+    .where(eq(user.id, accountId))
+    .limit(1);
+
+  return row ?? null;
+}
+
+/** Accounts whose name or email contains the query, for the transfer search. */
+export async function searchAccounts(query: string, limit = 8) {
+  const db = await getDb();
+  const needle = `%${query.trim().toLowerCase().replace(/[%_]/g, "")}%`;
+  return db
+    .select({ id: user.id, name: user.name, email: user.email })
+    .from(user)
+    .where(or(sql`lower(${user.name}) like ${needle}`, sql`lower(${user.email}) like ${needle}`))
+    .orderBy(user.name)
+    .limit(limit);
+}
+
+/**
+ * Hands a release, with everything hanging off it (files, stats, coverage,
+ * its Spotlight), to another account. Artists are per account, so the
+ * release moves to an artist of the same name under the new owner, made if
+ * missing. Files keep their storage keys; nothing reads the old prefix.
+ */
+export async function transferRelease(releaseId: string, toAccountId: string) {
+  const db = await getDb();
+  const [release] = await db
+    .select({ artistName: artist.name })
+    .from(pressRelease)
+    .innerJoin(artist, eq(artist.id, pressRelease.artistId))
+    .where(eq(pressRelease.id, releaseId))
+    .limit(1);
+  if (!release) return false;
+
+  const artistId = await ensureArtist(toAccountId, release.artistName);
+  await db
+    .update(pressRelease)
+    .set({ accountId: toAccountId, artistId })
+    .where(eq(pressRelease.id, releaseId));
+  return true;
 }

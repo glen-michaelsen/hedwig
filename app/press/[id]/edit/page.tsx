@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireAccount } from "@/lib/auth";
+import { pressOwnerFor } from "@/lib/press/scope";
 import { getRelease, listArtists } from "@/lib/dal/press";
 import { Card, PageHeader, buttonQuiet } from "@/app/_components/ui";
 import { parseTagList } from "@/lib/press/taxonomy";
@@ -13,7 +14,7 @@ export async function generateMetadata({
 }: PageProps<"/press/[id]/edit">) {
   const { id } = await params;
   const account = await requireAccount(`/press/${id}/edit`);
-  const release = await getRelease(account.id, id);
+  const release = await getRelease(await pressOwnerFor(account, id), id);
   return { title: release ? `Edit release: ${release.title}` : "Edit release" };
 }
 
@@ -22,10 +23,12 @@ export default async function EditReleasePage({
 }: PageProps<"/press/[id]/edit">) {
   const { id } = await params;
   const account = await requireAccount(`/press/${id}/edit`);
+  // An admin editing someone else's kit picks from the owner's artists.
+  const ownerId = await pressOwnerFor(account, id);
 
   const [release, artists] = await Promise.all([
-    getRelease(account.id, id),
-    listArtists(account.id),
+    getRelease(ownerId, id),
+    listArtists(ownerId),
   ]);
   if (!release) notFound();
 
