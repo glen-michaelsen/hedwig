@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
 import { container } from "@/app/_components/ui";
-import { GuideCard } from "../_components/guide-layout";
+import { PhotoCard } from "../_components/photo-card";
 
 const PAGE_DESCRIPTION =
   "Get your music heard by the right people. How to build a press kit, and more guides on releasing and promoting your music.";
@@ -24,6 +24,7 @@ const GUIDES = [
     href: "/knowledge/promote/press-kit",
     title: "How to Build a Press Kit (EPK)",
     body: "Music, cover art, press photos, bio and video. What goes in, what to skip, and real examples from featured artists.",
+    image: "/images/knowledge/promote/press-kit.jpg",
   },
 ] as const;
 
@@ -50,7 +51,7 @@ export default function PromoteKnowledgePage() {
             </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               {GUIDES.map((item) => (
-                <GuideCard key={item.href} {...item} />
+                <PhotoCard key={item.href} {...item} />
               ))}
             </div>
           </section>
