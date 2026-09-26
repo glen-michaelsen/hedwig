@@ -71,30 +71,51 @@ function useIsClient() {
   return useSyncExternalStore(subscribe, () => true, () => false);
 }
 
-function formatWhen(date: Date, now: Date) {
+type Edge = "start" | "end";
+
+/** A date, and an optional time. An empty time means the whole day. */
+type DayTime = { date: string; time: string };
+
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/**
+ * Whether a moment is the default for its edge: a start at 00:00, or an end
+ * at 23:59:59. Those came from "no time given", so they read as whole days.
+ */
+function isWholeDay(date: Date, edge: Edge) {
+  return edge === "start"
+    ? date.getHours() === 0 && date.getMinutes() === 0 && date.getSeconds() === 0
+    : date.getHours() === 23 && date.getMinutes() === 59 && date.getSeconds() === 59;
+}
+
+function formatWhen(date: Date, now: Date, edge: Edge) {
   return new Intl.DateTimeFormat("en-GB", {
     day: "numeric",
     month: "short",
     ...(date.getFullYear() === now.getFullYear() ? {} : { year: "numeric" }),
-    hour: "2-digit",
-    minute: "2-digit",
+    ...(isWholeDay(date, edge) ? {} : { hour: "2-digit", minute: "2-digit" }),
   }).format(date);
 }
 
-/** "2026-10-12T18:00", the value a datetime-local input wants, in local time. */
-function toLocalInput(date: Date | null | undefined) {
-  if (!date) return "";
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(
-    date.getHours(),
-  )}:${pad(date.getMinutes())}`;
+/** A stored moment back into the two fields, in local time. */
+function toDayTime(date: Date | null | undefined, edge: Edge): DayTime {
+  if (!date) return { date: "", time: "" };
+  return {
+    date: `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`,
+    time: isWholeDay(date, edge) ? "" : `${pad(date.getHours())}:${pad(date.getMinutes())}`,
+  };
 }
 
-/** The input's local wall time as an ISO string in UTC, or "" when empty. */
-function toIso(local: string) {
-  if (!local) return "";
-  const date = new Date(local);
-  return Number.isNaN(date.getTime()) ? "" : date.toISOString();
+/**
+ * The two fields as one moment in UTC, or "" with no date. No time means
+ * the whole day: from 00:00 for a start, until 23:59:59 for an end, so the
+ * last day counts in full.
+ */
+function toIso({ date, time }: DayTime, edge: Edge) {
+  if (!date) return "";
+  const clock = time ? `${time}:00` : edge === "start" ? "00:00:00" : "23:59:59";
+  const moment = new Date(`${date}T${clock}`);
+  return Number.isNaN(moment.getTime()) ? "" : moment.toISOString();
 }
 
 function ClockIcon() {
@@ -120,14 +141,14 @@ function ScheduleLine({ block, now }: { block: ParsedBlock; now: Date }) {
 
   const text =
     state === "upcoming"
-      ? `Not live yet. Shows from ${formatWhen(from!, now)}${
-          until ? ` until ${formatWhen(until, now)}` : ""
+      ? `Not live yet. Shows from ${formatWhen(from!, now, "start")}${
+          until ? ` until ${formatWhen(until, now, "end")}` : ""
         }`
       : state === "ended"
-        ? `Ended ${formatWhen(until!, now)}. No longer on your page`
+        ? `Ran until ${formatWhen(until!, now, "end")}. No longer on your page`
         : until
-          ? `Live until ${formatWhen(until, now)}`
-          : `Live since ${formatWhen(from!, now)}`;
+          ? `Live until ${formatWhen(until, now, "end")}`
+          : `Live since ${formatWhen(from!, now, "start")}`;
 
   const tone =
     state === "upcoming"
@@ -393,12 +414,12 @@ function BlockModal({
   );
   const [lookingUpTitle, setLookingUpTitle] = useState(false);
 
-  const [showFrom, setShowFrom] = useState(toLocalInput(existing?.showFrom));
-  const [showUntil, setShowUntil] = useState(toLocalInput(existing?.showUntil));
+  const [showFrom, setShowFrom] = useState(toDayTime(existing?.showFrom, "start"));
+  const [showUntil, setShowUntil] = useState(toDayTime(existing?.showUntil, "end"));
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   // Decided once, when the modal opens. Tied to the fields instead, clearing
   // both would snap the section shut while you're still in it.
-  const [scheduleOpenAtStart] = useState(Boolean(showFrom || showUntil));
+  const [scheduleOpenAtStart] = useState(Boolean(showFrom.date || showUntil.date));
 
   /**
    * Fills the title from the video page as soon as a URL is entered — only
@@ -674,45 +695,73 @@ function BlockModal({
             </svg>
           </summary>
 
-          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div className="mt-4 grid gap-5 sm:grid-cols-2">
             {(
               [
-                { id: "showFromLocal", title: "Show from", value: showFrom, set: setShowFrom },
-                { id: "showUntilLocal", title: "Show until", value: showUntil, set: setShowUntil },
+                {
+                  id: "showFrom",
+                  title: "Show from",
+                  value: showFrom,
+                  set: setShowFrom,
+                  timeHint: "No time: from 00:00",
+                },
+                {
+                  id: "showUntil",
+                  title: "Show until",
+                  value: showUntil,
+                  set: setShowUntil,
+                  timeHint: "No time: until 23:59",
+                },
               ] as const
             ).map((field) => (
               <div key={field.id}>
                 <div className="flex items-baseline justify-between gap-2">
-                  <label className={label} htmlFor={field.id}>
+                  <label className={label} htmlFor={`${field.id}Date`}>
                     {field.title}
                   </label>
-                  {field.value && (
+                  {(field.value.date || field.value.time) && (
                     <button
                       type="button"
-                      onClick={() => field.set("")}
+                      onClick={() => field.set({ date: "", time: "" })}
                       className="text-xs text-faint transition-colors hover:text-foreground"
                     >
                       Clear
                     </button>
                   )}
                 </div>
-                <input
-                  className={input}
-                  id={field.id}
-                  type="datetime-local"
-                  value={field.value}
-                  onChange={(event) => field.set(event.target.value)}
-                />
+                <div className="grid grid-cols-[1fr_7.5rem] gap-2">
+                  <input
+                    className={input}
+                    id={`${field.id}Date`}
+                    type="date"
+                    value={field.value.date}
+                    onChange={(event) => field.set({ ...field.value, date: event.target.value })}
+                  />
+                  <input
+                    className={input}
+                    id={`${field.id}Time`}
+                    type="time"
+                    aria-label={`${field.title}, time (optional)`}
+                    value={field.value.time}
+                    onChange={(event) => field.set({ ...field.value, time: event.target.value })}
+                  />
+                </div>
+                {field.value.time && !field.value.date ? (
+                  <p className="mt-1.5 text-right text-[11px] text-amber-700">Pick a date too</p>
+                ) : (
+                  <p className="mt-1.5 text-right text-[11px] text-faint">{field.timeHint}</p>
+                )}
               </div>
             ))}
           </div>
           {/* What the server gets: the same moments, in UTC. */}
-          <input type="hidden" name="showFrom" value={toIso(showFrom)} />
-          <input type="hidden" name="showUntil" value={toIso(showUntil)} />
+          <input type="hidden" name="showFrom" value={toIso(showFrom, "start")} />
+          <input type="hidden" name="showUntil" value={toIso(showUntil, "end")} />
           <p className="mt-3 text-xs leading-relaxed text-faint">
-            Leave both empty to show the block right away and keep it up.
-            Times are in your time zone ({timeZone}). A block that has ended
-            stays off your page until you change its schedule.
+            A date is enough: it counts the whole day. Add a time for an exact
+            moment, in your time zone ({timeZone}). Leave both empty to show
+            the block right away and keep it up. A block that has ended stays
+            off your page until you change its schedule.
           </p>
         </details>
 
