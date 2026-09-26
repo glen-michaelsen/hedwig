@@ -12,7 +12,8 @@ function plural(count: number, one: string, many: string) {
 /**
  * Real press kits from artists featured in Spotlight, read live on every
  * visit, so the guide gets new examples as new releases are featured.
- * Only kits that are public themselves show up (listSpotlightPressKits).
+ * A private kit still shows as an example, but only a public one links
+ * to its files (listSpotlightPressKits).
  */
 export async function PressKitExamples() {
   const kits = await listSpotlightPressKits(3);
@@ -73,18 +74,29 @@ export async function PressKitExamples() {
                 <p className="mt-2 text-xs text-faint">{contents.join(" · ")}</p>
               )}
               <div className="mt-auto flex flex-col gap-1.5 pt-4 text-sm">
-                <Link
-                  href={`/kit/${kit.kitSlug}`}
-                  className={`font-medium text-brand-600 hover:underline ${focusable} rounded`}
-                >
-                  Open the press kit →
-                </Link>
-                <Link
-                  href={`/spotlight/${kit.spotlightSlug}`}
-                  className={`text-muted transition-colors hover:text-foreground ${focusable} rounded`}
-                >
-                  Read the Spotlight
-                </Link>
+                {kit.kitPublished && kit.kitSlug ? (
+                  <>
+                    <Link
+                      href={`/kit/${kit.kitSlug}`}
+                      className={`font-medium text-brand-600 hover:underline ${focusable} rounded`}
+                    >
+                      Open the press kit →
+                    </Link>
+                    <Link
+                      href={`/spotlight/${kit.spotlightSlug}`}
+                      className={`text-muted transition-colors hover:text-foreground ${focusable} rounded`}
+                    >
+                      Read the Spotlight
+                    </Link>
+                  </>
+                ) : (
+                  <Link
+                    href={`/spotlight/${kit.spotlightSlug}`}
+                    className={`font-medium text-brand-600 hover:underline ${focusable} rounded`}
+                  >
+                    Read the Spotlight →
+                  </Link>
+                )}
               </div>
             </div>
           </div>

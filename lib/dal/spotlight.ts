@@ -282,9 +282,10 @@ export async function listPublishedSpotlights() {
 
 /**
  * Real press kits to learn from, for the press kit guide in Knowledge: the
- * newest Spotlight releases whose press kit is itself public. Both halves
- * have to be public on purpose. A live article about a release whose kit is
- * private shows nothing here, so the guide never exposes an unpublished kit.
+ * newest releases with a live Spotlight article. The kit itself may be
+ * private. Then the guide shows only what the article already shows (cover,
+ * title, genre) plus a count of what's in the kit, and no link: the files
+ * of a private kit are never reachable from here. `kitPublished` says which.
  */
 export async function listSpotlightPressKits(limit = 3) {
   const db = await getDb();
@@ -303,6 +304,7 @@ export async function listSpotlightPressKits(limit = 3) {
       releaseKind: pressRelease.kind,
       genre: pressRelease.genre,
       kitSlug: pressRelease.slug,
+      kitPublished: pressRelease.published,
       artistName: artist.name,
       coverAssetId: articleColumns.coverAssetId,
       photos: assetCount("photo"),
@@ -312,13 +314,7 @@ export async function listSpotlightPressKits(limit = 3) {
     .from(spotlight)
     .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
     .innerJoin(artist, eq(artist.id, pressRelease.artistId))
-    .where(
-      and(
-        await isPubliclyVisible(),
-        eq(pressRelease.published, true),
-        isNotNull(pressRelease.slug),
-      ),
-    )
+    .where(await isPubliclyVisible())
     .orderBy(desc(spotlight.publishedAt), desc(spotlight.createdAt))
     .limit(limit);
 }

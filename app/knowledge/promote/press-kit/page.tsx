@@ -226,10 +226,11 @@ export default function PressKitGuidePage() {
           <p>
             The best way to learn is to look at real ones. These are the
             newest releases featured in{" "}
-            <TermLink href="/spotlight">Spotlight</TermLink>, with their
-            actual press kits. Open one and see how the cover, photos, tracks
-            and texts come together. The list updates by itself as new
-            releases get featured. ✨
+            <TermLink href="/spotlight">Spotlight</TermLink>, with a look
+            at what their press kits hold. Where the artist has made the kit
+            public, you can open it and see how the cover, photos, tracks and
+            texts come together. The list updates by itself as new releases
+            get featured. ✨
           </p>
           <PressKitExamples />
         </GuideSection>
