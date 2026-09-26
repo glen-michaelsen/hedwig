@@ -117,6 +117,52 @@ function toIso({ date, time }: DayTime, edge: Edge) {
   return Number.isNaN(moment.getTime()) ? "" : moment.toISOString();
 }
 
+/**
+ * A date or time input that behaves on a phone. iOS gives these a built-in
+ * minimum width that ignores the grid (so they overflow), centres the value,
+ * and shows an empty one as a blank box. `min-w-0` and `appearance-none`
+ * let it shrink, the value sits left, and a faint placeholder says what goes
+ * in an empty one.
+ */
+function PickerField({
+  id,
+  type,
+  placeholder,
+  ariaLabel,
+  value,
+  onChange,
+}: {
+  id: string;
+  type: "date" | "time";
+  placeholder: string;
+  ariaLabel?: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div className="relative min-w-0">
+      <input
+        className={`peer ${input} min-w-0 appearance-none text-left [&::-webkit-date-and-time-value]:text-left ${
+          value ? "" : "text-transparent focus:text-foreground"
+        }`}
+        id={id}
+        type={type}
+        aria-label={ariaLabel}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+      />
+      {!value && (
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-base text-faint sm:text-sm peer-focus:hidden"
+        >
+          {placeholder}
+        </span>
+      )}
+    </div>
+  );
+}
+
 function ClockIcon() {
   return (
     <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className="h-3.5 w-3.5 shrink-0">
@@ -424,7 +470,6 @@ function BlockModal({
 
   const [showFrom, setShowFrom] = useState(toDayTime(existing?.showFrom, "start"));
   const [showUntil, setShowUntil] = useState(toDayTime(existing?.showUntil, "end"));
-  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   // Decided once, when the modal opens. Tied to the fields instead, clearing
   // both would snap the section shut while you're still in it.
   const [scheduleOpenAtStart] = useState(Boolean(showFrom.date || showUntil.date));
@@ -737,21 +782,21 @@ function BlockModal({
                     </button>
                   )}
                 </div>
-                <div className="grid grid-cols-[1fr_7.5rem] gap-2">
-                  <input
-                    className={input}
+                <div className="grid grid-cols-[minmax(0,1fr)_6.5rem] gap-2">
+                  <PickerField
                     id={`${field.id}Date`}
                     type="date"
+                    placeholder="Date"
                     value={field.value.date}
-                    onChange={(event) => field.set({ ...field.value, date: event.target.value })}
+                    onChange={(date) => field.set({ ...field.value, date })}
                   />
-                  <input
-                    className={input}
+                  <PickerField
                     id={`${field.id}Time`}
                     type="time"
-                    aria-label={`${field.title}, time (optional)`}
+                    placeholder="Time"
+                    ariaLabel={`${field.title}, time (optional)`}
                     value={field.value.time}
-                    onChange={(event) => field.set({ ...field.value, time: event.target.value })}
+                    onChange={(time) => field.set({ ...field.value, time })}
                   />
                 </div>
                 {field.value.time && !field.value.date ? (
@@ -766,10 +811,7 @@ function BlockModal({
           <input type="hidden" name="showFrom" value={toIso(showFrom, "start")} />
           <input type="hidden" name="showUntil" value={toIso(showUntil, "end")} />
           <p className="mt-3 text-xs leading-relaxed text-faint">
-            A date is enough: it counts the whole day. Add a time for an exact
-            moment, in your time zone ({timeZone}). Leave both empty to show
-            the block right away and keep it up. A block that has ended stays
-            off your page until you change its schedule.
+            Leave both empty to keep the block on your page all the time.
           </p>
         </details>
 
