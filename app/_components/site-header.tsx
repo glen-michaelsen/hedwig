@@ -79,6 +79,24 @@ export function SiteFooter() {
         <div className="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-8 text-sm text-white/60">
           <p>&copy; {new Date().getFullYear()} Trenodo</p>
           <div className="flex flex-wrap items-center gap-6">
+            {/* External: the Tawk.to knowledge base and the UptimeRobot
+                status page. Plain links in a new tab, as quiet as the rest. */}
+            <a
+              href="https://trenodo.tawk.help/"
+              target="_blank"
+              rel="noopener"
+              className="transition-colors hover:text-white"
+            >
+              Help center
+            </a>
+            <a
+              href="https://stats.uptimerobot.com/5dC1Ji59Az"
+              target="_blank"
+              rel="noopener"
+              className="transition-colors hover:text-white"
+            >
+              Status
+            </a>
             <Link href="/ideas" className="transition-colors hover:text-white">
               Ideas
             </Link>
