@@ -33,7 +33,7 @@ import {
   updateSongAction,
 } from "../../actions";
 import { Modal } from "@/app/_components/modal";
-import { OverflowMenu } from "../../_components/overflow-menu";
+import { OverflowMenu } from "@/app/_components/overflow-menu";
 import {
   actionPill,
   actionPillBrand,

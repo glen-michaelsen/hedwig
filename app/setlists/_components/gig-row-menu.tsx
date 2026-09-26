@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { deleteGigAction, duplicateGigAction } from "../actions";
-import { OverflowMenu } from "./overflow-menu";
+import { OverflowMenu } from "@/app/_components/overflow-menu";
 import { Modal } from "@/app/_components/modal";
 import { button, buttonQuiet } from "@/app/_components/ui";
 

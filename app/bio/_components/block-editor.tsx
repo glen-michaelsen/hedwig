@@ -40,11 +40,10 @@ import {
 import type { BlockKind } from "@/lib/bio/blocks";
 import type { ReleaseLink } from "@/lib/dal/press";
 import { Modal } from "@/app/_components/modal";
+import { OverflowMenu } from "@/app/_components/overflow-menu";
 import {
   Empty,
   ErrorText,
-  actionPill,
-  actionPillBrand,
   button,
   buttonGhost,
   buttonQuiet,
@@ -320,6 +319,7 @@ function SortableRow({
     transition,
     isDragging,
   } = useSortable({ id: block.id });
+  const [, startTransition] = useTransition();
 
   return (
     <li
@@ -365,32 +365,33 @@ function SortableRow({
         )}
       </span>
 
-      <span className="flex shrink-0 items-center gap-2">
-        <form action={toggleBlockAction}>
-          <input type="hidden" name="blockId" value={block.id} />
-          <input
-            type="hidden"
-            name="visible"
-            value={block.visible ? "false" : "true"}
-          />
-          <button className={actionPill}>
-            {block.visible ? "Hide" : "Show"}
-          </button>
-        </form>
-
-        <button className={actionPillBrand} onClick={onEdit}>
-          Edit
-        </button>
-
-        <form action={deleteBlockAction}>
-          <input type="hidden" name="blockId" value={block.id} />
-          <button
-            className="px-1 text-xs text-faint transition-colors hover:text-rose-600"
-            aria-label={`Delete ${summarise(block, releases)}`}
-          >
-            ✕
-          </button>
-        </form>
+      {/* One menu instead of three buttons: on a phone, three buttons left
+          almost no room for the block's own name. */}
+      <span className="shrink-0">
+        <OverflowMenu
+          label={`Options for ${summarise(block, releases)}`}
+          items={[
+            { label: "Edit", onSelect: onEdit },
+            {
+              label: block.visible ? "Hide" : "Show",
+              onSelect: () => {
+                const formData = new FormData();
+                formData.set("blockId", block.id);
+                formData.set("visible", block.visible ? "false" : "true");
+                startTransition(() => toggleBlockAction(formData));
+              },
+            },
+            {
+              label: "Delete",
+              danger: true,
+              onSelect: () => {
+                const formData = new FormData();
+                formData.set("blockId", block.id);
+                startTransition(() => deleteBlockAction(formData));
+              },
+            },
+          ]}
+        />
       </span>
 
       {/* Its own full-width line, so it stays readable on a phone, where
