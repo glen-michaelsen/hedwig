@@ -30,6 +30,16 @@ export const COMPARISONS: Comparison[] = [
   setlistHelper,
 ];
 
+/**
+ * Old compare URLs and where they live now. The overviews were renamed from
+ * "X alternatives" to their category; the old addresses redirect for good,
+ * so links and search results keep working. Add a row on every rename.
+ */
+export const RENAMED_SLUGS: Record<string, string> = {
+  "linktree-alternatives": "link-in-bio-tools",
+  "my-music-staff-alternatives": "music-teacher-software",
+};
+
 export function getComparison(slug: string) {
   return COMPARISONS.find((item) => item.slug === slug) ?? null;
 }

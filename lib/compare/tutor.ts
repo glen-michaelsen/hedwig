@@ -215,7 +215,7 @@ export const opus1: Versus = {
 
 export const myMusicStaffAlternatives: Roundup = {
   kind: "roundup",
-  slug: "my-music-staff-alternatives",
+  slug: "music-teacher-software",
   tool: "tutor",
   title: "Music Teacher Software, Compared",
   lastChecked: LAST_CHECKED,

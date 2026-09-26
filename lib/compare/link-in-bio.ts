@@ -337,7 +337,7 @@ export const linkfire: Versus = {
 
 export const linktreeAlternatives: Roundup = {
   kind: "roundup",
-  slug: "linktree-alternatives",
+  slug: "link-in-bio-tools",
   tool: "link-in-bio",
   title: "Link in Bio Tools for Musicians, Compared",
   lastChecked: LAST_CHECKED,

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
-import { comparisonTitle, getComparison } from "@/lib/compare";
+import { RENAMED_SLUGS, comparisonTitle, getComparison } from "@/lib/compare";
 import { RoundupView } from "../_components/roundup-view";
 import { VersusView } from "../_components/versus-view";
 
@@ -43,6 +43,10 @@ export default async function ComparisonPage({
   params,
 }: PageProps<"/compare/[slug]">) {
   const { slug } = await params;
+  // A renamed page: send the old address to the new one, permanently.
+  const renamed = RENAMED_SLUGS[slug];
+  if (renamed) permanentRedirect(`/compare/${renamed}`);
+
   const item = getComparison(slug);
   if (!item) notFound();
 
