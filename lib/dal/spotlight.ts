@@ -280,6 +280,49 @@ export async function listPublishedSpotlights() {
     .limit(100);
 }
 
+/**
+ * Real press kits to learn from, for the press kit guide in Knowledge: the
+ * newest Spotlight releases whose press kit is itself public. Both halves
+ * have to be public on purpose. A live article about a release whose kit is
+ * private shows nothing here, so the guide never exposes an unpublished kit.
+ */
+export async function listSpotlightPressKits(limit = 3) {
+  const db = await getDb();
+  const assetCount = (kind: "photo" | "track" | "document") =>
+    sql<number>`(
+      select count(*) from ${releaseAsset}
+      where ${releaseAsset.releaseId} = ${pressRelease.id}
+        and ${releaseAsset.kind} = ${kind}
+    )`.mapWith(Number);
+
+  return db
+    .select({
+      spotlightSlug: spotlight.slug,
+      rating: spotlight.rating,
+      releaseTitle: pressRelease.title,
+      releaseKind: pressRelease.kind,
+      genre: pressRelease.genre,
+      kitSlug: pressRelease.slug,
+      artistName: artist.name,
+      coverAssetId: articleColumns.coverAssetId,
+      photos: assetCount("photo"),
+      tracks: assetCount("track"),
+      documents: assetCount("document"),
+    })
+    .from(spotlight)
+    .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
+    .innerJoin(artist, eq(artist.id, pressRelease.artistId))
+    .where(
+      and(
+        await isPubliclyVisible(),
+        eq(pressRelease.published, true),
+        isNotNull(pressRelease.slug),
+      ),
+    )
+    .orderBy(desc(spotlight.publishedAt), desc(spotlight.createdAt))
+    .limit(limit);
+}
+
 /** The most recent other published articles, for the "keep reading" widget. */
 export async function listRelatedSpotlights(excludeId: string, limit = 3) {
   const db = await getDb();

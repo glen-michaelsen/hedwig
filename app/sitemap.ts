@@ -180,6 +180,13 @@ const PAGES: {
     priority: 0.6,
     changeFrequency: "monthly",
   },
+  { path: "/knowledge/promote", priority: 0.7, changeFrequency: "monthly" },
+  {
+    path: "/knowledge/promote/press-kit",
+    priority: 0.6,
+    // Its examples change as releases get featured.
+    changeFrequency: "weekly",
+  },
   { path: "/knowledge/record", priority: 0.7, changeFrequency: "monthly" },
   {
     path: "/knowledge/record/studio-setup",
