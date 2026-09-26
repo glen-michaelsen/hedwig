@@ -158,9 +158,13 @@ function ScheduleLine({ block, now }: { block: ParsedBlock; now: Date }) {
         : "text-brand-700";
 
   return (
-    <span className={`mt-1 flex items-center gap-1.5 text-xs ${tone}`}>
-      <ClockIcon />
-      <span className="truncate">{text}</span>
+    <span
+      className={`flex basis-full items-start gap-1.5 pl-10 text-xs leading-relaxed ${tone}`}
+    >
+      <span className="mt-0.5">
+        <ClockIcon />
+      </span>
+      <span>{text}</span>
     </span>
   );
 }
@@ -321,7 +325,7 @@ function SortableRow({
     <li
       ref={setNodeRef}
       style={{ transform: CSS.Transform.toString(transform), transition }}
-      className={`flex items-center gap-3 rounded-3xl border bg-surface px-4 py-4 sm:px-5 ${
+      className={`flex flex-wrap items-center gap-x-3 gap-y-2 rounded-3xl border bg-surface px-4 py-4 sm:px-5 ${
         isDragging
           ? "relative z-10 border-brand-400 shadow-lift"
           : "border-line shadow-soft"
@@ -359,7 +363,6 @@ function SortableRow({
             {clicks} {clicks === 1 ? "click" : "clicks"}
           </span>
         )}
-        <ScheduleLine block={block} now={now} />
       </span>
 
       <span className="flex shrink-0 items-center gap-2">
@@ -389,6 +392,10 @@ function SortableRow({
           </button>
         </form>
       </span>
+
+      {/* Its own full-width line, so it stays readable on a phone, where
+          the row itself has little room left for text. */}
+      <ScheduleLine block={block} now={now} />
     </li>
   );
 }
