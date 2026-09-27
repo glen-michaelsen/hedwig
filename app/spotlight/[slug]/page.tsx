@@ -75,10 +75,16 @@ async function canSeeBadges(
   if (previewToken && (await getSpotlightByPreviewToken(article.slug, previewToken))) {
     return true;
   }
-  const account = await getAccount();
-  if (!account) return false;
-  if (await isSpotlightOwner(article.id, account.id)) return true;
-  return isAdmin(account);
+  // A public page must never fail because of this extra: if the session
+  // check errors or times out, the reader just doesn't see the badge box.
+  try {
+    const account = await getAccount();
+    if (!account) return false;
+    if (await isSpotlightOwner(article.id, account.id)) return true;
+    return await isAdmin(account);
+  } catch {
+    return false;
+  }
 }
 
 function previewTokenFrom(value: string | string[] | undefined) {

@@ -99,10 +99,24 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   });
 }
 
+/**
+ * Better Auth's session cookie: `better-auth.session_token` (or `-session_token`), with the
+ * `__Secure-` prefix it gets over https. No cookie means nobody is signed in.
+ */
+const SESSION_COOKIE = /(?:^|;\s*)(?:__Secure-)?better-auth[.-]session_token=/;
+
 export async function getAccount(): Promise<Account | null> {
+  const requestHeaders = await headers();
+
+  // Nobody signed in, so nothing to look up. Skipping Better Auth here keeps
+  // every signed-out visitor (most traffic, crawlers, the login page itself)
+  // off the session path entirely, which in production has stalled until
+  // the timeout below on a large share of requests.
+  if (!SESSION_COOKIE.test(requestHeaders.get("cookie") ?? "")) return null;
+
   const auth = await getAuth();
   const result = await withTimeout(
-    auth.api.getSession({ headers: await headers() }),
+    auth.api.getSession({ headers: requestHeaders }),
     8000,
   );
   if (!result?.user) return null;
