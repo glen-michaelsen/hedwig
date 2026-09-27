@@ -12,6 +12,7 @@ import { requireAdmin } from "@/lib/auth";
 import { todayIso } from "@/lib/clock";
 import { listSpotlights } from "@/lib/dal/spotlight";
 import { computeSpotlightStatus } from "@/lib/spotlight/slug";
+import { CarouselButton } from "./_components/carousel-button";
 import { SpotlightStatusBadge } from "./_components/status-badge";
 
 export const metadata = { title: "Spotlight" };
@@ -45,9 +46,12 @@ export default async function AdminSpotlightPage() {
             : `${articles.length} article${articles.length === 1 ? "" : "s"}, ${live} published.`
         }
         action={
-          <Link className={button} href="/account/spotlight/new">
-            Write one
-          </Link>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <CarouselButton liveCount={live} />
+            <Link className={button} href="/account/spotlight/new">
+              Write one
+            </Link>
+          </div>
         }
       />
 

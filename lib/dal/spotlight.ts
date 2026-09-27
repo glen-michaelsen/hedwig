@@ -319,6 +319,19 @@ export async function listSpotlightPressKits(limit = 3) {
     .limit(limit);
 }
 
+/** The newest live articles, by when they went up, for the carousel PDF. */
+export async function listRecentLiveSpotlightIds(limit: number) {
+  const db = await getDb();
+  const rows = await db
+    .select({ id: spotlight.id })
+    .from(spotlight)
+    .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
+    .where(await isPubliclyVisible())
+    .orderBy(desc(spotlight.publishedAt), desc(spotlight.createdAt))
+    .limit(limit);
+  return rows.map((row) => row.id);
+}
+
 /** The most recent other published articles, for the "keep reading" widget. */
 export async function listRelatedSpotlights(excludeId: string, limit = 3) {
   const db = await getDb();
