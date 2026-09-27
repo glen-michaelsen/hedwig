@@ -36,6 +36,17 @@ export function SocialMenu({
           "noopener,noreferrer",
         ),
     },
+    {
+      label: "Download image",
+      // A throwaway link, so the browser saves the file under the name the
+      // server gives it (artist-title-type-month-year.jpg).
+      onSelect: () => {
+        const link = document.createElement("a");
+        link.href = `/account/spotlight/${spotlightId}/image?download`;
+        link.download = "";
+        link.click();
+      },
+    },
     { label: "Captions", onSelect: copyCaption },
   ];
 

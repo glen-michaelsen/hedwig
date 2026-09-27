@@ -7,6 +7,12 @@
  * is never testing a different layout than what actually ships.
  */
 
+/**
+ * Bump on any change to the layout below: stored images are named after a
+ * fingerprint that includes this, so every article gets a fresh one.
+ */
+export const SPOTLIGHT_IMAGE_VERSION = 1;
+
 export const SPOTLIGHT_IMAGE_WIDTH = 1080;
 export const SPOTLIGHT_IMAGE_HEIGHT = 1350;
 
