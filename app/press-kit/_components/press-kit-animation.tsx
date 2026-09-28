@@ -18,11 +18,6 @@ import { BrowserFrame } from "@/app/_components/mockup/browser-frame";
  */
 
 const LOOP_MS = 15_000;
-
-/** The stage is laid out at this size, then scaled to whatever width the frame gets. */
-const STAGE_WIDTH = 560;
-const STAGE_HEIGHT = 488;
-const MAX_FRAME_WIDTH = 460;
 /** Where the still (reduced motion) stops: the published kit, link copied. */
 const STILL_MS = 13_500;
 
@@ -48,21 +43,6 @@ function subscribeReducedMotion(onChange: () => void) {
 
 function getReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-}
-
-/**
- * `?pk-frame=5000` freezes the animation at that moment, for checking a
- * step or taking a screenshot. Hidden tabs never run the clock, so this is
- * also the only way to see a later step in an automated browser.
- */
-function subscribeNever() {
-  return () => {};
-}
-
-function getFrozenFrame() {
-  const value = new URLSearchParams(window.location.search).get("pk-frame");
-  const ms = value === null ? NaN : Number(value);
-  return Number.isFinite(ms) ? Math.max(0, Math.min(LOOP_MS - 1, ms)) : null;
 }
 
 /** The part of `text` typed by time `t`, typing from `start` at `speed` ms a letter. */
@@ -109,26 +89,11 @@ function Check({ show, children }: { show: boolean; children: string }) {
 
 export function PressKitAnimation() {
   const reducedMotion = useSyncExternalStore(subscribeReducedMotion, getReducedMotion, () => false);
-  const frozen = useSyncExternalStore(subscribeNever, getFrozenFrame, () => null);
   const [elapsed, setElapsed] = useState(0);
-  const [frameWidth, setFrameWidth] = useState(MAX_FRAME_WIDTH);
   const rootRef = useRef<HTMLDivElement>(null);
 
-  // The frame shrinks with its column (the hero column can be ~300px), and
-  // the stage has to shrink with it, or its edges get cut off.
   useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const observer = new ResizeObserver(([entry]) => {
-      setFrameWidth(Math.min(MAX_FRAME_WIDTH, Math.floor(entry.contentRect.width)));
-    });
-    observer.observe(root);
-    return () => observer.disconnect();
-  }, []);
-  const scale = frameWidth / STAGE_WIDTH;
-
-  useEffect(() => {
-    if (reducedMotion || frozen !== null) return;
+    if (reducedMotion) return;
     let frame = 0;
     let last = performance.now();
     let visible = true;
@@ -150,9 +115,9 @@ export function PressKitAnimation() {
       cancelAnimationFrame(frame);
       observer.disconnect();
     };
-  }, [reducedMotion, frozen]);
+  }, [reducedMotion]);
 
-  const t = frozen ?? (reducedMotion ? STILL_MS : elapsed);
+  const t = reducedMotion ? STILL_MS : elapsed;
   const scene = SCENES.findLastIndex((item) => t >= item.start);
 
   const title = typed("Vita Nova", t, 400, 70);
@@ -167,17 +132,18 @@ export function PressKitAnimation() {
     }`;
 
   return (
-    <div ref={rootRef} className="flex w-full max-w-[460px] flex-col items-center">
+    <div ref={rootRef} className="w-full">
       <BrowserFrame
         screenClassName="bg-background"
-        frameWidth={frameWidth}
-        screenHeight={Math.round(STAGE_HEIGHT * scale)}
-        nativeWidth={STAGE_WIDTH}
-        scale={scale}
+        frameWidth={460}
+        screenHeight={400}
+        nativeWidth={560}
+        scale={0.82}
         url={scene === 0 ? "trenodo.com/press/new" : "trenodo.com/press/vita-nova"}
       >
-        {/* A fixed-height stage, so the stacked scenes cross-fade in place. */}
-        <div className="relative text-foreground" style={{ height: STAGE_HEIGHT }}>
+        {/* A fixed-height stage (the screen's height at this scale), so
+            the stacked scenes can cross-fade in place. */}
+        <div className="relative h-[488px] text-foreground">
           <div className={sceneClass(0)}>
             <div className="space-y-4">
               <Field label="Title" {...title} />
