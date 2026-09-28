@@ -9,7 +9,7 @@ import {
   container,
   containerNarrow,
 } from "../_components/ui";
-import { PressKitAnimation } from "./_components/press-kit-animation";
+import { PressKitMockup } from "./_components/press-kit-mockup";
 import { FaqSection } from "@/app/_components/marketing/faq-section";
 import { StepsSection } from "@/app/_components/marketing/steps-section";
 
@@ -183,7 +183,7 @@ function Hero() {
           </div>
 
           <div className="flex min-w-0 justify-center lg:justify-end">
-            <PressKitAnimation />
+            <PressKitMockup />
           </div>
         </div>
       </div>
