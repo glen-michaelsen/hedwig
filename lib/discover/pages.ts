@@ -21,7 +21,7 @@
  * its slug; add a new word instead.
  */
 
-/** Low while Spotlight is young. Raise them as it fills up; live pages keep their place. */
+/** Low while Spotlight is young; raise both as it fills up. */
 export const GO_LIVE_AT = 4;
 export const STAY_LIVE_AT = 2;
 
