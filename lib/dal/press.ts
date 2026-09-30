@@ -1,6 +1,6 @@
 import "server-only";
 import { and, asc, desc, eq, ne, or, sql } from "drizzle-orm";
-import { artist, pressRelease, releaseAsset, user } from "@/db/schema";
+import { artist, pressRelease, releaseAsset, spotlight, user } from "@/db/schema";
 import { newId } from "@/lib/crypto";
 import { slugify } from "@/lib/slug";
 import { getDb } from "@/lib/db";
@@ -654,6 +654,36 @@ export async function listOtherAccountsReleases(exceptAccountId: string) {
     .innerJoin(artist, eq(artist.id, pressRelease.artistId))
     .innerJoin(user, eq(user.id, pressRelease.accountId))
     .where(ne(pressRelease.accountId, exceptAccountId))
+    .orderBy(desc(pressRelease.createdAt));
+}
+
+/**
+ * Every release on Trenodo with its tags, for the admin metadata table.
+ * Crosses accounts on purpose, so only an admin page may call it.
+ */
+export async function listAllReleaseMetadata() {
+  const db = await getDb();
+  return db
+    .select({
+      id: pressRelease.id,
+      title: pressRelease.title,
+      artistName: artist.name,
+      ownerEmail: user.email,
+      releaseDate: pressRelease.releaseDate,
+      url: pressRelease.url,
+      genre: pressRelease.genre,
+      mood: pressRelease.mood,
+      country: pressRelease.country,
+      language: pressRelease.language,
+      labelStatus: pressRelease.labelStatus,
+      gender: pressRelease.gender,
+      hasSpotlight: sql<number>`exists (
+        select 1 from ${spotlight} where ${spotlight.releaseId} = ${pressRelease.id}
+      )`.mapWith(Boolean),
+    })
+    .from(pressRelease)
+    .innerJoin(artist, eq(artist.id, pressRelease.artistId))
+    .innerJoin(user, eq(user.id, pressRelease.accountId))
     .orderBy(desc(pressRelease.createdAt));
 }
 

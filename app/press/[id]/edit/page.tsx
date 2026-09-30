@@ -20,8 +20,12 @@ export async function generateMetadata({
 
 export default async function EditReleasePage({
   params,
+  searchParams,
 }: PageProps<"/press/[id]/edit">) {
   const { id } = await params;
+  // Opened from the admin metadata table: cancel and save both go back there.
+  const fromMetadata = (await searchParams).back === "metadata";
+  const backHref = fromMetadata ? "/press/metadata" : `/press/${id}`;
   const account = await requireAccount(`/press/${id}/edit`);
   // An admin editing someone else's kit picks from the owner's artists.
   const ownerId = await pressOwnerFor(account, id);
@@ -38,7 +42,7 @@ export default async function EditReleasePage({
         title="Edit release"
         subtitle={release.title}
         action={
-          <Link className={buttonQuiet} href={`/press/${id}`}>
+          <Link className={buttonQuiet} href={backHref}>
             Cancel
           </Link>
         }
@@ -47,6 +51,7 @@ export default async function EditReleasePage({
       <Card>
         <ReleaseForm
           action={updateReleaseAction}
+          returnTo={fromMetadata ? "metadata" : undefined}
           artists={artists.map(({ id: artistId, name }) => ({
             id: artistId,
             name,

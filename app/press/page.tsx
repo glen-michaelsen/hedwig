@@ -9,6 +9,7 @@ import {
   Panel,
   PanelList,
   button,
+  buttonGhost,
   focusable,
 } from "@/app/_components/ui";
 
@@ -107,9 +108,16 @@ export default async function PressPage() {
         title="Press Kit"
         subtitle="One place for the cover, the photos, the audio and the paperwork."
         action={
-          <Link className={button} href="/press/new">
-            New release
-          </Link>
+          <div className="flex flex-wrap items-center gap-2.5">
+            {admin && (
+              <Link className={buttonGhost} href="/press/metadata">
+                Metadata
+              </Link>
+            )}
+            <Link className={button} href="/press/new">
+              New release
+            </Link>
+          </div>
         }
       />
 

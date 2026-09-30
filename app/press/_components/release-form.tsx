@@ -56,6 +56,7 @@ export function ReleaseForm({
   artistDefaults,
   defaults,
   submitLabel,
+  returnTo,
 }: {
   action: (
     state: ReleaseFormState,
@@ -66,6 +67,8 @@ export function ReleaseForm({
   artistDefaults?: Record<string, ArtistTags | null>;
   defaults?: ReleaseDefaults;
   submitLabel: string;
+  /** Where saving lands: "metadata" for the admin table, else the release. */
+  returnTo?: "metadata";
 }) {
   const [state, formAction, pending] = useActionState<
     ReleaseFormState,
@@ -94,6 +97,7 @@ export function ReleaseForm({
       {defaults?.id && (
         <input type="hidden" name="releaseId" value={defaults.id} />
       )}
+      {returnTo && <input type="hidden" name="returnTo" value={returnTo} />}
 
       <div>
         <label className={label} htmlFor="artistId">

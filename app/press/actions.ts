@@ -153,6 +153,11 @@ export async function updateReleaseAction(
 
   revalidatePath("/press");
   revalidatePath(`/press/${releaseId}`);
+  // A fixed value, not a URL from the form, so it can't be pointed elsewhere.
+  if (formData.get("returnTo") === "metadata") {
+    revalidatePath("/press/metadata");
+    redirect("/press/metadata");
+  }
   redirect(`/press/${releaseId}`);
 }
 
