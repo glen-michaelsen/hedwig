@@ -11,7 +11,7 @@ export default async function NewReleasePage() {
   const account = await requireAccount("/press/new");
   const artists = await listArtists(account.id);
 
-  // So picking an existing artist can prefill country/city/label status from
+  // So picking an existing artist can prefill country/city/label status/gender from
   // their last release — that stuff rarely changes release to release,
   // unlike genre and mood, which stay blank for a new one.
   const artistDefaults = Object.fromEntries(

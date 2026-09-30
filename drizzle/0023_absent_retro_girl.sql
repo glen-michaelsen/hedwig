@@ -1,0 +1,1 @@
+ALTER TABLE `press_release` ADD `gender` text;

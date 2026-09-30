@@ -17,6 +17,7 @@ import {
   MOOD_MAX,
   LANGUAGES,
   LABEL_STATUSES,
+  GENDERS,
   NORDIC_COUNTRIES,
   OTHER_COUNTRIES,
 } from "@/lib/press/taxonomy";
@@ -37,6 +38,7 @@ export type ReleaseDefaults = {
   city?: string | null;
   language?: string | null;
   labelStatus?: string | null;
+  gender?: string | null;
 };
 
 const NEW_ARTIST = "__new__";
@@ -45,6 +47,7 @@ type ArtistTags = {
   country: string | null;
   city: string | null;
   labelStatus: string | null;
+  gender: string | null;
 };
 
 export function ReleaseForm({
@@ -59,7 +62,7 @@ export function ReleaseForm({
     formData: FormData,
   ) => Promise<ReleaseFormState>;
   artists: ArtistOption[];
-  /** Latest country/city/label status per artist, for prefilling a new release. */
+  /** Latest country/city/label status/gender per artist, for prefilling a new release. */
   artistDefaults?: Record<string, ArtistTags | null>;
   defaults?: ReleaseDefaults;
   submitLabel: string;
@@ -84,6 +87,7 @@ export function ReleaseForm({
   const effectiveLabelStatus = isEditing
     ? (defaults?.labelStatus ?? "")
     : (inherited?.labelStatus ?? "");
+  const effectiveGender = isEditing ? (defaults?.gender ?? "") : (inherited?.gender ?? "");
 
   return (
     <form action={formAction} className="space-y-5">
@@ -320,6 +324,35 @@ export function ReleaseForm({
                 ))}
               </select>
             </div>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label className={label} htmlFor="gender">
+                Gender{" "}
+                <span className="font-normal normal-case tracking-normal text-faint">
+                  (optional)
+                </span>
+              </label>
+              <select
+                key={`gender-${artistChoice}`}
+                className={input}
+                id="gender"
+                name="gender"
+                defaultValue={effectiveGender}
+              >
+                <option value="">Not specified</option>
+                {GENDERS.map((g) => (
+                  <option key={g.value} value={g.value}>
+                    {g.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <p className="text-xs leading-relaxed text-faint sm:pt-7">
+              Who fronts this release. It helps lists like &ldquo;Danish female
+              singers&rdquo; find you. Rather not say? That&rsquo;s an answer too.
+            </p>
           </div>
         </div>
       </div>

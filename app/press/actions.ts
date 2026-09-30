@@ -16,6 +16,7 @@ import {
   MOOD_MAX,
   LANGUAGES,
   LABEL_STATUSES,
+  GENDERS,
   COUNTRIES,
   type TaxonomyOption,
 } from "@/lib/press/taxonomy";
@@ -107,6 +108,7 @@ function readRelease(
       city: nullable(formData.get("city")),
       language: parseSingle(formData, "language", LANGUAGES),
       labelStatus: parseSingle(formData, "labelStatus", LABEL_STATUSES),
+      gender: parseSingle(formData, "gender", GENDERS),
     },
   };
 }

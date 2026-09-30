@@ -276,6 +276,7 @@ export default async function ReleasePage({
         country={release.country}
         language={release.language}
         labelStatus={release.labelStatus}
+        gender={release.gender}
       />
 
       {release.notes && (

@@ -78,6 +78,7 @@ export type ReleaseInput = {
   city: string | null;
   language: string | null;
   labelStatus: string | null;
+  gender: string | null;
 };
 
 /**
@@ -250,6 +251,7 @@ export async function getRelease(accountId: string, releaseId: string) {
       city: pressRelease.city,
       language: pressRelease.language,
       labelStatus: pressRelease.labelStatus,
+      gender: pressRelease.gender,
     })
     .from(pressRelease)
     .innerJoin(artist, eq(artist.id, pressRelease.artistId))
@@ -262,7 +264,7 @@ export async function getRelease(accountId: string, releaseId: string) {
 }
 
 /**
- * Country/city/label status rarely change release to release for the same
+ * Country/city/label status/gender rarely change release to release for the same
  * artist, so a new release starts prefilled from whatever was entered last
  * — genre and mood stay empty since those genuinely vary per release.
  */
@@ -273,6 +275,7 @@ export async function getLatestReleaseTagsForArtist(artistId: string) {
       country: pressRelease.country,
       city: pressRelease.city,
       labelStatus: pressRelease.labelStatus,
+      gender: pressRelease.gender,
     })
     .from(pressRelease)
     .where(eq(pressRelease.artistId, artistId))

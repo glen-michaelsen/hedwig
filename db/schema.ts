@@ -493,6 +493,8 @@ export const pressRelease = sqliteTable(
     language: text("language"),
     city: text("city"),
     labelStatus: text("label_status"),
+    /** Who fronts the release, from GENDERS in lib/press/taxonomy.ts. */
+    gender: text("gender"),
     mood: text("mood"),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()

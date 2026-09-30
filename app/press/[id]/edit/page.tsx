@@ -65,6 +65,7 @@ export default async function EditReleasePage({
             city: release.city,
             language: release.language,
             labelStatus: release.labelStatus,
+            gender: release.gender,
           }}
           submitLabel="Save changes"
         />

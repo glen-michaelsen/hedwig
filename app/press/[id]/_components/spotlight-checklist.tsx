@@ -23,6 +23,7 @@ export function SpotlightChecklist({
   country,
   language,
   labelStatus,
+  gender,
 }: {
   releaseId: string;
   hasCover: boolean;
@@ -33,6 +34,7 @@ export function SpotlightChecklist({
   country: string | null;
   language: string | null;
   labelStatus: string | null;
+  gender: string | null;
 }) {
   const editPath = `/press/${releaseId}/edit`;
 
@@ -49,6 +51,7 @@ export function SpotlightChecklist({
     { label: "Country", done: Boolean(country), href: `${editPath}#country` },
     { label: "Language", done: Boolean(language), href: `${editPath}#language` },
     { label: "Label", done: Boolean(labelStatus), href: `${editPath}#labelStatus` },
+    { label: "Gender", done: Boolean(gender), href: `${editPath}#gender` },
   ];
 
   const doneCount = items.filter((item) => item.done).length;

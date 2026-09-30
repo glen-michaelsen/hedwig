@@ -59,6 +59,21 @@ export const LABEL_STATUSES: readonly TaxonomyOption[] = [
   { value: "signed", label: "Signed" },
 ] as const;
 
+/**
+ * Who fronts the release, for listings like "Danish female singers". About
+ * the artist, not the listener. "Prefer not to say" is an answer in its own
+ * right, so it counts as filled in; leaving the field empty is the only
+ * "not answered".
+ */
+export const GENDERS: readonly TaxonomyOption[] = [
+  { value: "woman", label: "Woman" },
+  { value: "man", label: "Man" },
+  { value: "non-binary", label: "Non-binary" },
+  { value: "another", label: "Another identity" },
+  { value: "mixed", label: "Mixed (band or group)" },
+  { value: "undisclosed", label: "Prefer not to say" },
+] as const;
+
 /** Nordic countries pinned first — Trenodo's actual market — then the rest alphabetically. */
 export const NORDIC_COUNTRIES: readonly TaxonomyOption[] = [
   { value: "DK", label: "Denmark" },
