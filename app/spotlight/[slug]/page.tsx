@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { Hearts } from "@/app/_components/hearts";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
 import { MoreSpotlights } from "./_components/more-spotlights";
+import { DiscoverLinks } from "./_components/discover-links";
+import { getDiscoverPagesForArticle } from "@/lib/discover";
 import { BadgeBox } from "./_components/badge-box";
 import { ShareBox } from "./_components/share-box";
 import {
@@ -153,10 +155,14 @@ export default async function SpotlightArticlePage({
     ? `${article.headerFocusX}% ${article.headerFocusY}%`
     : "50% 50%";
   const released = formatDate(article.releaseDate);
-  const [related, showBadges] = await Promise.all([
+  const [related, showBadges, discover] = await Promise.all([
     listRelatedSpotlights(article.id),
     // The badge images only answer for published articles.
     mode === "published" ? canSeeBadges(article, previewToken) : false,
+    // A side dish: if it fails, the article still serves.
+    mode === "published"
+      ? getDiscoverPagesForArticle(article.id).catch(() => [])
+      : [],
   ]);
 
   // Both are plain YYYY-MM-DD, so a string compare is a date compare — and
@@ -394,6 +400,8 @@ export default async function SpotlightArticlePage({
               maxRating={MAX_RATING}
             />
           )}
+
+          <DiscoverLinks pages={discover} />
 
           <MoreSpotlights articles={related} />
 

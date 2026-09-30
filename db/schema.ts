@@ -625,6 +625,20 @@ export const spotlight = sqliteTable(
 );
 
 /**
+ * Discover pages (/discover/<slug>) that have gone live at least once. The
+ * pages themselves are generated from release tags (lib/discover/pages.ts);
+ * this only remembers which ones crossed the go-live line, so a page that
+ * dips a little afterwards stays up instead of flickering in and out of
+ * Google's index.
+ */
+export const discoverPage = sqliteTable("discover_page", {
+  slug: text("slug").primaryKey(),
+  liveSince: integer("live_since", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
+/**
  * Releases the admin has looked at and decided not to write about.
  *
  * Its own table rather than a column on `press_release`: that row belongs to

@@ -169,6 +169,13 @@
       "when": 1790797930804,
       "tag": "0023_absent_retro_girl",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "6",
+      "when": 1790800874401,
+      "tag": "0024_condemned_turbo",
+      "breakpoints": true
     }
   ]
 }

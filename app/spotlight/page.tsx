@@ -4,6 +4,8 @@ import { Hearts } from "@/app/_components/hearts";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
 import { container, focusable } from "@/app/_components/ui";
 import { listPublishedSpotlights } from "@/lib/dal/spotlight";
+import { getLiveDiscoverPages } from "@/lib/discover";
+import { SpotlightCard } from "./_components/spotlight-card";
 
 const PAGE_DESCRIPTION =
   "New music, one release at a time. No algorithm. Just one musician telling another musician's story.";
@@ -29,19 +31,14 @@ export const dynamic = "force-dynamic";
 
 const KIND_LABELS = { single: "Single", ep: "EP", album: "Album" } as const;
 
-function formatDate(value: string | null) {
-  if (!value) return null;
-  const [year, month, day] = value.split("-").map(Number);
-  return new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(year, month - 1, day));
-}
-
 export default async function SpotlightIndexPage() {
-  const articles = await listPublishedSpotlights();
+  const [articles, discover] = await Promise.all([
+    listPublishedSpotlights(),
+    getLiveDiscoverPages(),
+  ]);
   const [lead, ...rest] = articles;
+  // The biggest pages make the best doorways; the rest are one click on.
+  const browse = [...discover].sort((a, b) => b.ids.length - a.ids.length).slice(0, 8);
 
   // Lists what's actually published, generated fresh from the same query
   // the page renders from — nothing hand-written to fall out of step with
@@ -94,6 +91,32 @@ export default async function SpotlightIndexPage() {
             </Link>
           </p>
         </div>
+
+        {browse.length > 0 && (
+          <nav aria-label="Browse Spotlight" className={`${container} mt-8`}>
+            <ul className="flex flex-wrap gap-2">
+              {browse.map((status) => (
+                <li key={status.page.slug}>
+                  <Link
+                    href={`/discover/${status.page.slug}`}
+                    className={`inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3.5 py-2 text-xs font-medium text-foreground transition-colors hover:border-line-strong ${focusable}`}
+                  >
+                    {status.page.label}
+                    <span className="tabular-nums text-faint">{status.ids.length}</span>
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link
+                  href="/discover"
+                  className={`inline-flex items-center rounded-full px-3.5 py-2 text-xs font-medium text-brand-600 hover:underline ${focusable}`}
+                >
+                  Browse all →
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        )}
 
         {articles.length === 0 ? (
           <div className={`${container} mt-14`}>
@@ -149,42 +172,7 @@ export default async function SpotlightIndexPage() {
             {rest.length > 0 && (
               <div className={`${container} mt-12 grid gap-8 sm:mt-14 sm:grid-cols-2 lg:grid-cols-3`}>
                 {rest.map((article) => (
-                  <Link
-                    key={article.id}
-                    href={`/spotlight/${article.slug}`}
-                    className={`group block ${focusable}`}
-                  >
-                    <div className="aspect-4/3 w-full overflow-hidden rounded-3xl bg-surface-muted">
-                      {(article.headerAssetId ?? article.coverAssetId) && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={`/spotlight/image/${article.headerAssetId ?? article.coverAssetId}?size=md`}
-                          alt=""
-                          style={{
-                            objectPosition: article.headerAssetId
-                              ? `${article.headerFocusX}% ${article.headerFocusY}%`
-                              : "50% 50%",
-                          }}
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      )}
-                    </div>
-
-                    <p className="mt-4 text-xs font-medium uppercase tracking-[0.12em] text-muted">
-                      {article.artistName}
-                    </p>
-                    <h2 className="mt-1.5 text-lg font-semibold tracking-tight text-balance transition-colors group-hover:text-brand-700 dark:group-hover:text-brand-300">
-                      {article.headline}
-                    </h2>
-                    <div className="mt-2.5 flex items-center gap-3">
-                      <Hearts rating={article.rating} className="h-3.5 w-3.5" />
-                      {formatDate(article.releaseDate) && (
-                        <span className="text-xs text-faint">
-                          {formatDate(article.releaseDate)}
-                        </span>
-                      )}
-                    </div>
-                  </Link>
+                  <SpotlightCard key={article.id} article={article} />
                 ))}
               </div>
             )}

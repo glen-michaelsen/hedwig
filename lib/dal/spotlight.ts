@@ -2,6 +2,7 @@ import "server-only";
 import { and, asc, desc, eq, isNotNull, isNull, lte, ne, or, sql } from "drizzle-orm";
 import {
   artist,
+  discoverPage,
   pressRelease,
   releaseAsset,
   spotlight,
@@ -100,11 +101,11 @@ export async function listPhotosForRelease(releaseId: string) {
 
 /* ----------------------------- admin: articles -------------------------- */
 
-const articleColumns = {
+/** What a card needs: everything but the body, which can run to pages. */
+const cardColumns = {
   id: spotlight.id,
   slug: spotlight.slug,
   headline: spotlight.headline,
-  body: spotlight.body,
   rating: spotlight.rating,
   headerAssetId: spotlight.headerAssetId,
   headerFocusX: spotlight.headerFocusX,
@@ -125,6 +126,8 @@ const articleColumns = {
     limit 1
   )`,
 };
+
+const articleColumns = { ...cardColumns, body: spotlight.body };
 
 export async function listSpotlights() {
   const db = await getDb();
@@ -278,6 +281,55 @@ export async function listPublishedSpotlights() {
       desc(spotlight.publishedAt),
     )
     .limit(100);
+}
+
+/**
+ * Every live Spotlight with its release's tags, for the Discover pages
+ * (lib/discover/pages.ts). No limit: a Discover page counts all of them.
+ * Ordered like the Spotlight index, newest release first.
+ */
+export async function listDiscoverArticles() {
+  const db = await getDb();
+  return db
+    .select({
+      ...cardColumns,
+      genre: pressRelease.genre,
+      mood: pressRelease.mood,
+      country: pressRelease.country,
+      language: pressRelease.language,
+      gender: pressRelease.gender,
+    })
+    .from(spotlight)
+    .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
+    .innerJoin(artist, eq(artist.id, pressRelease.artistId))
+    .where(await isPubliclyVisible())
+    .orderBy(
+      sql`${pressRelease.releaseDate} is null`,
+      desc(pressRelease.releaseDate),
+      desc(spotlight.publishedAt),
+    );
+}
+
+export type DiscoverArticleRow = Awaited<ReturnType<typeof listDiscoverArticles>>[number];
+
+/** Discover pages that have crossed the go-live line before. */
+export async function listDiscoverWentLive() {
+  const db = await getDb();
+  const rows = await db.select({ slug: discoverPage.slug }).from(discoverPage);
+  return new Set(rows.map((row) => row.slug));
+}
+
+export async function recordDiscoverLive(slugs: string[]) {
+  if (slugs.length === 0) return;
+  const db = await getDb();
+  // D1 caps bound parameters per statement, so a first run that finds many
+  // pages over the line at once goes in batches.
+  for (let i = 0; i < slugs.length; i += 50) {
+    await db
+      .insert(discoverPage)
+      .values(slugs.slice(i, i + 50).map((slug) => ({ slug })))
+      .onConflictDoNothing();
+  }
 }
 
 /**

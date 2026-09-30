@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { COMPARISONS } from "@/lib/compare";
 import { listPublishedSpotlights } from "@/lib/dal/spotlight";
+import { getDiscover } from "@/lib/discover";
 
 /**
  * The static marketing pages, plus every published Spotlight article below.
@@ -204,6 +205,7 @@ const PAGES: {
     priority: 0.7,
     changeFrequency: "monthly",
   },
+  { path: "/discover", priority: 0.5, changeFrequency: "weekly" },
   { path: "/compare", priority: 0.5, changeFrequency: "monthly" },
   { path: "/ideas", priority: 0.5, changeFrequency: "weekly" },
   { path: "/account/signup", priority: 0.7, changeFrequency: "monthly" },
@@ -241,5 +243,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.5,
   }));
 
-  return [...staticEntries, ...articleEntries];
+  // Only live Discover pages, dated by their newest Spotlight, so a crawler
+  // comes back when something was added and not before.
+  const { statuses, articles: discoverArticles } = await getDiscover();
+  const discoverEntries = statuses
+    .filter((status) => status.live)
+    .map((status) => {
+      const dates = status.ids.map((id) => {
+        const row = discoverArticles.get(id);
+        return (row?.publishedAt ?? row?.createdAt ?? lastModified).getTime();
+      });
+      return {
+        url: `https://trenodo.com/discover/${status.page.slug}`,
+        lastModified: new Date(Math.max(...dates)),
+        changeFrequency: "weekly" as const,
+        priority: 0.6,
+      };
+    });
+
+  return [...staticEntries, ...articleEntries, ...discoverEntries];
 }

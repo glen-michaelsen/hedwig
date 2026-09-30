@@ -6,6 +6,7 @@ import {
   Panel,
   PanelList,
   button,
+  buttonGhost,
   focusable,
 } from "@/app/_components/ui";
 import { requireAdmin } from "@/lib/auth";
@@ -47,6 +48,9 @@ export default async function AdminSpotlightPage() {
         }
         action={
           <div className="flex flex-wrap items-center gap-2.5">
+            <Link className={buttonGhost} href="/account/spotlight/discover">
+              Discover pages
+            </Link>
             <CarouselButton liveCount={live} />
             <Link className={button} href="/account/spotlight/new">
               Write one
