@@ -23,9 +23,10 @@ export const featureItems: NavItem[] = [
   { href: "/ideas", label: "Ideas" },
 ];
 
-/** Spotlight is two things: the articles, and how to get your own release in them. */
+/** Spotlight: the articles, the lists they're sorted into, and how to get in. */
 export const spotlightItems: NavItem[] = [
-  { href: "/spotlight", label: "Spotlight articles" },
+  { href: "/spotlight", label: "Articles" },
+  { href: "/discover", label: "Discover" },
   { href: "/spotlight/get-featured", label: "Get featured" },
 ];
 

@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
 import { container, focusable } from "@/app/_components/ui";
-import { getLiveDiscoverPages } from "@/lib/discover";
+import { getDiscover, getLiveDiscoverPages } from "@/lib/discover";
 import type { DiscoverGroup } from "@/lib/discover/pages";
+import { DiscoverBlock } from "./_components/discover-block";
 
 const PAGE_DESCRIPTION =
   "Browse Trenodo Spotlight by singer, country, genre and mood. Every release picked and reviewed by a musician.";
@@ -23,10 +24,16 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-const GROUPS: DiscoverGroup[] = ["Singers", "Countries", "Genres", "Moods", "Mixes"];
+const GROUPS: { group: DiscoverGroup; heading: string }[] = [
+  { group: "Singers", heading: "By who sings" },
+  { group: "Countries", heading: "By where they're from" },
+  { group: "Genres", heading: "By genre" },
+  { group: "Moods", heading: "By mood" },
+  { group: "Mixes", heading: "Narrower picks" },
+];
 
 export default async function DiscoverIndexPage() {
-  const live = await getLiveDiscoverPages();
+  const [live, { articles }] = await Promise.all([getLiveDiscoverPages(), getDiscover()]);
 
   return (
     <>
@@ -55,8 +62,8 @@ export default async function DiscoverIndexPage() {
               </Link>
             </p>
           ) : (
-            <div className="mt-12 space-y-10">
-              {GROUPS.map((group) => {
+            <div className="mt-14 space-y-14">
+              {GROUPS.map(({ group, heading }) => {
                 const pages = live
                   .filter((status) => status.page.group === group)
                   .sort((a, b) => b.ids.length - a.ids.length);
@@ -64,21 +71,28 @@ export default async function DiscoverIndexPage() {
                 return (
                   <section key={group}>
                     <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
-                      {group}
+                      {heading}
                     </h2>
-                    <ul className="mt-4 flex flex-wrap gap-2">
-                      {pages.map((status) => (
-                        <li key={status.page.slug}>
-                          <Link
+                    <div className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                      {pages.map((status) => {
+                        const rows = status.ids.flatMap((id) => articles.get(id) ?? []);
+                        return (
+                          <DiscoverBlock
+                            key={status.page.slug}
                             href={`/discover/${status.page.slug}`}
-                            className={`inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2.5 text-sm font-medium shadow-soft transition-colors hover:border-line-strong ${focusable}`}
-                          >
-                            {status.page.title}
-                            <span className="tabular-nums text-faint">{status.ids.length}</span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                            title={status.page.title}
+                            count={rows.length}
+                            averageRating={
+                              rows.reduce((sum, row) => sum + row.rating, 0) / Math.max(rows.length, 1)
+                            }
+                            covers={rows
+                              .flatMap((row) => (row.coverAssetId ? [row.coverAssetId] : []))
+                              .slice(0, 3)
+                              .map((id) => `/spotlight/image/${id}?size=md`)}
+                          />
+                        );
+                      })}
+                    </div>
                   </section>
                 );
               })}
