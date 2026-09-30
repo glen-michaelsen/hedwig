@@ -245,7 +245,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Only live Discover pages, dated by their newest Spotlight, so a crawler
   // comes back when something was added and not before.
-  const { statuses, articles: discoverArticles } = await getDiscover();
+  // A Discover failure drops these entries, never the whole sitemap.
+  const { statuses, articles: discoverArticles } = await getDiscover().catch(() => ({
+    statuses: [],
+    articles: new Map(),
+  }));
   const discoverEntries = statuses
     .filter((status) => status.live)
     .map((status) => {

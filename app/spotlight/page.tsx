@@ -34,7 +34,8 @@ const KIND_LABELS = { single: "Single", ep: "EP", album: "Album" } as const;
 export default async function SpotlightIndexPage() {
   const [articles, discover] = await Promise.all([
     listPublishedSpotlights(),
-    getLiveDiscoverPages(),
+    // The Browse row is extra. If Discover fails, the articles still serve.
+    getLiveDiscoverPages().catch(() => []),
   ]);
   const [lead, ...rest] = articles;
   // The biggest pages make the best doorways; the rest are one click on.
