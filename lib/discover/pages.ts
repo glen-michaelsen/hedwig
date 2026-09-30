@@ -21,8 +21,9 @@
  * its slug; add a new word instead.
  */
 
-export const GO_LIVE_AT = 6;
-export const STAY_LIVE_AT = 4;
+/** Low while Spotlight is young. Raise them as it fills up; live pages keep their place. */
+export const GO_LIVE_AT = 4;
+export const STAY_LIVE_AT = 2;
 
 export type DiscoverTags = {
   genre: string[];
