@@ -14,14 +14,23 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: ["/", "/account/signup", "/account/login"],
+      // Robots rules match the start of a path, so a bare "/press" would
+      // also block /press-kit, "/tutor" /tutoring, and "/s" /spotlight and
+      // /setlist. Each private area is blocked as itself ("$" ends the
+      // match) and everything under it ("/"), never as a bare prefix.
       disallow: [
         "/account",
-        "/tutor",
-        "/bio",
-        "/press",
-        "/setlists",
-        "/s",
-        "/api",
+        "/tutor$",
+        "/tutor/",
+        "/bio$",
+        "/bio/",
+        "/press$",
+        "/press/",
+        "/setlists$",
+        "/setlists/",
+        "/s$",
+        "/s/",
+        "/api/",
       ],
     },
     sitemap: "https://trenodo.com/sitemap.xml",
