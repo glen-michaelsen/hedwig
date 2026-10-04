@@ -1,6 +1,23 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-layout";
+import type { ReactNode } from "react";
+import { GuideFaq, GuideLayout, GuideSection, GuideStep } from "../../_components/guide-layout";
+import {
+  BadgeIcon,
+  BagIcon,
+  CalendarIcon,
+  ChecklistIcon,
+  CoinsIcon,
+  HubIcon,
+  MicIcon,
+  PenIcon,
+  PlayIcon,
+  RecordIcon,
+  SendIcon,
+  SparkleIcon,
+  UploadIcon,
+  WarningIcon,
+} from "../../_components/guide-icons";
 import { TermLink } from "@/app/_components/term-link";
 import { focusable } from "@/app/_components/ui";
 
@@ -108,6 +125,68 @@ const structuredData = {
   ],
 };
 
+const FLOW = [
+  { icon: <UploadIcon />, title: "You", body: "Upload the song, cover and details once" },
+  { icon: <HubIcon />, title: "Your distributor", body: "Delivers it, then collects what the stores pay" },
+  { icon: <PlayIcon />, title: "Every store", body: "Spotify, Apple Music, YouTube, TikTok, Instagram, Tidal and more" },
+];
+
+const EARNINGS = [
+  { icon: <RecordIcon />, title: "The recording", body: "Streams and downloads. Your distributor collects this." },
+  {
+    icon: <PenIcon />,
+    title: "The song",
+    body: "Every play also pays the songwriter. Join your collecting society (Koda, PRS, ASCAP, BMI) and register your songs. Songtrust collects what's left abroad.",
+  },
+  {
+    icon: <MicIcon />,
+    title: "The performance",
+    body: "Radio and shops pay the performers on a recording too, through societies like Gramex or SoundExchange.",
+  },
+];
+
+const AVOID = [
+  {
+    title: "Buying streams or followers.",
+    body: "Stores spot fake streams, and the penalty lands on you: fines from your distributor, or your release taken down.",
+  },
+  {
+    title: "Playlist offers that guarantee numbers.",
+    body: "A real curator can promise to listen, never to add you.",
+  },
+  {
+    title: "Hiding AI use.",
+    body: "Most stores accept music made with AI. Hiding it is what gets tracks pulled: declare it when you upload, and never imitate a real artist's voice.",
+  },
+  {
+    title: "A new name for every release.",
+    body: "Release under the same artist name, spelled the same way, or your listeners get split across profiles.",
+  },
+];
+
+function TimelineItem({
+  when,
+  highlight = false,
+  children,
+}: {
+  when: string;
+  highlight?: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <li className="flex flex-col gap-1.5 sm:flex-row sm:gap-4">
+      <span
+        className={`h-fit w-fit shrink-0 rounded-full px-3 py-1 text-xs font-semibold sm:w-32 sm:text-center ${
+          highlight ? "bg-brand-600 text-white" : "bg-brand-500/10 text-brand-700"
+        }`}
+      >
+        {when}
+      </span>
+      <span>{children}</span>
+    </li>
+  );
+}
+
 const linkClass = `font-medium text-brand-600 hover:underline ${focusable} rounded`;
 const tableWrap = "overflow-x-auto rounded-3xl border border-line bg-surface";
 const thead = "bg-surface-muted/60 text-xs font-semibold uppercase tracking-[0.08em] text-muted";
@@ -129,18 +208,34 @@ export default function ReleaseYourMusicPage() {
         <GuideSection title="How it works">
           <p>
             You can&rsquo;t upload straight to Spotify or Apple Music. A
-            distributor does it for you. You upload once, and they deliver
-            your release to Spotify, Apple Music, YouTube Music, TikTok,
-            Instagram, Amazon, Deezer, Tidal and many more. Then they collect
-            what the stores pay and pass it on to you.
-          </p>
-          <p>
+            distributor does it for you, and collects what the stores pay.
             You keep the rights. The distributor is a delivery service, not a
             label.
           </p>
+          <ol className="grid items-stretch gap-2 sm:grid-cols-[1fr_auto_1fr_auto_1fr]">
+            {FLOW.map((box, index) => (
+              <li key={box.title} className="contents">
+                {index > 0 && (
+                  <span aria-hidden="true" className="grid place-items-center text-lg text-brand-500">
+                    <span className="sm:hidden">↓</span>
+                    <span className="hidden sm:inline">→</span>
+                  </span>
+                )}
+                <div className="flex items-center gap-3 rounded-3xl border border-line bg-surface p-4 shadow-soft sm:block sm:text-center">
+                  <span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-brand-500/10 text-brand-700 sm:mx-auto">
+                    {box.icon}
+                  </span>
+                  <span className="block">
+                    <span className="block text-sm font-semibold text-foreground sm:mt-3">{box.title}</span>
+                    <span className="mt-1 block text-xs leading-relaxed text-muted">{box.body}</span>
+                  </span>
+                </div>
+              </li>
+            ))}
+          </ol>
         </GuideSection>
 
-        <GuideSection title="1. Get everything ready">
+        <GuideStep step={1} icon={<ChecklistIcon />} title="Get everything ready">
           <p>Stores are strict. Have all of this ready before you start the upload:</p>
           <div className={tableWrap}>
             <table className="w-full text-left text-sm">
@@ -168,9 +263,9 @@ export default function ReleaseYourMusicPage() {
             permission: a song someone else wrote needs a licence, and so does
             a sample you didn&rsquo;t make.
           </p>
-        </GuideSection>
+        </GuideStep>
 
-        <GuideSection title="2. Choose a distributor">
+        <GuideStep step={2} icon={<SendIcon />} title="Choose a distributor">
           <p>
             They all reach the same big stores. The difference is how you pay.
             Release often? A yearly fee with unlimited releases is cheapest.
@@ -209,46 +304,42 @@ export default function ReleaseYourMusicPage() {
             taking a cut. Neither is wrong, but you want to know before, not
             after.
           </p>
-        </GuideSection>
+        </GuideStep>
 
-        <GuideSection title="3. Pick the date, then work backwards">
+        <GuideStep step={3} icon={<CalendarIcon />} title="Pick the date, then work backwards">
           <p>
             New music comes out on Fridays, worldwide. That&rsquo;s when the
             playlists refresh, so release on a Friday too.
           </p>
-          <ul className="list-disc space-y-2 pl-5">
-            <li>
-              <strong className="text-foreground">4 weeks before:</strong>{" "}
-              upload to your distributor, with the release date set.
-            </li>
-            <li>
-              <strong className="text-foreground">3 weeks before:</strong>{" "}
-              pitch one song to Spotify&rsquo;s editors in Spotify for Artists.
+          <ol className="space-y-3">
+            <TimelineItem when="4 weeks before">
+              Upload to your distributor, with the release date set.
+            </TimelineItem>
+            <TimelineItem when="3 weeks before">
+              Pitch one song to Spotify&rsquo;s editors in Spotify for Artists.
               The last chance is 7 days before release day.
-            </li>
-            <li>
-              <strong className="text-foreground">2 weeks before:</strong>{" "}
-              share a pre-save link, and send your{" "}
+            </TimelineItem>
+            <TimelineItem when="2 weeks before">
+              Share a pre-save link, and send your{" "}
               <TermLink href="/press-kit">Press Kit</TermLink> to blogs and
               radio. Our guide to{" "}
               <Link href="/knowledge/promote/press-kit" className={linkClass}>
                 building a press kit
               </Link>{" "}
               shows what goes in.
-            </li>
-            <li>
-              <strong className="text-foreground">Release day:</strong> post
-              it everywhere, and put it at the top of your{" "}
+            </TimelineItem>
+            <TimelineItem when="Release day" highlight>
+              Post it everywhere, and put it at the top of your{" "}
               <TermLink href="/link-in-bio">Link in Bio</TermLink>.
-            </li>
-          </ul>
+            </TimelineItem>
+          </ol>
           <p>
             &ldquo;As soon as possible&rdquo; skips all of it. Your song comes
             out, and nobody knows. 🙈
           </p>
-        </GuideSection>
+        </GuideStep>
 
-        <GuideSection title="4. Claim your artist profiles">
+        <GuideStep step={4} icon={<BadgeIcon />} title="Claim your artist profiles">
           <p>
             Once your first release is in the stores, claim your free artist
             profiles. They give you your stats, a verified profile, and on
@@ -274,41 +365,33 @@ export default function ReleaseYourMusicPage() {
               Official Artist Channel.
             </li>
           </ul>
-        </GuideSection>
+        </GuideStep>
 
-        <GuideSection title="5. How the money reaches you">
+        <GuideStep step={5} icon={<CoinsIcon />} title="How the money reaches you">
           <p>
             A song earns in more ways than one. Most artists only collect the
             first.
           </p>
-          <ul className="list-disc space-y-2 pl-5">
-            <li>
-              <strong className="text-foreground">The recording.</strong>{" "}
-              Streams and downloads. Your distributor collects this.
-            </li>
-            <li>
-              <strong className="text-foreground">The song.</strong> Every
-              stream, radio play and gig also pays the songwriter. Join your
-              collecting society (Koda in Denmark, PRS in the UK, ASCAP or BMI
-              in the US) and register your songs. A publishing service like
-              Songtrust collects what&rsquo;s left abroad.
-            </li>
-            <li>
-              <strong className="text-foreground">The performance.</strong>{" "}
-              When your recording plays on radio or in shops, the performers
-              on it are paid too, through societies like Gramex in Denmark or
-              SoundExchange in the US.
-            </li>
-          </ul>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {EARNINGS.map((item) => (
+              <div key={item.title} className="rounded-3xl border border-line bg-surface p-4 shadow-soft">
+                <span className="grid h-10 w-10 place-items-center rounded-xl bg-brand-500/10 text-brand-700">
+                  {item.icon}
+                </span>
+                <p className="mt-3 text-sm font-semibold text-foreground">{item.title}</p>
+                <p className="mt-1 text-sm leading-relaxed">{item.body}</p>
+              </div>
+            ))}
+          </div>
           <p>
             About Spotify: a stream pays a fraction of a cent, and a track
             earns nothing until it reaches 1,000 streams in a year. That
             sounds harsh. It also means one engaged fan base beats a hundred
             songs nobody plays.
           </p>
-        </GuideSection>
+        </GuideStep>
 
-        <GuideSection title="6. Sell it too">
+        <GuideStep step={6} icon={<BagIcon />} title="Sell it too" rail={false}>
           <p>
             Streaming pays per play. Fans who love you will pay more than
             that, if you let them.{" "}
@@ -317,50 +400,45 @@ export default function ReleaseYourMusicPage() {
             </a>{" "}
             sells your music and merch straight to fans, and you keep most of
             every sale. On Bandcamp Fridays, a few days a year, it takes
-            nothing at all. Vinyl, CDs and T-shirts at gigs still
-            sell. Bring a card reader. 💳
+            nothing at all. Vinyl, CDs and T-shirts at gigs still sell. Bring
+            a card reader. 💳
           </p>
-        </GuideSection>
+        </GuideStep>
 
-        <GuideSection title="What to avoid">
-          <ul className="list-disc space-y-2 pl-5">
-            <li>
-              <strong className="text-foreground">Buying streams or followers.</strong>{" "}
-              Stores spot fake streams, and the penalty lands on you: fines
-              from your distributor, or your release taken down.
-            </li>
-            <li>
-              <strong className="text-foreground">Playlist offers that guarantee numbers.</strong>{" "}
-              A real curator can promise to listen, never to add you. Pitch
-              through services that pay curators to listen, like the ones on
-              our list of{" "}
-              <Link href="/knowledge/websites-for-musicians#promote" className={linkClass}>
-                useful websites for musicians
-              </Link>
-              .
-            </li>
-            <li>
-              <strong className="text-foreground">Hiding AI use.</strong>{" "}
-              Most stores accept music made with AI. Hiding it is what gets
-              tracks pulled: declare it when you upload, and never imitate a
-              real artist&rsquo;s voice.
-            </li>
-            <li>
-              <strong className="text-foreground">A new name for every release.</strong>{" "}
-              Release under the same artist name, spelled the same way, or
-              your listeners get split across profiles.
-            </li>
+        <GuideStep icon={<WarningIcon />} title="What to avoid" rail={false}>
+          <ul className="space-y-3">
+            {AVOID.map((item) => (
+              <li key={item.title} className="flex gap-3">
+                <span
+                  aria-hidden="true"
+                  className="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-rose-500/12 text-[11px] font-bold text-rose-700"
+                >
+                  ✕
+                </span>
+                <span>
+                  <strong className="text-foreground">{item.title}</strong> {item.body}
+                </span>
+              </li>
+            ))}
           </ul>
-        </GuideSection>
+          <p>
+            Pitch through services that pay curators to listen, like the ones
+            on our list of{" "}
+            <Link href="/knowledge/websites-for-musicians#promote" className={linkClass}>
+              useful websites for musicians
+            </Link>
+            .
+          </p>
+        </GuideStep>
 
-        <GuideSection title="After release day">
+        <GuideStep icon={<SparkleIcon />} title="After release day" rail={false}>
           <p>
             The work starts now, not stops. Play the song live, post the
             story behind it, and send it to the people who said &ldquo;send
             me your next one&rdquo;. If it&rsquo;s good, it might even end up
             in the <TermLink href="/spotlight">Spotlight</TermLink>. 🎉
           </p>
-        </GuideSection>
+        </GuideStep>
 
         <GuideFaq items={FAQS} />
       </GuideLayout>

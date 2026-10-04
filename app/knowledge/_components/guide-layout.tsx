@@ -94,6 +94,51 @@ export function GuideSection({
 }
 
 /**
+ * A numbered step with an icon, for how-to guides. Consecutive steps are
+ * joined by a thin rail from one icon to the next, so the page reads as a
+ * route rather than a stack of sections. Leave `rail` off the last step.
+ */
+export function GuideStep({
+  step,
+  icon,
+  title,
+  rail = true,
+  id,
+  children,
+}: {
+  step?: number;
+  icon: ReactNode;
+  title: string;
+  rail?: boolean;
+  id?: string;
+  children: ReactNode;
+}) {
+  return (
+    <section id={id} className="relative scroll-mt-24 sm:pl-20">
+      {rail && (
+        <span
+          aria-hidden="true"
+          className="absolute -bottom-12 left-7 top-16 hidden w-px bg-linear-to-b from-brand-500/30 to-line sm:block"
+        />
+      )}
+      {/* Icon beside the heading on a phone; in its own column, on the rail, from sm up. */}
+      <div className="flex items-center gap-4 sm:block">
+        <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-brand-500/10 text-brand-700 ring-1 ring-brand-500/15 sm:absolute sm:left-0 sm:top-0 sm:h-14 sm:w-14">
+          {icon}
+          {step !== undefined && (
+            <span className="absolute -right-1.5 -top-1.5 grid h-6 w-6 place-items-center rounded-full bg-brand-600 text-[11px] font-bold text-white ring-2 ring-background">
+              {step}
+            </span>
+          )}
+        </span>
+        <h2 className="text-2xl font-semibold tracking-tight text-balance sm:pt-3">{title}</h2>
+      </div>
+      <div className="mt-4 space-y-4 text-base leading-relaxed text-muted text-pretty">{children}</div>
+    </section>
+  );
+}
+
+/**
  * Native <details>/<summary> rather than a React-state accordion — the
  * disclosure behaviour, keyboard support and screen-reader semantics all
  * come from the browser for free, and every guide page stays a plain
