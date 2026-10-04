@@ -9,10 +9,11 @@ import { focusable } from "@/app/_components/ui";
  * Trenodo does. So no link-in-bio sites, EPK builders, setlist apps or
  * lesson admin tools, however good. Prices change, so cards say Free,
  * Freemium or Paid rather than amounts. Check the list twice a year and
- * move LAST_CHECKED when you do.
+ * move LAST_REVIEWED when you do. It goes to search engines as the
+ * article's last-modified date, not onto the page.
  */
 
-const LAST_CHECKED = "October 2026";
+const LAST_REVIEWED = "2026-10-04";
 
 type Price = "Free" | "Freemium" | "Paid";
 
@@ -332,10 +333,6 @@ const FAQS = [
     q: "Do I get paid when my songs are played on the radio or at gigs?",
     a: "You can, but streaming payouts don't cover it. Join your collecting society, like Koda, PRS or ASCAP, and register your songs. A publishing service like Songtrust can collect the rest from abroad.",
   },
-  {
-    q: "Why isn't my favourite link-in-bio or press kit site here?",
-    a: "Because Trenodo does those jobs itself, with Link in Bio, Press Kit, Setlist and Tutor. This list is for everything else a musician needs.",
-  },
 ] as const;
 
 const structuredData = {
@@ -346,6 +343,7 @@ const structuredData = {
       headline: TITLE,
       description: PAGE_DESCRIPTION,
       author: { "@type": "Organization", name: "Trenodo" },
+      dateModified: LAST_REVIEWED,
       image: "https://trenodo.com/images/knowledge/journey/useful-websites.jpg",
     },
     {
@@ -491,9 +489,6 @@ export default function WebsitesForMusiciansPage() {
               </li>
             ))}
           </ul>
-          <p className="mt-4 text-xs text-faint">
-            Last checked {LAST_CHECKED}. Prices change, so each card says Free, Freemium or Paid instead of an amount.
-          </p>
         </nav>
 
         {GROUPS.map((group) => (
@@ -510,9 +505,7 @@ export default function WebsitesForMusiciansPage() {
 
         <GuideSection title="And the rest is Trenodo">
           <p>
-            You might notice a few things missing: link-in-bio pages, press kits,
-            setlists and a way to run your students. That&rsquo;s on purpose.
-            Trenodo does those jobs, free for now: a{" "}
+            Trenodo covers the rest, free for now: a{" "}
             <TermLink href="/link-in-bio">Link in Bio</TermLink> page for all
             your links, a <TermLink href="/press-kit">Press Kit</TermLink> for
             every release, a <TermLink href="/setlist">Setlist</TermLink> you
