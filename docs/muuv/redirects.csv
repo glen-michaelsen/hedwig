@@ -32,9 +32,9 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /selvstudie/instrumenter/guitar/skalaer.html,331,9815,7.52,,/knowledge/guitar/scales,,exists,
 /muuvtube/video/kim-larsen-haveje.html,323,21854,8.87,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /selvstudie/guitar/skalaer.html,323,9635,6.68,,/knowledge/guitar/scales,,exists,
-/selvstudie/instrumenter/guitar/akkorder/b-akkord-variationer.html,302,29323,7.35,,/knowledge/guitar/chords,/knowledge/guitar/chords/b,create,Chord shapes for one root
+/selvstudie/instrumenter/guitar/akkorder/b-akkord-variationer.html,302,29323,7.35,,/knowledge/guitar/chords/b,,exists,Chord shapes for one root
 /musik.html,293,29001,9.41,,/discover,,skip-danish,"Danish playlists (stille musik, julemusik, kærlighedssange)"
-/selvstudie/instrumenter/guitar/akkorder/c-akkord-variationer.html,288,38649,5.7,,/knowledge/guitar/chords,/knowledge/guitar/chords/c,create,Chord shapes for one root
+/selvstudie/instrumenter/guitar/akkorder/c-akkord-variationer.html,288,38649,5.7,,/knowledge/guitar/chords/c,,exists,Chord shapes for one root
 /muuvtube/video/lille-peter-edderkop.html,288,16687,6.16,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /blog/gode-sing-along-sange-til-guitarister.html,288,7992,9.35,,/knowledge/guitar/getting-started,/knowledge/guitar/easy-songs,create,"Easy guitar songs by number of chords (chords only, no lyrics)"
 /selvstudie/musikteori/toneskala.html,280,31884,7.51,,/knowledge/theory/scales-and-notes,,exists,
@@ -49,7 +49,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /data/material/chords/ronan-keating-when-you-say-nothing-at-all-akkorder.pdf,231,5064,12.06,,/knowledge/guitar/chords,/knowledge/guitar/easy-songs,create,International chord sheets: point to easy songs
 /selvstudie/instrumenter/bas/skalaer.html,230,6322,9.37,,/knowledge/bass/scales,,exists,
 /musik/stille-musik.html,229,23973,8.86,,/discover,,skip-danish,"Danish playlists (stille musik, julemusik, kærlighedssange)"
-/selvstudie/instrumenter/guitar/akkorder/g-akkord-variationer.html,225,27394,5.35,,/knowledge/guitar/chords,/knowledge/guitar/chords/g,create,Chord shapes for one root
+/selvstudie/instrumenter/guitar/akkorder/g-akkord-variationer.html,225,27394,5.35,,/knowledge/guitar/chords/g,,exists,Chord shapes for one root
 /data/material/chords/kim-larsen-fru-sauterne-akkorder.pdf,220,3192,3.75,,/knowledge/guitar/chords,,skip-danish,Kim Larsen chord sheets
 /selvstudie/bas/skalaer.html,216,6370,7.22,,/knowledge/bass/scales,,exists,
 /guides/guide-udgiv-din-musik-paa-spotify-apple-music-deezer-tidal-og-mange-flere.html,208,14232,5.97,2,/knowledge/promote,/knowledge/promote/release-your-music,create,"Release your music on Spotify, Apple Music and the rest"
@@ -61,11 +61,11 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /musik/dansk-julemusik.html,191,25888,11.83,,/discover,,skip-danish,"Danish playlists (stille musik, julemusik, kærlighedssange)"
 /selvstudie/instrumenter/guitar/generelt-om-guitaren.html,191,8072,6.88,,/knowledge/guitar/anatomy,,exists,
 /selvstudie/instrumenter/guitar/stem-guitar.html,181,14606,9.77,,/knowledge/guitar/tuning,,exists,
-/selvstudie/instrumenter/guitar/akkorder/bb-akkord-variationer.html,172,17633,8.35,,/knowledge/guitar/chords,/knowledge/guitar/chords/b-flat,create,Chord shapes for one root
+/selvstudie/instrumenter/guitar/akkorder/bb-akkord-variationer.html,172,17633,8.35,,/knowledge/guitar/chords/b-flat,,exists,Chord shapes for one root
 /muuvtube/video/kim-larsen-joanna.html,165,19031,6.85,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /muuvtube/video/anne-linnet-foraarsdag.html,163,29097,8.42,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /muuvtube/video/hjulene-paa-bussen.html,160,14985,6.87,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
-/selvstudie/instrumenter/guitar/akkorder/d-akkord-variationer.html,148,30272,6.28,,/knowledge/guitar/chords,/knowledge/guitar/chords/d,create,Chord shapes for one root
+/selvstudie/instrumenter/guitar/akkorder/d-akkord-variationer.html,148,30272,6.28,,/knowledge/guitar/chords/d,,exists,Chord shapes for one root
 /shop/harmonika.html,146,5817,13.77,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /muuvtube/video/kim-larsen-susan-himmelblaa.html,145,20050,8.67,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /blog/5-gode-raad-saadan-laerer-du-at-saette-fingrene-rigtigt-paa-guitarstrengene.html,144,3275,6.3,,/knowledge/guitar/getting-started,,exists,Guitar beginner blog posts
@@ -83,14 +83,14 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /muuvtube/video/se-den-lille-kattekilling.html,125,10287,8,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /shop/harmonika/piano.html,122,5025,15.49,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /shop/produkt/951-ringway-tg8852.html,122,1096,14.22,,/,,skip-shop,Shop pages (no shop on Trenodo)
-/selvstudie/instrumenter/guitar/akkorder/a-akkord-variationer.html,121,20799,6.38,,/knowledge/guitar/chords,/knowledge/guitar/chords/a,create,Chord shapes for one root
+/selvstudie/instrumenter/guitar/akkorder/a-akkord-variationer.html,121,20799,6.38,,/knowledge/guitar/chords/a,,exists,Chord shapes for one root
 /muuvtube/video/kim-larsen-this-is-my-life.html,121,8474,8.16,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /muuvtube/video/metallica-nothing-else-matters.html,113,2722,10.52,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
-/selvstudie/instrumenter/guitar/akkorder/f-akkord-varationer.html,109,21693,5.91,,/knowledge/guitar/chords,/knowledge/guitar/chords/f,create,Chord shapes for one root
+/selvstudie/instrumenter/guitar/akkorder/f-akkord-varationer.html,109,21693,5.91,,/knowledge/guitar/chords/f,,exists,Chord shapes for one root
 /data/material/chords/animals-house-of-the-rising-sun-akkorder.pdf,106,5451,12.31,,/knowledge/guitar/chords,/knowledge/guitar/easy-songs,create,International chord sheets: point to easy songs
 /selvstudie/guitar/transponering.html,105,6924,5.47,,/knowledge/guitar/transposing,,exists,
 /selvstudie/tips-guides/guide-til-musikere-markedsfoering-paa-sociale-medier.html,101,6838,27.81,,/knowledge/promote,/knowledge/promote/social-media,create,Social media for musicians
-/selvstudie/instrumenter/guitar/akkorder/e-akkord-variationer.html,92,22241,5.9,,/knowledge/guitar/chords,/knowledge/guitar/chords/e,create,Chord shapes for one root
+/selvstudie/instrumenter/guitar/akkorder/e-akkord-variationer.html,92,22241,5.9,,/knowledge/guitar/chords/e,,exists,Chord shapes for one root
 /muuvtube/video/der-sad-to-katte-paa-et-bord.html,89,3620,7.05,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /selvstudie/trommer/trommesaettets-opbygning.html,87,12605,8.92,,/knowledge/drums,/knowledge/drums/anatomy,create,"The drum kit, piece by piece"
 /muuvtube/video/mariehoenen-evigglad.html,86,14784,5.4,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
@@ -127,7 +127,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /selvstudie/guitar/tabulatur.html,57,6069,8.02,,/knowledge/guitar/reading-tabs,,exists,
 /muuvtube/video/kim-larsen-jutlandia.html,56,11378,5.84,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /selvstudie/guitar.html,56,10840,15.88,,/knowledge/guitar,,exists,
-/selvstudie/instrumenter/guitar/akkorder/f-kryds-akkord-variationer.html,54,10328,7.39,,/knowledge/guitar/chords,/knowledge/guitar/chords/f-sharp,create,Chord shapes for one root
+/selvstudie/instrumenter/guitar/akkorder/f-kryds-akkord-variationer.html,54,10328,7.39,,/knowledge/guitar/chords/f-sharp,,exists,Chord shapes for one root
 /muuvtube/video/oasis-wonderwall.html,54,2885,8.54,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /muuvtube/video/kashmir-lampshade.html,54,2554,6.12,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /musikunderviser/lars-emil-riis-727.html,54,442,4.79,,/tutoring,,tutoring,Teacher profiles and lesson pages
@@ -148,8 +148,8 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /selvstudie/musikteori/overtoner.html,47,5277,7.87,,/knowledge/theory/overtones,,exists,
 /undervisning/lydteknik.html,47,641,18.05,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /blog/gode-musikinstrumenter-til-sommeren-nemme-at-tage-med-og-oeve-udendoers.html,46,6493,11.08,,/knowledge,,misc,Other blog posts
-/selvstudie/instrumenter/guitar/akkorder/c-kryds-akkord-variationer.html,45,5938,7.78,,/knowledge/guitar/chords,/knowledge/guitar/chords/c-sharp,create,Chord shapes for one root
-/selvstudie/instrumenter/guitar/akkorder/g-kryds-akkord-variationer.html,44,8190,8.45,,/knowledge/guitar/chords,/knowledge/guitar/chords/g-sharp,create,Chord shapes for one root
+/selvstudie/instrumenter/guitar/akkorder/c-kryds-akkord-variationer.html,45,5938,7.78,,/knowledge/guitar/chords/c-sharp,,exists,Chord shapes for one root
+/selvstudie/instrumenter/guitar/akkorder/g-kryds-akkord-variationer.html,44,8190,8.45,,/knowledge/guitar/chords/a-flat,,exists,Chord shapes for one root
 /undervisning/genre/jazz.html,44,1023,17.4,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /undervisning/genre/opera.html,44,645,18.64,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /selvstudie/ordbog/j-s/kammertonen.html,43,17478,6.53,,/knowledge/theory/concert-pitch,,exists,
@@ -188,7 +188,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /selvstudie/instrumenter/trommer/stikteknik.html,29,1021,10.82,,/knowledge/drums,/knowledge/drums/rudiments,create,Sticking and rudiments (paradiddle and friends)
 /shop/guitar/gribebraetsolie.html,29,676,6.21,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /blog/vil-du-laere-at-spille-guitar-laer-det-paa-kun-30-minutter-om-dagen.html,28,15081,12.82,,/knowledge/guitar/getting-started,,exists,Guitar beginner blog posts
-/selvstudie/instrumenter/guitar/akkorder/d-kryds-akkord-variationer.html,28,10873,10.79,,/knowledge/guitar/chords,/knowledge/guitar/chords/d-sharp,create,Chord shapes for one root
+/selvstudie/instrumenter/guitar/akkorder/d-kryds-akkord-variationer.html,28,10873,10.79,,/knowledge/guitar/chords/e-flat,,exists,Chord shapes for one root
 /muuvtube/video/bob-dylan-knocking-on-heavens-door.html,28,1581,11.46,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /musikunderviser/jack-kilburn-1095.html,28,260,2.91,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /blog/black-friday-tilbud-paa-musikinstrumenter.html,27,990,16.68,,/knowledge,,misc,Other blog posts

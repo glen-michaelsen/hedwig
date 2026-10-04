@@ -5,6 +5,7 @@ import { GuideFaq, GuideLayout, GuideSection } from "../../_components/guide-lay
 import { ZoomableImage } from "../../_components/zoomable-image";
 import { focusable } from "@/app/_components/ui";
 import { BARRE_CHORDS, OPEN_CHORDS } from "@/lib/chord-diagrams/guitar-chords";
+import { CHORD_ROOTS, variantHref } from "@/lib/chord-diagrams/chord-variants";
 
 const PAGE_DESCRIPTION =
   "Open chords, barre chords and how to read a chord diagram. The chord guide every beginner comes back to.";
@@ -88,6 +89,7 @@ export default function GuitarChordsPage() {
                 slug={chord.slug}
                 name={chord.name}
                 shortName={chord.shortName}
+                href={variantHref(chord.slug) ?? undefined}
               />
             ))}
           </div>
@@ -119,6 +121,7 @@ export default function GuitarChordsPage() {
                 slug={chord.slug}
                 name={chord.name}
                 shortName={chord.shortName}
+                href={variantHref(chord.slug) ?? undefined}
               />
             ))}
           </div>
@@ -155,6 +158,25 @@ export default function GuitarChordsPage() {
               className="mx-auto w-full max-w-40 sm:mx-0 sm:w-40 sm:shrink-0"
             />
           </div>
+        </GuideSection>
+
+        <GuideSection title="Every chord, in every key">
+          <p>
+            Sevenths, sus chords, diminished and the barre shapes for each
+            one. Pick a key.
+          </p>
+          <ul className="flex flex-wrap gap-2">
+            {CHORD_ROOTS.map((root) => (
+              <li key={root.slug}>
+                <Link
+                  href={`/knowledge/guitar/chords/${root.slug}`}
+                  className={`inline-flex min-w-11 items-center justify-center rounded-full border border-line bg-surface px-3.5 py-2 text-sm font-semibold text-foreground transition-colors hover:border-line-strong hover:text-brand-700 ${focusable}`}
+                >
+                  {root.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </GuideSection>
 
         <GuideSection title="How to get faster">

@@ -20,8 +20,10 @@ const COLOR = {
 
 const FRET_ROWS = 4;
 const WIDTH = 200;
-const GRID_LEFT = 34;
-const GRID_RIGHT = 176;
+// Room on the left for the fret label ("10fr") clear of a barre that
+// starts on the low string.
+const GRID_LEFT = 42;
+const GRID_RIGHT = 184;
 const GRID_TOP = 50;
 const FRET_HEIGHT = 34;
 const GRID_BOTTOM = GRID_TOP + FRET_ROWS * FRET_HEIGHT;
@@ -84,7 +86,7 @@ export function renderChordSvg(chord: ChordShape): string {
   // thing.
   if (baseFret > 1 && !chord.barre?.label) {
     parts.push(
-      `<text x="${GRID_LEFT - 10}" y="${GRID_TOP + FRET_HEIGHT / 2 + 4}" text-anchor="end" font-family="system-ui, sans-serif" font-size="13" fill="${COLOR.label}">${baseFret}fr</text>`,
+      `<text x="${GRID_LEFT - DOT_RADIUS - 4}" y="${GRID_TOP + FRET_HEIGHT / 2 + 4}" text-anchor="end" font-family="system-ui, sans-serif" font-size="12" fill="${COLOR.label}">${baseFret}fr</text>`,
     );
   }
 

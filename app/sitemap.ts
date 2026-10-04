@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { CHORD_ROOTS } from "@/lib/chord-diagrams/chord-variants";
 import { COMPARISONS } from "@/lib/compare";
 import { listPublishedSpotlights } from "@/lib/dal/spotlight";
 import { getDiscover } from "@/lib/discover";
@@ -233,7 +234,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly" as const,
   }));
 
-  const staticEntries = [...PAGES, ...comparePages].map((page) => ({
+  // Every key's chord page, from the same list the pages render from.
+  const chordPages = CHORD_ROOTS.map((root) => ({
+    path: `/knowledge/guitar/chords/${root.slug}`,
+    priority: 0.6,
+    changeFrequency: "monthly" as const,
+  }));
+
+  const staticEntries = [...PAGES, ...comparePages, ...chordPages].map((page) => ({
     url: `https://trenodo.com${page.path}`,
     lastModified,
     changeFrequency: page.changeFrequency,

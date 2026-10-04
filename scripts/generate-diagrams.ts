@@ -14,6 +14,7 @@ import {
   ALL_GUITAR_CHORDS,
   CAPO_TRANSPOSE_EXAMPLE,
 } from "../lib/chord-diagrams/guitar-chords";
+import { ALL_CHORD_VARIANTS } from "../lib/chord-diagrams/chord-variants";
 import { renderChordSvg } from "../lib/chord-diagrams/render";
 import { GUITAR_SCALES } from "../lib/scale-diagrams/guitar-scales";
 import { renderScaleSvg } from "../lib/scale-diagrams/render";
@@ -39,7 +40,7 @@ async function writeAll<T extends { slug: string }>(
 }
 
 async function main() {
-  const guitarChords = [...ALL_GUITAR_CHORDS, ...CAPO_TRANSPOSE_EXAMPLE];
+  const guitarChords = [...ALL_GUITAR_CHORDS, ...CAPO_TRANSPOSE_EXAMPLE, ...ALL_CHORD_VARIANTS];
   await writeAll(
     path.join(KNOWLEDGE_DIR, "guitar/chords"),
     guitarChords,
