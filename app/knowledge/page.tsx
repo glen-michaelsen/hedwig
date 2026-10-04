@@ -91,6 +91,12 @@ const JOURNEY = [
     body: "Share what you know. Turn your playing into lessons other musicians can book.",
     image: "/images/knowledge/journey/teaching.jpg",
   },
+  {
+    href: "/knowledge/websites-for-musicians",
+    title: "Useful Websites",
+    body: "Backing tracks, free recording apps, distribution and more. The sites worth a bookmark.",
+    image: "/images/knowledge/journey/useful-websites.jpg",
+  },
 ] as const;
 
 export default function KnowledgeIndexPage() {

@@ -199,6 +199,11 @@ const PAGES: {
     priority: 0.6,
     changeFrequency: "monthly",
   },
+  {
+    path: "/knowledge/websites-for-musicians",
+    priority: 0.6,
+    changeFrequency: "monthly",
+  },
   { path: "/spotlight", priority: 0.6, changeFrequency: "weekly" },
   {
     path: "/spotlight/get-featured",

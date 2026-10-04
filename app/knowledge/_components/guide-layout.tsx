@@ -16,8 +16,9 @@ export function GuideLayout({
   intro,
   children,
 }: {
-  category: string;
-  categoryHref: string;
+  /** The pillar the guide belongs to. Leave both out for a guide that sits straight under Knowledge. */
+  category?: string;
+  categoryHref?: string;
   title: string;
   intro: string;
   children: ReactNode;
@@ -35,13 +36,17 @@ export function GuideLayout({
             >
               Knowledge
             </Link>
-            <span aria-hidden="true">/</span>
-            <Link
-              href={categoryHref}
-              className={`transition-colors hover:text-foreground ${focusable} rounded`}
-            >
-              {category}
-            </Link>
+            {category && categoryHref && (
+              <>
+                <span aria-hidden="true">/</span>
+                <Link
+                  href={categoryHref}
+                  className={`transition-colors hover:text-foreground ${focusable} rounded`}
+                >
+                  {category}
+                </Link>
+              </>
+            )}
           </nav>
 
           <h1 className="mt-4 text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
@@ -55,10 +60,10 @@ export function GuideLayout({
 
           <div className="mt-16 border-t border-line pt-8">
             <Link
-              href={categoryHref}
+              href={categoryHref ?? "/knowledge"}
               className={`text-sm font-medium text-muted transition-colors hover:text-foreground ${focusable} rounded`}
             >
-              ← Back to {category}
+              ← Back to {category ?? "Knowledge"}
             </Link>
           </div>
         </article>
