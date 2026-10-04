@@ -19,7 +19,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /muuvtube/video/ole-har-foedselsdag-den-med-instrumenterne.html,625,43634,6.46,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /,619,52661,12.23,45,/,,home,
 /muuvtube/laer-lette-begynder-sange-paa-guitar.html,554,21891,7.64,,/knowledge/guitar/getting-started,/knowledge/guitar/easy-songs,create,"Easy guitar songs by number of chords (chords only, no lyrics)"
-/selvstudie/tips-guides/guide-udgiv-din-musik-paa-spotify-apple-music-deezer-tidal-og-mange-flere.html,514,19409,7.78,,/knowledge/promote,/knowledge/promote/release-your-music,create,"Release your music on Spotify, Apple Music and the rest"
+/selvstudie/tips-guides/guide-udgiv-din-musik-paa-spotify-apple-music-deezer-tidal-og-mange-flere.html,514,19409,7.78,,/knowledge/promote/release-your-music,,exists,"Release your music on Spotify, Apple Music and the rest"
 /selvstudie/tips-guides/pris-for-musiker-spillejobs-gigs.html,508,36902,9.69,,/knowledge/perform,/knowledge/perform/gig-fees,create,What to charge for a gig
 /muuvtube/laer-sange-med-3-akkorder.html,506,11850,8.67,,/knowledge/guitar/getting-started,/knowledge/guitar/easy-songs,create,"Easy guitar songs by number of chords (chords only, no lyrics)"
 /muuvtube/laer-guitar-sange-med-4-akkorder,476,12608,6.91,,/knowledge/guitar/getting-started,/knowledge/guitar/easy-songs,create,"Easy guitar songs by number of chords (chords only, no lyrics)"
@@ -52,7 +52,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /selvstudie/instrumenter/guitar/akkorder/g-akkord-variationer.html,225,27394,5.35,,/knowledge/guitar/chords/g,,exists,Chord shapes for one root
 /data/material/chords/kim-larsen-fru-sauterne-akkorder.pdf,220,3192,3.75,,/knowledge/guitar/chords,,skip-danish,Kim Larsen chord sheets
 /selvstudie/bas/skalaer.html,216,6370,7.22,,/knowledge/bass/scales,,exists,
-/guides/guide-udgiv-din-musik-paa-spotify-apple-music-deezer-tidal-og-mange-flere.html,208,14232,5.97,2,/knowledge/promote,/knowledge/promote/release-your-music,create,"Release your music on Spotify, Apple Music and the rest"
+/guides/guide-udgiv-din-musik-paa-spotify-apple-music-deezer-tidal-og-mange-flere.html,208,14232,5.97,2,/knowledge/promote/release-your-music,,exists,"Release your music on Spotify, Apple Music and the rest"
 /muuvtube/video/puff-den-magiske-drage.html,203,19307,8.34,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /selvstudie/musikteori/kvintcirkel.html,202,131535,5.04,2,/knowledge/theory/circle-of-fifths,,exists,
 /selvstudie/instrumenter/guitar/transponering.html,201,11063,5.38,,/knowledge/guitar/transposing,,exists,
@@ -137,7 +137,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /undervisning/sang.html,51,12641,22.39,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /selvstudie/guitar/skift-strenge.html,51,6799,7.48,,/knowledge/guitar/changing-strings,,exists,
 /selvstudie/instrumenter/bas/basguitarens-opbygning.html,51,5182,10.05,,/knowledge/bass/anatomy,,exists,
-/selvstudie/tips-guides/guide-tips-til-at-saelge-musik-online.html,50,3731,10.85,,/knowledge/promote,/knowledge/promote/release-your-music,create,"Release your music on Spotify, Apple Music and the rest"
+/selvstudie/tips-guides/guide-tips-til-at-saelge-musik-online.html,50,3731,10.85,,/knowledge/promote/release-your-music,,exists,"Release your music on Spotify, Apple Music and the rest"
 /undervisning/dj/aarhus.html,50,2096,35.62,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /selvstudie/instrumenter/lydstudie/software.html,49,4600,16.67,,/knowledge/record/choosing-software,,exists,
 /shop/violin/boerne.html,49,2728,7.43,,/,,skip-shop,Shop pages (no shop on Trenodo)
@@ -178,7 +178,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /muuvtube/video/kim-larsen-fru-sauterne.html,32,2872,8.39,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /shop/produkt/11-startpakke-sant-guitars-ac-80-na.html,32,1746,4.06,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /musikunderviser/jan-ole-ettrup-789.html,32,488,3.88,,/tutoring,,tutoring,Teacher profiles and lesson pages
-/blog/saa-meget-tjener-musikere-per-afspilning-paa-spotify.html,31,10262,6.87,,/knowledge/promote,/knowledge/promote/release-your-music,create,"Release your music on Spotify, Apple Music and the rest"
+/blog/saa-meget-tjener-musikere-per-afspilning-paa-spotify.html,31,10262,6.87,,/knowledge/promote/release-your-music,,exists,"Release your music on Spotify, Apple Music and the rest"
 /shop/produkt/906-epiphone-hummingbird-pro.html,31,518,9.53,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /blog/hvilken-instrument-skal-man-laere-find-ud-af-det-her.html,30,5364,18.56,,/knowledge,,misc,Other blog posts
 /shop/produkt/348-fender-squier-bullet-strat-ht-hss-awt.html,30,977,7.84,,/,,skip-shop,Shop pages (no shop on Trenodo)
@@ -301,7 +301,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /shop/guitar/western.html,12,2298,22.86,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /blog/musikinspiration-jens-konrad-se-hinanden-igen.html,12,2132,6.75,,/spotlight,,spotlight,Artist features
 /shop/guitar/gibson.html,12,1756,26.62,,/,,skip-shop,Shop pages (no shop on Trenodo)
-/blog/saadan-tjener-du-penge-paa-din-musik.html,12,1284,6.04,,/knowledge/promote,/knowledge/promote/release-your-music,create,"Release your music on Spotify, Apple Music and the rest"
+/blog/saadan-tjener-du-penge-paa-din-musik.html,12,1284,6.04,,/knowledge/promote/release-your-music,,exists,"Release your music on Spotify, Apple Music and the rest"
 /data/material/chords/oasis-wonderwall-akkorder.pdf,12,1173,15.99,,/knowledge/guitar/chords,/knowledge/guitar/easy-songs,create,International chord sheets: point to easy songs
 /shop/produkt/3046-yamaha-c40.html,12,1147,9.91,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /selvstudie/trommer/stikteknik.html,12,1053,15.22,,/knowledge/drums,/knowledge/drums/rudiments,create,Sticking and rudiments (paradiddle and friends)

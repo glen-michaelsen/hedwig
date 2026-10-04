@@ -26,6 +26,12 @@ const GUIDES = [
     body: "Music, cover art, press photos, bio and video. What goes in, what to skip, and real examples from featured artists.",
     image: "/images/knowledge/promote/press-kit.jpg",
   },
+  {
+    href: "/knowledge/promote/release-your-music",
+    title: "How to Release Your Music",
+    body: "Spotify, Apple Music, TikTok and the rest. What to prepare, which distributor to pick and how the money reaches you.",
+    image: "/images/knowledge/journey/promoting.jpg",
+  },
 ] as const;
 
 export default function PromoteKnowledgePage() {

@@ -24,7 +24,7 @@ Knowledge hub, which already has most of the neighbours.
 | 1 | Song chord pages, e.g. `/knowledge/guitar/songs/what-a-wonderful-world` | 6,960 | ~200k | 9 chord sheet PDFs (What a Wonderful World 2,686 · Knockin' on Heaven's Door 2,481 · Hallelujah 700 · The Scientist 458 · Save Tonight 279 · When You Say Nothing at All 231 · House of the Rising Sun 106) |
 | 2 | `/knowledge/guitar/easy-songs` | 2,257 | ~95k | "Songs with 2, 3 and 4 chords", beginner songs, sing-alongs |
 | 3 | **Built.** `/knowledge/guitar/chords/<root>` (a, b-flat, b, c, c-sharp, d, e-flat, e, f, f-sharp, g, a-flat); the CSV now points here | 1,628 | 243k | 12 chord variation pages |
-| 4 | `/knowledge/promote/release-your-music` | 815 | 49k | Release on Spotify, Apple Music and the rest; sell online; pay per stream |
+| 4 | **Built.** `/knowledge/promote/release-your-music` | 815 | 49k | Release on Spotify, Apple Music and the rest; sell online; pay per stream |
 | 5 | `/knowledge/perform/gig-fees` | 773 | 64k | What to charge for a gig |
 | 6 | `/knowledge/piano/scales` | 408 | 24k | Piano scales |
 | 7 | `/knowledge/drums/anatomy` | 335 | 27k | The drum kit, piece by piece |
