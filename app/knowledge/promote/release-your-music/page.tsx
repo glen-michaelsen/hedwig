@@ -63,7 +63,7 @@ const DISTRIBUTORS = [
   { name: "TuneCore", url: "https://www.tunecore.com", model: "Yearly plans, unlimited releases", cut: "None on paid plans", fit: "Artists who want publishing help in the same place" },
   { name: "CD Baby", url: "https://cdbaby.com", model: "One fee per release, no yearly fee", cut: "A small share", fit: "Artists who release now and then" },
   { name: "Ditto Music", url: "https://dittomusic.com", model: "Yearly fee, unlimited releases", cut: "None", fit: "A budget yearly option" },
-  { name: "Amuse", url: "https://www.amuse.io", model: "Yearly plans. The free plan is gone.", cut: "None while you pay", fit: "Artists who want advances later" },
+  { name: "Amuse", url: "https://www.amuse.io", model: "Yearly plans, unlimited releases", cut: "None while you pay", fit: "Artists who want advances later" },
 ] as const;
 
 const FAQS = [
@@ -203,7 +203,7 @@ export default function ReleaseYourMusicPage() {
         category="Promoting Your Music"
         categoryHref="/knowledge/promote"
         title={TITLE}
-        intro="Anyone can put a song on Spotify today, no label needed. The upload takes ten minutes. Getting it heard takes a little planning. Here's how to do both. 🚀"
+        intro="Anyone can put a song on Spotify, no label needed. The upload takes ten minutes. Getting it heard takes a little planning. Here's how to do both. 🚀"
       >
         <GuideSection title="How it works">
           <p>
@@ -400,7 +400,7 @@ export default function ReleaseYourMusicPage() {
             </a>{" "}
             sells your music and merch straight to fans, and you keep most of
             every sale. On Bandcamp Fridays, a few days a year, it takes
-            nothing at all. Vinyl, CDs and T-shirts at gigs still sell. Bring
+            nothing at all. Vinyl, CDs and T-shirts sell well at gigs. Bring
             a card reader. 💳
           </p>
         </GuideStep>
