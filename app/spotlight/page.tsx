@@ -4,6 +4,8 @@ import { Hearts } from "@/app/_components/hearts";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
 import { container, focusable } from "@/app/_components/ui";
 import { listPublishedSpotlights } from "@/lib/dal/spotlight";
+import { spotlightAuthorSchema, spotlightPublisherSchema } from "@/lib/spotlight/author";
+import { MAX_RATING } from "@/lib/spotlight/slug";
 import { getLiveDiscoverPages } from "@/lib/discover";
 import { SpotlightCard } from "./_components/spotlight-card";
 
@@ -50,11 +52,19 @@ export default async function SpotlightIndexPage() {
     name: "Trenodo Spotlight",
     url: "https://trenodo.com/spotlight",
     description: PAGE_DESCRIPTION,
+    publisher: spotlightPublisherSchema,
     blogPost: articles.map((article) => ({
       "@type": "Review",
       headline: article.headline,
       url: `https://trenodo.com/spotlight/${article.slug}`,
       datePublished: (article.publishedAt ?? article.createdAt).toISOString(),
+      author: spotlightAuthorSchema,
+      reviewRating: {
+        "@type": "Rating",
+        ratingValue: article.rating,
+        bestRating: MAX_RATING,
+        worstRating: 1,
+      },
       itemReviewed: {
         "@type": "MusicRelease",
         name: article.releaseTitle,
