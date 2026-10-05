@@ -26,9 +26,10 @@ import {
 import { MAX_RATING } from "@/lib/spotlight/slug";
 import {
   SPOTLIGHT_AUTHOR,
-  spotlightAuthorSchema,
-  spotlightPublisherSchema,
-} from "@/lib/spotlight/author";
+  authorPath,
+  authorSchema,
+  trenodoPublisherSchema,
+} from "@/lib/authors";
 
 export const dynamic = "force-dynamic";
 
@@ -193,8 +194,8 @@ export default async function SpotlightArticlePage({
         headline: article.headline,
         url: `https://trenodo.com/spotlight/${article.slug}`,
         datePublished: (article.publishedAt ?? article.createdAt).toISOString(),
-        author: spotlightAuthorSchema,
-        publisher: spotlightPublisherSchema,
+        author: authorSchema(SPOTLIGHT_AUTHOR),
+        publisher: trenodoPublisherSchema,
         reviewBody: paragraphs.join("\n\n"),
         reviewRating: {
           "@type": "Rating",
@@ -372,7 +373,7 @@ export default async function SpotlightArticlePage({
           <p className="mb-6 text-sm text-muted">
             By{" "}
             <Link
-              href={SPOTLIGHT_AUTHOR.path}
+              href={authorPath(SPOTLIGHT_AUTHOR)}
               rel="author"
               className={`font-medium text-foreground hover:text-brand-700 ${focusable} rounded`}
             >

@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { AUTHORS, authorPath } from "@/lib/authors";
 import { CHORD_ROOTS } from "@/lib/chord-diagrams/chord-variants";
 import { COMPARISONS } from "@/lib/compare";
 import { listPublishedSpotlights } from "@/lib/dal/spotlight";
@@ -246,7 +247,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly" as const,
   }));
 
-  const staticEntries = [...PAGES, ...comparePages, ...chordPages].map((page) => ({
+  const authorPages = AUTHORS.map((author) => ({
+    path: authorPath(author),
+    priority: 0.4,
+    changeFrequency: "monthly" as const,
+  }));
+
+  const staticEntries = [...PAGES, ...comparePages, ...chordPages, ...authorPages].map((page) => ({
     url: `https://trenodo.com${page.path}`,
     lastModified,
     changeFrequency: page.changeFrequency,

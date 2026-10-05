@@ -1,40 +1,43 @@
 import type { ReactNode } from "react";
 import { focusable } from "./ui";
 
+/** One glyph per network, drawn on a 24×24 grid. */
+export const SOCIAL_ICONS: Record<string, ReactNode> = {
+  YouTube: (
+    <path
+      fill="currentColor"
+      fillRule="evenodd"
+      d="M5.5 4.5h13A4.5 4.5 0 0 1 23 9v6a4.5 4.5 0 0 1-4.5 4.5h-13A4.5 4.5 0 0 1 1 15V9a4.5 4.5 0 0 1 4.5-4.5ZM10 8.75v6.5L15.5 12Z"
+    />
+  ),
+  Instagram: (
+    <>
+      <rect x="2.75" y="2.75" width="18.5" height="18.5" rx="5.25" fill="none" stroke="currentColor" strokeWidth="2" />
+      <circle cx="12" cy="12" r="4.25" fill="none" stroke="currentColor" strokeWidth="2" />
+      <circle cx="17.4" cy="6.6" r="1.25" fill="currentColor" />
+    </>
+  ),
+  Facebook: (
+    <path
+      fill="currentColor"
+      d="M13.5 21.5v-8h2.7l.45-3.1H13.5V8.6c0-.9.3-1.55 1.6-1.55h1.65V4.3a22 22 0 0 0-2.4-.13c-2.4 0-4.05 1.45-4.05 4.15v2.08H7.6v3.1h2.7v8Z"
+    />
+  ),
+  Medium: (
+    <>
+      <circle cx="7" cy="12" r="5.75" fill="currentColor" />
+      <ellipse cx="16.75" cy="12" rx="2.9" ry="5.4" fill="currentColor" />
+      <ellipse cx="21.6" cy="12" rx="1.1" ry="4.9" fill="currentColor" />
+    </>
+  ),
+  Unsplash: <path fill="currentColor" d="M8.25 3h7.5v5.25h-7.5V3Zm7.5 7.5H21V21H3V10.5h5.25v5.25h7.5V10.5Z" />,
+};
+
 /** Trenodo's own profiles. Add a row here, and the footer picks it up. */
-const SOCIAL_LINKS: { name: string; href: string; icon: ReactNode }[] = [
-  {
-    name: "YouTube",
-    href: "https://www.youtube.com/@trenodo-com",
-    icon: (
-      <path
-        fill="currentColor"
-        fillRule="evenodd"
-        d="M5.5 4.5h13A4.5 4.5 0 0 1 23 9v6a4.5 4.5 0 0 1-4.5 4.5h-13A4.5 4.5 0 0 1 1 15V9a4.5 4.5 0 0 1 4.5-4.5ZM10 8.75v6.5L15.5 12Z"
-      />
-    ),
-  },
-  {
-    name: "Instagram",
-    href: "https://www.instagram.com/trenodo.app/",
-    icon: (
-      <>
-        <rect x="2.75" y="2.75" width="18.5" height="18.5" rx="5.25" fill="none" stroke="currentColor" strokeWidth="2" />
-        <circle cx="12" cy="12" r="4.25" fill="none" stroke="currentColor" strokeWidth="2" />
-        <circle cx="17.4" cy="6.6" r="1.25" fill="currentColor" />
-      </>
-    ),
-  },
-  {
-    name: "Facebook",
-    href: "https://www.facebook.com/trenodo",
-    icon: (
-      <path
-        fill="currentColor"
-        d="M13.5 21.5v-8h2.7l.45-3.1H13.5V8.6c0-.9.3-1.55 1.6-1.55h1.65V4.3a22 22 0 0 0-2.4-.13c-2.4 0-4.05 1.45-4.05 4.15v2.08H7.6v3.1h2.7v8Z"
-      />
-    ),
-  },
+const SOCIAL_LINKS: { name: string; href: string }[] = [
+  { name: "YouTube", href: "https://www.youtube.com/@trenodo-com" },
+  { name: "Instagram", href: "https://www.instagram.com/trenodo.app/" },
+  { name: "Facebook", href: "https://www.facebook.com/trenodo" },
 ];
 
 /** Round icon buttons, made for the dark purple footer. */
@@ -52,7 +55,7 @@ export function SocialLinks() {
             className={`grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white/80 transition-colors hover:bg-white/20 hover:text-white ${focusable}`}
           >
             <svg viewBox="0 0 24 24" aria-hidden="true" className="h-5 w-5">
-              {link.icon}
+              {SOCIAL_ICONS[link.name]}
             </svg>
           </a>
         </li>
