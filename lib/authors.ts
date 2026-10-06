@@ -8,7 +8,7 @@
  */
 
 export type AuthorProfile = {
-  name: "Instagram" | "Facebook" | "Medium" | "Unsplash" | "YouTube";
+  name: "LinkedIn" | "Instagram" | "Facebook" | "Medium" | "Unsplash" | "YouTube";
   href: string;
 };
 
@@ -29,6 +29,7 @@ export const AUTHORS: Author[] = [
     bio: "I'm passionate about music and entrepreneurship, and I started building Trenodo to help upcoming artists.",
     image: "/images/authors/glen-michaelsen.jpg",
     profiles: [
+      { name: "LinkedIn", href: "https://www.linkedin.com/in/glenmichaelsen/" },
       { name: "Instagram", href: "https://www.instagram.com/glenmichaelsen/" },
       { name: "Facebook", href: "https://www.facebook.com/Glenovic/" },
       { name: "Medium", href: "https://medium.com/@glenmichaelsen" },
