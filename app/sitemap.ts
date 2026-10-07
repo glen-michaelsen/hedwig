@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { AUTHORS, authorPath } from "@/lib/authors";
 import { CHORD_ROOTS } from "@/lib/chord-diagrams/chord-variants";
+import { SONGS } from "@/lib/songs/songs";
 import { COMPARISONS } from "@/lib/compare";
 import { listPublishedSpotlights } from "@/lib/dal/spotlight";
 import { getDiscover } from "@/lib/discover";
@@ -247,13 +248,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "monthly" as const,
   }));
 
+  const songPages = [
+    { path: "/knowledge/guitar/songs", priority: 0.6, changeFrequency: "weekly" as const },
+    ...SONGS.map((song) => ({
+      path: `/knowledge/guitar/songs/${song.slug}`,
+      priority: 0.6,
+      changeFrequency: "monthly" as const,
+    })),
+  ];
+
   const authorPages = AUTHORS.map((author) => ({
     path: authorPath(author),
     priority: 0.4,
     changeFrequency: "monthly" as const,
   }));
 
-  const staticEntries = [...PAGES, ...comparePages, ...chordPages, ...authorPages].map((page) => ({
+  const staticEntries = [...PAGES, ...comparePages, ...chordPages, ...songPages, ...authorPages].map((page) => ({
     url: `https://trenodo.com${page.path}`,
     lastModified,
     changeFrequency: page.changeFrequency,

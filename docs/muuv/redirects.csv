@@ -5,7 +5,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /selvstudie/tips-guides/x-factor-vindere-gennem-tiden-danmark.html,3130,236928,7.96,,/,,skip-danish,Danish TV/charts
 /selvstudie/tips-guides/toppen-af-poppen-deltagere-gennem-tiden.html,3115,133231,5.83,,/,,skip-danish,Danish TV/charts
 /data/material/chords/kim-larsen-papirsklip-akkorder.pdf,3021,22678,3.32,,/knowledge/guitar/chords,,skip-danish,Kim Larsen chord sheets
-/data/material/chords/louis-armstrong-what-a-wonderful-world-akkorder.pdf,2686,78621,7.98,,/knowledge/guitar/chords,/knowledge/guitar/easy-songs,create,International chord sheets: point to easy songs
+/data/material/chords/louis-armstrong-what-a-wonderful-world-akkorder.pdf,2686,78621,7.98,,/knowledge/guitar/songs/what-a-wonderful-world,,exists,International chord sheets: point to easy songs
 /data/material/chords/bob-dylan-knocking-on-heavens-door-akkorder.pdf,2481,53449,14.39,,/knowledge/guitar/chords,/knowledge/guitar/easy-songs,create,International chord sheets: point to easy songs
 /data/material/chords/kim-larsen-joanna-akkorder.pdf,2369,84233,7.6,,/knowledge/guitar/chords,,skip-danish,Kim Larsen chord sheets
 /data/material/chords/kim-larsen-midt-om-natten-akkorder.pdf,2185,41749,6.27,,/knowledge/guitar/chords,,skip-danish,Kim Larsen chord sheets
@@ -471,7 +471,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /blog/musikinspiration-glimtvis-long-kiss-goodnight.html,6,524,5.69,,/spotlight/an-epic-album-from-start-to-finish,,spotlight,
 /shop/produkt/974-casio-cdp-130.html,6,508,9.56,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /shop/produkt/1036-yamaha-clp-625-r.html,6,498,26.17,,/,,skip-shop,Shop pages (no shop on Trenodo)
-/muuvtube/video/louis-armstrong-what-a-wonderful-world.html,6,481,8.86,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
+/muuvtube/video/louis-armstrong-what-a-wonderful-world.html,6,481,8.86,,/knowledge/guitar/songs/what-a-wonderful-world,,exists,Song and children's song video lessons
 /undervisning/sangskrivning.html,6,479,26.85,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /shop/produkt/arvada-vio-180l-venstrehaands-violin-4-4-pakkeloesning.html,6,461,13.9,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /musikunderviser/christian-frigaard-1337.html,6,378,5.56,,/tutoring,,tutoring,Teacher profiles and lesson pages

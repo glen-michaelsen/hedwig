@@ -179,6 +179,19 @@ export default function GuitarChordsPage() {
           </ul>
         </GuideSection>
 
+        <GuideSection title="Put them to work">
+          <p>
+            Chords stick faster in a real song. Try our{" "}
+            <Link
+              href="/knowledge/guitar/songs"
+              className={`font-medium text-brand-600 hover:underline ${focusable} rounded`}
+            >
+              songs with chords
+            </Link>
+            , bar by bar, with an easier capo version for the tricky ones.
+          </p>
+        </GuideSection>
+
         <GuideSection title="How to get faster">
           <p>
             Repetition is the secret. At some point your hand finds the chord

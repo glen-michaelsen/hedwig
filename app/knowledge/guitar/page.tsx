@@ -27,6 +27,11 @@ const REFERENCE = [
     body: "Open chords, barre chords, and how to read a chord diagram.",
   },
   {
+    href: "/knowledge/guitar/songs",
+    title: "Songs with Chords",
+    body: "Real songs, bar by bar. Every chord drawn, plus an easier capo version.",
+  },
+  {
     href: "/knowledge/guitar/scales",
     title: "Scales",
     body: "Major, minor and the two pentatonic scales.",
