@@ -45,6 +45,149 @@ export const SONGS: Song[] = [
       },
     ],
   },
+  {
+    slug: "knockin-on-heavens-door",
+    title: "Knockin' on Heaven's Door",
+    artist: "Bob Dylan",
+    year: 1973,
+    writers: ["Bob Dylan"],
+    key: "G",
+    feel: "Laid back",
+    bpm: 69,
+    level: "Beginner",
+    intro:
+      "Four chords, one pattern, start to finish. One of the best first songs there is: easy to play, and it sounds like the record from day one.",
+    strumming: {
+      pattern: ["D", "-", "D", "U", "-", "U", "D", "U"],
+      tip: "Easy and steady. Let the G ring out before you move on.",
+    },
+    sections: [
+      { name: "Verse", bars: [["G"], ["D"], ["Am"], ["Am"], ["G"], ["D"], ["C"], ["C"]] },
+      { name: "Chorus", repeat: 2, bars: [["G"], ["D"], ["Am"], ["Am"], ["G"], ["D"], ["C"], ["C"]] },
+      { name: "Verse", bars: [["G"], ["D"], ["Am"], ["Am"], ["G"], ["D"], ["C"], ["C"]] },
+      { name: "Chorus", repeat: 2, bars: [["G"], ["D"], ["Am"], ["Am"], ["G"], ["D"], ["C"], ["C"]] },
+    ],
+  },
+  {
+    slug: "hallelujah",
+    title: "Hallelujah",
+    artist: "Jeff Buckley",
+    year: 1994,
+    writers: ["Leonard Cohen"],
+    key: "C",
+    feel: "Slow, in 12/8",
+    bpm: 60,
+    level: "Beginner",
+    intro:
+      "A song people ask for at every campfire. The chords are friendly, the challenge is the feel: slow, patient and in threes.",
+    strumming: {
+      tip: "Each beat splits into three. Pick the strings one by one, bass note first, or strum gently once per beat.",
+    },
+    sections: [
+      {
+        name: "Verse",
+        bars: [["C"], ["Am"], ["C"], ["Am"], ["F"], ["G"], ["C"], ["G"], ["C"], ["F", "G"], ["Am"], ["F"], ["G"], ["E7"], ["Am"], ["Am"]],
+      },
+      { name: "Chorus", bars: [["F"], ["F"], ["Am"], ["Am"], ["F"], ["F"], ["C"], ["G"], ["C"], ["C"]] },
+      {
+        name: "Verse",
+        bars: [["C"], ["Am"], ["C"], ["Am"], ["F"], ["G"], ["C"], ["G"], ["C"], ["F", "G"], ["Am"], ["F"], ["G"], ["E7"], ["Am"], ["Am"]],
+      },
+      { name: "Chorus", bars: [["F"], ["F"], ["Am"], ["Am"], ["F"], ["F"], ["C"], ["G"], ["C"], ["C"]] },
+    ],
+  },
+  {
+    slug: "the-scientist",
+    title: "The Scientist",
+    artist: "Coldplay",
+    year: 2002,
+    writers: ["Guy Berryman", "Jonny Buckland", "Will Champion", "Chris Martin"],
+    key: "F",
+    feel: "Slow piano ballad",
+    bpm: 74,
+    level: "Intermediate",
+    intro:
+      "Written on piano, and it moves like one: slow, even and soft. On guitar it's three chords for the verse, one more for the chorus.",
+    strumming: {
+      pattern: ["D", "-", "D", "-", "D", "-", "D", "U"],
+      tip: "Play it like the piano: steady, even, and quieter than you think.",
+    },
+    sections: [
+      { name: "Verse", repeat: 2, bars: [["Dm"], ["Bb"], ["F"], ["F"], ["Dm"], ["Bb"], ["F"], ["F"]] },
+      { name: "Chorus", bars: [["Bb"], ["F"], ["F"], ["C"], ["Bb"], ["F"], ["F"], ["C"]] },
+      { name: "Verse", bars: [["Dm"], ["Bb"], ["F"], ["F"], ["Dm"], ["Bb"], ["F"], ["F"]] },
+      { name: "Chorus", bars: [["Bb"], ["F"], ["F"], ["C"], ["Bb"], ["F"], ["F"], ["C"]] },
+    ],
+  },
+  {
+    slug: "save-tonight",
+    title: "Save Tonight",
+    artist: "Eagle-Eye Cherry",
+    year: 1997,
+    writers: ["Eagle-Eye Cherry"],
+    key: "Am",
+    feel: "Driving",
+    bpm: 120,
+    level: "Beginner",
+    intro:
+      "The same four chords from start to finish, which makes it perfect for getting your changes fast. Lock in, and drive it.",
+    strumming: {
+      pattern: ["D", "-", "D", "U", "-", "U", "D", "U"],
+      tip: "Driving and steady, with a bit of muscle on the down strums.",
+    },
+    sections: [
+      { name: "Verse", repeat: 2, bars: [["Am"], ["F"], ["C"], ["G"], ["Am"], ["F"], ["C"], ["G"]] },
+      { name: "Chorus", repeat: 2, bars: [["Am"], ["F"], ["C"], ["G"], ["Am"], ["F"], ["C"], ["G"]] },
+      { name: "Verse", bars: [["Am"], ["F"], ["C"], ["G"], ["Am"], ["F"], ["C"], ["G"]] },
+      { name: "Chorus", repeat: 2, bars: [["Am"], ["F"], ["C"], ["G"], ["Am"], ["F"], ["C"], ["G"]] },
+    ],
+  },
+  {
+    slug: "when-you-say-nothing-at-all",
+    title: "When You Say Nothing at All",
+    artist: "Ronan Keating",
+    year: 1999,
+    writers: ["Paul Overstreet", "Don Schlitz"],
+    key: "D",
+    feel: "Gentle",
+    bpm: 88,
+    level: "Beginner",
+    intro:
+      "Three open chords and a lot of heart. A lovely one for weddings, and for anyone who just learned D, A and G.",
+    strumming: {
+      pattern: ["D", "-", "D", "U", "-", "U", "D", "U"],
+      tip: "Gentle. Let the up strums whisper.",
+    },
+    sections: [
+      { name: "Verse", repeat: 2, bars: [["D"], ["A"], ["G"], ["A"], ["D"], ["A"], ["G"], ["A"]] },
+      { name: "Chorus", bars: [["G"], ["A"], ["D"], ["G"], ["G"], ["A"], ["D"], ["D"]] },
+      { name: "Verse", bars: [["D"], ["A"], ["G"], ["A"], ["D"], ["A"], ["G"], ["A"]] },
+      { name: "Chorus", bars: [["G"], ["A"], ["D"], ["G"], ["G"], ["A"], ["D"], ["D"]] },
+    ],
+  },
+  {
+    slug: "house-of-the-rising-sun",
+    title: "House of the Rising Sun",
+    artist: "The Animals",
+    year: 1964,
+    writers: ["Traditional"],
+    key: "Am",
+    feel: "Rolling, in 6/8",
+    bpm: 76,
+    level: "Intermediate",
+    intro:
+      "The classic picking song. Five chords that roll around and around, with a full F barre to earn your stripes.",
+    strumming: {
+      tip: "Pick it: bass note first, then up and down through the higher strings, six notes for every chord.",
+    },
+    sections: [
+      {
+        name: "Verse",
+        repeat: 4,
+        bars: [["Am", "C"], ["D", "F"], ["Am", "C"], ["E"], ["Am", "C"], ["D", "F"], ["Am", "E"], ["Am", "E"]],
+      },
+    ],
+  },
 ];
 
 export function getSong(slug: string) {

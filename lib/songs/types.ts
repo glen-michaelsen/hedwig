@@ -22,7 +22,7 @@ export type Song = {
   title: string;
   artist: string;
   year: number;
-  /** The songwriters, credited on the page. */
+  /** The songwriters, credited on the page. ["Traditional"] for a folk song. */
   writers: string[];
   /** The key it's recorded in, as a chord symbol: "F", "Am". */
   key: string;
@@ -31,7 +31,11 @@ export type Song = {
   /** The recording's tempo in beats per minute, where play-along starts. */
   bpm: number;
   level: "Beginner" | "Intermediate" | "Advanced";
-  strumming: { pattern: Strum[]; tip: string };
+  /**
+   * How to play the rhythm. `pattern` is one bar of eighth notes in 4/4;
+   * leave it out for a song in 6/8 or 12/8, where the tip says it instead.
+   */
+  strumming: { pattern?: Strum[]; tip: string };
   sections: SongSection[];
   /** A short line about playing it, in the house voice. */
   intro: string;

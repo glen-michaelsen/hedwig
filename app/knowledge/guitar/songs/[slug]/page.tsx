@@ -12,6 +12,11 @@ import { SongChart, type ChartChord } from "./_components/song-chart";
 // render per request. The data is static, so that's cheap.
 export const dynamic = "force-dynamic";
 
+/** "A, B and C": a list of names the way a sentence reads. */
+const WRITERS = new Intl.ListFormat("en-GB", { type: "conjunction" });
+
+const traditional = (song: Song) => song.writers.length === 1 && song.writers[0] === "Traditional";
+
 const ORDINAL = ["", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th"];
 
 function faqsFor(song: Song, chords: string[], capo: ReturnType<typeof bestCapo>) {
@@ -36,7 +41,9 @@ export async function generateMetadata({
   if (!song) return {};
   const chords = chordsIn(song);
   const title = `${song.title} Chords: ${song.artist}`;
-  const description = `Play ${song.title} by ${song.artist} on guitar: ${chords.length} chords with diagrams, the strumming pattern and the whole song bar by bar. Plus an easier capo version.`;
+  const description = `Play ${song.title} by ${song.artist} on guitar: ${chords.length} chords with diagrams, how to strum it, and a play-along through the whole song, bar by bar.${
+    bestCapo(song) ? " Plus an easier capo version." : ""
+  }`;
   const url = `/knowledge/guitar/songs/${song.slug}`;
   return {
     title: `${title} | Trenodo`,
@@ -64,7 +71,7 @@ export default async function SongPage({ params }: PageProps<"/knowledge/guitar/
       {
         "@type": "MusicComposition",
         name: song.title,
-        composer: song.writers.map((name) => ({ "@type": "Person", name })),
+        ...(traditional(song) ? {} : { composer: song.writers.map((name) => ({ "@type": "Person", name })) }),
         musicalKey: song.key,
         recordedAs: {
           "@type": "MusicRecording",
@@ -102,8 +109,8 @@ export default async function SongPage({ params }: PageProps<"/knowledge/guitar/
       >
         <div className="space-y-4">
           <p className="text-sm text-muted">
-            <span className="font-semibold text-foreground">{song.artist}</span> · {song.year} · Written by{" "}
-            {song.writers.join(" and ")}
+            <span className="font-semibold text-foreground">{song.artist}</span> · {song.year} ·{" "}
+            {traditional(song) ? "Traditional" : `Written by ${WRITERS.format(song.writers)}`}
           </p>
           <ul className="flex flex-wrap gap-2">
             <li className={pill}>Key: {song.key}</li>
@@ -141,28 +148,32 @@ export default async function SongPage({ params }: PageProps<"/knowledge/guitar/
 
         <section aria-labelledby="strum-heading">
           <h2 id="strum-heading" className="text-2xl font-semibold tracking-tight">
-            Strumming pattern
+            How to strum it
           </h2>
-          <p className="mt-2 text-sm text-muted">One bar, counted &ldquo;1 and 2 and 3 and 4 and&rdquo;.</p>
-          <ol className="mt-5 grid max-w-md grid-cols-8 gap-1.5">
-            {song.strumming.pattern.map((strum, index) => (
-              <li key={index} className="text-center">
-                <span
-                  className={`grid h-11 place-items-center rounded-xl text-base font-semibold ${
-                    strum === "D"
-                      ? "bg-brand-600 text-white"
-                      : strum === "U"
-                        ? "bg-brand-500/12 text-brand-700"
-                        : "border border-dashed border-line text-faint"
-                  }`}
-                  aria-label={strum === "D" ? "Down" : strum === "U" ? "Up" : "Miss"}
-                >
-                  {strum === "-" ? "·" : strum === "D" ? "↓" : "↑"}
-                </span>
-                <span className="mt-1 block text-xs text-faint">{index % 2 === 0 ? index / 2 + 1 : "and"}</span>
-              </li>
-            ))}
-          </ol>
+          {song.strumming.pattern && (
+            <>
+              <p className="mt-2 text-sm text-muted">One bar, counted &ldquo;1 and 2 and 3 and 4 and&rdquo;.</p>
+              <ol className="mt-5 grid max-w-md grid-cols-8 gap-1.5">
+                {song.strumming.pattern.map((strum, index) => (
+                  <li key={index} className="text-center">
+                    <span
+                      className={`grid h-11 place-items-center rounded-xl text-base font-semibold ${
+                        strum === "D"
+                          ? "bg-brand-600 text-white"
+                          : strum === "U"
+                            ? "bg-brand-500/12 text-brand-700"
+                            : "border border-dashed border-line text-faint"
+                      }`}
+                      aria-label={strum === "D" ? "Down" : strum === "U" ? "Up" : "Miss"}
+                    >
+                      {strum === "-" ? "·" : strum === "D" ? "↓" : "↑"}
+                    </span>
+                    <span className="mt-1 block text-xs text-faint">{index % 2 === 0 ? index / 2 + 1 : "and"}</span>
+                  </li>
+                ))}
+              </ol>
+            </>
+          )}
           <p className="mt-4 text-base text-muted">{song.strumming.tip}</p>
         </section>
 
