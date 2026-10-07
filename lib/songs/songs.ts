@@ -82,7 +82,9 @@ export const SONGS: Song[] = [
     intro:
       "A song people ask for at every campfire. The chords are friendly; the challenge is the feel: slow, patient and in 6/8.",
     strumming: {
-      tip: "Count it 1 2 3, 4 5 6. Pick the strings one by one with the bass note on 1 and 4, or strum gently on 1 and 4.",
+      pattern: ["D", "D", "D", "D", "D", "D"],
+      picking: ["Bass", "3", "2", "1", "2", "3"],
+      tip: "Lean into 1 and 4, and keep the rest light.",
     },
     sections: [
       {
@@ -180,7 +182,9 @@ export const SONGS: Song[] = [
     intro:
       "The classic picking song. Five chords that roll around and around, with a full F barre to earn your stripes.",
     strumming: {
-      tip: "Pick it, six notes to the bar: the bass note on 1, then up and down through the higher strings.",
+      pattern: ["D", "D", "D", "D", "D", "D"],
+      picking: ["Bass", "3", "2", "1", "2", "3"],
+      tip: "Picking is the classic way to play it. Let every note ring into the next.",
     },
     sections: [
       {

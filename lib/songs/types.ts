@@ -47,10 +47,12 @@ export type Song = {
   meter?: Meter;
   level: "Beginner" | "Intermediate" | "Advanced";
   /**
-   * How to play the rhythm. `pattern` is one bar of eighth notes in 4/4;
-   * leave it out for a song in 6/8 or 12/8, where the tip says it instead.
+   * How to play the rhythm, one entry per eighth note of a bar: 8 in 4/4,
+   * 6 in 6/8. `pattern` is strumming; `picking` is the strings in order,
+   * "Bass" for the chord's bass note, otherwise a string number counted
+   * from the thinnest (1 = high E).
    */
-  strumming: { pattern?: Strum[]; tip: string };
+  strumming: { pattern?: Strum[]; picking?: string[]; tip: string };
   sections: SongSection[];
   /** A short line about playing it, in the house voice. */
   intro: string;

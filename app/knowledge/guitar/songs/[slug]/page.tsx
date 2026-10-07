@@ -5,7 +5,7 @@ import { GuideFaq, GuideLayout } from "../../../_components/guide-layout";
 import { focusable } from "@/app/_components/ui";
 import { bestCapo, chordsIn, diagramFor, shiftChord } from "@/lib/songs/chords";
 import { getSong } from "@/lib/songs/songs";
-import type { Song } from "@/lib/songs/types";
+import { METERS, type Meter, type Song, type Strum } from "@/lib/songs/types";
 import { SongChart, type ChartChord } from "./_components/song-chart";
 
 // OpenNext on Workers has no cache for prerendered param pages, so these
@@ -34,6 +34,41 @@ function faqsFor(song: Song, chords: string[], capo: ReturnType<typeof bestCapo>
   ];
 }
 
+type Cell = { label: string; aria: string; kind: "strong" | "light" | "rest" };
+
+/** A strum as a cell. In 6/8 the 1 and the 4 lead, the rest stay light. */
+function strumCell(strum: Strum, index: number, meter: Meter): Cell {
+  if (strum === "-") return { label: "·", aria: "Miss", kind: "rest" };
+  const leads = meter === "6/8" ? METERS["6/8"].groups.includes(index) : strum === "D";
+  return { label: strum === "D" ? "↓" : "↑", aria: strum === "D" ? "Down" : "Up", kind: leads ? "strong" : "light" };
+}
+
+/** One bar of rhythm, a cell per eighth note, counted the way the meter counts. */
+function RhythmGrid({ cells, meter }: { cells: Cell[]; meter: Meter }) {
+  const count = (i: number) => (meter === "6/8" ? String(i + 1) : i % 2 === 0 ? String(i / 2 + 1) : "and");
+  return (
+    <ol className={`mt-3 grid max-w-md gap-1.5 ${meter === "6/8" ? "grid-cols-6" : "grid-cols-8"}`}>
+      {cells.map((cell, i) => (
+        <li key={i} className="text-center">
+          <span
+            aria-label={cell.aria}
+            className={`grid h-11 place-items-center rounded-xl text-sm font-semibold ${
+              cell.kind === "strong"
+                ? "bg-brand-600 text-white"
+                : cell.kind === "light"
+                  ? "bg-brand-500/12 text-brand-700"
+                  : "border border-dashed border-line text-faint"
+            }`}
+          >
+            {cell.label}
+          </span>
+          <span className="mt-1 block text-xs text-faint">{count(i)}</span>
+        </li>
+      ))}
+    </ol>
+  );
+}
+
 export async function generateMetadata({
   params,
 }: PageProps<"/knowledge/guitar/songs/[slug]">): Promise<Metadata> {
@@ -59,6 +94,7 @@ export default async function SongPage({ params }: PageProps<"/knowledge/guitar/
 
   const chords = chordsIn(song);
   const capo = bestCapo(song);
+  const meter: Meter = song.meter ?? "4/4";
   const chart = (symbol: string): ChartChord => ({ symbol, diagram: diagramFor(symbol) });
   const original = chords.map(chart);
   const capoChords = capo ? chords.map((chord) => chart(shiftChord(chord, capo.fret))) : null;
@@ -150,31 +186,29 @@ export default async function SongPage({ params }: PageProps<"/knowledge/guitar/
 
         <section aria-labelledby="strum-heading">
           <h2 id="strum-heading" className="text-2xl font-semibold tracking-tight">
-            How to strum it
+            {song.strumming.picking ? "How to play it" : "How to strum it"}
           </h2>
           {song.strumming.pattern && (
-            <>
-              <p className="mt-2 text-sm text-muted">One bar, counted &ldquo;1 and 2 and 3 and 4 and&rdquo;.</p>
-              <ol className="mt-5 grid max-w-md grid-cols-8 gap-1.5">
-                {song.strumming.pattern.map((strum, index) => (
-                  <li key={index} className="text-center">
-                    <span
-                      className={`grid h-11 place-items-center rounded-xl text-base font-semibold ${
-                        strum === "D"
-                          ? "bg-brand-600 text-white"
-                          : strum === "U"
-                            ? "bg-brand-500/12 text-brand-700"
-                            : "border border-dashed border-line text-faint"
-                      }`}
-                      aria-label={strum === "D" ? "Down" : strum === "U" ? "Up" : "Miss"}
-                    >
-                      {strum === "-" ? "·" : strum === "D" ? "↓" : "↑"}
-                    </span>
-                    <span className="mt-1 block text-xs text-faint">{index % 2 === 0 ? index / 2 + 1 : "and"}</span>
-                  </li>
-                ))}
-              </ol>
-            </>
+            <div className="mt-4">
+              {song.strumming.picking && <h3 className="text-sm font-semibold text-foreground">Strum</h3>}
+              <RhythmGrid meter={meter} cells={song.strumming.pattern.map((strum, i) => strumCell(strum, i, meter))} />
+            </div>
+          )}
+          {song.strumming.picking && (
+            <div className="mt-6">
+              <h3 className="text-sm font-semibold text-foreground">Or pick it</h3>
+              <RhythmGrid
+                meter={meter}
+                cells={song.strumming.picking.map((step) => ({
+                  label: step,
+                  aria: step === "Bass" ? "Bass note" : `String ${step}`,
+                  kind: step === "Bass" ? "strong" : "light",
+                }))}
+              />
+              <p className="mt-3 text-sm text-muted">
+                Strings count from the thinnest: 1 is the high E. Bass is the chord&rsquo;s lowest note.
+              </p>
+            </div>
           )}
           <p className="mt-4 text-base text-muted">{song.strumming.tip}</p>
         </section>
