@@ -139,10 +139,10 @@ export const SONGS: Song[] = [
       tip: "Driving and steady, with a bit of muscle on the down strums.",
     },
     sections: [
-      { name: "Verse", repeat: 2, bars: [["Am"], ["F"], ["C"], ["G"], ["Am"], ["F"], ["C"], ["G"]] },
-      { name: "Chorus", repeat: 2, bars: [["Am"], ["F"], ["C"], ["G"], ["Am"], ["F"], ["C"], ["G"]] },
-      { name: "Verse", bars: [["Am"], ["F"], ["C"], ["G"], ["Am"], ["F"], ["C"], ["G"]] },
-      { name: "Chorus", repeat: 2, bars: [["Am"], ["F"], ["C"], ["G"], ["Am"], ["F"], ["C"], ["G"]] },
+      { name: "Verse", repeat: 2, bars: [["Am", "F"], ["C", "G"], ["Am", "F"], ["C", "G"]] },
+      { name: "Chorus", repeat: 2, bars: [["Am", "F"], ["C", "G"], ["Am", "F"], ["C", "G"]] },
+      { name: "Verse", bars: [["Am", "F"], ["C", "G"], ["Am", "F"], ["C", "G"]] },
+      { name: "Chorus", repeat: 2, bars: [["Am", "F"], ["C", "G"], ["Am", "F"], ["C", "G"]] },
     ],
   },
   {
