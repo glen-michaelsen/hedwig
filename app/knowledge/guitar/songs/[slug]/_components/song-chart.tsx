@@ -148,7 +148,6 @@ export function SongChart({
                       chords={bar}
                       name={name}
                       beats={beats}
-                      groups={groups}
                       beat={here?.bar === b && position?.phase === "playing" ? position.beat : null}
                       onStart={() => play.start(flat.findIndex((f) => f.section === s && f.bar === b))}
                     />
@@ -325,14 +324,12 @@ function BarBox({
   chords,
   name,
   beats,
-  groups,
   beat,
   onStart,
 }: {
   chords: Bar;
   name: (symbol: string) => string;
   beats: number;
-  groups: number[];
   beat: number | null;
   onStart: () => void;
 }) {
@@ -372,9 +369,7 @@ function BarBox({
           <span
             key={i}
             aria-hidden="true"
-            className={`absolute bottom-1.5 rounded-full ${groups.includes(i) ? "h-1.5 w-1.5" : "h-1 w-1"} ${
-              active && i <= beat ? "bg-brand-500" : "bg-line-strong"
-            }`}
+            className={`absolute bottom-1.5 h-1 w-1 rounded-full ${active && i <= beat ? "bg-brand-500" : "bg-line-strong"}`}
             style={{ left: `calc(${((i + 0.5) / beats) * 100}% - 2px)` }}
           />
         ))}
