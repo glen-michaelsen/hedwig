@@ -28,6 +28,8 @@ export type Song = {
   key: string;
   /** How it feels to play: "Slow and swung". */
   feel: string;
+  /** The recording's tempo in beats per minute, where play-along starts. */
+  bpm: number;
   level: "Beginner" | "Intermediate" | "Advanced";
   strumming: { pattern: Strum[]; tip: string };
   sections: SongSection[];

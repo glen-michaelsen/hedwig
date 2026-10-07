@@ -17,6 +17,7 @@ export const SONGS: Song[] = [
     writers: ["Bob Thiele", "George David Weiss"],
     key: "F",
     feel: "Slow and swung",
+    bpm: 72,
     level: "Intermediate",
     intro:
       "A slow ballad that lives on its chord changes. Take it easy, let every chord ring, and leave space. The capo version keeps the original sound with friendlier shapes.",

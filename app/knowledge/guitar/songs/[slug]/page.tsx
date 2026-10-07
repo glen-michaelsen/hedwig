@@ -133,6 +133,7 @@ export default async function SongPage({ params }: PageProps<"/knowledge/guitar/
 
         <SongChart
           songKey={song.key}
+          bpm={song.bpm}
           sections={song.sections}
           original={original}
           capo={capo && capoChords ? { fret: capo.fret, chords: capoChords } : null}
