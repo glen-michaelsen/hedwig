@@ -62,10 +62,10 @@ export const SONGS: Song[] = [
       tip: "Easy and steady. Let the G ring out before you move on.",
     },
     sections: [
-      { name: "Verse", bars: [["G"], ["D"], ["Am"], ["Am"], ["G"], ["D"], ["C"], ["C"]] },
-      { name: "Chorus", repeat: 2, bars: [["G"], ["D"], ["Am"], ["Am"], ["G"], ["D"], ["C"], ["C"]] },
-      { name: "Verse", bars: [["G"], ["D"], ["Am"], ["Am"], ["G"], ["D"], ["C"], ["C"]] },
-      { name: "Chorus", repeat: 2, bars: [["G"], ["D"], ["Am"], ["Am"], ["G"], ["D"], ["C"], ["C"]] },
+      { name: "Verse", bars: [["G", "D"], ["Am"], ["G", "D"], ["C"], ["G", "D"], ["Am"], ["G", "D"], ["C"]] },
+      { name: "Chorus", bars: [["G", "D"], ["Am"], ["G", "D"], ["C"], ["G", "D"], ["Am"], ["G", "D"], ["C"]] },
+      { name: "Verse", bars: [["G", "D"], ["Am"], ["G", "D"], ["C"], ["G", "D"], ["Am"], ["G", "D"], ["C"]] },
+      { name: "Chorus", bars: [["G", "D"], ["Am"], ["G", "D"], ["C"], ["G", "D"], ["Am"], ["G", "D"], ["C"]] },
     ],
   },
   {
