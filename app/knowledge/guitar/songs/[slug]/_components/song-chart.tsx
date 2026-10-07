@@ -18,10 +18,12 @@ export type ChartChord = {
  * server works both versions out, this only chooses which to show.
  */
 export function SongChart({
+  songKey,
   sections,
   original,
   capo,
 }: {
+  songKey: string;
   sections: SongSection[];
   original: ChartChord[];
   capo: { fret: number; chords: ChartChord[] } | null;
@@ -32,23 +34,37 @@ export function SongChart({
   const name = (symbol: string) =>
     useCapo && capo ? capo.chords[original.findIndex((c) => c.symbol === symbol)].symbol : symbol;
 
-  const toggle = (on: boolean) =>
-    `rounded-full border px-4 py-2 text-sm font-medium transition-colors ${focusable} ${
-      on
-        ? "border-brand-500/40 bg-brand-500/10 text-brand-700"
-        : "border-line bg-surface text-muted hover:border-line-strong hover:text-foreground"
+  // A segmented control: the choice in play is solid purple with a tick,
+  // so which version you're reading is never in doubt.
+  const segment = (on: boolean) =>
+    `inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${focusable} ${
+      on ? "bg-brand-600 text-white shadow-soft" : "text-muted hover:text-foreground"
     }`;
+  const tick = (
+    <svg viewBox="0 0 20 20" aria-hidden="true" className="h-4 w-4">
+      <path d="m5 10.5 3 3 7-7" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
 
   return (
     <>
       {capo && (
-        <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Play it">
-          <button type="button" className={toggle(!useCapo)} aria-pressed={!useCapo} onClick={() => setUseCapo(false)}>
-            Original key
-          </button>
-          <button type="button" className={toggle(useCapo)} aria-pressed={useCapo} onClick={() => setUseCapo(true)}>
-            Easier: capo {capo.fret}
-          </button>
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="text-sm text-muted">Play it</span>
+          <div
+            className="inline-flex flex-wrap gap-1 rounded-full border border-line bg-surface-muted p-1"
+            role="group"
+            aria-label="Play it"
+          >
+            <button type="button" className={segment(!useCapo)} aria-pressed={!useCapo} onClick={() => setUseCapo(false)}>
+              {!useCapo && tick}
+              Original key ({songKey})
+            </button>
+            <button type="button" className={segment(useCapo)} aria-pressed={useCapo} onClick={() => setUseCapo(true)}>
+              {useCapo && tick}
+              Easier: capo {capo.fret}
+            </button>
+          </div>
         </div>
       )}
 
