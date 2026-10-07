@@ -114,6 +114,7 @@ export default async function SongPage({ params }: PageProps<"/knowledge/guitar/
           </p>
           <ul className="flex flex-wrap gap-2">
             <li className={pill}>Key: {song.key}</li>
+            {song.meter && song.meter !== "4/4" && <li className={pill}>{song.meter}</li>}
             <li className={pill}>{song.feel}</li>
             <li className={pill}>{chords.length} chords</li>
             <li className={pill}>{song.level}</li>
@@ -141,6 +142,7 @@ export default async function SongPage({ params }: PageProps<"/knowledge/guitar/
         <SongChart
           songKey={song.key}
           bpm={song.bpm}
+          meter={song.meter}
           sections={song.sections}
           original={original}
           capo={capo && capoChords ? { fret: capo.fret, chords: capoChords } : null}

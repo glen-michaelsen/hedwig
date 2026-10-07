@@ -75,13 +75,14 @@ export const SONGS: Song[] = [
     year: 1994,
     writers: ["Leonard Cohen"],
     key: "C",
-    feel: "Slow, in 12/8",
+    feel: "Slow",
     bpm: 60,
+    meter: "6/8",
     level: "Beginner",
     intro:
-      "A song people ask for at every campfire. The chords are friendly, the challenge is the feel: slow, patient and in threes.",
+      "A song people ask for at every campfire. The chords are friendly; the challenge is the feel: slow, patient and in 6/8.",
     strumming: {
-      tip: "Each beat splits into three. Pick the strings one by one, bass note first, or strum gently once per beat.",
+      tip: "Count it 1 2 3, 4 5 6. Pick the strings one by one with the bass note on 1 and 4, or strum gently on 1 and 4.",
     },
     sections: [
       {
@@ -172,19 +173,20 @@ export const SONGS: Song[] = [
     year: 1964,
     writers: ["Traditional"],
     key: "Am",
-    feel: "Rolling, in 6/8",
+    feel: "Rolling",
     bpm: 76,
+    meter: "6/8",
     level: "Intermediate",
     intro:
       "The classic picking song. Five chords that roll around and around, with a full F barre to earn your stripes.",
     strumming: {
-      tip: "Pick it: bass note first, then up and down through the higher strings, six notes for every chord.",
+      tip: "Pick it, six notes to the bar: the bass note on 1, then up and down through the higher strings.",
     },
     sections: [
       {
         name: "Verse",
         repeat: 4,
-        bars: [["Am", "C"], ["D", "F"], ["Am", "C"], ["E"], ["Am", "C"], ["D", "F"], ["Am", "E"], ["Am", "E"]],
+        bars: [["Am"], ["C"], ["D"], ["F"], ["Am"], ["C"], ["E"], ["E"], ["Am"], ["C"], ["D"], ["F"], ["Am"], ["E"], ["Am"], ["E"]],
       },
     ],
   },

@@ -22,6 +22,9 @@ for (const song of SONGS) {
     }
   }
   if (!diagramFor(song.key)) problems.push(`${song.slug}: key "${song.key}" isn't a chord we know`);
+  if (song.meter && song.meter !== "4/4" && song.strumming.pattern) {
+    problems.push(`${song.slug}: a 4/4 strum grid on a ${song.meter} song`);
+  }
   if (song.bpm < 40 || song.bpm > 220) problems.push(`${song.slug}: bpm ${song.bpm} looks wrong`);
   if (song.strumming.pattern && song.strumming.pattern.length !== 8) problems.push(`${song.slug}: strumming needs 8 eighth notes`);
 

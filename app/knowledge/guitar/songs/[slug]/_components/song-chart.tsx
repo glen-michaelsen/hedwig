@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { focusable } from "@/app/_components/ui";
 import { ChordFigure } from "../../../../_components/chord-figure";
-import type { Bar, SongSection } from "@/lib/songs/types";
+import { METERS, type Bar, type Meter, type SongSection } from "@/lib/songs/types";
 import { usePlayAlong, type PlayPosition } from "./use-play-along";
 
 const ORDINAL = ["", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th"];
@@ -16,21 +16,21 @@ export type ChartChord = {
 /** One bar in playing order: repeats written out, so pass 2 is its own entry. */
 type FlatBar = { section: number; bar: number; pass: number; chords: Bar };
 
-/** Chords in a bar share its four beats evenly: two chords, two beats each. */
-function chordIndexOnBeat(chords: Bar, beat: number) {
-  return Math.min(chords.length - 1, Math.floor((beat * chords.length) / 4));
+/** Chords in a bar share its beats evenly: in 4/4, two chords get two beats each; in 6/8, three. */
+function chordIndexOnBeat(chords: Bar, beat: number, beats: number) {
+  return Math.min(chords.length - 1, Math.floor((beat * chords.length) / beats));
 }
 
-function chordOnBeat(chords: Bar, beat: number) {
-  return chords[chordIndexOnBeat(chords, beat)];
+function chordOnBeat(chords: Bar, beat: number, beats: number) {
+  return chords[chordIndexOnBeat(chords, beat, beats)];
 }
 
 /** The next chord that's different from the one on (bar, beat), or null at the end. */
-function nextChange(flat: FlatBar[], bar: number, beat: number) {
-  const now = chordOnBeat(flat[bar].chords, beat);
+function nextChange(flat: FlatBar[], bar: number, beat: number, beats: number) {
+  const now = chordOnBeat(flat[bar].chords, beat, beats);
   for (let b = bar, t = beat + 1; b < flat.length; b++, t = 0) {
-    for (; t < 4; t++) {
-      const chord = chordOnBeat(flat[b].chords, t);
+    for (; t < beats; t++) {
+      const chord = chordOnBeat(flat[b].chords, t, beats);
       if (chord !== now) return chord;
     }
   }
@@ -45,12 +45,14 @@ function nextChange(flat: FlatBar[], bar: number, beat: number) {
 export function SongChart({
   songKey,
   bpm,
+  meter = "4/4",
   sections,
   original,
   capo,
 }: {
   songKey: string;
   bpm: number;
+  meter?: Meter;
   sections: SongSection[];
   original: ChartChord[];
   capo: { fret: number; chords: ChartChord[] } | null;
@@ -70,7 +72,14 @@ export function SongChart({
     [sections],
   );
 
-  const play = usePlayAlong({ bars: flat.length, initialBpm: bpm });
+  const { beats, pulse, groups } = METERS[meter];
+  const play = usePlayAlong({
+    bars: flat.length,
+    initialBpm: bpm,
+    beatsPerBar: beats,
+    beatsPerPulse: pulse,
+    groups,
+  });
   const position = play.position;
   const playingBar = position?.phase === "playing" ? flat[position.bar] : null;
 
@@ -107,10 +116,13 @@ export function SongChart({
           Play along, bar by bar
         </h2>
         <p className="mt-2 text-sm text-muted">
-          Each box is one bar of four beats. Press play, or tap a bar to start there.
+          {meter === "6/8"
+            ? "Each box is one bar of 6/8: six beats, counted 1 2 3, 4 5 6."
+            : "Each box is one bar of four beats."}{" "}
+          Press play, or tap a bar to start there.
         </p>
 
-        <PlayPanel play={play} flat={flat} name={name} songBpm={bpm} />
+        <PlayPanel play={play} flat={flat} name={name} songBpm={bpm} beats={beats} groups={groups} />
 
         <div className="mt-6 space-y-7">
           {sections.map((section, s) => {
@@ -135,6 +147,8 @@ export function SongChart({
                       key={b}
                       chords={bar}
                       name={name}
+                      beats={beats}
+                      groups={groups}
                       beat={here?.bar === b && position?.phase === "playing" ? position.beat : null}
                       onStart={() => play.start(flat.findIndex((f) => f.section === s && f.bar === b))}
                     />
@@ -194,11 +208,15 @@ function PlayPanel({
   flat,
   name,
   songBpm,
+  beats,
+  groups,
 }: {
   play: ReturnType<typeof usePlayAlong>;
   flat: FlatBar[];
   name: (symbol: string) => string;
   songBpm: number;
+  beats: number;
+  groups: number[];
 }) {
   const position: PlayPosition | null = play.position;
   let now: string;
@@ -207,18 +225,18 @@ function PlayPanel({
   let beatsLit: number;
 
   if (!position) {
-    now = name(chordOnBeat(flat[0].chords, 0));
-    next = nextChange(flat, 0, 0);
+    now = name(chordOnBeat(flat[0].chords, 0, beats));
+    next = nextChange(flat, 0, 0, beats);
     label = "First chord";
     beatsLit = 0;
   } else if (position.phase === "count-in") {
     now = position.beat < 0 ? "…" : String(position.beat + 1);
-    next = chordOnBeat(flat[0].chords, 0);
+    next = chordOnBeat(flat[position.from].chords, 0, beats);
     label = "Count-in";
     beatsLit = position.beat + 1;
   } else {
-    now = name(chordOnBeat(flat[position.bar].chords, position.beat));
-    next = nextChange(flat, position.bar, position.beat);
+    now = name(chordOnBeat(flat[position.bar].chords, position.beat, beats));
+    next = nextChange(flat, position.bar, position.beat, beats);
     label = "Play now";
     beatsLit = position.beat + 1;
   }
@@ -252,11 +270,13 @@ function PlayPanel({
             <p className="text-xs font-medium text-muted">Next</p>
             <p className="text-2xl font-semibold leading-none text-faint">{next ? name(next) : "End"}</p>
           </div>
-          <ol className="flex gap-1.5 pb-1" aria-label={`Beat ${beatsLit} of 4`}>
-            {[0, 1, 2, 3].map((i) => (
+          <ol className="flex gap-1.5 pb-1" aria-label={`Beat ${beatsLit} of ${beats}`}>
+            {Array.from({ length: beats }, (_, i) => (
               <li
                 key={i}
-                className={`h-3 w-3 rounded-full ${i < beatsLit ? "bg-brand-600" : "border border-line-strong bg-surface-muted"}`}
+                className={`h-3 w-3 rounded-full ${groups.includes(i) && i > 0 ? "ml-2" : ""} ${
+                  i < beatsLit ? "bg-brand-600" : "border border-line-strong bg-surface-muted"
+                }`}
               />
             ))}
           </ol>
@@ -304,11 +324,15 @@ function PlayPanel({
 function BarBox({
   chords,
   name,
+  beats,
+  groups,
   beat,
   onStart,
 }: {
   chords: Bar;
   name: (symbol: string) => string;
+  beats: number;
+  groups: number[];
   beat: number | null;
   onStart: () => void;
 }) {
@@ -325,7 +349,7 @@ function BarBox({
     }
   }, [active]);
 
-  const playingIndex = active ? chordIndexOnBeat(chords, beat) : -1;
+  const playingIndex = active ? chordIndexOnBeat(chords, beat, beats) : -1;
 
   return (
     <li>
@@ -342,14 +366,16 @@ function BarBox({
         <span
           aria-hidden="true"
           className="absolute inset-y-0 left-0 bg-brand-500/15 motion-safe:transition-[width] motion-safe:duration-100"
-          style={{ width: active ? `${(beat + 1) * 25}%` : "0%" }}
+          style={{ width: active ? `${((beat + 1) / beats) * 100}%` : "0%" }}
         />
-        {[0, 1, 2, 3].map((i) => (
+        {Array.from({ length: beats }, (_, i) => (
           <span
             key={i}
             aria-hidden="true"
-            className={`absolute bottom-1.5 h-1 w-1 rounded-full ${active && i <= beat ? "bg-brand-500" : "bg-line-strong"}`}
-            style={{ left: `calc(${12.5 + i * 25}% - 2px)` }}
+            className={`absolute bottom-1.5 rounded-full ${groups.includes(i) ? "h-1.5 w-1.5" : "h-1 w-1"} ${
+              active && i <= beat ? "bg-brand-500" : "bg-line-strong"
+            }`}
+            style={{ left: `calc(${((i + 0.5) / beats) * 100}% - 2px)` }}
           />
         ))}
         {chords.map((chord, i) => (
