@@ -194,6 +194,74 @@ export const SONGS: Song[] = [
       },
     ],
   },
+  {
+    slug: "tom-dooley",
+    title: "Tom Dooley",
+    artist: "The Kingston Trio",
+    year: 1958,
+    writers: ["Traditional"],
+    key: "D",
+    feel: "Easy-going",
+    bpm: 100,
+    level: "Beginner",
+    intro:
+      "Two chords, the whole way through. If you can change between D and A, you can play this one tonight.",
+    strumming: {
+      pattern: ["D", "-", "D", "U", "-", "U", "D", "U"],
+      tip: "Keep it relaxed and even. The song does the work.",
+    },
+    sections: [
+      { name: "Chorus", bars: [["D"], ["D"], ["A"], ["A"], ["A"], ["A"], ["D"], ["D"]] },
+      { name: "Verse", repeat: 2, bars: [["D"], ["D"], ["A"], ["A"], ["A"], ["A"], ["D"], ["D"]] },
+      { name: "Chorus", bars: [["D"], ["D"], ["A"], ["A"], ["A"], ["A"], ["D"], ["D"]] },
+    ],
+  },
+  {
+    slug: "let-it-be",
+    title: "Let It Be",
+    artist: "The Beatles",
+    year: 1970,
+    writers: ["John Lennon", "Paul McCartney"],
+    key: "C",
+    feel: "Calm and steady",
+    bpm: 72,
+    level: "Beginner",
+    intro:
+      "Four chords, two to a bar, in the friendliest key there is. A song everybody knows, and one you'll keep coming back to.",
+    strumming: {
+      pattern: ["D", "-", "D", "U", "-", "U", "D", "U"],
+      tip: "Steady, like the piano on the record. Each chord gets two beats.",
+    },
+    sections: [
+      { name: "Verse", repeat: 2, bars: [["C", "G"], ["Am", "F"], ["C", "G"], ["F", "C"]] },
+      { name: "Chorus", bars: [["Am", "G"], ["F", "C"], ["C", "G"], ["F", "C"]] },
+      { name: "Verse", repeat: 2, bars: [["C", "G"], ["Am", "F"], ["C", "G"], ["F", "C"]] },
+      { name: "Chorus", bars: [["Am", "G"], ["F", "C"], ["C", "G"], ["F", "C"]] },
+    ],
+  },
+  {
+    slug: "take-me-home-country-roads",
+    title: "Take Me Home, Country Roads",
+    artist: "John Denver",
+    year: 1971,
+    writers: ["Bill Danoff", "Taffy Nivert", "John Denver"],
+    key: "A",
+    feel: "Bright and open",
+    bpm: 82,
+    level: "Beginner",
+    intro:
+      "The campfire anthem. Four chords, and a chorus everyone sings along to. Put the capo on, and they're all open shapes.",
+    strumming: {
+      pattern: ["D", "-", "D", "U", "-", "U", "D", "U"],
+      tip: "Open and bright. Let the strings ring.",
+    },
+    sections: [
+      { name: "Verse", bars: [["A"], ["F#m"], ["E"], ["D"], ["A"], ["F#m"], ["E"], ["D"]] },
+      { name: "Chorus", bars: [["A"], ["E"], ["F#m"], ["D"], ["A"], ["E"], ["D"], ["A"]] },
+      { name: "Verse", bars: [["A"], ["F#m"], ["E"], ["D"], ["A"], ["F#m"], ["E"], ["D"]] },
+      { name: "Chorus", repeat: 2, bars: [["A"], ["E"], ["F#m"], ["D"], ["A"], ["E"], ["D"], ["A"]] },
+    ],
+  },
 ];
 
 export function getSong(slug: string) {

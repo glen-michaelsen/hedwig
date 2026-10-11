@@ -18,11 +18,11 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /blog/vil-du-laere-at-skrive-din-egen-sang-foelg-vores-guide-her.html,695,48880,8.43,1,/knowledge/songwriting,,exists,
 /muuvtube/video/ole-har-foedselsdag-den-med-instrumenterne.html,625,43634,6.46,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /,619,52661,12.23,45,/,,home,
-/muuvtube/laer-lette-begynder-sange-paa-guitar.html,554,21891,7.64,,/knowledge/guitar/getting-started,/knowledge/guitar/easy-songs,create,"Easy guitar songs by number of chords (chords only, no lyrics)"
+/muuvtube/laer-lette-begynder-sange-paa-guitar.html,554,21891,7.64,,/knowledge/guitar/easy-songs,,exists,"Easy guitar songs by number of chords (chords only, no lyrics)"
 /selvstudie/tips-guides/guide-udgiv-din-musik-paa-spotify-apple-music-deezer-tidal-og-mange-flere.html,514,19409,7.78,,/knowledge/promote/release-your-music,,exists,"Release your music on Spotify, Apple Music and the rest"
-/selvstudie/tips-guides/pris-for-musiker-spillejobs-gigs.html,508,36902,9.69,,/knowledge/perform,/knowledge/perform/gig-fees,create,What to charge for a gig
-/muuvtube/laer-sange-med-3-akkorder.html,506,11850,8.67,,/knowledge/guitar/getting-started,/knowledge/guitar/easy-songs,create,"Easy guitar songs by number of chords (chords only, no lyrics)"
-/muuvtube/laer-guitar-sange-med-4-akkorder,476,12608,6.91,,/knowledge/guitar/getting-started,/knowledge/guitar/easy-songs,create,"Easy guitar songs by number of chords (chords only, no lyrics)"
+/selvstudie/tips-guides/pris-for-musiker-spillejobs-gigs.html,508,36902,9.69,,/knowledge/perform/gig-fees,,exists,What to charge for a gig
+/muuvtube/laer-sange-med-3-akkorder.html,506,11850,8.67,,/knowledge/guitar/easy-songs,,exists,"Easy guitar songs by number of chords (chords only, no lyrics)"
+/muuvtube/laer-guitar-sange-med-4-akkorder,476,12608,6.91,,/knowledge/guitar/easy-songs,,exists,"Easy guitar songs by number of chords (chords only, no lyrics)"
 /selvstudie/tips-guides/oversigt-spillesteder-i-danmark-for-upcoming-kunstnere.html,467,13345,12.67,,/knowledge/perform,,skip-danish,Danish venue and shop lists
 /muuvtube/video/kim-larsen-midt-om-natten.html,459,27915,7.52,1,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /data/material/chords/coldplay-the-scientist-akkorder.pdf,458,27161,17.86,,/knowledge/guitar/songs/the-scientist,,exists,International chord sheets: point to easy songs
@@ -36,16 +36,16 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /musik.html,293,29001,9.41,,/discover,,skip-danish,"Danish playlists (stille musik, julemusik, kærlighedssange)"
 /selvstudie/instrumenter/guitar/akkorder/c-akkord-variationer.html,288,38649,5.7,,/knowledge/guitar/chords/c,,exists,Chord shapes for one root
 /muuvtube/video/lille-peter-edderkop.html,288,16687,6.16,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
-/blog/gode-sing-along-sange-til-guitarister.html,288,7992,9.35,,/knowledge/guitar/getting-started,/knowledge/guitar/easy-songs,create,"Easy guitar songs by number of chords (chords only, no lyrics)"
+/blog/gode-sing-along-sange-til-guitarister.html,288,7992,9.35,,/knowledge/guitar/easy-songs,,exists,"Easy guitar songs by number of chords (chords only, no lyrics)"
 /selvstudie/musikteori/toneskala.html,280,31884,7.51,,/knowledge/theory/scales-and-notes,,exists,
 /data/material/chords/eagle-eye-cherry-save-tonight-akkorder.pdf,279,15739,15.5,,/knowledge/guitar/songs/save-tonight,,exists,International chord sheets: point to easy songs
 /selvstudie/tips-guides/alle-super-bowl-halftime-shows-gennem-tiden.html,275,17322,9.44,,/,,skip-offtopic,"Trivia, off topic for Trenodo"
 /muuvtube/video/otto-brandenburg-alle-soemaend-er-glade-for-piger.html,267,21145,7.63,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /muuvtube/video/anders-matthesen-quangs-sang.html,266,26479,7.2,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /selvstudie/tips-guides/musikbutikker-i-danmark.html,265,43207,18.75,1,/knowledge/perform,,skip-danish,Danish venue and shop lists
-/guides/pris-for-musiker-spillejobs-gigs.html,265,27215,6.17,,/knowledge/perform,/knowledge/perform/gig-fees,create,What to charge for a gig
+/guides/pris-for-musiker-spillejobs-gigs.html,265,27215,6.17,,/knowledge/perform/gig-fees,,exists,What to charge for a gig
 /selvstudie/instrumenter/trommer/trommesaettets-opbygning.html,248,14722,11.18,,/knowledge/drums,/knowledge/drums/anatomy,create,"The drum kit, piece by piece"
-/muuvtube/laer-skoenne-boernesange-paa.guitar.html,238,21173,6.9,,/knowledge/guitar/getting-started,/knowledge/guitar/easy-songs,create,"Easy guitar songs by number of chords (chords only, no lyrics)"
+/muuvtube/laer-skoenne-boernesange-paa.guitar.html,238,21173,6.9,,/knowledge/guitar/easy-songs,,exists,"Easy guitar songs by number of chords (chords only, no lyrics)"
 /data/material/chords/ronan-keating-when-you-say-nothing-at-all-akkorder.pdf,231,5064,12.06,,/knowledge/guitar/songs/when-you-say-nothing-at-all,,exists,International chord sheets: point to easy songs
 /selvstudie/instrumenter/bas/skalaer.html,230,6322,9.37,,/knowledge/bass/scales,,exists,
 /musik/stille-musik.html,229,23973,8.86,,/discover,,skip-danish,"Danish playlists (stille musik, julemusik, kærlighedssange)"
@@ -74,7 +74,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /selvstudie/instrumenter/guitar.html,139,17229,13.54,,/knowledge/guitar,,exists,
 /blog/hvordan-finder-man-et-emne-naar-man-vil-skrive-en-sang.html,137,11590,8.74,,/knowledge/songwriting/finding-your-subject,,exists,
 /muuvtube/video/jeg-ved-en-laerkerede.html,134,13138,6.67,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
-/muuvtube/laer-sange-med-2-akkorder.html,134,3315,9.47,,/knowledge/guitar/getting-started,/knowledge/guitar/easy-songs,create,"Easy guitar songs by number of chords (chords only, no lyrics)"
+/muuvtube/laer-sange-med-2-akkorder.html,134,3315,9.47,,/knowledge/guitar/easy-songs,,exists,"Easy guitar songs by number of chords (chords only, no lyrics)"
 /selvstudie/guitar/stem-guitar.html,130,12834,8.33,,/knowledge/guitar/tuning,,exists,
 /blog/saadan-opbygger-du-gode-akkordrundgange-ved-hjaelp-af-kvintcirklen.html,130,4976,10.39,,/knowledge/theory/circle-of-fifths,,exists,
 /selvstudie/instrumenter/guitar/tabulatur.html,128,6671,10.81,,/knowledge/guitar/reading-tabs,,exists,
@@ -160,20 +160,20 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /shop/produkt/714-santana-8a.html,41,141,4.66,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /muuvtube/video/kim-larsen-byens-hotel.html,40,4973,9.93,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /shop/produkt/2327-startpakke-ringway-ck62plus.html,40,296,6.59,,/,,skip-shop,Shop pages (no shop on Trenodo)
-/muuvtube/video/beatles-let-it-be.html,39,2255,7.54,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
+/muuvtube/video/beatles-let-it-be.html,39,2255,7.54,,/knowledge/guitar/songs/let-it-be,,exists,Song and children's song video lessons
 /muuvtube/video/melodi-puff-den-magiske-drage.html,38,11310,9.29,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /selvstudie/bas/basguitarens-opbygning.html,38,3251,7.88,,/knowledge/bass/anatomy,,exists,
 /selvstudie/sang/funktioner.html,38,1753,6.22,,/knowledge/vocals/vocal-registers,,exists,
 /undervisning/genre/metal.html,37,334,14.21,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /shop/violin/strenge.html,36,5956,17.8,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /undervisning/trommer.html,36,2823,16.95,,/tutoring,,tutoring,Teacher profiles and lesson pages
-/muuvtube/laer-danske-sange-paa-guitar.html,36,1948,11.87,,/knowledge/guitar/getting-started,/knowledge/guitar/easy-songs,create,"Easy guitar songs by number of chords (chords only, no lyrics)"
+/muuvtube/laer-danske-sange-paa-guitar.html,36,1948,11.87,,/knowledge/guitar/easy-songs,,exists,"Easy guitar songs by number of chords (chords only, no lyrics)"
 /selvstudie/instrumenter/trommer/stikteknik/paraddile.html,36,688,3.32,,/knowledge/drums,/knowledge/drums/rudiments,create,Sticking and rudiments (paradiddle and friends)
 /musikunderviser/asger-rosendal-thorn-768.html,36,433,36.41,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /shop/guitar/yamaha.html,35,5268,9.11,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /selvstudie/tips-guides/saadan-bliver-du-gademusiker.html,34,2311,7.44,,/knowledge/perform,/knowledge/perform/busking,create,Busking
 /muuvtube/video/jeff-buckley-hallelujah.html,33,2304,9.41,,/knowledge/guitar/songs/hallelujah,,exists,Song and children's song video lessons
-/muuvtube/video/john-denver-take-me-home-country-roads.html,33,1401,10.53,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
+/muuvtube/video/john-denver-take-me-home-country-roads.html,33,1401,10.53,,/knowledge/guitar/songs/take-me-home-country-roads,,exists,Song and children's song video lessons
 /blog/hvor-mange-strenge-skal-man-slaa-an-paa-de-forskellige-guitarakkorder.html,32,3578,9.36,,/knowledge/guitar/getting-started,,exists,Guitar beginner blog posts
 /muuvtube/video/kim-larsen-fru-sauterne.html,32,2872,8.39,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /shop/produkt/11-startpakke-sant-guitars-ac-80-na.html,32,1746,4.06,,/,,skip-shop,Shop pages (no shop on Trenodo)
@@ -196,7 +196,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /muuvtube/video/elvis-presley-can-kryds-39t-help-falling-in-love.html,26,1619,9.21,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /shop/produkt/1024-norman-b18-cedar-protege.html,26,175,8.95,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /muuvtube/video/mads-langer-fact-fiction.html,25,3929,7.44,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
-/muuvtube/laer-foedselsdagssange-paa.guitar.html,25,2945,11.58,,/knowledge/guitar/getting-started,/knowledge/guitar/easy-songs,create,"Easy guitar songs by number of chords (chords only, no lyrics)"
+/muuvtube/laer-foedselsdagssange-paa.guitar.html,25,2945,11.58,,/knowledge/guitar/easy-songs,,exists,"Easy guitar songs by number of chords (chords only, no lyrics)"
 /shop/produkt/970-yamaha-np-12-wh-piaggero.html,25,1241,15.04,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /selvstudie/instrumenter/sang/stoetten.html,25,755,7.12,,/knowledge/vocals/breath-support,,exists,
 /undervisning/banjo.html,25,752,5.46,,/tutoring,,tutoring,Teacher profiles and lesson pages
@@ -213,7 +213,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /musikunderviser/lukas-rande-123.html,23,163,12.77,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /musikunderviser/david-sachsenskjold-275.html,23,156,8.22,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /shop/violin/dele.html,22,1347,8.36,,/,,skip-shop,Shop pages (no shop on Trenodo)
-/muuvtube/video/tom-dooley.html,22,1213,15.07,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
+/muuvtube/video/tom-dooley.html,22,1213,15.07,,/knowledge/guitar/songs/tom-dooley,,exists,Song and children's song video lessons
 /blog/fordele-ved-musikundervisning-for-boern-med-adhd.html,22,1052,21.42,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /undervisning/sang/horsens.html,22,935,6.5,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /musikunderviser/timur-allisstone-1290.html,22,213,15.54,,/tutoring,,tutoring,Teacher profiles and lesson pages
@@ -302,7 +302,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /blog/musikinspiration-jens-konrad-se-hinanden-igen.html,12,2132,6.75,,/spotlight,,spotlight,Artist features
 /shop/guitar/gibson.html,12,1756,26.62,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /blog/saadan-tjener-du-penge-paa-din-musik.html,12,1284,6.04,,/knowledge/promote/release-your-music,,exists,"Release your music on Spotify, Apple Music and the rest"
-/data/material/chords/oasis-wonderwall-akkorder.pdf,12,1173,15.99,,/knowledge/guitar/chords,/knowledge/guitar/easy-songs,create,International chord sheets: point to easy songs
+/data/material/chords/oasis-wonderwall-akkorder.pdf,12,1173,15.99,,/knowledge/guitar/easy-songs,,exists,International chord sheets: point to easy songs
 /shop/produkt/3046-yamaha-c40.html,12,1147,9.91,,/,,skip-shop,Shop pages (no shop on Trenodo)
 /selvstudie/trommer/stikteknik.html,12,1053,15.22,,/knowledge/drums,/knowledge/drums/rudiments,create,Sticking and rudiments (paradiddle and friends)
 /undervisning/klarinet.html,12,690,27.11,,/tutoring,,tutoring,Teacher profiles and lesson pages
@@ -428,7 +428,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /blog/musik-goer-dig-klogere.html,7,509,9.98,,/knowledge,,misc,Other blog posts
 /musikunderviser/annette-trollegaard-lorentzen-134.html,7,455,14.62,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /artist/uma-kabongo-46.html,7,449,8.56,,/spotlight,,spotlight,Artist features
-/data/material/chords/snow-patrol-chasing-cars-akkorder.pdf,7,423,39.77,,/knowledge/guitar/chords,/knowledge/guitar/easy-songs,create,International chord sheets: point to easy songs
+/data/material/chords/snow-patrol-chasing-cars-akkorder.pdf,7,423,39.77,,/knowledge/guitar/easy-songs,,exists,International chord sheets: point to easy songs
 /musikunderviser/peter-moelgaard-66.html,7,420,5.45,,/tutoring,,tutoring,Teacher profiles and lesson pages
 /artist/tina-stachowiak-41.html,7,375,5.17,,/spotlight,,spotlight,Artist features
 /musikunderviser/henrik-bonne-240.html,7,366,6.22,,/tutoring,,tutoring,Teacher profiles and lesson pages

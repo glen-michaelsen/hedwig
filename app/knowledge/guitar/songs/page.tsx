@@ -45,6 +45,13 @@ export default function GuitarSongsPage() {
           <p className="mt-4 max-w-xl text-base leading-relaxed text-muted text-pretty">
             {PAGE_DESCRIPTION} Pick one, and play along with the record. 🎸
           </p>
+          <p className="mt-3 text-sm text-muted">
+            New to guitar? Start with the{" "}
+            <Link href="/knowledge/guitar/easy-songs" className={`rounded font-medium text-brand-600 hover:underline ${focusable}`}>
+              easy songs with 2, 3 and 4 chords
+            </Link>
+            .
+          </p>
 
           <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {songs.map((song) => {
