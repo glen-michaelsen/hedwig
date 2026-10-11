@@ -44,7 +44,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /muuvtube/video/anders-matthesen-quangs-sang.html,266,26479,7.2,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /selvstudie/tips-guides/musikbutikker-i-danmark.html,265,43207,18.75,1,/knowledge/perform,,skip-danish,Danish venue and shop lists
 /guides/pris-for-musiker-spillejobs-gigs.html,265,27215,6.17,,/knowledge/perform/gig-fees,,exists,What to charge for a gig
-/selvstudie/instrumenter/trommer/trommesaettets-opbygning.html,248,14722,11.18,,/knowledge/drums,/knowledge/drums/anatomy,create,"The drum kit, piece by piece"
+/selvstudie/instrumenter/trommer/trommesaettets-opbygning.html,248,14722,11.18,,/knowledge/drums/anatomy,,exists,"The drum kit, piece by piece"
 /muuvtube/laer-skoenne-boernesange-paa.guitar.html,238,21173,6.9,,/knowledge/guitar/easy-songs,,exists,"Easy guitar songs by number of chords (chords only, no lyrics)"
 /data/material/chords/ronan-keating-when-you-say-nothing-at-all-akkorder.pdf,231,5064,12.06,,/knowledge/guitar/songs/when-you-say-nothing-at-all,,exists,International chord sheets: point to easy songs
 /selvstudie/instrumenter/bas/skalaer.html,230,6322,9.37,,/knowledge/bass/scales,,exists,
@@ -92,7 +92,7 @@ old_path,clicks,impressions,position,linking_sites,redirect_to,redirect_to_when_
 /selvstudie/tips-guides/guide-til-musikere-markedsfoering-paa-sociale-medier.html,101,6838,27.81,,/knowledge/promote,/knowledge/promote/social-media,create,Social media for musicians
 /selvstudie/instrumenter/guitar/akkorder/e-akkord-variationer.html,92,22241,5.9,,/knowledge/guitar/chords/e,,exists,Chord shapes for one root
 /muuvtube/video/der-sad-to-katte-paa-et-bord.html,89,3620,7.05,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
-/selvstudie/trommer/trommesaettets-opbygning.html,87,12605,8.92,,/knowledge/drums,/knowledge/drums/anatomy,create,"The drum kit, piece by piece"
+/selvstudie/trommer/trommesaettets-opbygning.html,87,12605,8.92,,/knowledge/drums/anatomy,,exists,"The drum kit, piece by piece"
 /muuvtube/video/mariehoenen-evigglad.html,86,14784,5.4,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons
 /selvstudie/instrumenter/guitar/kend-gribebraettet.html,85,16612,7.7,,/knowledge/guitar,/knowledge/guitar/fretboard,create,Learn the fretboard
 /muuvtube/video/i-skovens-dybe-stille-ro.html,85,4547,7.06,,/knowledge/guitar/getting-started,,skip-video,Song and children's song video lessons

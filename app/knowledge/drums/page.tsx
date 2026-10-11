@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { SiteFooter, SiteHeader } from "@/app/_components/site-header";
-import { container } from "@/app/_components/ui";
+import Link from "next/link";
+import { container, focusable } from "@/app/_components/ui";
 import { GuideFaq, GuideSection } from "../_components/guide-layout";
 
 const PAGE_DESCRIPTION =
@@ -119,7 +120,15 @@ export default function DrumsKnowledgePage() {
               <p>
                 A drum kit can be set up in many ways. The exact mix of drums
                 and cymbals depends on the style and on the drummer. But every
-                kit is built from the same few parts.
+                kit is built from the same few parts. See them all on a kit
+                you can tap:{" "}
+                <Link
+                  href="/knowledge/drums/anatomy"
+                  className={`font-medium text-brand-600 hover:underline ${focusable} rounded`}
+                >
+                  the drum kit, piece by piece
+                </Link>
+                .
               </p>
               <ul className="list-disc space-y-3 pl-5">
                 <li>
