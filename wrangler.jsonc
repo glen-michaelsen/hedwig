@@ -44,9 +44,13 @@
 	// trenodo.com is the product. The Worker, D1 database and R2 bucket keep
 	// the "hedwig" codename — renaming the database would mean migrating the
 	// data, and renaming the Worker would break the self-reference binding.
+	// muuv.dk moved into Trenodo: every request there gets a 301 from
+	// lib/muuv/redirect.mjs before Next.js sees it (see docs/muuv/).
 	"routes": [
 		{ "pattern": "trenodo.com", "custom_domain": true },
-		{ "pattern": "www.trenodo.com", "custom_domain": true }
+		{ "pattern": "www.trenodo.com", "custom_domain": true },
+		{ "pattern": "muuv.dk", "custom_domain": true },
+		{ "pattern": "www.muuv.dk", "custom_domain": true }
 	],
 	// Adding "routes" turns the workers.dev URL off by default. Keep it on:
 	// it's a working fallback if anything goes wrong with the domain.
