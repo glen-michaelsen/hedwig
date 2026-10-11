@@ -98,11 +98,28 @@ before matching, and every answer is a 301.
 | `/selvstudie*`, `/guides*` | `/knowledge` |
 | anything else | `/` |
 
+## How the redirects work
+
+- `lib/muuv/redirect.mjs` answers every request to muuv.dk or www.muuv.dk
+  with a 301 to trenodo.com, before Next.js sees it
+  (`cloudflare-worker.mjs`). Other hosts pass straight through.
+- `lib/muuv/redirects-map.mjs` is generated from `redirects.csv`. To change
+  a redirect, edit the CSV, run `node scripts/build-muuv-redirects.mjs`, and
+  commit both.
+- Paths not in the CSV fall back to the section rules above, then to `/`.
+  Trailing slashes, a missing `.html` and capital letters still match.
+- On preview, `https://preview.trenodo.com/__muuv/<old path>` answers as
+  muuv.dk would, so a redirect can be tested before the domain moves.
+- `node scripts/check-muuv-targets.mjs` fetches every target on
+  trenodo.com and lists any that don't answer 200.
+
 ## Doing the switch
 
-1. Add muuv.dk (and www.muuv.dk) to the Worker as custom domains.
-2. In the Worker, answer any request whose host is muuv.dk with the 301
-   from these rules, before Next.js sees it.
-3. In Search Console, verify trenodo.com and use **Change of address** from
+1. Merge to prod, and run `node scripts/check-muuv-targets.mjs`.
+2. Add muuv.dk to the Cloudflare account, then add `muuv.dk` and
+   `www.muuv.dk` to the Worker's custom domains: in `wrangler.jsonc`
+   `routes`, next to trenodo.com, so a deploy doesn't drop them.
+3. Spot-check a few old links in a browser.
+4. In Search Console, verify trenodo.com and use **Change of address** from
    muuv.dk to trenodo.com.
-4. Keep muuv.dk registered and redirecting for at least a year.
+5. Keep muuv.dk registered and redirecting for at least a year.
