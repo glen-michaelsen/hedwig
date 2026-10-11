@@ -21,6 +21,8 @@ import { renderScaleSvg } from "../lib/scale-diagrams/render";
 import { ALL_PIANO_CHORDS } from "../lib/piano-diagrams/piano-chords";
 import { PIANO_REFERENCE_DIAGRAMS } from "../lib/piano-diagrams/piano-reference";
 import { renderPianoChordSvg } from "../lib/piano-diagrams/render";
+import { ALL_PIANO_SCALES } from "../lib/piano-diagrams/piano-scales";
+import { renderPianoScaleSvg } from "../lib/piano-diagrams/render-scale";
 import { CIRCLE_OF_FIFTHS } from "../lib/theory-diagrams/circle-of-fifths";
 import { renderCircleOfFifthsSvg } from "../lib/theory-diagrams/render";
 
@@ -55,6 +57,11 @@ async function main() {
     path.join(KNOWLEDGE_DIR, "piano/chords"),
     ALL_PIANO_CHORDS,
     renderPianoChordSvg,
+  );
+  await writeAll(
+    path.join(KNOWLEDGE_DIR, "piano/scales"),
+    ALL_PIANO_SCALES,
+    renderPianoScaleSvg,
   );
   await writeAll(
     path.join(KNOWLEDGE_DIR, "piano/reference"),

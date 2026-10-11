@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 521 198" width="521" height="198" role="img" aria-label="C minor scale on piano, with right-hand fingering">
+  <title>C minor scale on piano, with right-hand fingering</title>
+  <rect x="0" y="0" width="521" height="198" rx="16" fill="#ffffff" />
+  <rect x="14" y="14" width="34" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="48" y="14" width="34" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="82" y="14" width="34" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="116" y="14" width="34" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="150" y="14" width="34" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="184" y="14" width="34" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="218" y="14" width="34" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="252" y="14" width="34" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="286" y="14" width="34" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="320" y="14" width="34" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="354" y="14" width="34" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="388" y="14" width="34" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="422" y="14" width="34" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="456" y="14" width="34" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="490" y="14" width="17" height="130" fill="#ffffff" stroke="#c7bda8" stroke-width="1.5" rx="4" />
+  <rect x="37.5" y="14" width="21" height="80" rx="3" fill="#3d372c" data-note="C#4" />
+  <rect x="71.5" y="14" width="21" height="80" rx="3" fill="#3d372c" data-note="D#4" />
+  <rect x="139.5" y="14" width="21" height="80" rx="3" fill="#3d372c" data-note="F#4" />
+  <rect x="173.5" y="14" width="21" height="80" rx="3" fill="#3d372c" data-note="G#4" />
+  <rect x="207.5" y="14" width="21" height="80" rx="3" fill="#3d372c" data-note="A#4" />
+  <rect x="275.5" y="14" width="21" height="80" rx="3" fill="#3d372c" data-note="C#5" />
+  <rect x="309.5" y="14" width="21" height="80" rx="3" fill="#3d372c" data-note="D#5" />
+  <rect x="377.5" y="14" width="21" height="80" rx="3" fill="#3d372c" data-note="F#5" />
+  <rect x="411.5" y="14" width="21" height="80" rx="3" fill="#3d372c" data-note="G#5" />
+  <rect x="445.5" y="14" width="21" height="80" rx="3" fill="#3d372c" data-note="A#5" />
+  <circle cx="31" cy="118" r="11" fill="#825abe" />
+  <text x="31" y="122.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#ffffff">1</text>
+  <text x="31" y="161" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#6b6153">C</text>
+  <circle cx="65" cy="118" r="11" fill="#825abe" />
+  <text x="65" y="122.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#ffffff">2</text>
+  <text x="65" y="161" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#6b6153">D</text>
+  <circle cx="82" cy="74" r="11" fill="#825abe" />
+  <text x="82" y="78.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#ffffff">3</text>
+  <text x="82" y="177" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#6b6153">Eb</text>
+  <circle cx="133" cy="118" r="11" fill="#825abe" />
+  <text x="133" y="122.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#ffffff">1</text>
+  <text x="133" y="161" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#6b6153">F</text>
+  <circle cx="167" cy="118" r="11" fill="#825abe" />
+  <text x="167" y="122.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#ffffff">2</text>
+  <text x="167" y="161" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#6b6153">G</text>
+  <circle cx="184" cy="74" r="11" fill="#825abe" />
+  <text x="184" y="78.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#ffffff">3</text>
+  <text x="184" y="177" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#6b6153">Ab</text>
+  <circle cx="218" cy="74" r="11" fill="#825abe" />
+  <text x="218" y="78.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#ffffff">4</text>
+  <text x="218" y="177" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#6b6153">Bb</text>
+  <circle cx="269" cy="118" r="11" fill="#825abe" />
+  <text x="269" y="122.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="700" fill="#ffffff">5</text>
+  <text x="269" y="161" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#6b6153">C</text>
+</svg>

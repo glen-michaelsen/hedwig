@@ -30,6 +30,11 @@ const REFERENCE = [
     title: "Chords",
     body: "All 12 major and all 12 minor chords, each with a diagram.",
   },
+  {
+    href: "/knowledge/piano/scales",
+    title: "Scales",
+    body: "Every major scale and the first minor scales, with the fingering on every key.",
+  },
 ] as const;
 
 export default function PianoKnowledgePage() {

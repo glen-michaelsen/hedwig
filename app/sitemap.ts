@@ -207,6 +207,7 @@ const PAGES: {
     priority: 0.6,
     changeFrequency: "monthly",
   },
+  { path: "/knowledge/piano/scales", priority: 0.7, changeFrequency: "monthly" },
   { path: "/knowledge/perform", priority: 0.6, changeFrequency: "monthly" },
   { path: "/knowledge/perform/gig-fees", priority: 0.7, changeFrequency: "monthly" },
   {
