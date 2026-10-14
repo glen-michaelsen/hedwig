@@ -112,6 +112,17 @@ export function SpotlightIcon({ className = "h-4 w-4" }: IconProps) {
   );
 }
 
+/** Three columns of cards: the Spotlight board. */
+export function BoardIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>
+      <rect x="3" y="3.5" width="14" height="13" rx="2.5" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M7.7 3.5v13M12.3 3.5v13" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M4.9 6.5h1.2M9.4 6.5h1.2M9.4 9h1.2M13.9 6.5h1.2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function SetlistIcon({ className = "h-4 w-4" }: IconProps) {
   return (
     <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>

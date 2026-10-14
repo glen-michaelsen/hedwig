@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useState, type ReactNode } from "react";
 import { Wordmark, focusable } from "./ui";
 import {
+  BoardIcon,
   HomeIcon,
   IdeasIcon,
   LinkInBioIcon,
@@ -35,6 +36,7 @@ const ICONS = {
   setlists: SetlistIcon,
   settings: SettingsIcon,
   musicians: MusiciansIcon,
+  board: BoardIcon,
 } as const;
 
 export type IconName = keyof typeof ICONS;
@@ -53,6 +55,13 @@ export type ShellItem = {
    * a pre-rendered element would only allow a wrapper that lies about it.
    */
   icon?: IconName;
+  /**
+   * A second, smaller link inside the item, for the page you jump to most
+   * from there (Spotlight's board). Where there's a mouse it shows on hover
+   * or focus; on touch screens, which can't hover, it's always shown. It
+   * stays highlighted while you're on it.
+   */
+  shortcut?: { href: string; label: string; icon: IconName };
 };
 
 export type ShellGroup = {
@@ -87,12 +96,14 @@ function NavItems({ groups }: { groups: ShellGroup[] }) {
               const active = item.exact
                 ? pathname === item.href
                 : isActive(pathname, item.href);
-              return (
+              const shortcutActive = item.shortcut ? isActive(pathname, item.shortcut.href) : false;
+              const link = (
                 <Link
-                  key={item.href}
                   href={item.href}
-                  aria-current={active ? "page" : undefined}
+                  aria-current={active && !shortcutActive ? "page" : undefined}
                   className={`flex items-center gap-2.5 rounded-2xl px-3 py-2.5 text-sm font-medium transition-colors ${
+                    item.shortcut ? "pr-11" : ""
+                  } ${
                     active
                       ? "bg-brand-500/12 text-brand-700 dark:text-brand-300"
                       : "text-muted hover:bg-surface-muted hover:text-foreground"
@@ -101,6 +112,27 @@ function NavItems({ groups }: { groups: ShellGroup[] }) {
                   {item.icon && <Glyph name={item.icon} className="h-4 w-4 shrink-0" />}
                   {item.label}
                 </Link>
+              );
+              if (!item.shortcut) return <div key={item.href}>{link}</div>;
+
+              // Two links side by side, never one inside the other.
+              return (
+                <div key={item.href} className="group/item relative">
+                  {link}
+                  <Link
+                    href={item.shortcut.href}
+                    aria-label={item.shortcut.label}
+                    title={item.shortcut.label}
+                    aria-current={shortcutActive ? "page" : undefined}
+                    className={`absolute right-1.5 top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-xl transition-all ${
+                      shortcutActive
+                        ? "bg-brand-600 text-white opacity-100"
+                        : "text-muted hover:bg-surface hover:text-brand-700 [@media(hover:hover)]:opacity-0 focus-visible:opacity-100 group-hover/item:opacity-100 group-focus-within/item:opacity-100"
+                    } ${focusable}`}
+                  >
+                    <Glyph name={item.shortcut.icon} className="h-4 w-4" />
+                  </Link>
+                </div>
               );
             })}
           </div>

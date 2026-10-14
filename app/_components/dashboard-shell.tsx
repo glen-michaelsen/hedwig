@@ -62,6 +62,7 @@ export async function DashboardShell({ children }: { children: ReactNode }) {
                 href: "/account/spotlight",
                 label: "Spotlight",
                 icon: "spotlight",
+                shortcut: { href: "/account/spotlight/board", label: "Spotlight board", icon: "board" },
               },
               { href: "/account/ideas", label: "Ideas", icon: "ideas" },
             ],
