@@ -20,7 +20,7 @@ const KIND_LABELS = { single: "Single", ep: "EP", album: "Album" } as const;
 type Column = "needs-info" | "ready" | "planned";
 
 const COLUMNS: { key: Column; title: string; body: string; dot: string }[] = [
-  { key: "needs-info", title: "Needs info", body: "Missing a cover, a press photo or a link to the music.", dot: "bg-amber-400" },
+  { key: "needs-info", title: "Needs info", body: "Missing a cover or a press photo.", dot: "bg-amber-400" },
   { key: "ready", title: "Ready", body: "The essentials are in. Plan it, or skip it.", dot: "bg-emerald-500" },
   { key: "planned", title: "Planned to write", body: "Your own list. The owner can't see it.", dot: "bg-brand-500" },
 ];
