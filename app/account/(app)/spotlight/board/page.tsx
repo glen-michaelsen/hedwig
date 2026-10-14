@@ -85,7 +85,7 @@ function DateChip({ date, today }: { date: string | null; today: string }) {
   const urgent = days >= 0 && days <= 14;
   return (
     <span
-      className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+      className={`inline-flex whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-semibold ${
         urgent ? "bg-rose-500/12 text-rose-700" : days < 0 ? "bg-surface-muted text-muted" : "bg-brand-500/10 text-brand-700"
       }`}
     >
@@ -122,6 +122,26 @@ function daysAgo(date: Date) {
   return days === 0 ? "today" : days === 1 ? "yesterday" : `${days} days ago`;
 }
 
+/** When the owner was last asked for what's missing, or that they haven't been. */
+function EmailedChip({ sentAt }: { sentAt: Date | null }) {
+  if (!sentAt) {
+    return <span className="inline-flex whitespace-nowrap rounded-full bg-surface-muted px-2 py-0.5 text-[11px] font-semibold text-muted">Not emailed yet</span>;
+  }
+  const exact = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short" }).format(sentAt);
+  return (
+    <span
+      title={new Intl.DateTimeFormat("en-GB", { dateStyle: "long", timeStyle: "short" }).format(sentAt)}
+      className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-brand-500/10 px-2 py-0.5 text-[11px] font-semibold text-brand-700"
+    >
+      <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className="h-3 w-3">
+        <rect x="3" y="4.5" width="14" height="11" rx="2" stroke="currentColor" strokeWidth="1.6" />
+        <path d="m3.5 6 6.5 5 6.5-5" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+      </svg>
+      Emailed {daysAgo(sentAt)} · {exact}
+    </span>
+  );
+}
+
 function BoardCard({ card, today }: { card: Card; today: string }) {
   const { release, items, essentials, extras, column } = card;
   const missing = essentials.length + extras.length;
@@ -156,8 +176,9 @@ function BoardCard({ card, today }: { card: Card; today: string }) {
         </div>
       </div>
 
-      <div className="mt-3">
+      <div className="mt-3 flex flex-wrap gap-1.5">
         <DateChip date={release.releaseDate} today={today} />
+        {(missing > 0 || release.nudgedAt) && <EmailedChip sentAt={release.nudgedAt} />}
       </div>
 
       {missing > 0 && (
@@ -173,10 +194,6 @@ function BoardCard({ card, today }: { card: Card; today: string }) {
           <MissingChips releaseId={release.id} items={essentials} label="Needed" strong />
           <MissingChips releaseId={release.id} items={extras} label="Extras" strong={false} />
         </div>
-      )}
-
-      {release.nudgedAt && (
-        <p className="mt-3 text-[11px] text-faint">Emailed {daysAgo(release.nudgedAt)}</p>
       )}
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
