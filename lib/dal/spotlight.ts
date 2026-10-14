@@ -6,6 +6,7 @@ import {
   pressRelease,
   releaseAsset,
   spotlight,
+  spotlightNudge,
   spotlightPlan,
   spotlightSkip,
   user,
@@ -88,45 +89,52 @@ export async function unskipRelease(releaseId: string) {
 
 /* --------------------------- admin: the board -------------------------- */
 
+/** What the board needs to sort a release into Needs info, Ready or Planned to write. */
+const boardColumns = {
+  id: pressRelease.id,
+  title: pressRelease.title,
+  kind: pressRelease.kind,
+  releaseDate: pressRelease.releaseDate,
+  createdAt: pressRelease.createdAt,
+  url: pressRelease.url,
+  genre: pressRelease.genre,
+  mood: pressRelease.mood,
+  country: pressRelease.country,
+  language: pressRelease.language,
+  labelStatus: pressRelease.labelStatus,
+  gender: pressRelease.gender,
+  artistName: artist.name,
+  ownerName: user.name,
+  ownerEmail: user.email,
+  coverAssetId: sql<string | null>`(
+    select ${releaseAsset.id} from ${releaseAsset}
+    where ${releaseAsset.releaseId} = ${pressRelease.id}
+      and ${releaseAsset.kind} = 'cover'
+    limit 1
+  )`,
+  photoCount: sql<number>`(
+    select count(*) from ${releaseAsset}
+    where ${releaseAsset.releaseId} = ${pressRelease.id}
+      and ${releaseAsset.kind} = 'photo'
+  )`.mapWith(Number),
+  planned: sql<number>`exists (
+    select 1 from ${spotlightPlan}
+    where ${spotlightPlan.releaseId} = ${pressRelease.id}
+  )`.mapWith(Boolean),
+  nudgedAt: sql<number | null>`(
+    select ${spotlightNudge.sentAt} from ${spotlightNudge}
+    where ${spotlightNudge.releaseId} = ${pressRelease.id}
+  )`.mapWith((value: number | null) => (value === null ? null : new Date(value * 1000))),
+};
+
 /**
  * Every release still waiting for a decision: no Spotlight article yet
- * (planned or published) and not skipped. With what the board needs to
- * sort it into Needs info, Ready or Planned. Admin only, across accounts.
+ * (planned or published) and not skipped. Admin only, across accounts.
  */
 export async function listReleasesForBoard() {
   const db = await getDb();
   return db
-    .select({
-      id: pressRelease.id,
-      title: pressRelease.title,
-      kind: pressRelease.kind,
-      releaseDate: pressRelease.releaseDate,
-      createdAt: pressRelease.createdAt,
-      url: pressRelease.url,
-      genre: pressRelease.genre,
-      mood: pressRelease.mood,
-      country: pressRelease.country,
-      language: pressRelease.language,
-      labelStatus: pressRelease.labelStatus,
-      gender: pressRelease.gender,
-      artistName: artist.name,
-      ownerEmail: user.email,
-      coverAssetId: sql<string | null>`(
-        select ${releaseAsset.id} from ${releaseAsset}
-        where ${releaseAsset.releaseId} = ${pressRelease.id}
-          and ${releaseAsset.kind} = 'cover'
-        limit 1
-      )`,
-      photoCount: sql<number>`(
-        select count(*) from ${releaseAsset}
-        where ${releaseAsset.releaseId} = ${pressRelease.id}
-          and ${releaseAsset.kind} = 'photo'
-      )`.mapWith(Number),
-      planned: sql<number>`exists (
-        select 1 from ${spotlightPlan}
-        where ${spotlightPlan.releaseId} = ${pressRelease.id}
-      )`.mapWith(Boolean),
-    })
+    .select(boardColumns)
     .from(pressRelease)
     .innerJoin(artist, eq(artist.id, pressRelease.artistId))
     .innerJoin(user, eq(user.id, pressRelease.accountId))
@@ -134,6 +142,29 @@ export async function listReleasesForBoard() {
       sql`not exists (select 1 from ${spotlight} where ${spotlight.releaseId} = ${pressRelease.id})
         and not exists (select 1 from ${spotlightSkip} where ${spotlightSkip.releaseId} = ${pressRelease.id})`,
     );
+}
+
+/** One release as the board sees it, for the email preview. */
+export async function getBoardRelease(releaseId: string) {
+  const db = await getDb();
+  const [row] = await db
+    .select(boardColumns)
+    .from(pressRelease)
+    .innerJoin(artist, eq(artist.id, pressRelease.artistId))
+    .innerJoin(user, eq(user.id, pressRelease.accountId))
+    .where(eq(pressRelease.id, releaseId))
+    .limit(1);
+  return row ?? null;
+}
+
+/** Log that the owner was emailed about what's missing (latest send wins). */
+export async function markReleaseNudged(releaseId: string) {
+  const db = await getDb();
+  const sentAt = new Date();
+  await db
+    .insert(spotlightNudge)
+    .values({ releaseId, sentAt })
+    .onConflictDoUpdate({ target: spotlightNudge.releaseId, set: { sentAt } });
 }
 
 export type BoardRelease = Awaited<ReturnType<typeof listReleasesForBoard>>[number];

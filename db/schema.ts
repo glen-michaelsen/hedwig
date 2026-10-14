@@ -670,6 +670,19 @@ export const spotlightPlan = sqliteTable("spotlight_plan", {
     .default(sql`(unixepoch())`),
 });
 
+/**
+ * When the owner of a release was last emailed from the Spotlight board,
+ * asking for what's missing from their press kit. One row per release,
+ * overwritten on each send, so the board can say "Emailed 3 days ago" and
+ * nobody gets nudged twice by accident.
+ */
+export const spotlightNudge = sqliteTable("spotlight_nudge", {
+  releaseId: text("release_id")
+    .primaryKey()
+    .references(() => pressRelease.id, { onDelete: "cascade" }),
+  sentAt: integer("sent_at", { mode: "timestamp" }).notNull(),
+});
+
 export type Spotlight = typeof spotlight.$inferSelect;
 
 /* ------------------------------------------------------------------ *

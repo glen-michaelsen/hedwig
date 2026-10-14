@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { requireAdmin } from "@/lib/auth";
 import { getEnv } from "@/lib/db";
 import * as dal from "@/lib/dal/spotlight";
+import { sendNudge } from "@/lib/spotlight/nudge";
 import { sendAutomaticSpotlightEmail, sendSpotlightEmailFor } from "@/lib/spotlight/notify";
 import { isValidRating } from "@/lib/spotlight/slug";
 
@@ -188,4 +189,17 @@ export async function unplanReleaseAction(formData: FormData) {
   await requireAdmin();
   await dal.unplanRelease(String(formData.get("releaseId")));
   revalidatePath("/account/spotlight/board");
+}
+
+/**
+ * The board's email asking an owner for what's missing. "me" sends the
+ * same email to the admin, as a test, without logging it as sent.
+ */
+export async function sendNudgeAction(formData: FormData) {
+  const admin = await requireAdmin();
+  const releaseId = String(formData.get("releaseId"));
+  const toMe = formData.get("to") === "me";
+  const sent = await sendNudge(releaseId, toMe ? admin.email : undefined);
+  revalidatePath("/account/spotlight/board");
+  redirect(`/account/spotlight/board/email/${releaseId}?sent=${sent ? (toMe ? "me" : "owner") : "failed"}`);
 }

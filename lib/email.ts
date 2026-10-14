@@ -373,3 +373,99 @@ export async function sendSpotlightEmail(email: SpotlightEmail): Promise<boolean
 
   return !error;
 }
+
+/* ---------------- Spotlight: asking for what's missing ---------------- */
+
+export type SpotlightNudge = {
+  to: string;
+  firstName: string;
+  releaseTitle: string;
+  /** What we need before we can write about it: "A press photo". */
+  essentials: string[];
+  /** What would help an article reach further: "Genre". */
+  extras: string[];
+  /** The kit's edit page, where most of it is filled in. */
+  kitUrl: string;
+  /** Who signs it. */
+  signature: string;
+};
+
+function bulletList(items: string[]) {
+  return `<ul style="margin:0 0 20px;padding:0 0 0 20px;font-size:16px;line-height:1.7;color:${COLOR.ink};">${items
+    .map((item) => `<li>${escapeHtml(item)}</li>`)
+    .join("")}</ul>`;
+}
+
+const NUDGE_EXTRAS_INTRO =
+  "They put your release on the right Discover lists, where listeners browse by genre, country and mood:";
+const NUDGE_PROMISE =
+  "One honest note: we can't promise a Spotlight article for every release. But we listen to everything that comes in, and every submission gets a fair chance. \u{1F3A7}";
+
+/** The email, as the admin previews it and as it's sent. */
+export function spotlightNudgeContent(nudge: SpotlightNudge) {
+  const title = escapeHtml(nudge.releaseTitle);
+  const name = escapeHtml(nudge.firstName);
+  const needs = nudge.essentials.length > 0;
+  const one = nudge.essentials.length === 1;
+
+  const subject = needs
+    ? `Your press kit for "${nudge.releaseTitle}" is nearly Spotlight-ready`
+    : `A few details could take "${nudge.releaseTitle}" further`;
+
+  const html = cardEmailHtml(
+    `Your press kit for ${title}`,
+    [
+      paragraph(`Hi ${name},`),
+      paragraph(`Thanks for building the press kit for <strong>${title}</strong> on Trenodo. It's great to see it there. \u{1F389}`),
+      needs
+        ? paragraph(`We'd love to consider it for a Spotlight article. To do that, we need ${one ? "one more thing" : "a few more things"}:`) +
+          bulletList(nudge.essentials)
+        : paragraph("It already has everything we need to consider it for a Spotlight article. A few more details would help an article reach further."),
+      nudge.extras.length > 0
+        ? paragraph(needs ? `These are optional, but they help a Spotlight article reach further. ${NUDGE_EXTRAS_INTRO}` : NUDGE_EXTRAS_INTRO) +
+          bulletList(nudge.extras)
+        : "",
+      pillButton(nudge.kitUrl, "Finish your press kit"),
+      `<p style="margin:20px 0 20px;font-size:14px;line-height:1.6;color:${COLOR.muted};">${NUDGE_PROMISE}</p>`,
+      `<p style="margin:0;font-size:16px;line-height:1.5;color:${COLOR.ink};">${escapeHtml(nudge.signature)}<br><span style="color:${COLOR.muted};">Trenodo Spotlight</span></p>`,
+    ].join(""),
+  );
+
+  const list = (items: string[]) => items.map((item) => `- ${item}`).join("\n");
+  const text = [
+    `Hi ${nudge.firstName},`,
+    "",
+    `Thanks for building the press kit for ${nudge.releaseTitle} on Trenodo. It's great to see it there.`,
+    "",
+    ...(needs
+      ? [`We'd love to consider it for a Spotlight article. To do that, we need ${one ? "one more thing" : "a few more things"}:`, list(nudge.essentials), ""]
+      : ["It already has everything we need to consider it for a Spotlight article. A few more details would help an article reach further.", ""]),
+    ...(nudge.extras.length > 0
+      ? [needs ? `These are optional, but they help a Spotlight article reach further. ${NUDGE_EXTRAS_INTRO}` : NUDGE_EXTRAS_INTRO, list(nudge.extras), ""]
+      : []),
+    "Finish your press kit:",
+    nudge.kitUrl,
+    "",
+    NUDGE_PROMISE,
+    "",
+    nudge.signature,
+    "Trenodo Spotlight",
+  ].join("\n");
+
+  return { subject, html, text };
+}
+
+/** Best-effort like the other senders: false instead of throwing. */
+export async function sendSpotlightNudge(nudge: SpotlightNudge): Promise<boolean> {
+  const { RESEND_API_KEY } = await getEnv();
+  if (!RESEND_API_KEY) return false;
+  const content = spotlightNudgeContent(nudge);
+  const { error } = await new Resend(RESEND_API_KEY).emails.send({
+    from: FROM,
+    to: nudge.to,
+    subject: content.subject,
+    html: content.html,
+    text: content.text,
+  });
+  return !error;
+}

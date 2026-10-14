@@ -10,7 +10,7 @@ import { requireAdmin } from "@/lib/auth";
 import { todayIso } from "@/lib/clock";
 import { listReleasesForBoard, type BoardRelease } from "@/lib/dal/spotlight";
 import { parseTagList } from "@/lib/press/taxonomy";
-import { readinessHref, readinessOf, type ReadinessItem } from "@/lib/spotlight/readiness";
+import { missingOf, readinessHref, readinessOf, type ReadinessItem } from "@/lib/spotlight/readiness";
 import { planReleaseAction, skipReleaseAction, unplanReleaseAction } from "../actions";
 
 export const metadata = { title: "Spotlight board" };
@@ -20,12 +20,18 @@ const KIND_LABELS = { single: "Single", ep: "EP", album: "Album" } as const;
 type Column = "needs-info" | "ready" | "planned";
 
 const COLUMNS: { key: Column; title: string; body: string; dot: string }[] = [
-  { key: "needs-info", title: "Needs info", body: "The press kit is missing something.", dot: "bg-amber-400" },
-  { key: "ready", title: "Ready", body: "Everything's there. Plan it, or skip it.", dot: "bg-emerald-500" },
+  { key: "needs-info", title: "Needs info", body: "Missing a cover, a press photo or a link to the music.", dot: "bg-amber-400" },
+  { key: "ready", title: "Ready", body: "The essentials are in. Plan it, or skip it.", dot: "bg-emerald-500" },
   { key: "planned", title: "Planned to write", body: "Your own list. The owner can't see it.", dot: "bg-brand-500" },
 ];
 
-type Card = { release: BoardRelease; items: ReadinessItem[]; missing: ReadinessItem[]; column: Column };
+type Card = {
+  release: BoardRelease;
+  items: ReadinessItem[];
+  essentials: ReadinessItem[];
+  extras: ReadinessItem[];
+  column: Column;
+};
 
 function toCard(release: BoardRelease): Card {
   const items = readinessOf({
@@ -39,9 +45,10 @@ function toCard(release: BoardRelease): Card {
     labelStatus: release.labelStatus,
     gender: release.gender,
   });
-  const missing = items.filter((item) => !item.done);
-  const column: Column = release.planned ? "planned" : missing.length > 0 ? "needs-info" : "ready";
-  return { release, items, missing, column };
+  // Ready means the essentials are in; the extras show, but don't hold it back.
+  const { essentials, extras } = missingOf(items);
+  const column: Column = release.planned ? "planned" : essentials.length > 0 ? "needs-info" : "ready";
+  return { release, items, essentials, extras, column };
 }
 
 /** Days from `today` to `date`, both plain YYYY-MM-DD, without a timezone in sight. */
@@ -87,9 +94,38 @@ function DateChip({ date, today }: { date: string | null; today: string }) {
   );
 }
 
+function MissingChips({ releaseId, items, label, strong }: { releaseId: string; items: ReadinessItem[]; label: string; strong: boolean }) {
+  if (items.length === 0) return null;
+  return (
+    <div className="mt-2">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-faint">{label}</p>
+      <ul className="mt-1 flex flex-wrap gap-1">
+        {items.map((item) => (
+          <li key={item.key}>
+            <Link
+              href={readinessHref(releaseId, item)}
+              className={`inline-flex rounded-full border border-dashed px-2 py-0.5 text-[11px] hover:text-foreground ${focusable} ${
+                strong ? "border-amber-500/60 text-amber-800 hover:border-amber-600" : "border-line text-muted hover:border-line-strong"
+              }`}
+            >
+              {item.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function daysAgo(date: Date) {
+  const days = Math.floor((Date.now() - date.getTime()) / 86_400_000);
+  return days === 0 ? "today" : days === 1 ? "yesterday" : `${days} days ago`;
+}
+
 function BoardCard({ card, today }: { card: Card; today: string }) {
-  const { release, items, missing, column } = card;
-  const done = items.length - missing.length;
+  const { release, items, essentials, extras, column } = card;
+  const missing = essentials.length + extras.length;
+  const done = items.length - missing;
 
   return (
     <li className="rounded-3xl border border-line bg-surface p-4 shadow-soft">
@@ -124,7 +160,7 @@ function BoardCard({ card, today }: { card: Card; today: string }) {
         <DateChip date={release.releaseDate} today={today} />
       </div>
 
-      {missing.length > 0 && (
+      {missing > 0 && (
         <div className="mt-3">
           <div className="flex items-center gap-2">
             <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-muted">
@@ -134,23 +170,23 @@ function BoardCard({ card, today }: { card: Card; today: string }) {
               {done}/{items.length}
             </span>
           </div>
-          <ul className="mt-2 flex flex-wrap gap-1" aria-label="Missing">
-            {missing.map((item) => (
-              <li key={item.key}>
-                <Link
-                  href={readinessHref(release.id, item)}
-                  className={`inline-flex rounded-full border border-dashed border-line px-2 py-0.5 text-[11px] text-muted hover:border-line-strong hover:text-foreground ${focusable}`}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <MissingChips releaseId={release.id} items={essentials} label="Needed" strong />
+          <MissingChips releaseId={release.id} items={extras} label="Extras" strong={false} />
         </div>
       )}
 
+      {release.nudgedAt && (
+        <p className="mt-3 text-[11px] text-faint">Emailed {daysAgo(release.nudgedAt)}</p>
+      )}
+
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        {column === "planned" ? (
+        {column === "ready" && (
+          <form action={planReleaseAction}>
+            <input type="hidden" name="releaseId" value={release.id} />
+            <button className={actionPillBrand}>Plan</button>
+          </form>
+        )}
+        {column === "planned" && (
           <>
             <Link href={`/account/spotlight/new?release=${release.id}`} className={actionPillBrand}>
               Write
@@ -160,11 +196,11 @@ function BoardCard({ card, today }: { card: Card; today: string }) {
               <button className={actionPill}>Unplan</button>
             </form>
           </>
-        ) : (
-          <form action={planReleaseAction}>
-            <input type="hidden" name="releaseId" value={release.id} />
-            <button className={column === "ready" ? actionPillBrand : actionPill}>Plan</button>
-          </form>
+        )}
+        {missing > 0 && (
+          <Link href={`/account/spotlight/board/email/${release.id}`} className={actionPill}>
+            Email
+          </Link>
         )}
         <form action={skipReleaseAction} className="ml-auto">
           <input type="hidden" name="releaseId" value={release.id} />

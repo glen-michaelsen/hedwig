@@ -183,6 +183,13 @@
       "when": 1792009176003,
       "tag": "0025_fair_kabuki",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "6",
+      "when": 1792009819774,
+      "tag": "0026_rich_cargill",
+      "breakpoints": true
     }
   ]
 }
