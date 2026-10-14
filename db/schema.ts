@@ -654,6 +654,22 @@ export const spotlightSkip = sqliteTable("spotlight_skip", {
     .default(sql`(unixepoch())`),
 });
 
+/**
+ * Releases the admin intends to write about: the "Planned" column on the
+ * Spotlight board. Same shape and reasoning as spotlightSkip: an editorial
+ * note about someone's record, kept off `press_release` because it isn't
+ * theirs to see. Nothing outside the admin pages reads it; the musician
+ * hears about a Spotlight only once an article is actually scheduled.
+ */
+export const spotlightPlan = sqliteTable("spotlight_plan", {
+  releaseId: text("release_id")
+    .primaryKey()
+    .references(() => pressRelease.id, { onDelete: "cascade" }),
+  createdAt: integer("created_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
 export type Spotlight = typeof spotlight.$inferSelect;
 
 /* ------------------------------------------------------------------ *

@@ -6,6 +6,7 @@ import {
   pressRelease,
   releaseAsset,
   spotlight,
+  spotlightPlan,
   spotlightSkip,
   user,
 } from "@/db/schema";
@@ -60,6 +61,10 @@ export async function listReleasesForPicker() {
         select 1 from ${spotlightSkip}
         where ${spotlightSkip.releaseId} = ${pressRelease.id}
       )`.mapWith(Number),
+      planned: sql<number>`exists (
+        select 1 from ${spotlightPlan}
+        where ${spotlightPlan.releaseId} = ${pressRelease.id}
+      )`.mapWith(Boolean),
     })
     .from(pressRelease)
     .innerJoin(artist, eq(artist.id, pressRelease.artistId))
@@ -79,6 +84,68 @@ export async function skipRelease(releaseId: string) {
 export async function unskipRelease(releaseId: string) {
   const db = await getDb();
   await db.delete(spotlightSkip).where(eq(spotlightSkip.releaseId, releaseId));
+}
+
+/* --------------------------- admin: the board -------------------------- */
+
+/**
+ * Every release still waiting for a decision: no Spotlight article yet
+ * (planned or published) and not skipped. With what the board needs to
+ * sort it into Needs info, Ready or Planned. Admin only, across accounts.
+ */
+export async function listReleasesForBoard() {
+  const db = await getDb();
+  return db
+    .select({
+      id: pressRelease.id,
+      title: pressRelease.title,
+      kind: pressRelease.kind,
+      releaseDate: pressRelease.releaseDate,
+      createdAt: pressRelease.createdAt,
+      url: pressRelease.url,
+      genre: pressRelease.genre,
+      mood: pressRelease.mood,
+      country: pressRelease.country,
+      language: pressRelease.language,
+      labelStatus: pressRelease.labelStatus,
+      gender: pressRelease.gender,
+      artistName: artist.name,
+      ownerEmail: user.email,
+      coverAssetId: sql<string | null>`(
+        select ${releaseAsset.id} from ${releaseAsset}
+        where ${releaseAsset.releaseId} = ${pressRelease.id}
+          and ${releaseAsset.kind} = 'cover'
+        limit 1
+      )`,
+      photoCount: sql<number>`(
+        select count(*) from ${releaseAsset}
+        where ${releaseAsset.releaseId} = ${pressRelease.id}
+          and ${releaseAsset.kind} = 'photo'
+      )`.mapWith(Number),
+      planned: sql<number>`exists (
+        select 1 from ${spotlightPlan}
+        where ${spotlightPlan.releaseId} = ${pressRelease.id}
+      )`.mapWith(Boolean),
+    })
+    .from(pressRelease)
+    .innerJoin(artist, eq(artist.id, pressRelease.artistId))
+    .innerJoin(user, eq(user.id, pressRelease.accountId))
+    .where(
+      sql`not exists (select 1 from ${spotlight} where ${spotlight.releaseId} = ${pressRelease.id})
+        and not exists (select 1 from ${spotlightSkip} where ${spotlightSkip.releaseId} = ${pressRelease.id})`,
+    );
+}
+
+export type BoardRelease = Awaited<ReturnType<typeof listReleasesForBoard>>[number];
+
+export async function planRelease(releaseId: string) {
+  const db = await getDb();
+  await db.insert(spotlightPlan).values({ releaseId }).onConflictDoNothing();
+}
+
+export async function unplanRelease(releaseId: string) {
+  const db = await getDb();
+  await db.delete(spotlightPlan).where(eq(spotlightPlan.releaseId, releaseId));
 }
 
 /** The press photos of one release, for picking the header image. */

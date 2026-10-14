@@ -167,10 +167,25 @@ export async function skipReleaseAction(formData: FormData) {
   await requireAdmin();
   await dal.skipRelease(String(formData.get("releaseId")));
   revalidatePath("/account/spotlight/new");
+  revalidatePath("/account/spotlight/board");
 }
 
 export async function unskipReleaseAction(formData: FormData) {
   await requireAdmin();
   await dal.unskipRelease(String(formData.get("releaseId")));
   revalidatePath("/account/spotlight/new");
+  revalidatePath("/account/spotlight/board");
+}
+
+/** Mark a release as one to write about. Admin-only, and never shown to its owner. */
+export async function planReleaseAction(formData: FormData) {
+  await requireAdmin();
+  await dal.planRelease(String(formData.get("releaseId")));
+  revalidatePath("/account/spotlight/board");
+}
+
+export async function unplanReleaseAction(formData: FormData) {
+  await requireAdmin();
+  await dal.unplanRelease(String(formData.get("releaseId")));
+  revalidatePath("/account/spotlight/board");
 }

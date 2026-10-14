@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Card, focusable } from "@/app/_components/ui";
+import { readinessHref, readinessOf } from "@/lib/spotlight/readiness";
 
 type ChecklistItem = {
   label: string;
@@ -9,7 +10,7 @@ type ChecklistItem = {
 
 /**
  * What's still missing before this release is a good candidate for a
- * Spotlight write-up. Replaces the old "Public"/"Not shared" card — that
+ * Spotlight write-up (the list itself is lib/spotlight/readiness.ts). Replaces the old "Public"/"Not shared" card — that
  * information moved into the publish pill itself, so this slot is free for
  * something more actionable.
  */
@@ -36,23 +37,17 @@ export function SpotlightChecklist({
   labelStatus: string | null;
   gender: string | null;
 }) {
-  const editPath = `/press/${releaseId}/edit`;
-
-  const items: ChecklistItem[] = [
-    { label: "Album cover", done: hasCover, href: `/press/${releaseId}#cover` },
-    {
-      label: "Press photo",
-      done: photoCount >= 1,
-      href: `/press/${releaseId}#photos`,
-    },
-    { label: "Link", done: Boolean(url), href: `${editPath}#url` },
-    { label: "Genre", done: genre.length > 0, href: `${editPath}#genre` },
-    { label: "Mood/vibe", done: mood.length > 0, href: `${editPath}#mood` },
-    { label: "Country", done: Boolean(country), href: `${editPath}#country` },
-    { label: "Language", done: Boolean(language), href: `${editPath}#language` },
-    { label: "Label", done: Boolean(labelStatus), href: `${editPath}#labelStatus` },
-    { label: "Gender", done: Boolean(gender), href: `${editPath}#gender` },
-  ];
+  const items: ChecklistItem[] = readinessOf({
+    hasCover,
+    photoCount,
+    url,
+    genre,
+    mood,
+    country,
+    language,
+    labelStatus,
+    gender,
+  }).map((item) => ({ label: item.label, done: item.done, href: readinessHref(releaseId, item) }));
 
   const doneCount = items.filter((item) => item.done).length;
 

@@ -68,6 +68,12 @@ function ReleaseCard({ release }: { release: ReleaseOption }) {
           {release.artistName} · {KIND_LABELS[release.kind]}
         </p>
 
+        {state === "undecided" && release.planned && (
+          <span className="mt-2 inline-flex items-center rounded-full bg-brand-500/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-brand-700">
+            Planned to write
+          </span>
+        )}
+
         {state === "written" && (
           <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/12 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-emerald-700 dark:text-emerald-300">
             {release.spotlightPublished ? "Published" : "Draft written"}
