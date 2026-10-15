@@ -7,6 +7,9 @@
 	// release day has come (app/api/cron/spotlight-emails).
 	"triggers": { "crons": ["0 * * * *"] },
 	"name": "hedwig",
+	// Keeps every request's logs and exceptions, searchable in the dashboard
+	// (Workers > hedwig > Logs). Without it, an error is gone once it happens.
+	"observability": { "enabled": true },
 	"compatibility_date": "2026-01-15",
 	"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
 	"assets": {
@@ -84,6 +87,7 @@
 	"env": {
 		"preview": {
 			"name": "hedwig-preview",
+			"observability": { "enabled": true },
 			"compatibility_date": "2026-01-15",
 			"triggers": { "crons": ["0 * * * *"] },
 			"compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],

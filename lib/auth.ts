@@ -4,6 +4,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
+import { cache } from "react";
 import * as schema from "@/db/schema";
 import { getDb, getEnv } from "./db";
 
@@ -73,12 +74,10 @@ export type Account = {
 };
 
 /**
- * Nothing in the D1/session path below has a timeout of its own — a stalled
- * binding call (rare, but seen in production) would otherwise hang until
- * the platform force-kills the request, which reads as "the app is stuck"
- * on every page, since this runs on every signed-in render. Failing fast
- * here surfaces a normal error page instead — recoverable with a reload,
- * not an indefinite spinner.
+ * D1 reads have their own deadline and retry (lib/db.ts), but writes and
+ * Better Auth's own steps don't. A stall there would hang until the
+ * platform force-kills the request, on every signed-in render. Failing
+ * here instead shows the error page, which offers a retry.
  */
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -105,7 +104,11 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
  */
 const SESSION_COOKIE = /(?:^|;\s*)(?:__Secure-)?better-auth[.-]session_token=/;
 
-export async function getAccount(): Promise<Account | null> {
+/**
+ * Once per request: the dashboard layout and the page under it both ask,
+ * and so does every admin check. One answer serves them all.
+ */
+export const getAccount = cache(async (): Promise<Account | null> => {
   const requestHeaders = await headers();
 
   // Nobody signed in, so nothing to look up. Skipping Better Auth here keeps
@@ -115,9 +118,10 @@ export async function getAccount(): Promise<Account | null> {
   if (!SESSION_COOKIE.test(requestHeaders.get("cookie") ?? "")) return null;
 
   const auth = await getAuth();
+  // Room for lib/db.ts to give up on a stalled D1 read and try it again.
   const result = await withTimeout(
     auth.api.getSession({ headers: requestHeaders }),
-    8000,
+    10_000,
   );
   if (!result?.user) return null;
   const { id, name, email } = result.user;
@@ -127,7 +131,7 @@ export async function getAccount(): Promise<Account | null> {
     email,
     studioName: (result.user as { studioName?: string | null }).studioName,
   };
-}
+});
 
 /**
  * Use at the top of every signed-in page, action and route handler.
