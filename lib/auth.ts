@@ -117,12 +117,20 @@ export const getAccount = cache(async (): Promise<Account | null> => {
   // the timeout below on a large share of requests.
   if (!SESSION_COOKIE.test(requestHeaders.get("cookie") ?? "")) return null;
 
-  const auth = await getAuth();
-  // Room for lib/db.ts to give up on a stalled D1 read and try it again.
-  const result = await withTimeout(
-    auth.api.getSession({ headers: requestHeaders }),
-    10_000,
-  );
+  // Now and then getSession never answers, mostly while a click and its
+  // prefetches run side by side. Rather than wait it out, the first try
+  // gets a short leash and a fresh instance asks once more.
+  const ask = async (ms: number) => {
+    const auth = await getAuth();
+    return withTimeout(auth.api.getSession({ headers: requestHeaders }), ms);
+  };
+  let result: Awaited<ReturnType<typeof ask>>;
+  try {
+    result = await ask(4_000);
+  } catch (error) {
+    console.warn("Session check retried:", error instanceof Error ? error.message : error);
+    result = await ask(6_000);
+  }
   if (!result?.user) return null;
   const { id, name, email } = result.user;
   return {
