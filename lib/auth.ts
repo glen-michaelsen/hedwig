@@ -2,11 +2,18 @@ import "server-only";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
-import { headers } from "next/headers";
+import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { and, eq, gt } from "drizzle-orm";
+import { cookies, headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { cache } from "react";
 import * as schema from "@/db/schema";
 import { getDb, getEnv } from "./db";
+
+/** How long a session lasts. Visits push it out again (see SESSION_REFRESH_SECONDS). */
+const SESSION_SECONDS = 60 * 60 * 24 * 90;
+/** How old a session's last refresh may be before a visit pushes its expiry out again. */
+const SESSION_REFRESH_SECONDS = 60 * 60 * 24;
 
 /**
  * Built per request: the D1 binding comes from the request's Cloudflare
@@ -32,11 +39,11 @@ export async function getAuth() {
       // Musicians sign in occasionally, not daily — a week-long default
       // logs them out between visits. 90 days, rolling on each visit, keeps
       // them signed in as long as they keep coming back.
-      expiresIn: 60 * 60 * 24 * 90,
+      expiresIn: SESSION_SECONDS,
       // Push the 90 days out again on any visit older than a day. Without
       // this the window is fixed from the sign-in, so a daily user is still
       // thrown out three months later for no reason they can see.
-      updateAge: 60 * 60 * 24,
+      updateAge: SESSION_REFRESH_SECONDS,
       // Five minutes of the session held in a signed cookie, so ordinary
       // navigation doesn't hit D1 for a row it just read.
       cookieCache: { enabled: true, maxAge: 60 * 5 },
@@ -74,10 +81,10 @@ export type Account = {
 };
 
 /**
- * D1 reads have their own deadline and retry (lib/db.ts), but writes and
- * Better Auth's own steps don't. A stall there would hang until the
- * platform force-kills the request, on every signed-in render. Failing
- * here instead shows the error page, which offers a retry.
+ * D1 reads have their own deadline and retry (lib/db.ts). This is the
+ * backstop over the whole session check: a stall anywhere else would hang
+ * until the platform force-kills the request, on every signed-in render.
+ * Failing here instead shows the error page, which offers a retry.
  */
 function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -99,46 +106,136 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
 }
 
 /**
- * Better Auth's session cookie: `better-auth.session_token` (or `-session_token`), with the
- * `__Secure-` prefix it gets over https. No cookie means nobody is signed in.
+ * Better Auth's session cookie. Over https it carries the `__Secure-`
+ * prefix, which only a secure origin can set, and then only that name
+ * counts, as in Better Auth. Its value is `token.signature`, URL-encoded;
+ * the signature is an HMAC-SHA256 of the token under BETTER_AUTH_SECRET,
+ * in base64.
  */
-const SESSION_COOKIE = /(?:^|;\s*)(?:__Secure-)?better-auth[.-]session_token=/;
+function sessionCookieName(appUrl: string) {
+  const name = "better-auth.session_token";
+  return appUrl.startsWith("https://") ? `__Secure-${name}` : name;
+}
+
+function readCookie(header: string, name: string) {
+  for (const part of header.split(";")) {
+    const at = part.indexOf("=");
+    if (at > 0 && part.slice(0, at).trim() === name) {
+      return part.slice(at + 1).trim();
+    }
+  }
+  return null;
+}
+
+/** The token inside a signed cookie value, or null unless the signature holds. */
+async function verifiedToken(value: string, secret: string) {
+  let decoded: string;
+  let signature: Uint8Array<ArrayBuffer>;
+  try {
+    decoded = decodeURIComponent(value);
+    const dot = decoded.lastIndexOf(".");
+    if (dot < 1) return null;
+    const encoded = decoded.slice(dot + 1);
+    if (encoded.length !== 44 || !encoded.endsWith("=")) return null;
+    signature = Uint8Array.from(atob(encoded), (c) => c.charCodeAt(0));
+    decoded = decoded.slice(0, dot);
+  } catch {
+    return null;
+  }
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["verify"],
+  );
+  // subtle.verify compares in constant time.
+  const valid = await crypto.subtle.verify(
+    "HMAC",
+    key,
+    signature,
+    new TextEncoder().encode(decoded),
+  );
+  return valid ? decoded : null;
+}
+
+/**
+ * Who's signed in, read straight from the session table.
+ *
+ * Not through Better Auth's getSession: in production it sometimes never
+ * answers, mostly while a click and its prefetches run side by side, and
+ * the page fails at the timeout. A page needs only what this does: check
+ * the cookie's signature, then find a live session for the token. Signing
+ * in, up and out still go through Better Auth, which writes these rows.
+ */
+async function readSession(cookieHeader: string): Promise<Account | null> {
+  const env = await getEnv();
+  const name = sessionCookieName(env.APP_URL);
+  const raw = readCookie(cookieHeader, name);
+  if (!raw) return null;
+
+  const token = await verifiedToken(raw, env.BETTER_AUTH_SECRET);
+  if (!token) return null;
+
+  const db = await getDb();
+  const now = new Date();
+  const row = await db
+    .select({
+      sessionId: schema.session.id,
+      expiresAt: schema.session.expiresAt,
+      id: schema.user.id,
+      name: schema.user.name,
+      email: schema.user.email,
+      studioName: schema.user.studioName,
+    })
+    .from(schema.session)
+    .innerJoin(schema.user, eq(schema.session.userId, schema.user.id))
+    .where(and(eq(schema.session.token, token), gt(schema.session.expiresAt, now)))
+    .get();
+  if (!row) return null;
+
+  // Keep a returning musician signed in, as Better Auth's updateAge does:
+  // at most once a day, push the expiry out again. The page doesn't wait.
+  const refreshFrom =
+    row.expiresAt.getTime() - (SESSION_SECONDS - SESSION_REFRESH_SECONDS) * 1000;
+  if (now.getTime() >= refreshFrom) {
+    const { ctx } = await getCloudflareContext({ async: true });
+    ctx.waitUntil(
+      db
+        .update(schema.session)
+        .set({
+          expiresAt: new Date(now.getTime() + SESSION_SECONDS * 1000),
+          updatedAt: now,
+        })
+        .where(eq(schema.session.id, row.sessionId))
+        .run()
+        .catch((error) => console.warn("Session refresh failed:", error)),
+    );
+    // A cookie can only be rewritten from an action or a route handler. In
+    // a page render this throws, and the browser keeps the one it has.
+    try {
+      // Next encodes the value again on the way out, so hand it decoded.
+      (await cookies()).set(name, decodeURIComponent(raw), {
+        httpOnly: true,
+        secure: name.startsWith("__Secure-"),
+        sameSite: "lax",
+        path: "/",
+        maxAge: SESSION_SECONDS,
+      });
+    } catch {}
+  }
+
+  return { id: row.id, name: row.name, email: row.email, studioName: row.studioName };
+}
 
 /**
  * Once per request: the dashboard layout and the page under it both ask,
  * and so does every admin check. One answer serves them all.
  */
 export const getAccount = cache(async (): Promise<Account | null> => {
-  const requestHeaders = await headers();
-
-  // Nobody signed in, so nothing to look up. Skipping Better Auth here keeps
-  // every signed-out visitor (most traffic, crawlers, the login page itself)
-  // off the session path entirely, which in production has stalled until
-  // the timeout below on a large share of requests.
-  if (!SESSION_COOKIE.test(requestHeaders.get("cookie") ?? "")) return null;
-
-  // Now and then getSession never answers, mostly while a click and its
-  // prefetches run side by side. Rather than wait it out, the first try
-  // gets a short leash and a fresh instance asks once more.
-  const ask = async (ms: number) => {
-    const auth = await getAuth();
-    return withTimeout(auth.api.getSession({ headers: requestHeaders }), ms);
-  };
-  let result: Awaited<ReturnType<typeof ask>>;
-  try {
-    result = await ask(4_000);
-  } catch (error) {
-    console.warn("Session check retried:", error instanceof Error ? error.message : error);
-    result = await ask(6_000);
-  }
-  if (!result?.user) return null;
-  const { id, name, email } = result.user;
-  return {
-    id,
-    name,
-    email,
-    studioName: (result.user as { studioName?: string | null }).studioName,
-  };
+  const cookieHeader = (await headers()).get("cookie") ?? "";
+  // Room for lib/db.ts to give up on a stalled D1 read and try it again.
+  return withTimeout(readSession(cookieHeader), 10_000);
 });
 
 /**
