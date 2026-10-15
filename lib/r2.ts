@@ -185,3 +185,14 @@ export async function objectResponse(
     },
   });
 }
+
+/**
+ * A content-disposition header for any filename. Header values are ASCII,
+ * so "Tæt på.wav" goes in twice: as "Tt p.wav" for old clients, and exact
+ * in `filename*`, which every current browser reads instead.
+ */
+export function contentDisposition(type: "inline" | "attachment", filename: string) {
+  const ascii = filename.replace(/[^\x20-\x7e]/g, "").replace(/["\\]/g, "").trim() || "download";
+  const exact = encodeURIComponent(filename).replace(/['()*]/g, (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`);
+  return `${type}; filename="${ascii}"; filename*=UTF-8''${exact}`;
+}

@@ -1,5 +1,5 @@
 import { getReadableMaterial } from "@/lib/dal/student";
-import { getObject } from "@/lib/r2";
+import { contentDisposition, getObject } from "@/lib/r2";
 import { getStudentSession } from "@/lib/student-session";
 
 /**
@@ -28,14 +28,12 @@ export async function GET(
   const object = await getObject(material.r2Key);
   if (!object) return new Response("Not found", { status: 404 });
 
-  const filename = material.title.replace(/["\\]/g, "") || "material";
-
   return new Response(object.body, {
     headers: {
       "content-type":
         object.httpMetadata?.contentType ?? "application/pdf",
       "content-length": String(object.size),
-      "content-disposition": `inline; filename="${filename}.pdf"`,
+      "content-disposition": contentDisposition("inline", `${material.title || "material"}.pdf`),
       // Private to this student's browser; never a shared cache.
       "cache-control": "private, max-age=300",
       etag: object.httpEtag,

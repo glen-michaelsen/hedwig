@@ -2,7 +2,7 @@ import { getAccount } from "@/lib/auth";
 import { getAsset } from "@/lib/dal/press";
 import { pressOwnerFor } from "@/lib/press/scope";
 import { downloadName } from "@/lib/press/naming";
-import { getObject } from "@/lib/r2";
+import { contentDisposition, getObject } from "@/lib/r2";
 import { getImageVariant } from "@/lib/press/images";
 import { isImageVariant, isResizableImage } from "@/lib/press/variants";
 
@@ -59,15 +59,14 @@ export async function GET(
   const object = await getObject(asset.r2Key);
   if (!object) return new Response("Not found", { status: 404 });
 
-  const filename = downloadName(asset).replace(/["\\]/g, "");
-
   return new Response(object.body, {
     headers: {
       "content-type": asset.contentType,
       "content-length": String(object.size),
-      "content-disposition": `${
-        wantsDownload ? "attachment" : "inline"
-      }; filename="${filename}"`,
+      "content-disposition": contentDisposition(
+        wantsDownload ? "attachment" : "inline",
+        downloadName(asset),
+      ),
       "cache-control": "private, max-age=300",
       etag: object.httpEtag,
     },
