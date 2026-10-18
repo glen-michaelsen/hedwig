@@ -233,6 +233,8 @@ export type SpotlightEmail = {
   /** The article with its preview token: readable before it is public, and
    *  the way the owner sees the badge box without signing in. */
   previewUrl?: string | null;
+  /** The public asset library, /spotlight/assets/<id>: post, stories, badges. */
+  assetsUrl: string;
 };
 
 function hearts(rating: number, maxRating: number) {
@@ -273,6 +275,16 @@ function articleBox(headline: string, rating: number, maxRating: number) {
                 </table>`;
 }
 
+/** The Instagram post as a thumbnail, linking to the asset library, with a button under it. */
+function assetLibrary(email: SpotlightEmail, heading: string, intro: string, spaceAbove = 8) {
+  return [
+    `<p style="margin:${spaceAbove}px 0 8px;font-size:17px;font-weight:700;color:${COLOR.ink};">${heading}</p>`,
+    paragraph(intro),
+    `<p style="margin:0 0 20px;"><a href="${email.assetsUrl}"><img src="${email.assetsUrl}/post" alt="The Instagram post for ${escapeHtml(email.releaseTitle)}" width="240" height="300" style="display:block;width:240px;max-width:100%;height:auto;border:0;border-radius:16px;"></a></p>`,
+    pillButton(email.assetsUrl, "Open your asset library"),
+  ].join("");
+}
+
 function spotlightPlanned(email: SpotlightEmail) {
   const name = escapeHtml(email.ownerName);
   const title = escapeHtml(email.releaseTitle);
@@ -290,6 +302,13 @@ function spotlightPlanned(email: SpotlightEmail) {
         ? paragraph("Want a sneak peek? This link works for you now, before anyone else can see the article.") +
           pillButton(email.previewUrl, "Read it before everyone else")
         : "",
+      assetLibrary(
+        email,
+        "Get your posts ready",
+        "We made an Instagram post and stories from the review. Save them now, post them on release day.",
+        // Under a button rather than a link line, which brings less space of its own.
+        28,
+      ),
       `<p style="margin:16px 0 0;font-size:14px;line-height:1.6;color:${COLOR.muted};">On release day you get one more email, with the public link and badges for your website. Nothing to do until then. \u{1F642}</p>`,
     ].join(""),
   );
@@ -302,6 +321,9 @@ function spotlightPlanned(email: SpotlightEmail) {
     `Headline: ${email.headline}`,
     `Rating: ${hearts(email.rating, email.maxRating).text}`,
     ...(email.previewUrl ? ["", "Read it before everyone else:", email.previewUrl] : []),
+    "",
+    "Get your posts ready: an Instagram post and stories, made from the review:",
+    email.assetsUrl,
     "",
     "On release day you get one more email, with the public link and badges for your website.",
   ].join("\n");
@@ -326,7 +348,12 @@ function spotlightPublished(email: SpotlightEmail) {
       articleBox(email.headline, email.rating, email.maxRating),
       pillButton(email.articleUrl, "Read the article"),
       `<p style="margin:0 0 28px;font-size:13px;line-height:1.5;color:${COLOR.muted};word-break:break-all;"><a href="${email.articleUrl}" style="color:${COLOR.accent};">${email.articleUrl}</a></p>`,
-      `<p style="margin:0 0 8px;font-size:17px;font-weight:700;color:${COLOR.ink};">Put a badge on your website</p>`,
+      assetLibrary(
+        email,
+        "Share it on Instagram",
+        "We made a post and stories from the review. On your phone, save them straight to your photos.",
+      ),
+      `<p style="margin:20px 0 8px;font-size:17px;font-weight:700;color:${COLOR.ink};">Put a badge on your website</p>`,
       paragraph("Show fans and bookers that your release was featured. The badge links to the article. Pick one, copy the code, paste it on your site or in your EPK."),
       `<p style="margin:0 0 20px;"><a href="${badgesUrl}"><img src="${email.articleUrl}/badge/b.png" alt="Featured on Trenodo, ${email.rating} of ${email.maxRating} hearts" width="340" height="68" style="display:block;max-width:100%;height:auto;border:0;"></a></p>`,
       pillButton(badgesUrl, "Get your badges"),
@@ -345,11 +372,19 @@ function spotlightPublished(email: SpotlightEmail) {
     "Read the article:",
     email.articleUrl,
     "",
+    "Your Instagram post and stories:",
+    email.assetsUrl,
+    "",
     "Get badges for your website:",
     badgesUrl,
   ].join("\n");
 
   return { subject, html, text };
+}
+
+/** Subject, HTML and text for one Spotlight email, without sending it. */
+export function spotlightEmailContent(email: SpotlightEmail) {
+  return email.kind === "planned" ? spotlightPlanned(email) : spotlightPublished(email);
 }
 
 /**
@@ -360,7 +395,7 @@ export async function sendSpotlightEmail(email: SpotlightEmail): Promise<boolean
   const { RESEND_API_KEY } = await getEnv();
   if (!RESEND_API_KEY) return false;
 
-  const content = email.kind === "planned" ? spotlightPlanned(email) : spotlightPublished(email);
+  const content = spotlightEmailContent(email);
   const resend = new Resend(RESEND_API_KEY);
 
   const { error } = await resend.emails.send({

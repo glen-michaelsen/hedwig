@@ -63,6 +63,7 @@ export async function sendSpotlightEmailFor(
     releaseDate: formatDate(article.releaseDate),
     articleUrl,
     previewUrl: token ? `${articleUrl}?preview=${token}` : null,
+    assetsUrl: `${APP_URL}/spotlight/assets/${article.id}`,
   });
 }
 
