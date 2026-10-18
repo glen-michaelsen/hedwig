@@ -233,7 +233,6 @@ const articleColumns = {
   // For the "If you like" story.
   releaseGenre: pressRelease.genre,
   releaseMood: pressRelease.mood,
-  releaseLanguage: pressRelease.language,
 };
 
 export async function listSpotlights() {

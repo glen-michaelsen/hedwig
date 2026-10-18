@@ -15,21 +15,20 @@
 import { Children, Fragment, isValidElement } from "react";
 
 /** Bump on any layout change: stored stories are named after a fingerprint including it. */
-export const SPOTLIGHT_STORY_VERSION = 1;
+export const SPOTLIGHT_STORY_VERSION = 2;
 
 export const STORY_WIDTH = 1080;
 export const STORY_HEIGHT = 1920;
 const SAFE_TOP = 250;
 const SAFE_BOTTOM = 340;
 
-export const STORY_FONTS = {
-  sans: "Geist",
-  serif: "Instrument Serif",
-} as const;
+export const STORY_FONTS = { sans: "Geist" } as const;
 
 const INK = "#221c17";
 const BRAND = "#825abe";
-const BRAND_PALE = "#d1bef7";
+/** Duotone ends: shadows go deep purple, highlights light brand purple, as on the site's photo cards. */
+const DUO_DARK = "#140b1f";
+const DUO_LIGHT = "#b49cd8";
 const WHITE = "#ffffff";
 
 const HEART_PATH =
@@ -37,7 +36,6 @@ const HEART_PATH =
 
 export type StoryKind =
   | "post"
-  | "quote-photo"
   | "quote-card"
   | "quote-series"
   | "out-now"
@@ -65,7 +63,7 @@ export type StoryInput = {
   /** 1-based, for the quote series. */
   quoteNumber?: number;
   quoteCount?: number;
-  /** Labels for "If you like": genres, moods, language. */
+  /** Labels for "If you like": genres and moods. */
   tags?: string[];
 };
 
@@ -90,13 +88,8 @@ function frame(background: string, children: React.ReactNode) {
 }
 
 /** The header photo, full bleed, with a dark fade up from the bottom. `strength` is how far up it reaches. */
-function photo(input: StoryInput, strength: "soft" | "strong" | "dim") {
-  const stops =
-    strength === "dim"
-      ? [0.82, 0.72, 0.62, 0.55]
-      : strength === "strong"
-        ? [0.9, 0.7, 0.3, 0]
-        : [0.85, 0.55, 0.15, 0];
+function photo(input: StoryInput, strength: "soft" | "strong") {
+  const stops = strength === "strong" ? [0.9, 0.7, 0.3, 0] : [0.85, 0.55, 0.15, 0];
   return (
     <>
       {input.headerUrl && (
@@ -127,6 +120,67 @@ function photo(input: StoryInput, strength: "soft" | "strong" | "dim") {
           </linearGradient>
         </defs>
         <rect width={STORY_WIDTH} height={STORY_HEIGHT} fill="url(#fade)" />
+      </svg>
+    </>
+  );
+}
+
+/**
+ * A colour matrix mapping a pixel's brightness onto DUO_DARK → DUO_LIGHT,
+ * with a little extra contrast. The site does this with greyscale and a
+ * multiply blend, which Satori can't draw; an SVG filter it can.
+ */
+function duotoneMatrix(contrast = 1.15) {
+  const rgb = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+  const dark = rgb(DUO_DARK);
+  const light = rgb(DUO_LIGHT);
+  const rows = [0, 1, 2].map((channel) => {
+    const span = (light[channel] - dark[channel]) * contrast;
+    const offset = dark[channel] - ((contrast - 1) / 2) * (light[channel] - dark[channel]);
+    return `${span * 0.2126} ${span * 0.7152} ${span * 0.0722} 0 ${offset}`;
+  });
+  return [...rows, "0 0 0 1 0"].join(" ");
+}
+
+/** SVG can only anchor a crop at the start, middle or end, so the focus point rounds to the nearest. */
+function anchor(percent: number) {
+  return percent < 34 ? "Min" : percent > 66 ? "Max" : "Mid";
+}
+
+/** The header photo in brand duotone, full bleed, with a dark fade at the bottom for the text. */
+function duotonePhoto(input: StoryInput) {
+  return (
+    <>
+      {input.headerUrl && (
+        <svg
+          width={STORY_WIDTH}
+          height={STORY_HEIGHT}
+          viewBox={`0 0 ${STORY_WIDTH} ${STORY_HEIGHT}`}
+          style={{ position: "absolute", inset: 0 }}
+        >
+          <defs>
+            <filter id="duotone" colorInterpolationFilters="sRGB">
+              <feColorMatrix type="matrix" values={duotoneMatrix()} />
+            </filter>
+          </defs>
+          <image
+            href={input.headerUrl}
+            width={STORY_WIDTH}
+            height={STORY_HEIGHT}
+            preserveAspectRatio={`x${anchor(input.headerFocusX)}Y${anchor(input.headerFocusY)} slice`}
+            filter="url(#duotone)"
+          />
+        </svg>
+      )}
+      <svg width={STORY_WIDTH} height={STORY_HEIGHT} style={{ position: "absolute", inset: 0 }}>
+        <defs>
+          <linearGradient id="duofade" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0%" stopColor={DUO_DARK} stopOpacity={0.85} />
+            <stop offset="40%" stopColor={DUO_DARK} stopOpacity={0.35} />
+            <stop offset="100%" stopColor={DUO_DARK} stopOpacity={0.15} />
+          </linearGradient>
+        </defs>
+        <rect width={STORY_WIDTH} height={STORY_HEIGHT} fill="url(#duofade)" />
       </svg>
     </>
   );
@@ -192,9 +246,26 @@ function kicker(text: string, color: string = WHITE, opacity = 0.85) {
 }
 
 function quoteSize(quote: string) {
-  if (quote.length <= 60) return 92;
-  if (quote.length <= 110) return 76;
-  return 62;
+  if (quote.length <= 60) return 104;
+  if (quote.length <= 110) return 88;
+  return 72;
+}
+
+/** A quote in the site's own type: Geist, semibold, set tight. */
+function quoteText(quote: string) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        fontSize: quoteSize(quote),
+        fontWeight: 600,
+        lineHeight: 1.12,
+        letterSpacing: -1.5,
+      }}
+    >
+      {quoted(quote)}
+    </div>
+  );
 }
 
 function quoted(quote: string) {
@@ -287,27 +358,6 @@ function post(input: StoryInput) {
   );
 }
 
-/** 2. A quote over the press photo. */
-function quotePhoto(input: StoryInput) {
-  const quote = input.quote ?? "";
-  return frame(
-    INK,
-    <>
-      {photo(input, "strong")}
-      {safe(
-        <>
-          <div style={{ display: "flex", fontFamily: STORY_FONTS.serif, fontSize: 260, lineHeight: 0.7, color: BRAND_PALE, height: 150 }}>
-            “
-          </div>
-          <div style={{ display: "flex", fontFamily: STORY_FONTS.serif, fontSize: quoteSize(quote), lineHeight: 1.12 }}>{`${quote}”`}</div>
-          <div style={{ display: "flex", marginTop: 48 }}>{kicker(`${input.artistName} · Trenodo Spotlight`)}</div>
-        </>,
-        "flex-end",
-      )}
-    </>,
-  );
-}
-
 /** 3. A quote on brand purple, with the release underneath. */
 function quoteCard(input: StoryInput) {
   const quote = input.quote ?? "";
@@ -317,9 +367,7 @@ function quoteCard(input: StoryInput) {
       <>
         {kicker("Trenodo Spotlight", WHITE, 0.75)}
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <div style={{ display: "flex", fontFamily: STORY_FONTS.serif, fontSize: quoteSize(quote) + 6, lineHeight: 1.12 }}>
-            {quoted(quote)}
-          </div>
+          {quoteText(quote)}
           <div style={{ display: "flex", alignItems: "center", gap: 32, marginTop: 72 }}>
             {cover(input.coverUrl, 150, 20)}
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -343,9 +391,9 @@ function quoteSeries(input: StoryInput) {
   const count = Math.max(1, input.quoteCount ?? 1);
   const number = Math.min(count, Math.max(1, input.quoteNumber ?? 1));
   return frame(
-    INK,
+    DUO_DARK,
     <>
-      {photo(input, "dim")}
+      {duotonePhoto(input)}
       {safe(
         <>
           <div style={{ display: "flex", flexDirection: "column", gap: 28, alignSelf: "stretch" }}>
@@ -365,9 +413,7 @@ function quoteSeries(input: StoryInput) {
             </div>
             {kicker(`${number} of ${count}`, WHITE, 0.8)}
           </div>
-          <div style={{ display: "flex", fontFamily: STORY_FONTS.serif, fontSize: quoteSize(quote) + 4, lineHeight: 1.12 }}>
-            {quoted(quote)}
-          </div>
+          {quoteText(quote)}
           {kicker(`${input.artistName} · ${input.releaseTitle}`, WHITE, 0.8)}
         </>,
         "space-between",
@@ -514,8 +560,6 @@ export function buildSpotlightStoryJsx(input: StoryInput) {
   switch (input.kind) {
     case "post":
       return post(input);
-    case "quote-photo":
-      return quotePhoto(input);
     case "quote-card":
       return quoteCard(input);
     case "quote-series":

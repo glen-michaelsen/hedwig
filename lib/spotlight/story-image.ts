@@ -12,7 +12,7 @@ import {
   type StoryInput,
   type StoryKind,
 } from "@/lib/press/spotlight-story";
-import { GENRES, LANGUAGES, MOODS, parseTagList } from "@/lib/press/taxonomy";
+import { GENRES, MOODS, parseTagList } from "@/lib/press/taxonomy";
 import { parseQuotes } from "@/lib/spotlight/quotes";
 import { MAX_RATING } from "@/lib/spotlight/slug";
 import type { ShareImage } from "./share-image";
@@ -32,9 +32,8 @@ const KIND_LABELS = { single: "Single", ep: "EP", album: "Album" } as const;
 
 export type StorySlot = { slot: string; label: string };
 
-const QUOTE_KINDS = ["quote-photo", "quote-card", "quote-series"] as const;
+const QUOTE_KINDS = ["quote-card", "quote-series"] as const;
 const QUOTE_LABELS: Record<(typeof QUOTE_KINDS)[number], string> = {
-  "quote-photo": "Quote on photo",
   "quote-card": "Quote card",
   "quote-series": "Quote series",
 };
@@ -44,12 +43,11 @@ function labelsFor(values: string[], options: readonly { value: string; label: s
   return values.map((value) => byValue.get(value) ?? value);
 }
 
-/** "If you like" chips: genres, then moods, then the language. */
+/** "If you like" chips: genres, then moods. */
 function tagsOf(article: Article) {
   return [
     ...labelsFor(parseTagList(article.releaseGenre), GENRES),
     ...labelsFor(parseTagList(article.releaseMood), MOODS),
-    ...labelsFor(article.releaseLanguage ? [article.releaseLanguage] : [], LANGUAGES),
   ];
 }
 
@@ -76,7 +74,7 @@ export function storySlots(article: Article): StorySlot[] {
 /** What a slot asks for, or null if this article doesn't have it. */
 function resolveSlot(article: Article, slot: string): { kind: StoryKind; quoteIndex?: number } | null {
   if (!storySlots(article).some((candidate) => candidate.slot === slot)) return null;
-  const match = slot.match(/^(quote-photo|quote-card|quote-series)-(\d+)$/);
+  const match = slot.match(/^(quote-card|quote-series)-(\d+)$/);
   if (match) return { kind: match[1] as StoryKind, quoteIndex: Number(match[2]) - 1 };
   return { kind: slot as StoryKind };
 }
@@ -89,7 +87,6 @@ type Font = { name: string; data: ArrayBuffer; weight: 400 | 600; style: "normal
 const FONT_FILES = [
   { name: STORY_FONTS.sans, file: "geist-sans-latin-400-normal.woff", weight: 400 },
   { name: STORY_FONTS.sans, file: "geist-sans-latin-600-normal.woff", weight: 600 },
-  { name: STORY_FONTS.serif, file: "instrument-serif-latin-400-normal.woff", weight: 400 },
 ] as const;
 
 // Finished buffers only: a promise kept across requests would tie one

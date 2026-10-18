@@ -37,7 +37,6 @@ async function main() {
   const fonts = [
     { name: STORY_FONTS.sans, data: await font("geist-sans-latin-400-normal.woff"), weight: 400 as const, style: "normal" as const },
     { name: STORY_FONTS.sans, data: await font("geist-sans-latin-600-normal.woff"), weight: 600 as const, style: "normal" as const },
-    { name: STORY_FONTS.serif, data: await font("instrument-serif-latin-400-normal.woff"), weight: 400 as const, style: "normal" as const },
   ];
 
   const quotes = [
@@ -58,14 +57,14 @@ async function main() {
     releaseKind: "Album",
     releaseDate: "2026-10-09",
     quoteCount: quotes.length,
-    tags: ["R&B / Soul", "Dreamy", "Danish"],
+    tags: ["R&B / Soul", "Pop", "Dreamy"],
   };
 
   const stories: [string, StoryKind, number?][] = [
     ["01-post", "post"],
-    ["02-quote-photo", "quote-photo", 0],
     ["03-quote-card", "quote-card", 1],
     ["03-quote-card-long", "quote-card", 2],
+    ["10-quote-series-1", "quote-series", 0],
     ["06-out-now", "out-now"],
     ["07-coming-soon", "coming-soon"],
     ["09-if-you-like", "if-you-like"],
