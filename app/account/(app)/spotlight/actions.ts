@@ -145,7 +145,7 @@ export async function sendSpotlightTestEmailAction(
   kind: dal.SpotlightEmailKind,
 ): Promise<{ sentTo: string } | { error: string }> {
   const admin = await requireAdmin();
-  if (kind !== "planned" && kind !== "published") return { error: "Unknown email" };
+  if (kind !== "planned" && kind !== "published" && kind !== "reminder") return { error: "Unknown email" };
 
   const ok = await sendSpotlightEmailFor(spotlightId, kind, admin.email);
   return ok ? { sentTo: admin.email } : { error: "The email didn't go out. Try again in a moment" };

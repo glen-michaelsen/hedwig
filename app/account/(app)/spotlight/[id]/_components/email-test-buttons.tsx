@@ -4,14 +4,15 @@ import { useState, useTransition } from "react";
 import { buttonGhost } from "@/app/_components/ui";
 import { sendSpotlightTestEmailAction } from "../../actions";
 
-type Kind = "planned" | "published";
+type Kind = "planned" | "published" | "reminder";
 
 const LABELS: Record<Kind, string> = {
   planned: "Send the planned email to me",
   published: "Send the published email to me",
+  reminder: "Send the reminder to me",
 };
 
-/** Sends either email to the admin's own inbox, for testing and forwarding. */
+/** Sends any of the three emails to the admin's own inbox, for testing and forwarding. */
 export function EmailTestButtons({ spotlightId }: { spotlightId: string }) {
   const [pending, startTransition] = useTransition();
   const [busy, setBusy] = useState<Kind | null>(null);
@@ -30,7 +31,7 @@ export function EmailTestButtons({ spotlightId }: { spotlightId: string }) {
   return (
     <div>
       <div className="flex flex-wrap gap-2.5">
-        {(["planned", "published"] as const).map((kind) => (
+        {(["planned", "published", "reminder"] as const).map((kind) => (
           <button
             key={kind}
             type="button"

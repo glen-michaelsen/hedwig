@@ -1,5 +1,5 @@
 import "server-only";
-import { and, asc, desc, eq, isNotNull, isNull, lte, ne, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, isNotNull, isNull, lte, ne, or, sql } from "drizzle-orm";
 import {
   artist,
   discoverPage,
@@ -712,7 +712,7 @@ export type ReleaseOption = Awaited<
 
 /* --------------------------- emails to the owner --------------------------- */
 
-export type SpotlightEmailKind = "planned" | "published";
+export type SpotlightEmailKind = "planned" | "published" | "reminder";
 
 /**
  * Who a Spotlight email goes to: the account that owns the release's press
@@ -751,6 +751,7 @@ export async function getSpotlightEmailLog(spotlightId: string) {
     .select({
       plannedEmailSentAt: spotlight.plannedEmailSentAt,
       publishedEmailSentAt: spotlight.publishedEmailSentAt,
+      reminderEmailSentAt: spotlight.reminderEmailSentAt,
     })
     .from(spotlight)
     .where(eq(spotlight.id, spotlightId))
@@ -769,7 +770,9 @@ export async function markSpotlightEmailSent(
     .set(
       kind === "planned"
         ? { plannedEmailSentAt: new Date() }
-        : { publishedEmailSentAt: new Date() },
+        : kind === "published"
+          ? { publishedEmailSentAt: new Date() }
+          : { reminderEmailSentAt: new Date() },
     )
     .where(eq(spotlight.id, spotlightId));
 }
@@ -791,6 +794,33 @@ export async function listSpotlightsDueLiveEmail() {
         await isPubliclyVisible(),
         isNotNull(spotlight.plannedEmailSentAt),
         isNull(spotlight.publishedEmailSentAt),
+      ),
+    );
+}
+
+const DAY_MS = 86_400_000;
+
+/**
+ * Articles due the "share it again" reminder: still live, told "published"
+ * 7 to 9 days ago, not reminded yet. Timed from that email rather than the
+ * release date, since an article can be written days after the release.
+ * The two-day window gives the hourly cron room for a bad day, and keeps
+ * articles that went live long before this email existed from all being
+ * mailed at once.
+ */
+export async function listSpotlightsDueReminderEmail() {
+  const db = await getDb();
+  const now = Date.now();
+  return db
+    .select({ id: spotlight.id })
+    .from(spotlight)
+    .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
+    .where(
+      and(
+        await isPubliclyVisible(),
+        isNull(spotlight.reminderEmailSentAt),
+        lte(spotlight.publishedEmailSentAt, new Date(now - 7 * DAY_MS)),
+        gte(spotlight.publishedEmailSentAt, new Date(now - 9 * DAY_MS)),
       ),
     );
 }

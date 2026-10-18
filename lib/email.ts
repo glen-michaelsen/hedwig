@@ -219,7 +219,7 @@ export async function sendNewSignupAdminEmail(
 /* ------------------------------ Spotlight ------------------------------ */
 
 export type SpotlightEmail = {
-  kind: "planned" | "published";
+  kind: "planned" | "published" | "reminder";
   to: string;
   ownerName: string;
   releaseTitle: string;
@@ -235,6 +235,8 @@ export type SpotlightEmail = {
   previewUrl?: string | null;
   /** The public asset library, /spotlight/assets/<id>: post, stories, badges. */
   assetsUrl: string;
+  /** For the reminder: a few stories from the library, as thumbnails. */
+  stories?: { src: string; label: string }[];
 };
 
 function hearts(rating: number, maxRating: number) {
@@ -382,9 +384,63 @@ function spotlightPublished(email: SpotlightEmail) {
   return { subject, html, text };
 }
 
+/** Story thumbnails side by side, each linking to the asset library. */
+function storyRow(email: SpotlightEmail) {
+  const stories = email.stories ?? [];
+  if (stories.length === 0) return "";
+  const cells = stories
+    .map(
+      (story) => `<td width="${Math.floor(100 / stories.length)}%" style="padding:0 5px;vertical-align:top;">
+                        <a href="${email.assetsUrl}"><img src="${story.src}" alt="${escapeHtml(story.label)}" width="150" style="display:block;width:100%;max-width:150px;height:auto;border:0;border-radius:12px;"></a>
+                      </td>`,
+    )
+    .join("");
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 24px;">
+                  <tr>${cells}</tr>
+                </table>`;
+}
+
+/**
+ * A week after the published email: a nudge to post about it again, with
+ * stories ready to go. Timed from that email, not the release, so "a week
+ * ago" is when the review went up.
+ */
+function spotlightReminder(email: SpotlightEmail) {
+  const name = escapeHtml(email.ownerName);
+  const title = escapeHtml(email.releaseTitle);
+  const subject = `A week ago we published our review of ${email.releaseTitle}`;
+
+  const html = cardEmailHtml(
+    `A week ago we published our review of ${title}`,
+    [
+      paragraph(`${name}, a week out is a good time to post about <strong>${title}</strong> again. Fans who missed release day are still finding new music.`),
+      paragraph("These are ready to go:"),
+      storyRow(email),
+      pillButton(email.assetsUrl, "Open your asset library"),
+      `<p style="margin:16px 0 0;font-size:14px;line-height:1.6;color:${COLOR.muted};">Add a link sticker to <a href="${email.articleUrl}" style="color:${COLOR.accent};">the review</a> on your story, and fans can read it in one tap. \u{1F3B6}</p>`,
+    ].join(""),
+  );
+
+  const text = [
+    `A week ago we published our review of ${email.releaseTitle}`,
+    "",
+    `${email.ownerName}, a week out is a good time to post about ${email.releaseTitle} again. Fans who missed release day are still finding new music.`,
+    "",
+    "Your post and stories, ready to go:",
+    email.assetsUrl,
+    "",
+    "The review, for a link sticker:",
+    email.articleUrl,
+  ].join("\n");
+
+  return { subject, html, text };
+}
+
 /** Subject, HTML and text for one Spotlight email, without sending it. */
 export function spotlightEmailContent(email: SpotlightEmail) {
-  return email.kind === "planned" ? spotlightPlanned(email) : spotlightPublished(email);
+  if (email.kind === "planned") return spotlightPlanned(email);
+  if (email.kind === "published") return spotlightPublished(email);
+  return spotlightReminder(email);
 }
 
 /**

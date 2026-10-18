@@ -4,7 +4,8 @@ import { sendDueSpotlightEmails } from "@/lib/spotlight/notify";
 
 /**
  * Sends the "your Spotlight is live" emails for planned articles whose
- * release day has come. Called every hour by the scheduled handler in
+ * release day has come, and the "share it again" reminders a week after
+ * an article's live email. Called every hour by the scheduled handler in
  * cloudflare-worker.mjs, in-process, never over the network.
  *
  * The caller proves itself with BETTER_AUTH_SECRET, which only the Worker

@@ -133,9 +133,10 @@ export default async function EditSpotlightPage({
             )}{" "}
             They get an email when you publish: &ldquo;planned&rdquo; if the
             release date is still ahead, and &ldquo;published&rdquo; when the
-            article goes live. Each goes out once, by itself.
+            article goes live. A week after that, a reminder to share it again.
+            Each goes out once, by itself.
           </p>
-          <dl className="mt-4 grid gap-2 text-sm sm:grid-cols-2">
+          <dl className="mt-4 grid gap-2 text-sm sm:grid-cols-3">
             <div>
               <dt className="text-muted">Planned email</dt>
               <dd className="font-medium">{sentLabel(emailLog?.plannedEmailSentAt)}</dd>
@@ -144,9 +145,13 @@ export default async function EditSpotlightPage({
               <dt className="text-muted">Published email</dt>
               <dd className="font-medium">{sentLabel(emailLog?.publishedEmailSentAt)}</dd>
             </div>
+            <div>
+              <dt className="text-muted">Reminder</dt>
+              <dd className="font-medium">{sentLabel(emailLog?.reminderEmailSentAt)}</dd>
+            </div>
           </dl>
           <p className="mt-5 text-sm leading-relaxed text-muted text-pretty">
-            These two buttons send a copy to you, not to the artist. For testing, or
+            These buttons send a copy to you, not to the artist. For testing, or
             to forward.
           </p>
           <div className="mt-3">

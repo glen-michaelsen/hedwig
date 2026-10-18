@@ -1,0 +1,1 @@
+ALTER TABLE `spotlight` ADD `reminder_email_sent_at` integer;

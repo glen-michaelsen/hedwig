@@ -685,6 +685,8 @@ export const spotlight = sqliteTable(
      */
     plannedEmailSentAt: integer("planned_email_sent_at", { mode: "timestamp" }),
     publishedEmailSentAt: integer("published_email_sent_at", { mode: "timestamp" }),
+    /** The nudge to share again, a week after the published email. Once. */
+    reminderEmailSentAt: integer("reminder_email_sent_at", { mode: "timestamp" }),
     createdAt: integer("created_at", { mode: "timestamp" })
       .notNull()
       .default(sql`(unixepoch())`),
