@@ -9,6 +9,8 @@ import {
   listPhotosForRelease,
 } from "@/lib/dal/spotlight";
 import { buildSpotlightCaption } from "@/lib/press/spotlight-caption";
+import { parseQuotes } from "@/lib/spotlight/quotes";
+import { storySlots } from "@/lib/spotlight/story-image";
 import { MAX_RATING, computeSpotlightStatus } from "@/lib/spotlight/slug";
 import { updateSpotlightAction } from "../actions";
 import { SpotlightForm } from "../_components/spotlight-form";
@@ -16,6 +18,7 @@ import { DeleteSpotlightButton } from "./_components/delete-spotlight-button";
 import { EmailTestButtons } from "./_components/email-test-buttons";
 import { SocialMenu } from "./_components/social-menu";
 import { SpotlightStatusMenu } from "./_components/spotlight-status-menu";
+import { Stories } from "./_components/stories";
 
 const KIND_LABELS = { single: "Single", ep: "EP", album: "Album" } as const;
 
@@ -101,10 +104,13 @@ export default async function EditSpotlightPage({
             headerAssetId: article.headerAssetId,
             headerFocusX: article.headerFocusX,
             headerFocusY: article.headerFocusY,
+            quotes: parseQuotes(article.quotes),
           }}
           submitLabel="Save changes"
         />
       </Card>
+
+      <Stories spotlightId={article.id} slots={storySlots(article)} />
 
       <section className="mt-10">
         <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">

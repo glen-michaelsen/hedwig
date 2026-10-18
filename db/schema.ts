@@ -662,6 +662,11 @@ export const spotlight = sqliteTable(
      */
     headerFocusX: integer("header_focus_x").notNull().default(50),
     headerFocusY: integer("header_focus_y").notNull().default(50),
+    /**
+     * Lines picked for the Instagram stories, as a JSON array of strings,
+     * without quotation marks (the stories add their own). Null for none.
+     */
+    quotes: text("quotes"),
     published: integer("published", { mode: "boolean" })
       .notNull()
       .default(false),

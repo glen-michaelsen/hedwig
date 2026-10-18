@@ -1,0 +1,1 @@
+ALTER TABLE `spotlight` ADD `quotes` text;

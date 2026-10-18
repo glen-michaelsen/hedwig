@@ -9,6 +9,7 @@ import {
   input,
   label,
 } from "@/app/_components/ui";
+import { MAX_QUOTE_LENGTH, MAX_QUOTES } from "@/lib/spotlight/quotes";
 import { MAX_RATING, slugify } from "@/lib/spotlight/slug";
 import { HeaderPosition } from "./header-position";
 import type { SpotlightFormState } from "../actions";
@@ -23,6 +24,7 @@ export type SpotlightDefaults = {
   headerAssetId?: string | null;
   headerFocusX?: number;
   headerFocusY?: number;
+  quotes?: string[];
 };
 
 function RatingPicker({ value, onChange }: { value: number; onChange: (next: number) => void }) {
@@ -200,6 +202,23 @@ export function SpotlightForm({
         />
         <p className="mt-2 text-xs text-faint">
           Plain text. An empty line starts a new paragraph.
+        </p>
+      </div>
+
+      <div>
+        <label className={label} htmlFor="quotes">
+          Quotes for stories
+        </label>
+        <textarea
+          className={`${input} min-h-28 resize-y leading-relaxed`}
+          id="quotes"
+          name="quotes"
+          defaultValue={(defaults?.quotes ?? []).join("\n")}
+          placeholder="Some of her falsettos give me almost goosebump vibes."
+        />
+        <p className="mt-2 text-xs text-faint">
+          One per line, up to {MAX_QUOTES}, each under {MAX_QUOTE_LENGTH} characters. Each one
+          becomes its own story. Quotation marks are added for you.
         </p>
       </div>
 

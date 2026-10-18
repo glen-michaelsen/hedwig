@@ -7,6 +7,7 @@ import { getEnv } from "@/lib/db";
 import * as dal from "@/lib/dal/spotlight";
 import { sendNudge } from "@/lib/spotlight/nudge";
 import { sendAutomaticSpotlightEmail, sendSpotlightEmailFor } from "@/lib/spotlight/notify";
+import { MAX_QUOTE_LENGTH, MAX_QUOTES, quotesFromText } from "@/lib/spotlight/quotes";
 import { isValidRating } from "@/lib/spotlight/slug";
 
 export type SpotlightFormState = { error?: string };
@@ -39,6 +40,18 @@ function readForm(
 
   const headerAssetId = String(formData.get("headerAssetId") ?? "").trim();
 
+  const quotes = quotesFromText(String(formData.get("quotes") ?? ""));
+  if (quotes.length > MAX_QUOTES) {
+    return { ok: false, error: `Pick up to ${MAX_QUOTES} quotes` };
+  }
+  const long = quotes.find((quote) => quote.length > MAX_QUOTE_LENGTH);
+  if (long) {
+    return {
+      ok: false,
+      error: `Keep each quote under ${MAX_QUOTE_LENGTH} characters, so it fits a story: "${long.slice(0, 40)}…"`,
+    };
+  }
+
   // Percentages from the drag handle. Anything outside 0-100 is a broken
   // client, not a user, so it clamps rather than errors.
   const focus = (name: string) => {
@@ -56,6 +69,7 @@ function readForm(
       headerAssetId: headerAssetId.length > 0 ? headerAssetId : null,
       headerFocusX: focus("headerFocusX"),
       headerFocusY: focus("headerFocusY"),
+      quotes,
     },
   };
 }

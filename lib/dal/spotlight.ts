@@ -14,6 +14,7 @@ import {
 import { todayIso } from "@/lib/clock";
 import { newId } from "@/lib/crypto";
 import { getDb } from "@/lib/db";
+import { serializeQuotes } from "@/lib/spotlight/quotes";
 import { slugify } from "@/lib/spotlight/slug";
 
 /**
@@ -225,7 +226,15 @@ const cardColumns = {
   )`,
 };
 
-const articleColumns = { ...cardColumns, body: spotlight.body };
+const articleColumns = {
+  ...cardColumns,
+  body: spotlight.body,
+  quotes: spotlight.quotes,
+  // For the "If you like" story.
+  releaseGenre: pressRelease.genre,
+  releaseMood: pressRelease.mood,
+  releaseLanguage: pressRelease.language,
+};
 
 export async function listSpotlights() {
   const db = await getDb();
@@ -294,6 +303,8 @@ export type SpotlightInput = {
   headerAssetId: string | null;
   headerFocusX: number;
   headerFocusY: number;
+  /** For the Instagram stories; stored as JSON. */
+  quotes: string[];
 };
 
 export async function createSpotlight(input: SpotlightInput): Promise<string> {
@@ -303,6 +314,7 @@ export async function createSpotlight(input: SpotlightInput): Promise<string> {
   await db.insert(spotlight).values({
     id,
     ...input,
+    quotes: serializeQuotes(input.quotes),
     slug: await uniqueSlug(input.headline),
   });
 
@@ -320,6 +332,7 @@ export async function updateSpotlight(id: string, input: SpotlightInput) {
       headerAssetId: input.headerAssetId,
       headerFocusX: input.headerFocusX,
       headerFocusY: input.headerFocusY,
+      quotes: serializeQuotes(input.quotes),
       slug: await uniqueSlug(input.headline, id),
       updatedAt: new Date(),
     })
