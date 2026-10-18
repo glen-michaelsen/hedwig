@@ -48,6 +48,10 @@ export function SocialMenu({
       },
     },
     { label: "Captions", onSelect: copyCaption },
+    {
+      label: "Asset library",
+      onSelect: () => window.open(`/spotlight/assets/${spotlightId}`, "_blank", "noopener,noreferrer"),
+    },
   ];
 
   return (

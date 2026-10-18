@@ -14,7 +14,8 @@ import {
   isBadgeVariant,
   type BadgeData,
 } from "@/lib/press/spotlight-badge";
-import { MAX_RATING } from "@/lib/spotlight/slug";
+import { contentDisposition } from "@/lib/r2";
+import { MAX_RATING, slugify } from "@/lib/spotlight/slug";
 
 /**
  * A "Featured on Trenodo" badge for one published article, as a PNG an
@@ -23,9 +24,10 @@ import { MAX_RATING } from "@/lib/spotlight/slug";
  *
  * Cached for a day at the edge and in browsers. An edited rating shows up
  * on the artist's site within that day, which is fine for a badge.
+ * `?download` saves it as a file instead.
  */
 export async function GET(
-  _request: Request,
+  request: Request,
   { params }: RouteContext<"/spotlight/[slug]/badge/[file]">,
 ) {
   const { slug, file } = await params;
@@ -57,6 +59,13 @@ export async function GET(
     fonts: await loadBadgeFonts(badgeText(data)),
     headers: {
       "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800",
+      // `?download` (from the asset library) saves it as a named file.
+      ...(new URL(request.url).searchParams.has("download") && {
+        "Content-Disposition": contentDisposition(
+          "attachment",
+          `trenodo-spotlight-badge-${slugify(article.releaseTitle)}-${variant}.png`,
+        ),
+      }),
     },
   });
 }

@@ -47,3 +47,27 @@ export function badgeAlt(variant: BadgeVariant, data: { title: string; artist: s
   if (variant.startsWith("a")) return "Featured on Trenodo Spotlight";
   return `${data.title} by ${data.artist}, featured on Trenodo Spotlight: ${data.rating} of ${data.maxRating} hearts`;
 }
+
+/** The badge designs, in the order they're offered. */
+export const BADGE_DESIGNS = [
+  { variant: "a-light", name: "Simple", tone: "Light" },
+  { variant: "a-dark", name: "Simple", tone: "Dark" },
+  { variant: "b", name: "With hearts", tone: null },
+  { variant: "c-light", name: "With your cover", tone: "Light" },
+  { variant: "c-dark", name: "With your cover", tone: "Dark" },
+] as const satisfies readonly { variant: BadgeVariant; name: string; tone: string | null }[];
+
+/**
+ * Copy-paste code for a badge: a plain link around an <img>, so it works
+ * on any site builder, counts as a real link to the article, and runs no
+ * script of ours on the artist's page.
+ */
+export function badgeEmbedCode(
+  articleUrl: string,
+  variant: BadgeVariant,
+  data: { title: string; artist: string; rating: number; maxRating: number },
+) {
+  const { width, height } = badgeSize(variant);
+  const alt = badgeAlt(variant, data).replace(/"/g, "&quot;");
+  return `<a href="${articleUrl}" target="_blank" rel="noopener"><img src="${articleUrl}/badge/${variant}.png" alt="${alt}" width="${width}" height="${height}" style="border:0"></a>`;
+}

@@ -521,6 +521,26 @@ export async function getPublishedSpotlight(slug: string) {
 }
 
 /**
+ * An article for its public asset library (/spotlight/assets/<id>): any
+ * published one, Planned included, so the artist can get their release-day
+ * posts ready. `live` says whether the article itself is up yet; the
+ * badges link to it, so they wait for that. Drafts resolve to nothing.
+ */
+export async function getSpotlightForAssets(id: string) {
+  const db = await getDb();
+  const [row] = await db
+    .select(articleColumns)
+    .from(spotlight)
+    .innerJoin(pressRelease, eq(pressRelease.id, spotlight.releaseId))
+    .innerJoin(artist, eq(artist.id, pressRelease.artistId))
+    .where(and(eq(spotlight.id, id), eq(spotlight.published, true)))
+    .limit(1);
+  if (!row) return null;
+  const today = await todayIso();
+  return { ...row, live: row.releaseDate === null || row.releaseDate <= today };
+}
+
+/**
  * The live article about one of this account's own releases, if there is
  * one, for the Spotlight button and the Coverage list on the release page. Scoped by account like
  * everything in lib/dal/press.ts, and only once the article is public, so a

@@ -1,6 +1,6 @@
 import { Card } from "@/app/_components/ui";
 import type { StorySlot } from "@/lib/spotlight/story-image";
-import { SaveStoryButton } from "./save-story-button";
+import { SaveImageButton } from "@/app/_components/save-image";
 
 /**
  * Every Instagram story the article makes, to look at and download. Drawn
@@ -10,11 +10,14 @@ export function Stories({
   spotlightId,
   slots,
   fileBase,
+  libraryUrl,
 }: {
   spotlightId: string;
   slots: StorySlot[];
   /** "artist-title-type-mon-year", as the downloads are named. */
   fileBase: string;
+  /** The public asset library, once the article is published. */
+  libraryUrl: string | null;
 }) {
   return (
     <section className="mt-10">
@@ -24,6 +27,15 @@ export function Stories({
           Sized for Instagram stories. Out now and Read the review leave room for the link sticker.
           On a phone, Save opens the share sheet: Save Image puts it in Photos.
         </p>
+        {libraryUrl && (
+          <p className="mt-2 text-sm text-muted">
+            The artist&rsquo;s copy, with badges, is the{" "}
+            <a href={libraryUrl} target="_blank" rel="noopener noreferrer" className="font-medium text-brand-700 underline-offset-4 hover:underline">
+              asset library
+            </a>
+            . Anyone with the link can open it.
+          </p>
+        )}
         <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-4">
           {slots.map(({ slot, label }) => {
             const src = `/account/spotlight/${spotlightId}/story/${slot}`;
@@ -40,7 +52,7 @@ export function Stories({
                 </a>
                 <div className="mt-2 flex items-center justify-between gap-2">
                   <span className="truncate text-sm">{label}</span>
-                  <SaveStoryButton src={src} name={`${fileBase}-story-${slot}`} />
+                  <SaveImageButton src={src} name={`${fileBase}-story-${slot}`} />
                 </div>
               </li>
             );

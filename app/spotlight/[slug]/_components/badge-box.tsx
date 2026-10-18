@@ -3,7 +3,7 @@
 import { useState, useSyncExternalStore } from "react";
 import { actionPill, actionPillBrand } from "@/app/_components/ui";
 import {
-  badgeAlt,
+  badgeEmbedCode,
   badgeSize,
   type BadgeVariant,
 } from "@/lib/press/badge-meta";
@@ -79,9 +79,7 @@ export function BadgeBox({
   const articleUrl = `${origin ?? ""}/spotlight/${slug}`;
 
   function embedCode(variant: BadgeVariant) {
-    const { width, height } = badgeSize(variant);
-    const alt = badgeAlt(variant, { title, artist, rating, maxRating }).replace(/"/g, "&quot;");
-    return `<a href="${articleUrl}" target="_blank" rel="noopener"><img src="${articleUrl}/badge/${variant}.png" alt="${alt}" width="${width}" height="${height}" style="border:0"></a>`;
+    return badgeEmbedCode(articleUrl, variant, { title, artist, rating, maxRating });
   }
 
   async function copy(key: string, code: string) {

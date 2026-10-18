@@ -111,7 +111,12 @@ export default async function EditSpotlightPage({
         />
       </Card>
 
-      <Stories spotlightId={article.id} slots={storySlots(article)} fileBase={downloadName(article)} />
+      <Stories
+        spotlightId={article.id}
+        slots={storySlots(article)}
+        fileBase={downloadName(article)}
+        libraryUrl={article.published ? `/spotlight/assets/${article.id}` : null}
+      />
 
       <section className="mt-10">
         <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">
