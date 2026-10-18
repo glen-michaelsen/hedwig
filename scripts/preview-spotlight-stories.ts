@@ -60,7 +60,7 @@ async function main() {
     artistName: "ANKAH",
     releaseTitle: "Under dine lukkede øjne",
     releaseKind: "Album",
-    releaseDate: "2026-10-09",
+    releaseDate: "2026-09-11",
     quoteCount: quotes.length,
     tags: ["R&B / Soul", "Pop", "Dreamy"],
   };

@@ -15,7 +15,7 @@
 import { Children, Fragment, isValidElement } from "react";
 
 /** Bump on any layout change: stored stories are named after a fingerprint including it. */
-export const SPOTLIGHT_STORY_VERSION = 3;
+export const SPOTLIGHT_STORY_VERSION = 4;
 
 export const STORY_WIDTH = 1080;
 export const STORY_HEIGHT = 1920;
@@ -270,11 +270,13 @@ function releaseLine(input: StoryInput) {
   return [input.releaseKind, year].filter(Boolean).join(" · ");
 }
 
+/** Three letters each: en-GB's short September is "Sept", which reads long next to the rest. */
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 function dateParts(date: string) {
   const day = new Date(`${date}T12:00:00Z`);
-  const format = (options: Intl.DateTimeFormatOptions) =>
-    new Intl.DateTimeFormat("en-GB", { ...options, timeZone: "UTC" }).format(day);
-  return { weekday: format({ weekday: "short" }), date: format({ day: "numeric", month: "short" }) };
+  const weekday = new Intl.DateTimeFormat("en-GB", { weekday: "short", timeZone: "UTC" }).format(day);
+  return { weekday, date: `${day.getUTCDate()} ${MONTHS[day.getUTCMonth()]}` };
 }
 
 /**
@@ -518,9 +520,12 @@ function readReview(input: StoryInput) {
       {safe(
         <>
           {hearts(input.rating, input.maxRating, 44, WHITE)}
+          {/* Two set lines, so the count always starts the second. */}
           <div
             style={{
               display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
               marginTop: 36,
               fontSize: 76,
               fontWeight: 600,
@@ -528,7 +533,8 @@ function readReview(input: StoryInput) {
               textShadow: "0 2px 16px rgba(0,0,0,0.5)",
             }}
           >
-            {`Read why we gave it ${hearts_}`}
+            <div style={{ display: "flex" }}>Read why we gave it</div>
+            <div style={{ display: "flex" }}>{hearts_}</div>
           </div>
           <svg width={72} height={72} viewBox="0 0 24 24" style={{ marginTop: 36 }}>
             <path d="M12 5v14M6 13l6 6 6-6" fill="none" stroke={WHITE} strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" />
