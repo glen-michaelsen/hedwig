@@ -10,6 +10,7 @@ import {
 } from "@/lib/dal/spotlight";
 import { buildSpotlightCaption } from "@/lib/press/spotlight-caption";
 import { parseQuotes } from "@/lib/spotlight/quotes";
+import { downloadName } from "@/lib/spotlight/share-image";
 import { storySlots } from "@/lib/spotlight/story-image";
 import { MAX_RATING, computeSpotlightStatus } from "@/lib/spotlight/slug";
 import { updateSpotlightAction } from "../actions";
@@ -110,7 +111,7 @@ export default async function EditSpotlightPage({
         />
       </Card>
 
-      <Stories spotlightId={article.id} slots={storySlots(article)} />
+      <Stories spotlightId={article.id} slots={storySlots(article)} fileBase={downloadName(article)} />
 
       <section className="mt-10">
         <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">

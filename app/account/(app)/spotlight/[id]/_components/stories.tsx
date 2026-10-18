@@ -1,17 +1,28 @@
-import { Card, actionPill } from "@/app/_components/ui";
+import { Card } from "@/app/_components/ui";
 import type { StorySlot } from "@/lib/spotlight/story-image";
+import { SaveStoryButton } from "./save-story-button";
 
 /**
  * Every Instagram story the article makes, to look at and download. Drawn
  * on first view and kept, so the first visit after an edit takes a moment.
  */
-export function Stories({ spotlightId, slots }: { spotlightId: string; slots: StorySlot[] }) {
+export function Stories({
+  spotlightId,
+  slots,
+  fileBase,
+}: {
+  spotlightId: string;
+  slots: StorySlot[];
+  /** "artist-title-type-mon-year", as the downloads are named. */
+  fileBase: string;
+}) {
   return (
     <section className="mt-10">
       <h2 className="text-xs font-semibold uppercase tracking-[0.1em] text-muted">Stories</h2>
       <Card className="mt-4">
         <p className="text-sm leading-relaxed text-muted text-pretty">
           Sized for Instagram stories. Out now and Read the review leave room for the link sticker.
+          On a phone, Save opens the share sheet: Save Image puts it in Photos.
         </p>
         <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-3 lg:grid-cols-4">
           {slots.map(({ slot, label }) => {
@@ -29,9 +40,7 @@ export function Stories({ spotlightId, slots }: { spotlightId: string; slots: St
                 </a>
                 <div className="mt-2 flex items-center justify-between gap-2">
                   <span className="truncate text-sm">{label}</span>
-                  <a href={`${src}?download`} download className={actionPill}>
-                    Download
-                  </a>
+                  <SaveStoryButton src={src} name={`${fileBase}-story-${slot}`} />
                 </div>
               </li>
             );
