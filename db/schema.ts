@@ -71,6 +71,76 @@ export const verification = sqliteTable("verification", {
 });
 
 /* ------------------------------------------------------------------ *
+ * OAuth for the admin MCP (Better Auth's mcp plugin). Claude registers
+ * itself as an application, the admin allows it on /oauth/authorize,
+ * and it gets a token that /api/mcp accepts. Field names match the
+ * plugin's schema (better-auth/plugins/oidc-provider).
+ * ------------------------------------------------------------------ */
+
+export const oauthApplication = sqliteTable(
+  "oauthApplication",
+  {
+    id: text("id").primaryKey(),
+    name: text("name").notNull(),
+    icon: text("icon"),
+    metadata: text("metadata"),
+    clientId: text("clientId").notNull().unique(),
+    clientSecret: text("clientSecret"),
+    /** Comma-separated: where codes may be sent after the admin allows it. */
+    redirectUrls: text("redirectUrls").notNull(),
+    type: text("type").notNull(),
+    disabled: integer("disabled", { mode: "boolean" }).default(false),
+    userId: text("userId").references(() => user.id, { onDelete: "cascade" }),
+    createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
+    updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
+  },
+  (t) => [index("oauth_application_user_idx").on(t.userId)],
+);
+
+export const oauthAccessToken = sqliteTable(
+  "oauthAccessToken",
+  {
+    id: text("id").primaryKey(),
+    accessToken: text("accessToken").notNull().unique(),
+    refreshToken: text("refreshToken").notNull().unique(),
+    accessTokenExpiresAt: integer("accessTokenExpiresAt", { mode: "timestamp" }).notNull(),
+    refreshTokenExpiresAt: integer("refreshTokenExpiresAt", { mode: "timestamp" }).notNull(),
+    clientId: text("clientId")
+      .notNull()
+      .references(() => oauthApplication.clientId, { onDelete: "cascade" }),
+    userId: text("userId").references(() => user.id, { onDelete: "cascade" }),
+    scopes: text("scopes").notNull(),
+    createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
+    updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
+  },
+  (t) => [
+    index("oauth_access_token_client_idx").on(t.clientId),
+    index("oauth_access_token_user_idx").on(t.userId),
+  ],
+);
+
+export const oauthConsent = sqliteTable(
+  "oauthConsent",
+  {
+    id: text("id").primaryKey(),
+    clientId: text("clientId")
+      .notNull()
+      .references(() => oauthApplication.clientId, { onDelete: "cascade" }),
+    userId: text("userId")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    scopes: text("scopes").notNull(),
+    consentGiven: integer("consentGiven", { mode: "boolean" }).notNull(),
+    createdAt: integer("createdAt", { mode: "timestamp" }).notNull(),
+    updatedAt: integer("updatedAt", { mode: "timestamp" }).notNull(),
+  },
+  (t) => [
+    index("oauth_consent_client_idx").on(t.clientId),
+    index("oauth_consent_user_idx").on(t.userId),
+  ],
+);
+
+/* ------------------------------------------------------------------ *
  * Invites
  *
  * Signup is open to anyone — this is just a personal nudge: the admin

@@ -733,3 +733,51 @@ export async function transferRelease(releaseId: string, toAccountId: string) {
     .where(eq(pressRelease.id, releaseId));
   return true;
 }
+
+/**
+ * Every press kit on Trenodo, with what the readiness check needs and
+ * whether it has a Spotlight, for the admin MCP. Crosses accounts on
+ * purpose, so only admin code may call it.
+ */
+export async function listAllPressKits() {
+  const db = await getDb();
+  return db
+    .select({
+      id: pressRelease.id,
+      title: pressRelease.title,
+      kind: pressRelease.kind,
+      releaseDate: pressRelease.releaseDate,
+      slug: pressRelease.slug,
+      published: pressRelease.published,
+      url: pressRelease.url,
+      genre: pressRelease.genre,
+      mood: pressRelease.mood,
+      country: pressRelease.country,
+      language: pressRelease.language,
+      labelStatus: pressRelease.labelStatus,
+      gender: pressRelease.gender,
+      createdAt: pressRelease.createdAt,
+      artistName: artist.name,
+      ownerId: user.id,
+      ownerName: user.name,
+      ownerEmail: user.email,
+      hasCover: sql<number>`exists (
+        select 1 from ${releaseAsset}
+        where ${releaseAsset.releaseId} = ${pressRelease.id} and ${releaseAsset.kind} = 'cover'
+      )`.mapWith(Boolean),
+      photoCount: sql<number>`(
+        select count(*) from ${releaseAsset}
+        where ${releaseAsset.releaseId} = ${pressRelease.id} and ${releaseAsset.kind} = 'photo'
+      )`.mapWith(Number),
+      assetCount: sql<number>`(
+        select count(*) from ${releaseAsset} where ${releaseAsset.releaseId} = ${pressRelease.id}
+      )`.mapWith(Number),
+      spotlightId: sql<string | null>`(
+        select ${spotlight.id} from ${spotlight} where ${spotlight.releaseId} = ${pressRelease.id}
+      )`,
+    })
+    .from(pressRelease)
+    .innerJoin(artist, eq(artist.id, pressRelease.artistId))
+    .innerJoin(user, eq(user.id, pressRelease.accountId))
+    .orderBy(sql`${pressRelease.releaseDate} is null`, desc(pressRelease.releaseDate), desc(pressRelease.createdAt));
+}

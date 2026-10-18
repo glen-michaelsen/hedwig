@@ -2,6 +2,7 @@ import "server-only";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { nextCookies } from "better-auth/next-js";
+import { mcp } from "better-auth/plugins";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { and, eq, gt } from "drizzle-orm";
 import { cookies, headers } from "next/headers";
@@ -31,6 +32,9 @@ export async function getAuth() {
         session: schema.session,
         account: schema.account,
         verification: schema.verification,
+        oauthApplication: schema.oauthApplication,
+        oauthAccessToken: schema.oauthAccessToken,
+        oauthConsent: schema.oauthConsent,
       },
     }),
     secret: env.BETTER_AUTH_SECRET,
@@ -64,7 +68,26 @@ export async function getAuth() {
         studioName: { type: "string", required: false, input: true },
       },
     },
-    plugins: [nextCookies()],
+    plugins: [
+      // OAuth for the admin MCP (/api/mcp), so Claude can connect to it.
+      // Claude is sent to our own consent page (the discovery document in
+      // app/.well-known says so), which only the admin can see. The
+      // plugin's /mcp/authorize, which approves without asking, is closed
+      // in app/api/auth/[...all]/route.ts.
+      mcp({
+        loginPage: "/account/login",
+        resource: `${env.APP_URL}/api/mcp`,
+        oidcConfig: {
+          loginPage: "/account/login",
+          requirePKCE: true,
+          accessTokenExpiresIn: 60 * 60,
+          // A connection stays usable for 30 days without being used.
+          refreshTokenExpiresIn: 60 * 60 * 24 * 30,
+        },
+      }),
+      // Must stay last.
+      nextCookies(),
+    ],
   });
 }
 
