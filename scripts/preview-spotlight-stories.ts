@@ -3,7 +3,11 @@
  * and text in place of a real article: no D1, no R2, no deploy. For tuning
  * lib/press/spotlight-story.tsx; the story route calls the same function.
  *
- * Usage: npx tsx scripts/preview-spotlight-stories.ts [header.jpg] [cover.jpg] [out-dir]
+ * Usage: npx tsx scripts/preview-spotlight-stories.ts [header.jpg] [cover.jpg] [out-dir] [header-grey.jpg]
+ *
+ * The quote series tints a greyscale photo (the route asks Cloudflare
+ * Images for one); pass a greyscale copy as the fourth argument, e.g.
+ * sips -m "/System/Library/ColorSync/Profiles/Generic Gray Profile.icc" in.jpg --out grey.jpg
  */
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
@@ -31,8 +35,9 @@ const font = async (file: string) => {
 };
 
 async function main() {
-  const [headerPath, coverPath, outDir = "/tmp/spotlight-stories"] = process.argv.slice(2);
+  const [headerPath, coverPath, outDir = "/tmp/spotlight-stories", greyPath] = process.argv.slice(2);
   const headerUrl = headerPath ? await toDataUrl(headerPath) : null;
+  const greyUrl = greyPath ? await toDataUrl(greyPath) : headerUrl;
   const coverUrl = coverPath ? await toDataUrl(coverPath) : null;
   const fonts = [
     { name: STORY_FONTS.sans, data: await font("geist-sans-latin-400-normal.woff"), weight: 400 as const, style: "normal" as const },
@@ -76,6 +81,7 @@ async function main() {
   for (const [name, kind, quoteIndex] of stories) {
     const input: StoryInput = {
       ...base,
+      headerUrl: kind === "quote-series" ? greyUrl : headerUrl,
       kind,
       quote: quoteIndex === undefined ? undefined : quotes[quoteIndex],
       quoteNumber: quoteIndex === undefined ? undefined : quoteIndex + 1,

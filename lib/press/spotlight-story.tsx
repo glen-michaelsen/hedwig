@@ -15,7 +15,7 @@
 import { Children, Fragment, isValidElement } from "react";
 
 /** Bump on any layout change: stored stories are named after a fingerprint including it. */
-export const SPOTLIGHT_STORY_VERSION = 2;
+export const SPOTLIGHT_STORY_VERSION = 3;
 
 export const STORY_WIDTH = 1080;
 export const STORY_HEIGHT = 1920;
@@ -26,9 +26,8 @@ export const STORY_FONTS = { sans: "Geist" } as const;
 
 const INK = "#221c17";
 const BRAND = "#825abe";
-/** Duotone ends: shadows go deep purple, highlights light brand purple, as on the site's photo cards. */
-const DUO_DARK = "#140b1f";
-const DUO_LIGHT = "#b49cd8";
+/** brand-900: the deep end of the duotone tint. */
+const BRAND_DEEP = "#412c61";
 const WHITE = "#ffffff";
 
 const HEART_PATH =
@@ -45,6 +44,7 @@ export type StoryKind =
 
 export type StoryInput = {
   kind: StoryKind;
+  /** Greyscale for the quote series, which tints it; in colour for the rest. */
   headerUrl: string | null;
   coverUrl: string | null;
   headerFocusX: number;
@@ -126,60 +126,47 @@ function photo(input: StoryInput, strength: "soft" | "strong") {
 }
 
 /**
- * A colour matrix mapping a pixel's brightness onto DUO_DARK → DUO_LIGHT,
- * with a little extra contrast. The site does this with greyscale and a
- * multiply blend, which Satori can't draw; an SVG filter it can.
+ * The header photo in brand duotone, as on the site's photo cards. The
+ * site multiplies a greyscale photo by a purple gradient; Satori can't
+ * blend, but a translucent colour over a greyscale photo is a duotone too
+ * (black lands on deep purple, white on pale lavender). The caller hands
+ * in a greyscale copy for this story. Then a dark fade for the text.
  */
-function duotoneMatrix(contrast = 1.15) {
-  const rgb = (hex: string) => [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
-  const dark = rgb(DUO_DARK);
-  const light = rgb(DUO_LIGHT);
-  const rows = [0, 1, 2].map((channel) => {
-    const span = (light[channel] - dark[channel]) * contrast;
-    const offset = dark[channel] - ((contrast - 1) / 2) * (light[channel] - dark[channel]);
-    return `${span * 0.2126} ${span * 0.7152} ${span * 0.0722} 0 ${offset}`;
-  });
-  return [...rows, "0 0 0 1 0"].join(" ");
-}
-
-/** SVG can only anchor a crop at the start, middle or end, so the focus point rounds to the nearest. */
-function anchor(percent: number) {
-  return percent < 34 ? "Min" : percent > 66 ? "Max" : "Mid";
-}
-
-/** The header photo in brand duotone, full bleed, with a dark fade at the bottom for the text. */
 function duotonePhoto(input: StoryInput) {
   return (
     <>
       {input.headerUrl && (
-        <svg
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={input.headerUrl}
+          alt=""
           width={STORY_WIDTH}
           height={STORY_HEIGHT}
-          viewBox={`0 0 ${STORY_WIDTH} ${STORY_HEIGHT}`}
-          style={{ position: "absolute", inset: 0 }}
-        >
-          <defs>
-            <filter id="duotone" colorInterpolationFilters="sRGB">
-              <feColorMatrix type="matrix" values={duotoneMatrix()} />
-            </filter>
-          </defs>
-          <image
-            href={input.headerUrl}
-            width={STORY_WIDTH}
-            height={STORY_HEIGHT}
-            preserveAspectRatio={`x${anchor(input.headerFocusX)}Y${anchor(input.headerFocusY)} slice`}
-            filter="url(#duotone)"
-          />
-        </svg>
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: STORY_WIDTH,
+            height: STORY_HEIGHT,
+            objectFit: "cover",
+            objectPosition: `${input.headerFocusX}% ${input.headerFocusY}%`,
+          }}
+        />
       )}
       <svg width={STORY_WIDTH} height={STORY_HEIGHT} style={{ position: "absolute", inset: 0 }}>
         <defs>
+          <linearGradient id="tint" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor={BRAND} stopOpacity={0.5} />
+            <stop offset="100%" stopColor={BRAND_DEEP} stopOpacity={0.75} />
+          </linearGradient>
           <linearGradient id="duofade" x1="0" y1="1" x2="0" y2="0">
-            <stop offset="0%" stopColor={DUO_DARK} stopOpacity={0.85} />
-            <stop offset="40%" stopColor={DUO_DARK} stopOpacity={0.35} />
-            <stop offset="100%" stopColor={DUO_DARK} stopOpacity={0.15} />
+            <stop offset="0%" stopColor="#000000" stopOpacity={0.7} />
+            <stop offset="40%" stopColor="#000000" stopOpacity={0.25} />
+            <stop offset="100%" stopColor="#000000" stopOpacity={0} />
           </linearGradient>
         </defs>
+        {/* Shadows go deeper than a tint alone would take them. */}
+        <rect width={STORY_WIDTH} height={STORY_HEIGHT} fill="#000000" fillOpacity={0.3} />
+        <rect width={STORY_WIDTH} height={STORY_HEIGHT} fill="url(#tint)" />
         <rect width={STORY_WIDTH} height={STORY_HEIGHT} fill="url(#duofade)" />
       </svg>
     </>
@@ -391,7 +378,7 @@ function quoteSeries(input: StoryInput) {
   const count = Math.max(1, input.quoteCount ?? 1);
   const number = Math.min(count, Math.max(1, input.quoteNumber ?? 1));
   return frame(
-    DUO_DARK,
+    BRAND_DEEP,
     <>
       {duotonePhoto(input)}
       {safe(

@@ -15,16 +15,21 @@ import { isResizableImage } from "./variants";
  * Cached beside the original under its own key — `.sm`/`.md`/`.lg.webp`
  * variants are untouched, no collision.
  */
-function ogKey(r2Key: string, maxWidth: number) {
-  return `${r2Key}.og${maxWidth}.png`;
+function ogKey(r2Key: string, maxWidth: number, mono: boolean) {
+  return `${r2Key}.og${maxWidth}${mono ? ".mono" : ""}.png`;
 }
 
+/**
+ * `mono` gives a greyscale copy with a touch of contrast, for layouts that
+ * tint the photo themselves (the brand duotone on a Spotlight story).
+ */
 export async function resolveOgImageDataUrl(
   r2Key: string,
   contentType: string,
   maxWidth: number,
+  { mono = false }: { mono?: boolean } = {},
 ): Promise<string | null> {
-  const key = ogKey(r2Key, maxWidth);
+  const key = ogKey(r2Key, maxWidth, mono);
 
   const cached = await getObject(key);
   if (cached) {
@@ -41,7 +46,11 @@ export async function resolveOgImageDataUrl(
 
   try {
     const result = await env.IMAGES.input(original.body)
-      .transform({ width: maxWidth, fit: "scale-down" })
+      .transform({
+        width: maxWidth,
+        fit: "scale-down",
+        ...(mono && { saturation: 0, contrast: 1.1, brightness: 0.95 }),
+      })
       .output({ format: "image/png" });
 
     const bytes = await result.response().arrayBuffer();

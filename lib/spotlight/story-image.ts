@@ -145,9 +145,15 @@ async function render(article: Article, input: Omit<StoryInput, "headerUrl" | "c
     article.headerAssetId ? getAnySpotlightImage(article.headerAssetId) : null,
     article.coverAssetId ? getAnySpotlightImage(article.coverAssetId) : null,
   ]);
+  const mono = input.kind === "quote-series";
   const [headerUrl, coverUrl, loadedFonts] = await Promise.all([
     // Wider than the post's copy: a landscape photo has to fill 1920 high.
-    header ? resolveOgImageDataUrl(header.r2Key, header.contentType, 1440) : null,
+    // The series tints a greyscale copy; if that can't be made, the colour
+    // photo under the tint still beats no photo at all.
+    header
+      ? (mono ? await resolveOgImageDataUrl(header.r2Key, header.contentType, 1440, { mono }) : null) ??
+        resolveOgImageDataUrl(header.r2Key, header.contentType, 1440)
+      : null,
     cover ? resolveOgImageDataUrl(cover.r2Key, cover.contentType, 720) : null,
     loadFonts(),
   ]);
